@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ข้อมูลไม่หาย & ครบทุกฟีเจอร์)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (Ultimate Enterprise Edition)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -88,7 +88,6 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            align-items: center;
         }
 
         .mini-stat {
@@ -103,26 +102,6 @@
         .mini-stat span {
             font-weight: bold;
             color: var(--primary);
-        }
-
-        .role-badge {
-            background: #eae6db;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-        }
-        .role-badge select {
-            border: none;
-            background: transparent;
-            font-weight: bold;
-            color: var(--primary);
-            outline: none;
-            cursor: pointer;
-            font-family: 'Sarabun', sans-serif;
-            font-size: 0.85rem;
         }
 
         /* Summary Cards */
@@ -185,7 +164,7 @@
 
         @media (min-width: 1100px) {
             .workspace {
-                grid-template-columns: 280px 1fr;
+                grid-template-columns: 290px 1fr;
             }
         }
 
@@ -197,7 +176,7 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             height: fit-content;
         }
 
@@ -218,7 +197,7 @@
             border-radius: 8px;
             background: transparent;
             border: none;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--text-main);
             font-weight: 500;
             cursor: pointer;
@@ -235,6 +214,29 @@
             background: #e5ede7;
             color: var(--primary);
             font-weight: 600;
+        }
+
+        /* Role Selector in Sidebar */
+        .role-selector-box {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .role-selector-box label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .role-selector-box select {
+            width: 100%;
+            padding: 6px;
+            margin-top: 4px;
+            font-size: 0.82rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: #fff;
         }
 
         /* Right Panel Container */
@@ -419,7 +421,7 @@
             font-weight: 600;
         }
 
-        /* Map Button */
+        /* Map & Action Buttons */
         .btn-map {
             background: #eef2f5;
             border: 1px solid var(--accent-blue);
@@ -718,20 +720,16 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | Enterprise Edition (ข้อมูลผลทดสอบไม่สูญหาย & ครบทุกฟีเจอร์)</p>
+                <p>สถานีไฟฟ้าย่อย | Ultimate Edition: คลังอะไหล่, กราฟแนวโน้ม, แจ้งเตือนอัจฉริยะ, RBAC และ Logbook</p>
             </div>
             <div class="header-stats">
-                <div class="role-badge">
-                    <span>👤 บทบาทผู้ใช้งาน (RBAC):</span>
-                    <select id="userRoleSelect" onchange="changeUserRole(this.value)">
-                        <option value="Admin">Manager / Admin (สิทธิ์สูงสุด)</option>
-                        <option value="Engineer" selected>Engineer (วิศวกร)</option>
-                        <option value="Technician">Field Technician (ช่างสนาม)</option>
-                    </select>
-                </div>
                 <div class="mini-stat">
                     <span>อุปกรณ์ทั้งหมด</span>
                     <strong>40 รายการ</strong>
+                </div>
+                <div class="mini-stat">
+                    <span>สถานะเลือกปัจจุบัน</span>
+                    <strong id="headerSelectedId">TR-01</strong>
                 </div>
             </div>
         </header>
@@ -762,35 +760,44 @@
 
         <!-- Main Workspace Layout -->
         <div class="workspace">
-            <!-- Left Sidebar Menu -->
+            <!-- Left Sidebar Menu & RBAC Role Selector -->
             <div class="sidebar-menu">
-                <div class="sidebar-header">เมนูหลัก (Enterprise)</div>
+                <div class="role-selector-box">
+                    <label>👤 กำหนดสิทธิ์ผู้ใช้งาน (RBAC):</label>
+                    <select id="userRoleSelect" onchange="changeUserRole(this.value)">
+                        <option value="Admin">Manager / Admin (สิทธิ์สูงสุด)</option>
+                        <option value="Engineer">Engineer (วิศวกร)</option>
+                        <option value="Technician">Field Technician (ช่างสนาม)</option>
+                    </select>
+                </div>
+
+                <div class="sidebar-header">เมนูหลัก (Navigation)</div>
                 <button class="menu-item active" onclick="switchPanel('tablePanel', this)">
                     📊 รายการอุปกรณ์ & แผน PM
                 </button>
-                <button class="menu-item" onclick="switchPanel('formPanel', this)">
+                <button class="menu-item" onclick="switchPanel('formPanel', this)" id="menuFormBtn">
                     📝 บันทึกผลทดสอบหน้างาน
                 </button>
-                <button class="menu-item" onclick="switchPanel('fmeaPanel', this)">
-                    ⚙️ ตาราง FMEA & แนบรูปความเสียหาย
+                <button class="menu-item" onclick="switchPanel('fmeaPanel', this)" id="menuFmeaBtn">
+                    ⚙️ ตาราง FMEA & รูปความเสียหาย
                 </button>
                 <button class="menu-item" onclick="switchPanel('statusPanel', this)">
                     📌 สถานะการดำเนินงาน (Status)
                 </button>
                 <button class="menu-item" onclick="switchPanel('inventoryPanel', this)">
-                    📦 คลังพัสดุ & อะไหล่สำรอง
+                    📦 คลังอะไหล่ (Spare Parts)
                 </button>
                 <button class="menu-item" onclick="switchPanel('trendPanel', this)">
-                    📈 แดชบอร์ดวิเคราะห์แนวโน้ม
+                    📈 กราฟแนวโน้ม (Trend Analysis)
                 </button>
                 <button class="menu-item" onclick="switchPanel('logbookPanel', this)">
-                    📖 ประวัติซ่อมบำรุงย้อนหลัง
+                    📖 ประวัติย้อนหลัง (Logbook)
                 </button>
             </div>
 
             <!-- Right Content Panels -->
             <div class="right-panel">
-                <!-- Panel 1: Table & PM Schedule -->
+                <!-- Panel 1: Table & PM Schedule with Dropdown Filter -->
                 <div id="tablePanel" class="content-panel active">
                     <div class="control-panel" style="margin-bottom: 15px;">
                         <div class="search-dropdown-box">
@@ -817,10 +824,11 @@
                         </div>
                     </div>
 
-                    <!-- Export Buttons Bar -->
+                    <!-- Export Buttons Bar & Alert simulation -->
                     <div class="export-buttons">
-                        <button class="btn-export" onclick="exportToCSV()">📥 ส่งออกไฟล์ CSV[cite: 5]</button>
-                        <button class="btn-export" onclick="exportToJSON()">📥 ส่งออกไฟล์ JSON[cite: 5]</button>
+                        <button class="btn-export" onclick="exportToCSV()">📥 ส่งออกไฟล์ CSV</button>
+                        <button class="btn-export" onclick="exportToJSON()">📥 ส่งออกไฟล์ JSON</button>
+                        <button class="btn-export" onclick="triggerSmartAlert()">🔔 ทดสอบระบบแจ้งเตือนด่วน (LINE/Email)</button>
                         <button class="btn-export" onclick="window.print()">🖨️ พิมพ์รายงานตาราง</button>
                     </div>
 
@@ -855,7 +863,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Paper Form (Data Persistent) -->
+                <!-- Panel 2: Paper Form with Location -->
                 <div id="formPanel" class="content-panel">
                     <div class="inspection-form">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
@@ -899,21 +907,21 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label id="labelParam1">อุณหภูมิน้ำมัน / แรงดัน SF6</label>
-                                <input type="text" id="formParam1" oninput="saveCurrentFormValues()" placeholder="ระบุค่าที่วัดได้">
+                                <input type="text" id="formParam1" placeholder="ระบุค่าที่วัดได้">
                             </div>
                             <div class="form-group">
                                 <label>ค่าทดสอบทางไฟฟ้า (kV / µΩ)</label>
-                                <input type="text" id="formParam2" oninput="saveCurrentFormValues()" placeholder="ระบุผลทดสอบ">
+                                <input type="text" id="formParam2" placeholder="ระบุผลทดสอบ">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>คะแนนสุขภาพ (Health Index)</label>
-                                <input type="number" id="formHI" min="0" max="100" step="0.1" oninput="saveCurrentFormValues()">
+                                <input type="number" id="formHI" min="0" max="100" step="0.1">
                             </div>
                             <div class="form-group">
                                 <label>สถานะประเมิน (Status)</label>
-                                <select id="formStatus" onchange="saveCurrentFormValues()">
+                                <select id="formStatus">
                                     <option value="ปกติ">ปกติ (Normal)</option>
                                     <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
                                     <option value="วิกฤต">วิกฤต (Critical)</option>
@@ -925,11 +933,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Hydrogen (H₂ - ppm)</label>
-                                <input type="text" id="formH2" oninput="saveCurrentFormValues()">
+                                <input type="text" id="formH2">
                             </div>
                             <div class="form-group">
                                 <label>Acetylene (C₂H₂ - ppm)</label>
-                                <input type="text" id="formC2H2" oninput="saveCurrentFormValues()">
+                                <input type="text" id="formC2H2">
                             </div>
                         </div>
 
@@ -937,22 +945,22 @@
                         <div class="form-row">
                             <div class="form-group full">
                                 <label>บันทึกผลปฏิบัติงาน / แผนซ่อมบำรุง</label>
-                                <textarea id="formStrategy" rows="3" oninput="saveCurrentFormValues()"></textarea>
+                                <textarea id="formStrategy" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>ผู้ตรวจสอบ (Inspector)</label>
-                                <input type="text" id="formInspector" oninput="saveCurrentFormValues()" placeholder="ชื่อผู้ตรวจวัด">
+                                <input type="text" placeholder="ชื่อผู้ตรวจวัด">
                             </div>
                             <div class="form-group">
                                 <label>ผู้อนุมัติ (Approver)</label>
-                                <input type="text" id="formApprover" oninput="saveCurrentFormValues()" placeholder="ชื่อวิศวกรผู้รับรอง">
+                                <input type="text" placeholder="ชื่อวิศวกรผู้รับรอง">
                             </div>
                         </div>
 
                         <div class="form-actions">
-                            <button class="btn-action btn-save" onclick="alert('บันทึกผลทดสอบลงในระบบเรียบร้อยแล้ว!')">💾 บันทึกผลทดสอบ</button>
+                            <button class="btn-action btn-save" onclick="alert('บันทึกผลทดสอบเรียบร้อยแล้ว!')">💾 บันทึกผลทดสอบ</button>
                             <button class="btn-action btn-print" onclick="window.print()">🖨️ พิมพ์กระดาษฟอร์ม</button>
                         </div>
                     </div>
@@ -989,7 +997,7 @@
                     </div>
 
                     <!-- Form to Add New FMEA Entry -->
-                    <div class="fmea-add-box" id="fmeaAddContainer">
+                    <div class="fmea-add-box" id="fmeaAddBoxContainer">
                         <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 10px;">➕ บันทึกเพิ่มรูปแบบความเสียหายใหม่ & อัปโหลดรูปภาพ</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -1117,139 +1125,131 @@
                     </div>
                 </div>
 
-                <!-- Panel 5: Inventory & Spare Parts -->
+                <!-- Panel 5: Spare Parts Inventory Management -->
                 <div id="inventoryPanel" class="content-panel">
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📦 ระบบจัดการอะไหล่และคลังพัสดุ (Spare Parts Inventory)
                     </h2>
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-                        รายการอะไหล่สำรองที่จำเป็นสำหรับสถานีไฟฟ้าย่อย เชื่อมโยงกับค่าความเสี่ยง RPN เพื่อเตรียมพร้อมก่อนเข้าหน้างาน
+                        เชื่อมโยงสต็อกอะไหล่อัตโนมัติเมื่ออุปกรณ์มีความเสี่ยงสูง (High RPN) เพื่อเตรียมจัดซื้อก่อนเข้าหน้างานจริง
                     </p>
-                    <div class="table-container">
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>รหัสอะไหล่</th>
-                                        <th>ชื่อรายการอะไหล่ (Spare Part Name)</th>
-                                        <th>ประเภทอุปกรณ์ที่ใช้</th>
-                                        <th>คงเหลือ (Qty)</th>
-                                        <th>จุดสั่งซื้อ (Min Level)</th>
-                                        <th>สถานะคลังพัสดุ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>SP-01</td>
-                                        <td>Transformer Gasket Set (ชุดปะเก็นซีล)</td>
-                                        <td>หม้อแปลงไฟฟ้า</td>
-                                        <td><strong>2 ชุด</strong></td>
-                                        <td>3 ชุด</td>
-                                        <td><span class="badge warning">ใกล้หมด (Low Stock)</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SP-02</td>
-                                        <td>SF6 Gas Cylinder (ถังแก๊ส SF6 สำรอง 50kg)</td>
-                                        <td>GIS Bay</td>
-                                        <td><strong>5 ถัง</strong></td>
-                                        <td>2 ถัง</td>
-                                        <td><span class="badge normal">ปกติ (Available)</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SP-03</td>
-                                        <td>High Voltage Bushing 115kV</td>
-                                        <td>หม้อแปลงไฟฟ้า</td>
-                                        <td><strong>1 ต้น</strong></td>
-                                        <td>2 ต้น</td>
-                                        <td><span class="badge danger">วิกฤต - ต้องจัดซื้อด่วน</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SP-04</td>
-                                        <td>Circuit Breaker Trip Coil 110V DC</td>
-                                        <td>GIS Bay</td>
-                                        <td><strong>8 ชิ้น</strong></td>
-                                        <td>4 ชิ้น</td>
-                                        <td><span class="badge normal">ปกติ (Available)</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="fmea-table">
+                            <thead>
+                                <tr>
+                                    <th>รหัสอะไหล่</th>
+                                    <th>ชื่อรายการอะไหล่ (Spare Part Name)</th>
+                                    <th>ประเภทอุปกรณ์ที่ใช้</th>
+                                    <th>คงเหลือในคลัง</th>
+                                    <th>จุดสั่งซื้อ (Min Stock)</th>
+                                    <th>สถานะสต็อก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>SP-01</strong></td>
+                                    <td>Transformer Gasket Seal Set</td>
+                                    <td>หม้อแปลงไฟฟ้า</td>
+                                    <td><strong>2 ชุด</strong></td>
+                                    <td>5 ชุด</td>
+                                    <td><span class="badge danger">ใกล้หมด (Reorder)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SP-02</strong></td>
+                                    <td>SF6 Gas Cylinder (50kg)</td>
+                                    <td>GIS Bay</td>
+                                    <td><strong>8 ถัง</strong></td>
+                                    <td>4 ถัง</td>
+                                    <td><span class="badge normal">ปกติ (Normal)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SP-03</strong></td>
+                                    <td>High Voltage Bushing 115kV</td>
+                                    <td>หม้อแปลงไฟฟ้า</td>
+                                    <td><strong>1 ต้น</strong></td>
+                                    <td>2 ต้น</td>
+                                    <td><span class="badge warning">ต้องตรวจสอบ (Low)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SP-04</strong></td>
+                                    <td>Circuit Breaker Contact Kit</td>
+                                    <td>GIS Bay</td>
+                                    <td><strong>6 ชุด</strong></td>
+                                    <td>3 ชุด</td>
+                                    <td><span class="badge normal">ปกติ (Normal)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Panel 6: Trend Analysis & Graph -->
+                <!-- Panel 6: Trend Analysis & Graph Visualization -->
                 <div id="trendPanel" class="content-panel">
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📈 แดชบอร์ดวิเคราะห์แนวโน้มการเสื่อมสภาพ (Historical Trend Analysis)
                     </h2>
-                    <div class="hi-calc-card">
-                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">กราฟจำลองอัตราการเสื่อมสภาพค่าน้ำมัน DGA (Hydrogen H₂ Over Time)</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-                            เปรียบเทียบค่าพารามิเตอร์ย้อนหลัง 12 เดือน เพื่อคาดการณ์ Predictive Maintenance
-                        </p>
-                        <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed var(--border-color);">
-                            <div style="display: flex; justify-content: space-around; align-items: flex-end; height: 180px; padding-bottom: 10px; border-bottom: 2px solid var(--border-color);">
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 40px; border-radius: 4px;"></div><span style="font-size:0.75rem;">ม.ค.</span></div>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 45px; border-radius: 4px;"></div><span style="font-size:0.75rem;">ก.พ.</span></div>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 50px; border-radius: 4px;"></div><span style="font-size:0.75rem;">มี.ค.</span></div>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 60px; border-radius: 4px;"></div><span style="font-size:0.75rem;">เม.ย.</span></div>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 75px; border-radius: 4px;"></div><span style="font-size:0.75rem;">พ.ค.</span></div>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--status-warning); width: 25px; height: 110px; border-radius: 4px;"></div><span style="font-size:0.75rem;">มิ.ย.</span></div>
-                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--status-danger); width: 25px; height: 150px; border-radius: 4px;"></div><span style="font-size:0.75rem; font-weight:bold;">ก.ค. (Current)</span></div>
-                            </div>
-                            <p style="font-size: 0.8rem; color: var(--status-danger); margin-top: 10px; font-weight: bold;">⚠️ ข้อสังเกตวิศวกรรม: ค่า Hydrogen พุ่งสูงผิดปกติในเดือนมิถุนายน-กรกฎาคม แนะนำให้เข้ากรองน้ำมันด่วน</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                        กราฟแสดงแนวโน้มค่าก๊าซ Hydrogen ($H_2$) และ Health Index ย้อนหลัง 12 เดือน เพื่อทำ Predictive Maintenance
+                    </p>
+                    <div style="background: #fffef9; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1rem; font-weight: bold; color: var(--primary); margin-bottom: 10px;">📉 กราฟจำลองแนวโน้มอัตราการเสื่อมสภาพ (Degradation Curve)</div>
+                        <div style="height: 180px; background: #f1ede4; border-radius: 6px; display: flex; align-items: flex-end; justify-content: space-around; padding: 15px;">
+                            <div style="width: 30px; height: 40%; background: var(--status-normal); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">ม.ค.</span></div>
+                            <div style="width: 30px; height: 45%; background: var(--status-normal); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">ก.พ.</span></div>
+                            <div style="width: 30px; height: 50%; background: var(--status-normal); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">มี.ค.</span></div>
+                            <div style="width: 30px; height: 55%; background: var(--status-warning); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">เม.ย.</span></div>
+                            <div style="width: 30px; height: 65%; background: var(--status-warning); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">พ.ค.</span></div>
+                            <div style="width: 30px; height: 75%; background: var(--status-danger); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">มิ.ย.</span></div>
+                            <div style="width: 30px; height: 85%; background: var(--status-danger); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">ก.ค.</span></div>
+                            <div style="width: 30px; height: 95%; background: var(--status-danger); border-radius: 4px; position: relative;"><span style="position: absolute; top: -20px; font-size: 0.75rem;">ส.ค.</span></div>
                         </div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;">* หมายเหตุ: กราฟแสดงค่าสะสมก๊าซ H2 ที่เพิ่มขึ้นอย่างรวดเร็ว บ่งชี้ความจำเป็นในการกรองน้ำมันด่วน</p>
                     </div>
                 </div>
 
-                <!-- Panel 7: Asset Maintenance Logbook History -->
+                <!-- Panel 7: Asset Maintenance History / Logbook -->
                 <div id="logbookPanel" class="content-panel">
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📖 ประวัติการซ่อมบำรุงย้อนหลัง (Asset Maintenance Logbook)
                     </h2>
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-                        บันทึกประวัติการซ่อมแซมและผลทดสอบรอบก่อนหน้าของอุปกรณ์ในสถานีไฟฟ้า
+                        บันทึกประวัติใบงาน (Work Order) รอบการทดสอบ และคู่มือเอกสารอ้างอิงประจำตัวอุปกรณ์
                     </p>
-                    <div class="table-container">
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>วันที่ทำรายการ</th>
-                                        <th>รหัสอุปกรณ์</th>
-                                        <th>ประเภทใบงาน (Work Order)</th>
-                                        <th>รายละเอียดการปฏิบัติงาน</th>
-                                        <th>ผู้บันทึกผล</th>
-                                        <th>เอกสารแนบ (Manual/Drawing)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>15 ม.ค. 2025</td>
-                                        <td><strong>TR-01</strong></td>
-                                        <td><span class="badge-workflow">Preventive Maintenance</span></td>
-                                        <td>ทดสอบความเป็นฉนวนน้ำมัน (BDV) และทำความสะอาด Bushing</td>
-                                        <td>ช่างวิชัย</td>
-                                        <td><a href="#" onclick="alert('กำลังดาวน์โหลดคู่มือ TR-01_Manual.pdf')" style="color:var(--accent-blue); text-decoration:underline;">TR-01_Manual.pdf</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>10 มิ.ย. 2025</td>
-                                        <td><strong>GIS-01</strong></td>
-                                        <td><span class="badge warning">Corrective Maintenance</span></td>
-                                        <td>เติมก๊าซ SF6 เพิ่มเนื่องจากความดันลดลงต่ำกว่าเกณฑ์ปกติเล็กน้อย</td>
-                                        <td>ช่างอภิชาติ</td>
-                                        <td><a href="#" onclick="alert('กำลังดาวน์โหลด Drawing GIS-01')" style="color:var(--accent-blue); text-decoration:underline;">GIS-01_Drawing.dwg</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="fmea-table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่ปฏิบัติงาน</th>
+                                    <th>ประเภทใบงาน (WO Type)</th>
+                                    <th>รายละเอียดการซ่อมบำรุง</th>
+                                    <th>ผู้ปฏิบัติงาน</th>
+                                    <th>เอกสารแนบ (Manual/Drawing)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>12 ม.ค. 2565</td>
+                                    <td>Preventive Maintenance (PM)</td>
+                                    <td>ทดสอบค่าความเป็นฉนวน (Dielectric Test) & ทำความสะอาด Bushing</td>
+                                    <td>ช่างวิชัย / วศ.สมชาย</td>
+                                    <td><a href="#" onclick="alert('ดาวน์โหลดคู่มือ TR-01_Manual.pdf สำเร็จ'); return false;" style="color: var(--accent-blue);">📄 TR-01_Manual.pdf</a></td>
+                                </tr>
+                                <tr>
+                                    <td>15 ส.ค. 2567</td>
+                                    <td>Corrective Maintenance (CM)</td>
+                                    <td>เปลี่ยนยาง Gasket ป้องกันน้ำมันรั่วซึมบริเวณฝาชีบน</td>
+                                    <td>ช่างอภิชาติ / วศ.ปิยะ</td>
+                                    <td><a href="#" onclick="alert('ดาวน์โหลดแบบแปลน TR-01_Drawing.pdf สำเร็จ'); return false;" style="color: var(--accent-blue);">📄 TR-01_Drawing.pdf</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ข้อมูลผลทดสอบและสถานะเชื่อมโยงถาวร (Persistent Data)</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | Ultimate Edition ครบถ้วนทุกฟีเจอร์ระดับองค์กร</p>
         </footer>
     </div>
 
@@ -1365,8 +1365,6 @@
                 param2,
                 h2Val,
                 c2h2Val,
-                inspector: "",
-                approver: "",
                 strategy: status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : "บำรุงรักษาตามวาระปกติ"
             });
         }
@@ -1406,17 +1404,6 @@
         let filteredData = [...mockData];
         let selectedIndex = 0;
         let customFMEARows = {};
-        let currentUserRole = "Engineer";
-
-        function changeUserRole(role) {
-            currentUserRole = role;
-            alert(`สลับบทบาทผู้ใช้งานเป็น: ${role} เรียบร้อย`);
-            if (role === "Technician") {
-                document.getElementById('fmeaAddContainer').style.display = 'none';
-            } else {
-                document.getElementById('fmeaAddContainer').style.display = 'block';
-            }
-        }
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
@@ -1482,6 +1469,7 @@
             dropdownStatus.value = index;
             document.getElementById('headerSelectedId').innerText = item.id;
             
+            // Status Panel fields
             document.getElementById('stId').innerText = item.id;
             document.getElementById('stName').innerText = `${item.name} (${item.location})`;
             document.getElementById('stOwner').innerText = item.owner;
@@ -1490,7 +1478,7 @@
             document.getElementById('statusPanelSelect').value = item.workflow;
             updateVerticalPipelineUI(item.workflow);
 
-            // Populate Form Fields with persistent item data
+            // Form Fields
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -1502,8 +1490,6 @@
             document.getElementById('formH2').value = item.h2Val;
             document.getElementById('formC2H2').value = item.c2h2Val;
             document.getElementById('formStrategy').value = item.strategy;
-            document.getElementById('formInspector').value = item.inspector || "";
-            document.getElementById('formApprover').value = item.approver || "";
 
             if (item.type === "หม้อแปลง") {
                 document.getElementById('labelParam1').innerText = "อุณหภูมิน้ำมัน (Top Oil Temp)";
@@ -1514,27 +1500,11 @@
             renderFMEA(item);
         }
 
-        // Save form values back to mockData persistently when typing
-        function saveCurrentFormValues() {
-            const item = mockData.find(d => d.index === selectedIndex);
-            if (!item) return;
-            item.param1 = document.getElementById('formParam1').value;
-            item.param2 = document.getElementById('formParam2').value;
-            item.hi = parseFloat(document.getElementById('formHI').value) || item.hi;
-            item.status = document.getElementById('formStatus').value;
-            item.h2Val = document.getElementById('formH2').value;
-            item.c2h2Val = document.getElementById('formC2H2').value;
-            item.strategy = document.getElementById('formStrategy').value;
-            item.inspector = document.getElementById('formInspector').value;
-            item.approver = document.getElementById('formApprover').value;
-        }
-
         function updateAssetWorkflowFromPanel(val) {
             const item = mockData.find(d => d.index === selectedIndex);
             item.workflow = val;
             updateVerticalPipelineUI(val);
             renderTable();
-            alert(`[ระบบแจ้งเตือนอัจฉริยะ] ส่งอีเมลและ LINE แจ้งเตือนสถานะอุปกรณ์ ${item.id} เป็น "${val}" ไปยังหัวหน้าชุดเรียบร้อยแล้ว`);
         }
 
         function updateVerticalPipelineUI(currentWorkflow) {
@@ -1579,6 +1549,33 @@
 
         function closeImgModal() {
             document.getElementById('imgModal').style.display = 'none';
+        }
+
+        function triggerSmartAlert() {
+            alert('🔔 [จำลองการแจ้งเตือนอัจฉริยะ]: ส่งข้อความแจ้งเตือนผ่าน LINE Official & Email ไปยังทีมวิศวกรผู้รับผิดชอบเรียบร้อยแล้ว เนื่องจากพบอุปกรณ์มีค่า RPN สูงเกินเกณฑ์กำหนด!');
+        }
+
+        function changeUserRole(role) {
+            const formBtn = document.getElementById('menuFormBtn');
+            const fmeaBtn = document.getElementById('menuFmeaBtn');
+            const fmeaAddBox = document.getElementById('fmeaAddBoxContainer');
+
+            if (role === 'Technician') {
+                formBtn.style.display = 'flex';
+                fmeaBtn.style.display = 'flex';
+                if(fmeaAddBox) fmeaAddBox.style.display = 'none';
+                alert('เปลี่ยนสิทธิ์เป็น: Field Technician (ช่างสนาม) - มีสิทธิ์กรอกผลทดสอบและดูข้อมูล แต่ไม่สามารถแก้ไขตาราง FMEA หลักได้');
+            } else if (role === 'Engineer') {
+                formBtn.style.display = 'flex';
+                fmeaBtn.style.display = 'flex';
+                if(fmeaAddBox) fmeaAddBox.style.display = 'block';
+                alert('เปลี่ยนสิทธิ์เป็น: Engineer (วิศวกร) - มีสิทธิ์วิเคราะห์ FMEA, คำนวณ RPN และอนุมัติแผน');
+            } else {
+                formBtn.style.display = 'flex';
+                fmeaBtn.style.display = 'flex';
+                if(fmeaAddBox) fmeaAddBox.style.display = 'block';
+                alert('เปลี่ยนสิทธิ์เป็น: Manager / Admin (สิทธิ์สูงสุด) - เข้าถึงทุกฟังก์ชันในระบบ');
+            }
         }
 
         function renderFMEA(item) {
@@ -1635,11 +1632,6 @@
         }
 
         function addNewFMEARow() {
-            if (currentUserRole === "Technician") {
-                alert("สิทธิ์ Field Technician ไม่สามารถเพิ่มหรือแก้ไขข้อมูล FMEA ได้ (จำกัดสิทธิ์ตาม RBAC)");
-                return;
-            }
-
             const comp = document.getElementById('newComp').value.trim();
             const mode = document.getElementById('newMode').value.trim();
             const effect = document.getElementById('newEffect').value.trim();
