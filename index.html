@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (FMEA เพิ่มข้อมูลใหม่ได้ & สูตรถูกต้อง)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แสดง RPN ในหน้าแรก & Dropdown กรองข้อมูล)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -428,27 +428,6 @@
             margin-top: 20px;
         }
 
-        /* Health Index Calculation Card */
-        .hi-calc-card {
-            background: #fffef9;
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        /* Formula Box */
-        .formula-box {
-            background: #eae6db;
-            padding: 12px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 1.05rem;
-        }
-
         /* Pagination Controls */
         .pagination-container {
             background: var(--card-bg);
@@ -508,7 +487,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | แผน PM, บันทึกผลทดสอบ, FMEA & RPN (เพิ่มข้อมูลได้) และสูตร Health Index ที่ถูกต้อง</p>
+                <p>สถานีไฟฟ้าย่อย | แผน PM, บันทึกผลทดสอบ และตารางวิเคราะห์ FMEA พร้อมค่า RPN</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -560,19 +539,16 @@
                 <button class="menu-item" onclick="switchPanel('fmeaPanel', this)">
                     ⚙️ ตาราง FMEA & คำนวณ RPN
                 </button>
-                <button class="menu-item" onclick="switchPanel('hiPanel', this)">
-                    📈 การคำนวณ Health Index (HI)
-                </button>
             </div>
 
             <!-- Right Content Panels -->
             <div class="right-panel">
-                <!-- Panel 1: Table & PM Schedule -->
+                <!-- Panel 1: Table & PM Schedule with Dropdown Filter -->
                 <div id="tablePanel" class="content-panel active">
                     <div class="control-panel" style="margin-bottom: 20px;">
                         <div class="search-dropdown-box">
                             <select id="mainSearchDropdown" onchange="onMainDropdownSearch(this.value)">
-                                <option value="">-- ค้นหาและเลือกชื่ออุปกรณ์ --</option>
+                                <option value="">-- กรองแสดงเฉพาะอุปกรณ์ที่เลือก --</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -604,6 +580,7 @@
                                         <th>ชื่ออุปกรณ์</th>
                                         <th>ประเภท</th>
                                         <th>คะแนน (HI)</th>
+                                        <th>ค่าสูงสุด (RPN)</th>
                                         <th>สถานะ</th>
                                         <th>วันที่เข้าทำ PM</th>
                                     </tr>
@@ -723,8 +700,8 @@
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         ⚙️ ตารางวิเคราะห์ FMEA และการคำนวณ RPN (Risk Priority Number)
                     </h2>
-                    <div class="formula-box">
-                        สมการประเมินความเสี่ยง: RPN = Severity (S) × Occurrence (O) × Detection (D)  (สเกล 1 - 10)
+                    <div style="background: #eae6db; padding: 10px; border-radius: 6px; font-weight: 600; color: var(--primary); margin-bottom: 15px; text-align: center;">
+                        สมการประเมินความเสี่ยง: RPN = Severity (S) × Occurrence (O) × Detection (D)
                     </div>
                     
                     <div class="table-responsive">
@@ -755,7 +732,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>ชิ้นส่วนอุปกรณ์ (Component)</label>
-                                <input type="text" id="newComp" placeholder="เช่น Bushing, Winding, Tap Changer">
+                                <input type="text" id="newComp" placeholder="เช่น Bushing, Winding">
                             </div>
                             <div class="form-group">
                                 <label>รูปแบบความเสียหาย (Failure Mode)</label>
@@ -797,42 +774,11 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Panel 4: Health Index (HI) Calculation -->
-                <div id="hiPanel" class="content-panel">
-                    <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-                        📈 การคำนวณดัชนีสุขภาพ (Health Index - HI)
-                    </h2>
-                    
-                    <div class="formula-box">
-                        สมการดัชนีสุขภาพ: HI = 100 - &Sigma; (Condition Factor (CF<sub>i</sub>) &times; Weighting Factor (W<sub>i</sub>))
-                    </div>
-
-                    <div class="hi-calc-card">
-                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">หลักการและเกณฑ์มาตรฐานอ้างอิง</h3>
-                        <ul style="font-size: 0.88rem; margin-left: 20px; display: flex; flex-direction: column; gap: 6px;">
-                            <li><strong>Condition Factor ($CF_i$):</strong> คะแนนหักตามระดับความรุนแรงของผลทดสอบแต่ละหัวข้อ (สเกล 0 ถึง 10 คะแนน)</li>
-                            <li><strong>Weighting Factor ($W_i$):</strong> น้ำหนักความสำคัญของแต่ละหัวข้อทดสอบ (ผลรวมน้ำหนักทุกหัวข้อเท่ากับ 1.0 หรือ 100%)</li>
-                            <li><strong>เกณฑ์ประเมินสถานะสุขภาพ:</strong> 
-                                <span class="badge normal">ปกติ (HI > 85)</span> 
-                                <span class="badge warning">เฝ้าระวัง (HI 70 - 85)</span> 
-                                <span class="badge danger">วิกฤต (HI < 70)</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="hi-calc-card">
-                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">รายละเอียดการคำนวณของอุปกรณ์ปัจจุบัน (<span id="hiTargetId">TR-01</span>)</h3>
-                        <div id="hiBreakdown" style="font-size: 0.88rem; display: flex; flex-direction: column; gap: 8px;">
-                            <!-- Populated dynamically -->
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย[cite: 5] | FMEA บันทึกเพิ่มข้อมูลได้ & สูตรคำนวณถูกต้องตามหลักวิศวกรรม</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | FMEA บันทึกเพิ่มข้อมูลได้ & แสดง RPN ในหน้าแรก</p>
         </footer>
     </div>
 
@@ -879,6 +825,9 @@
             let h2Val = type === "หม้อแปลง" ? (status === "วิกฤต" ? "185.4" : "18.2") : "-";
             let c2h2Val = type === "หม้อแปลง" ? (status === "วิกฤต" ? "35.1" : "0.5") : "-";
 
+            // Calculate mock max RPN based on status
+            let maxRpn = status === 'วิกฤต' ? Math.floor(200 + Math.random() * 150) : status === 'เฝ้าระวัง' ? Math.floor(100 + Math.random() * 99) : Math.floor(30 + Math.random() * 69);
+
             mockData.push({
                 index: i - 1,
                 id,
@@ -888,6 +837,7 @@
                 status,
                 dayOffset,
                 dateStr,
+                maxRpn,
                 param1,
                 param2,
                 h2Val,
@@ -932,7 +882,7 @@
 
             const totalRows = filteredData.length;
             if (totalRows === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">ไม่พบข้อมูลที่ค้นหา</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-muted);">ไม่พบข้อมูลที่ค้นหา</td></tr>`;
                 document.getElementById('paginationInfo').innerText = `แสดง 0 จากทั้งหมด 0 รายการ`;
                 document.getElementById('prevBtn').disabled = true;
                 document.getElementById('nextBtn').disabled = true;
@@ -955,6 +905,7 @@
 
                 let typeBadge = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
                 let isUrgent = item.dayOffset <= 5;
+                let rpnColor = item.maxRpn >= 200 ? 'var(--status-danger)' : item.maxRpn >= 100 ? 'var(--status-warning)' : 'var(--status-normal)';
 
                 const tr = document.createElement('tr');
                 tr.onclick = () => {
@@ -967,6 +918,7 @@
                     <td>${item.name}</td>
                     <td><span class="badge ${typeBadge}">${item.type}</span></td>
                     <td><strong>${item.hi}</strong></td>
+                    <td><strong style="color: ${rpnColor}">${item.maxRpn}</strong></td>
                     <td><span class="badge ${badgeClass}">${item.status}</span></td>
                     <td><strong style="color: ${isUrgent ? 'var(--status-danger)' : 'inherit'}">${item.dateStr} ${isUrgent ? '(ด่วน)' : ''}</strong></td>
                 `;
@@ -985,7 +937,6 @@
             dropdownForm.value = index;
             dropdownMain.value = index;
             document.getElementById('headerSelectedId').innerText = item.id;
-            document.getElementById('hiTargetId').innerText = `${item.id} (${item.name})`;
 
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
@@ -1005,7 +956,6 @@
             }
 
             renderFMEA(item);
-            renderHI(item);
         }
 
         function renderFMEA(item) {
@@ -1095,33 +1045,20 @@
             alert('บันทึกรูปแบบความเสียหายใหม่เข้าตาราง FMEA สำเร็จ!');
         }
 
-        function renderHI(item) {
-            const hiDiv = document.getElementById('hiBreakdown');
-            let cf1 = item.status === 'วิกฤต' ? 6.5 : item.status === 'เฝ้าระวัง' ? 3.0 : 0.5;
-            let cf2 = item.status === 'วิกฤต' ? 5.8 : item.status === 'เฝ้าระวัง' ? 2.5 : 0.2;
-            let cf3 = item.status === 'วิกฤต' ? 7.0 : item.status === 'เฝ้าระวัง' ? 3.5 : 0.8;
-
-            hiDiv.innerHTML = `
-                <p>• <strong>คะแนน HI ปัจจุบัน:</strong> <span style="font-size:1.1rem; font-weight:bold; color:var(--primary);">${item.hi} / 100</span> (${item.status})</p>
-                <p>• <strong>หัวข้อที่ 1 (DGA Analysis - น้ำหนัก 40%):</strong> ค่า Penalty ($CF_1$) = ${cf1} คะแนน</p>
-                <p>• <strong>หัวข้อที่ 2 (Dielectric - น้ำหนัก 30%):</strong> ค่า Penalty ($CF_2$) = ${cf2} คะแนน</p>
-                <p>• <strong>หัวข้อที่ 3 (Thermal - น้ำหนัก 30%):</strong> ค่า Penalty ($CF_3$) = ${cf3} คะแนน</p>
-                <p style="margin-top:8px; background:var(--bg-color); padding:10px; border-radius:4px;">
-                    <strong>การคำนวณตามสูตร:</strong> 
-                    $\text{HI} = 100 - [(${cf1} \times 0.4) + (${cf2} \times 0.3) + (${cf3} \times 0.3)] = \mathbf{${item.hi}}$
-                </p>
-            `;
-        }
-
         function onDropdownSelect(val) {
             selectAsset(parseInt(val));
         }
 
         function onMainDropdownSearch(val) {
-            if (val === "") return;
-            const idx = parseInt(val);
-            selectAsset(idx);
-            switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);
+            if (val === "") {
+                filteredData = [...mockData];
+            } else {
+                const idx = parseInt(val);
+                selectAsset(idx);
+                filteredData = mockData.filter(item => item.index === idx);
+            }
+            currentPage = 1;
+            renderTable();
         }
 
         function switchPanel(panelId, btnElement) {
@@ -1143,12 +1080,14 @@
         function filterTable() {
             const typeVal = document.getElementById('typeFilter').value;
             const statusVal = document.getElementById('statusFilter').value;
+            const dropdownVal = document.getElementById('mainSearchDropdown').value;
 
             filteredData = mockData.filter(item => {
                 const matchType = typeVal === "" || item.type === typeVal;
                 const matchStatus = statusVal === "" || item.status === statusVal;
+                const matchDropdown = dropdownVal === "" || item.index === parseInt(dropdownVal);
 
-                return matchType && matchStatus;
+                return matchType && matchStatus && matchDropdown;
             });
 
             currentPage = 1;
