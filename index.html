@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบบริหารจัดการการซ่อมบำรุงเชิงความน่าเชื่อถือ (RCM) - หม้อแปลงและ GIS</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (Single Substation)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -229,8 +229,13 @@
             color: var(--text-main);
         }
 
+        tr {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
         tr:hover {
-            background-color: #faf9f5;
+            background-color: #f1ede4;
         }
 
         /* Badges */
@@ -248,6 +253,95 @@
         .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
         .badge.type-gis { background: #f0eaf2; color: #7a5180; }
 
+        /* Modal / Detail Panel Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 53, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 800px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: #eae6db;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .detail-item span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .detail-item strong {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .test-result-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .test-result-table th, .test-result-table td {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .test-result-table th {
+            background: #f1ede4;
+        }
+
         /* Footer Info */
         footer {
             text-align: center;
@@ -259,6 +353,7 @@
         @media (max-width: 600px) {
             header { padding: 15px; }
             .header-title h1 { font-size: 1.2rem; }
+            .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -268,16 +363,16 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>ระบบติดตามสุขภาพอุปกรณ์ วิเคราะห์ความเสี่ยง และวางแผนซ่อมบำรุงเชิงพยากรณ์</p>
+                <p>สถานีไฟฟ้าย่อยหลัก (Single Substation) | เรียงลำดับตามกำหนดการเข้าทำ PM</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
-                    <span>สถานีไฟฟ้าทั้งหมด</span>
-                    <strong>8 สถานี</strong>
+                    <span>อุปกรณ์ทั้งหมด</span>
+                    <strong>40 รายการ</strong>
                 </div>
                 <div class="mini-stat">
-                    <span>อุปกรณ์ในระบบ</span>
-                    <strong>40 รายการ</strong>
+                    <span>คำแนะนำ</span>
+                    <strong>คลิกแถวเพื่อดูผลทดสอบละเอียด</strong>
                 </div>
             </div>
         </header>
@@ -285,31 +380,31 @@
         <!-- Summary Cards -->
         <div class="summary-grid">
             <div class="card">
-                <h3>อุปกรณ์ทั้งหมด (Assets)</h3>
+                <h3>อุปกรณ์ทั้งหมดในสถานี</h3>
                 <div class="value">40</div>
                 <div class="desc">หม้อแปลง 20 ตัว | GIS Bay 20 ชุด</div>
             </div>
             <div class="card warning">
                 <h3>สถานะเฝ้าระวัง (Warning)</h3>
                 <div class="value" id="count-warning">--</div>
-                <div class="desc">ต้องติดตามค่า DGA หรือ SF6 ใกล้เกณฑ์</div>
+                <div class="desc">ต้องติดตามค่าใกล้เกณฑ์</div>
             </div>
             <div class="card danger">
                 <h3>สถานะวิกฤต (Critical)</h3>
                 <div class="value" id="count-danger">--</div>
-                <div class="desc">แนะนำวางแผนซ่อมบำรุงด่วน</div>
+                <div class="desc">เร่งด่วนต้องเข้าทำ PM</div>
             </div>
             <div class="card blue">
                 <h3>ดัชนีสุขภาพเฉลี่ย (Avg HI)</h3>
                 <div class="value" id="avg-hi">--</div>
-                <div class="desc">ภาพรวมระบบอยู่ในเกณฑ์ดี (Good)</div>
+                <div class="desc">ภาพรวมสถานีอยู่ในเกณฑ์ดี</div>
             </div>
         </div>
 
         <!-- Control Panel (Search & Filter) -->
         <div class="control-panel">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ค้นหาชื่ออุปกรณ์, สถานี, หรือรหัส..." onkeyup="filterTable()">
+                <input type="text" id="searchInput" placeholder="ค้นหาชื่ออุปกรณ์ หรือรหัส..." onkeyup="filterTable()">
             </div>
             <div class="filter-group">
                 <div class="filter-box">
@@ -336,32 +431,43 @@
                 <table id="assetTable">
                     <thead>
                         <tr>
+                            <th>ลำดับ PM</th>
                             <th>รหัสอุปกรณ์</th>
                             <th>ชื่ออุปกรณ์</th>
                             <th>ประเภท</th>
-                            <th>สถานีไฟฟ้า</th>
                             <th>คะแนนสุขภาพ (HI)</th>
                             <th>สถานะ</th>
-                            <th>พารามิเตอร์เด่น</th>
+                            <th>กำหนดการเข้าทำ PM</th>
                             <th>กลยุทธ์ RCM ที่แนะนำ</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Data will be populated by JavaScript -->
+                        <!-- Data populated by JS -->
                     </tbody>
                 </table>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ดีไซน์โทนสีนวลสบายตา รองรับทุกหน้าจอ</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ออกแบบด้วยโทนสีนวลสบายตา รองรับทุกอุปกรณ์</p>
         </footer>
     </div>
 
+    <!-- Modal for Detailed Test Results -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modalTitle">รายละเอียดผลทดสอบอุปกรณ์</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamically filled content -->
+            </div>
+        </div>
+    </div>
+
     <script>
-        const substations = ["สฟ.ลาดพร้าว", "สฟ.บางกะปิ", "สฟ.บางเขน", "สฟ.มีนบุรี", "สฟ.นนทบุรี", "สฟ.ปทุมธานี", "สฟ.สามเสน", "สฟ.ธนบุรี"];
         const assetTypes = ["หม้อแปลง", "GIS"];
-        
         const mockData = [];
         let warningCount = 0;
         let dangerCount = 0;
@@ -369,48 +475,73 @@
 
         for (let i = 1; i <= 40; i++) {
             const type = assetTypes[(i - 1) % 2];
-            const sub = substations[(i * 3) % substations.length];
-            const id = type === "หม้อแปลง" ? `TR-${100 + i}` : `GIS-${200 + i}`;
-            const name = type === "หม้อแปลง" ? `Main Power Transformer #${i}` : `GIS Feeder Bay #${i}`;
+            const id = type === "หม้อแปลง" ? `TR-${String(i).padStart(2, '0')}` : `GIS-${String(i).padStart(2, '0')}`;
+            const name = type === "หม้อแปลง" ? `Power Transformer Unit #${i}` : `GIS Feeder Bay #${i}`;
             
-            let hi, status, param, strategy;
-            const rand = (i * 13) % 100;
+            let hi, status, strategy, pmDays;
+            const rand = (i * 17) % 100;
             
             if (rand < 15) {
-                hi = (60 + Math.random() * 14).toFixed(1);
+                hi = (55 + Math.random() * 15).toFixed(1);
                 status = "วิกฤต";
+                pmDays = Math.floor(Math.random() * 7) + 1;
                 dangerCount++;
-            } else if (rand < 40) {
-                hi = (75 + Math.random() * 9).toFixed(1);
+            } else if (rand < 42) {
+                hi = (73 + Math.random() * 11).toFixed(1);
                 status = "เฝ้าระวัง";
+                pmDays = Math.floor(Math.random() * 20) + 8;
                 warningCount++;
             } else {
-                hi = (85 + Math.random() * 14.9).toFixed(1);
+                hi = (86 + Math.random() * 13.9).toFixed(1);
                 status = "ปกติ";
+                pmDays = Math.floor(Math.random() * 60) + 30;
             }
             totalHI += parseFloat(hi);
 
+            let testResults = [];
+            let mainParam = "";
             if (type === "หม้อแปลง") {
-                const temp = (65 + Math.random() * 25).toFixed(1);
-                param = `อุณหภูมิน้ำมัน: ${temp} °C`;
-                strategy = status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : status === "เฝ้าระวัง" ? "ตรวจสอบระบบระบายความร้อน" : "บำรุงรักษาตามวาระ (Time-based)";
+                const oilTemp = (65 + Math.random() * 25).toFixed(1);
+                const breakdownV = (45 + Math.random() * 20).toFixed(1);
+                const moisture = (10 + Math.random() * 25).toFixed(1);
+                mainParam = `อุณหภูมิน้ำมัน: ${oilTemp} °C`;
+                strategy = status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : status === "เฝ้าระวัง" ? "ตรวจสอบระบบระบายความร้อน" : "บำรุงรักษาตามวาระปกติ";
+                
+                testResults = [
+                    { test: "Dissolved Gas Analysis (DGA)", result: status === "วิกฤต" ? "พบก๊าซ Hydrogen & Acetylene สูง" : "ปกติ (Ethylene อยู่ในเกณฑ์มาตรฐาน)", status: status === "วิกฤต" ? "Fail" : "Pass" },
+                    { test: "Dielectric Breakdown Voltage", result: `${breakdownV} kV (เกณฑ์ > 50 kV)`, status: breakdownV > 50 ? "Pass" : "Warning" },
+                    { test: "Oil Moisture Content", result: `${moisture} ppm`, status: moisture < 20 ? "Pass" : "Warning" },
+                    { test: "Winding Insulation Resistance", result: "1,200 MΩ at 2.5 kV", status: "Pass" }
+                ];
             } else {
-                const sf6 = (0.45 + Math.random() * 0.15).toFixed(2);
-                param = `แรงดัน SF6: ${sf6} MPa`;
-                strategy = status === "วิกฤต" ? "เติมก๊าซ SF6 / ตรวจหาจุดรั่วซึม" : status === "เฝ้าระวัง" ? "ทดสอบค่าความต้านทานสัมผัส" : "ตรวจสอบภาพถ่ายความร้อน (Thermography)";
+                const sf6Pressure = (0.42 + Math.random() * 0.18).toFixed(2);
+                const contactRes = (35 + Math.random() * 25).toFixed(1);
+                mainParam = `แรงดัน SF6: ${sf6Pressure} MPa`;
+                strategy = status === "วิกฤต" ? "เติมก๊าซ SF6 / ตรวจหารอยรั่วซึม" : status === "เฝ้าระวัง" ? "ทดสอบความต้านทานสัมผัส" : "ตรวจสอบภาพถ่ายความร้อน";
+
+                testResults = [
+                    { test: "SF6 Gas Pressure & Density", result: `${sf6Pressure} MPa (เกณฑ์ Normal > 0.50)`, status: sf6Pressure > 0.50 ? "Pass" : "Warning" },
+                    { test: "SF6 Gas Moisture/Purity", result: "Purity 98.5%, Moisture 120 ppm", status: "Pass" },
+                    { test: "Main Circuit Resistance", result: `${contactRes} µΩ (เกณฑ์ < 50 µΩ)`, status: contactRes < 50 ? "Pass" : "Warning" },
+                    { test: "Partial Discharge (PD) Test", result: status === "วิกฤต" ? "ตรวจพบสัญญาณ PD ผิดปกติที่ Compartment B" : "ต่ำกว่าเกณฑ์แจ้งเตือน (< 5 pC)", status: status === "วิกฤต" ? "Fail" : "Pass" }
+                ];
             }
 
             mockData.push({
                 id,
                 name,
                 type,
-                sub,
                 hi: parseFloat(hi),
                 status,
-                param,
-                strategy
+                pmDays,
+                mainParam,
+                strategy,
+                testResults
             });
         }
+
+        // Sort by PM priority (urgent days first)
+        mockData.sort((a, b) => a.pmDays - b.pmDays);
 
         document.getElementById('count-warning').innerText = warningCount;
         document.getElementById('count-danger').innerText = dangerCount;
@@ -425,22 +556,24 @@
                 return;
             }
 
-            data.forEach(item => {
+            data.forEach((item, index) => {
                 let badgeClass = "normal";
                 if (item.status === "เฝ้าระวัง") badgeClass = "warning";
                 if (item.status === "วิกฤต") badgeClass = "danger";
 
                 let typeBadge = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
+                let pmText = item.pmDays <= 7 ? `อีก ${item.pmDays} วัน (ด่วน)` : `อีก ${item.pmDays} วัน`;
 
                 const tr = document.createElement('tr');
+                tr.onclick = () => openDetailModal(item);
                 tr.innerHTML = `
+                    <td><strong>#${index + 1}</strong></td>
                     <td><strong>${item.id}</strong></td>
                     <td>${item.name}</td>
                     <td><span class="badge ${typeBadge}">${item.type}</span></td>
-                    <td>${item.sub}</td>
                     <td><strong>${item.hi}</strong></td>
                     <td><span class="badge ${badgeClass}">${item.status}</span></td>
-                    <td>${item.param}</td>
+                    <td><strong style="color: ${item.pmDays <= 7 ? 'var(--status-danger)' : 'inherit'}">${pmText}</strong></td>
                     <td>${item.strategy}</td>
                 `;
                 tbody.appendChild(tr);
@@ -456,8 +589,7 @@
 
             const filtered = mockData.filter(item => {
                 const matchSearch = item.id.toLowerCase().includes(searchVal) || 
-                                    item.name.toLowerCase().includes(searchVal) || 
-                                    item.sub.toLowerCase().includes(searchVal);
+                                    item.name.toLowerCase().includes(searchVal);
                 const matchType = typeVal === "" || item.type === typeVal;
                 const matchStatus = statusVal === "" || item.status === statusVal;
 
@@ -465,6 +597,87 @@
             });
 
             renderTable(filtered);
+        }
+
+        function openDetailModal(item) {
+            const modal = document.getElementById('detailModal');
+            document.getElementById('modalTitle').innerText = `รายละเอียดผลทดสอบ: ${item.id} (${item.name})`;
+            
+            let statusBadgeClass = item.status === 'ปกติ' ? 'normal' : item.status === 'เฝ้าระวัง' ? 'warning' : 'danger';
+            
+            let testsHtml = `
+                <table class="test-result-table">
+                    <thead>
+                        <tr>
+                            <th>รายการทดสอบ (Test Item)</th>
+                            <th>ผลการตรวจวัดล่าสุด</th>
+                            <th>ผลการประเมิน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            item.testResults.forEach(t => {
+                let sColor = t.status === 'Pass' ? 'var(--status-normal)' : t.status === 'Warning' ? 'var(--status-warning)' : 'var(--status-danger)';
+                testsHtml += `
+                    <tr>
+                        <td>${t.test}</td>
+                        <td>${t.result}</td>
+                        <td><strong style="color: ${sColor}">${t.status}</strong></td>
+                    </tr>
+                `;
+            });
+            testsHtml += `</tbody></table>`;
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span>รหัสอุปกรณ์</span>
+                        <strong>${item.id}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>ประเภทอุปกรณ์</span>
+                        <strong>${item.type}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>คะแนนสุขภาพ (Health Index)</span>
+                        <strong>${item.hi} / 100</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>สถานะปัจจุบัน</span>
+                        <strong><span class="badge ${statusBadgeClass}">${item.status}</span></strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>พารามิเตอร์หลักหน้างาน</span>
+                        <strong>${item.mainParam}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>กำหนดการเข้าทำ PM</span>
+                        <strong>อีก ${item.pmDays} วันข้างหน้า</strong>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">ผลการทดสอบเชิงลึก (Diagnostic Test Results)</h3>
+                    ${testsHtml}
+                </div>
+                <div>
+                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 5px;">ข้อเสนอแนะกลยุทธ์ RCM</h3>
+                    <p style="font-size: 0.9rem; background: var(--bg-color); padding: 12px; border-radius: 6px; border-left: 3px solid var(--primary);">${item.strategy}</p>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
         }
     </script>
 </body>
