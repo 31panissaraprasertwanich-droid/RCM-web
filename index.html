@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เรียงเลขอุปกรณ์ใน Dropdown)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - FMEA, RPN และ Health Index</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,7 +18,6 @@
             --shadow: 0 4px 12px rgba(44, 62, 53, 0.05);
             --radius: 10px;
             
-            /* Status Colors */
             --status-normal: #4a7c59;
             --status-warning: #d99b26;
             --status-danger: #c25e52;
@@ -51,16 +50,10 @@
             box-shadow: var(--shadow);
             margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
-        }
-
-        @media (min-width: 768px) {
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
         }
 
         .header-title h1 {
@@ -74,77 +67,7 @@
             color: var(--text-muted);
         }
 
-        .header-stats {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .mini-stat {
-            background: var(--bg-color);
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .mini-stat span {
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        /* Summary Cards */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 576px) {
-            .summary-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .summary-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--primary);
-        }
-
-        .card.warning { border-left-color: var(--status-warning); }
-        .card.danger { border-left-color: var(--status-danger); }
-        .card.blue { border-left-color: var(--accent-blue); }
-
-        .card h3 {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .card .value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .card .desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        /* Main Workspace Layout */
+        /* Layout */
         .workspace {
             display: grid;
             grid-template-columns: 1fr;
@@ -158,7 +81,7 @@
             }
         }
 
-        /* Left Sidebar */
+        /* Sidebar Menu */
         .sidebar-menu {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -176,7 +99,6 @@
             color: var(--text-muted);
             padding: 5px 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .menu-item {
@@ -206,13 +128,7 @@
             font-weight: 600;
         }
 
-        /* Right Panel Container */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+        /* Content Panels */
         .content-panel {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -225,226 +141,74 @@
             display: block;
         }
 
-        /* Control Panel & Dropdown Search */
-        .control-panel {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        @media (min-width: 768px) {
-            .control-panel {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .search-dropdown-box {
-            display: flex;
-            gap: 10px;
-            flex: 1;
-            max-width: 400px;
-        }
-
-        .search-dropdown-box select, .filter-box select {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-color);
-            color: var(--text-main);
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Data Table Container */
+        /* Tables */
         .table-container {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .table-responsive {
-            width: 100%;
             overflow-x: auto;
+            margin-top: 15px;
+            margin-bottom: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.9rem;
-            min-width: 850px;
+            font-size: 0.88rem;
+            min-width: 900px;
         }
 
         th {
             background-color: #eae6db;
             color: var(--text-main);
-            padding: 14px 15px;
+            padding: 12px 14px;
             font-weight: 600;
             border-bottom: 2px solid var(--border-color);
         }
 
         td {
-            padding: 12px 15px;
+            padding: 10px 14px;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-main);
         }
 
-        tr {
-            transition: background 0.15s;
-        }
-
         tr:hover {
-            background-color: #f1ede4;
+            background-color: #faf9f5;
         }
 
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .badge.normal { background: #e5ede7; color: var(--status-normal); }
-        .badge.warning { background: #fcf4e5; color: #b37410; }
-        .badge.danger { background: #faeaea; color: var(--status-danger); }
-        .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
-        .badge.type-gis { background: #f0eaf2; color: #7a5180; }
-
-        /* Paper Form Styles */
-        .inspection-form {
+        /* Formulas & Cards */
+        .formula-card {
             background: #fffef9;
             border: 1px solid var(--border-color);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
         }
 
-        .form-section-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            background: #f1ede4;
-            padding: 5px 10px;
-            border-radius: 4px;
-            margin-top: 12px;
+        .formula-card h3 {
+            color: var(--primary);
+            font-size: 1.05rem;
             margin-bottom: 8px;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .form-group.full {
-            grid-column: span 2;
-        }
-
-        .form-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
+        .formula-box {
+            background: #f1ede4;
+            padding: 12px 15px;
             border-radius: 6px;
-            font-size: 0.88rem;
-            background: #ffffff;
+            font-family: monospace;
+            font-weight: bold;
             color: var(--text-main);
-            outline: none;
+            margin: 10px 0;
         }
 
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-action {
-            flex: 1;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
-            border: none;
-            transition: background 0.2s;
         }
-
-        .btn-save { background: var(--primary); color: white; }
-        .btn-save:hover { background: var(--primary-hover); }
-
-        .btn-print { background: var(--accent-blue); color: white; }
-        .btn-print:hover { background: #48637a; }
-
-        /* Pagination Controls */
-        .pagination-container {
-            background: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .pagination-info {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .pagination-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .page-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .page-btn:hover:not(:disabled) {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .badge.high { background: #faeaea; color: var(--status-danger); }
+        .badge.med { background: #fcf4e5; color: #b37410; }
+        .badge.low { background: #e5ede7; color: var(--status-normal); }
 
         footer {
             text-align: center;
@@ -460,401 +224,147 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | ค้นหาชื่ออุปกรณ์ด้วย Dropdown (เรียงเลขอุปกรณ์)</p>
-            </div>
-            <div class="header-stats">
-                <div class="mini-stat">
-                    <span>อุปกรณ์ทั้งหมด</span>
-                    <strong>40 รายการ</strong>
-                </div>
-                <div class="mini-stat">
-                    <span>สถานะเลือกปัจจุบัน</span>
-                    <strong id="headerSelectedId">TR-01</strong>
-                </div>
+                <p>โมดูลวิเคราะห์ FMEA, การคำนวณ RPN และดัชนีสุขภาพ (Health Index)</p>
             </div>
         </header>
 
-        <!-- Summary Cards -->
-        <div class="summary-grid">
-            <div class="card">
-                <h3>อุปกรณ์ทั้งหมดในสถานี</h3>
-                <div class="value">40</div>
-                <div class="desc">หม้อแปลง 20 ตัว | GIS Bay 20 ชุด</div>
-            </div>
-            <div class="card warning">
-                <h3>สถานะเฝ้าระวัง (Warning)</h3>
-                <div class="value" id="count-warning">--</div>
-                <div class="desc">ต้องติดตามค่าใกล้เกณฑ์</div>
-            </div>
-            <div class="card danger">
-                <h3>สถานะวิกฤต (Critical)</h3>
-                <div class="value" id="count-danger">--</div>
-                <div class="desc">เร่งด่วนต้องเข้าทำ PM</div>
-            </div>
-            <div class="card blue">
-                <h3>ดัชนีสุขภาพเฉลี่ย (Avg HI)</h3>
-                <div class="value" id="avg-hi">--</div>
-                <div class="desc">ภาพรวมระบบอยู่ในเกณฑ์ดี</div>
-            </div>
-        </div>
-
-        <!-- Main Workspace Layout -->
+        <!-- Main Workspace -->
         <div class="workspace">
-            <!-- Left Sidebar Menu -->
+            <!-- Sidebar Navigation -->
             <div class="sidebar-menu">
-                <div class="sidebar-header">เมนูหลัก (Navigation)</div>
-                <button class="menu-item active" onclick="switchPanel('tablePanel', this)">
-                    📊 รายการอุปกรณ์ & แผน PM
+                <div class="sidebar-header">โมดูลวิเคราะห์ RCM</div>
+                <button class="menu-item active" onclick="switchPanel('fmeaPanel', this)">
+                    ⚙️ ตาราง FMEA & RPN
                 </button>
-                <button class="menu-item" onclick="switchPanel('formPanel', this)">
-                    📝 บันทึกผลทดสอบหน้างาน
+                <button class="menu-item" onclick="switchPanel('hiPanel', this)">
+                    📊 การคำนวณดัชนีสุขภาพ (HI)
                 </button>
             </div>
 
-            <!-- Right Content Panels -->
+            <!-- Right Panels -->
             <div class="right-panel">
-                <!-- Panel 1: Table & PM Schedule with Dropdown Search -->
-                <div id="tablePanel" class="content-panel active">
-                    <div class="control-panel" style="margin-bottom: 20px;">
-                        <div class="search-dropdown-box">
-                            <select id="mainSearchDropdown" onchange="onMainDropdownSearch(this.value)">
-                                <option value="">-- ค้นหาและเลือกชื่ออุปกรณ์ --</option>
-                                <!-- Populated sorted by asset ID -->
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <div class="filter-box">
-                                <select id="typeFilter" onchange="filterTable()">
-                                    <option value="">ทุกประเภทอุปกรณ์</option>
-                                    <option value="หม้อแปลง">หม้อแปลงไฟฟ้า (Transformer)</option>
-                                    <option value="GIS">GIS Bay</option>
-                                </select>
-                            </div>
-                            <div class="filter-box">
-                                <select id="statusFilter" onchange="filterTable()">
-                                    <option value="">ทุกสถานะสุขภาพ</option>
-                                    <option value="ปกติ">ปกติ (Normal)</option>
-                                    <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
-                                    <option value="วิกฤต">วิกฤต (Critical)</option>
-                                </select>
-                            </div>
-                        </div>
+                <!-- Panel 1: FMEA & RPN Table -->
+                <div id="fmeaPanel" class="content-panel active">
+                    <h2 style="color: var(--primary); margin-bottom: 10px;">การวิเคราะห์ FMEA และการคำนวณ RPN (Risk Priority Number)</h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
+                        ตารางวิเคราะห์รูปแบบความเสียหาย ผลกระทบ และการประเมินความเสี่ยง โดยคำนวณจากสูตร: <strong>RPN = S × O × D</strong>
+                    </p>
+
+                    <div class="formula-card">
+                        <h3>เกณฑ์การประเมิน (1 - 10 Score):</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">
+                            • <strong>Severity (S):</strong> ระดับความรุนแรงของผลกระทบต่อระบบไฟฟ้า<br>
+                            • <strong>Occurrence (O):</strong> โอกาสหรือความถี่ของการเกิดความเสียหาย<br>
+                            • <strong>Detection (D):</strong> โอกาสในการตรวจพบความผิดปกติก่อนเกิดเหตุขัดข้อง
+                        </p>
                     </div>
 
-                    <div class="table-container" style="margin-bottom: 20px;">
-                        <div class="table-responsive">
-                            <table id="assetTable">
-                               <thead>
-                                    <tr>
-                                        <th>ลำดับ PM</th>
-                                        <th>รหัสอุปกรณ์</th>
-                                        <th>ชื่ออุปกรณ์</th>
-                                        <th>ประเภท</th>
-                                        <th>คะแนน (HI)</th>
-                                        <th>สถานะ</th>
-                                        <th>วันที่เข้าทำ PM</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                    <!-- Data populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="pagination-container">
-                        <div class="pagination-info" id="paginationInfo">แสดง 1-10 จากทั้งหมด 40 รายการ</div>
-                        <div class="pagination-buttons">
-                            <button class="page-btn" id="prevBtn" onclick="changePage(-1)">ย้อนกลับ</button>
-                            <button class="page-btn" id="nextBtn" onclick="changePage(1)">ถัดไป</button>
-                        </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>อุปกรณ์</th>
+                                    <th>รูปแบบความเสียหาย (Failure Mode)</th>
+                                    <th>ผลกระทบ (Failure Effect)</th>
+                                    <th>S</th>
+                                    <th>สาเหตุ (Failure Cause)</th>
+                                    <th>O</th>
+                                    <th>การตรวจสอบปัจจุบัน (Current Controls)</th>
+                                    <th>D</th>
+                                    <th>RPN (S×O×D)</th>
+                                    <th>ระดับความเสี่ยง</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Power Transformer</strong></td>
+                                    <td>ฉนวนขดลวดเสื่อมสภาพ / Partial Discharge</td>
+                                    <td>ไฟฟ้าดับเป็นวงกว้าง / หม้อแปลงระเบิด</td>
+                                    <td>9</td>
+                                    <td>ความชื้นในน้ำมันสูง, Overload ต่อเนื่อง</td>
+                                    <td>4</td>
+                                    <td>Online DGA & Temperature Monitoring</td>
+                                    <td>3</td>
+                                    <td><strong>108</strong></td>
+                                    <td><span class="badge high">High Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Power Transformer</strong></td>
+                                    <td>ปั๊มน้ำมันระบายความร้อนขัดข้อง (Cooling Fan/Pump Failure)</td>
+                                    <td>อุณหภูมิน้ำมันสูงเกินเกณฑ์จำกัด</td>
+                                    <td>7</td>
+                                    <td>มอเตอร์ปั๊มไหม้ / แมกเนติกเสื่อมสภาพ</td>
+                                    <td>5</td>
+                                    <td>Routine Inspection ทุกเดือน</td>
+                                    <td>4</td>
+                                    <td><strong>140</strong></td>
+                                    <td><span class="badge high">High Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>GIS Bay</strong></td>
+                                    <td>ก๊าซ SF6 รั่วซึมต่ำกว่าเกณฑ์ (Low SF6 Pressure)</td>
+                                    <td>สูญเสียคุณสมบัติการเป็นฉนวน เกิด Flashover</td>
+                                    <td>10</td>
+                                    <td>ซีลยาง O-ring เสื่อมสภาพตามอายุการใช้งาน</td>
+                                    <td>2</td>
+                                    <td>SF6 Gas Density Monitor (Alarm)</td>
+                                    <td>2</td>
+                                    <td><strong>40</strong></td>
+                                    <td><span class="badge med">Medium Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>GIS Bay</strong></td>
+                                    <td>หน้าสัมผัส Circuit Breaker ต้านทานสูง (High Contact Resistance)</td>
+                                    <td>เกิดความร้อนสะสมที่ขั้วต่อสายไฟ</td>
+                                    <td>8</td>
+                                    <td>สลักเกลียวหลวม / การสึกหรอของหน้าสัมผัส</td>
+                                    <td>3</td>
+                                    <td>Thermography ตรวจสอบภาพถ่ายความร้อน</td>
+                                    <td>3</td>
+                                    <td><strong>72</strong></td>
+                                    <td><span class="badge med">Medium Risk</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Panel 2: Paper Form for Inspection Testing -->
-                <div id="formPanel" class="content-panel">
-                    <div class="inspection-form">
-                        <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-                            📄 กระดาษบันทึกผลทดสอบหน้างานแบบละเอียด
-                        </h2>
-                        
-                        <!-- Dropdown Asset Selector for Field Workers (Sorted by ID, No Status) -->
-                        <div class="form-section-title" style="background: #e5ede7; color: var(--primary);">🔍 เลือกอุปกรณ์ที่ต้องการบันทึกผล</div>
-                        <div class="form-row">
-                            <div class="form-group full">
-                                <label>เลือกจากรายชื่ออุปกรณ์ในสถานี (เรียงตามเลขอุปกรณ์)</label>
-                                <select id="assetDropdown" onchange="onDropdownSelect(this.value)" style="font-weight: bold; background: #fff;">
-                                    <!-- Populated sorted by asset ID -->
-                                </select>
-                            </div>
-                        </div>
+                <!-- Panel 2: Health Index Calculation -->
+                <div id="hiPanel" class="content-panel">
+                    <h2 style="color: var(--primary); margin-bottom: 10px;">การคำนวณดัชนีสุขภาพอุปกรณ์ (Health Index - HI)</h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
+                        ดัชนีสุขภาพ (HI) ใช้ประเมินสภาพปัจจุบันของหม้อแปลงและ GIS เพื่อประกอบการตัดสินใจวางแผนซ่อมบำรุงเชิงพยากรณ์ (Predictive Maintenance)
+                    </p>
 
-                        <div class="form-section-title">1. ข้อมูลทั่วไปอุปกรณ์</div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>รหัสอุปกรณ์ (Asset ID)</label>
-                                <input type="text" id="formId" readonly style="font-weight:bold; color:var(--primary);">
-                            </div>
-                            <div class="form-group">
-                                <label>ประเภท (Type)</label>
-                                <input type="text" id="formType" readonly>
-                            </div>
+                    <div class="formula-card">
+                        <h3>สูตรการคำนวณ Health Index (HI):</h3>
+                        <div class="formula-box">
+                            HI = $\sum (W_i \times C_i)$ / $\sum W_i$  หรือคำนวณจากน้ำหนักคะแนนผลการทดสอบเชิงลึก
                         </div>
-                        <div class="form-row">
-                            <div class="form-group full">
-                                <label>ชื่ออุปกรณ์</label>
-                                <input type="text" id="formName" readonly>
-                            </div>
-                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-main);">
+                            โดยที่ $W_i$ คือค่าน้ำหนักความสำคัญของแต่ละหัวข้อทดสอบ และ $C_i$ คือคะแนนสภาพของหัวข้อนั้นๆ (คะแนนรวม 0 - 100 โดย 100 คือสภาพสมบูรณ์ที่สุด)
+                        </p>
+                    </div>
 
-                        <div class="form-section-title">2. ค่าตรวจวัดหน้างาน</div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label id="labelParam1">อุณหภูมิน้ำมัน / แรงดัน SF6</label>
-                                <input type="text" id="formParam1" placeholder="ระบุค่าที่วัดได้">
-                            </div>
-                            <div class="form-group">
-                                <label>ค่าทดสอบทางไฟฟ้า (kV / µΩ)</label>
-                                <input type="text" id="formParam2" placeholder="ระบุผลทดสอบ">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>คะแนนสุขภาพ (Health Index)</label>
-                                <input type="number" id="formHI" min="0" max="100" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label>สถานะประเมิน (Status)</label>
-                                <select id="formStatus">
-                                    <option value="ปกติ">ปกติ (Normal)</option>
-                                    <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
-                                    <option value="วิกฤต">วิกฤต (Critical)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-section-title">3. รายละเอียดก๊าซ DGA (สำหรับหม้อแปลง)</div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Hydrogen (H₂ - ppm)</label>
-                                <input type="text" id="formH2">
-                            </div>
-                            <div class="form-group">
-                                <label>Acetylene (C₂H₂ - ppm)</label>
-                                <input type="text" id="formC2H2">
-                            </div>
-                        </div>
-
-                        <div class="form-section-title">4. ความเห็นและข้อเสนอแนะ RCM</div>
-                        <div class="form-row">
-                            <div class="form-group full">
-                                <label>บันทึกผลปฏิบัติงาน / แผนซ่อมบำรุง</label>
-                                <textarea id="formStrategy" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>ผู้ตรวจสอบ (Inspector)</label>
-                                <input type="text" placeholder="ชื่อผู้ตรวจวัด">
-                            </div>
-                            <div class="form-group">
-                                <label>ผู้อนุมัติ (Approver)</label>
-                                <input type="text" placeholder="ชื่อวิศวกรผู้รับรอง">
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button class="btn-action btn-save" onclick="alert('บันทึกผลทดสอบเรียบร้อยแล้ว!')">💾 บันทึกผลทดสอบ</button>
-                            <button class="btn-action btn-print" onclick="window.print()">🖨️ พิมพ์กระดาษฟอร์ม</button>
-                        </div>
+                    <div class="formula-card">
+                        <h3>เกณฑ์การแปลผลคะแนน Health Index (HI):</h3>
+                        <ul style="margin-left: 20px; font-size: 0.9rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                            <li><strong>85.0 - 100.0 (Normal / Very Good):</strong> อุปกรณ์ปกติ ดำเนินการบำรุงรักษาตามวาระปกติ (Time-based)</li>
+                            <li><strong>70.0 - 84.9 (Good / Attention):</strong> เริ่มเสื่อมสภาพเล็กน้อย เฝ้าระวังพารามิเตอร์สำคัญ</li>
+                            <li><strong>50.0 - 69.9 (Medium / Warning):</strong> เสื่อมสภาพปานกลาง วางแผนตรวจสอบเชิงลึกหรือทำ PM เร็วขึ้น</li>
+                            <li><strong>&lt; 50.0 (Critical / Poor):</strong> สภาพวิกฤต มีความเสี่ยงสูง เร่งรัดวางแผนซ่อมบำรุงหรือเปลี่ยนทดแทนด่วน</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ค้นหาชื่อด้วย Dropdown (เรียงเลขอุปกรณ์)</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | โมดูล FMEA, RPN และ Health Index</p>
         </footer>
     </div>
 
     <script>
-        const assetTypes = ["หม้อแปลง", "GIS"];
-        const mockData = [];
-        let warningCount = 0;
-        let dangerCount = 0;
-        let totalHI = 0;
-
-        const baseDate = new Date(2026, 7, 26);
-
-        for (let i = 1; i <= 40; i++) {
-            const type = assetTypes[(i - 1) % 2];
-            const id = type === "หม้อแปลง" ? `TR-${String(i).padStart(2, '0')}` : `GIS-${String(i).padStart(2, '0')}`;
-            const name = type === "หม้อแปลง" ? `Power Transformer Unit #${i}` : `GIS Feeder Bay #${i}`;
-            
-            let hi, status, strategy, dayOffset;
-            const rand = (i * 17) % 100;
-            
-            if (rand < 15) {
-                hi = (55 + Math.random() * 15).toFixed(1);
-                status = "วิกฤต";
-                dayOffset = Math.floor(Math.random() * 5) + 1;
-                dangerCount++;
-            } else if (rand < 42) {
-                hi = (73 + Math.random() * 11).toFixed(1);
-                status = "เฝ้าระวัง";
-                dayOffset = Math.floor(Math.random() * 20) + 6;
-                warningCount++;
-            } else {
-                hi = (86 + Math.random() * 13.9).toFixed(1);
-                status = "ปกติ";
-                dayOffset = Math.floor(Math.random() * 60) + 26;
-            }
-            totalHI += parseFloat(hi);
-
-            const pmDateObj = new Date(baseDate);
-            pmDateObj.setDate(baseDate.getDate() + dayOffset);
-            const dateStr = pmDateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
-
-            let param1 = type === "หม้อแปลง" ? (65 + Math.random() * 20).toFixed(1) + " °C" : (0.45 + Math.random() * 0.15).toFixed(2) + " MPa";
-            let param2 = type === "หม้อแปลง" ? (55 + Math.random() * 15).toFixed(1) + " kV" : (40 + Math.random() * 20).toFixed(1) + " µΩ";
-            let h2Val = type === "หม้อแปลง" ? (status === "วิกฤต" ? "185.4" : "18.2") : "-";
-            let c2h2Val = type === "หม้อแปลง" ? (status === "วิกฤต" ? "35.1" : "0.5") : "-";
-
-            mockData.push({
-                index: i - 1,
-                id,
-                name,
-                type,
-                hi: parseFloat(hi),
-                status,
-                dayOffset,
-                dateStr,
-                param1,
-                param2,
-                h2Val,
-                c2h2Val,
-                strategy: status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : "บำรุงรักษาตามวาระปกติ"
-            });
-        }
-
-        const dropdownSortedData = [...mockData].sort((a, b) => a.id.localeCompare(b.id));
-        mockData.sort((a, b) => a.dayOffset - b.dayOffset);
-
-        document.getElementById('count-warning').innerText = warningCount;
-        document.getElementById('count-danger').innerText = dangerCount;
-        document.getElementById('avg-hi').innerText = (totalHI / 40).toFixed(1) + " / 100";
-
-        const dropdownForm = document.getElementById('assetDropdown');
-        const dropdownMain = document.getElementById('mainSearchDropdown');
-
-        dropdownSortedData.forEach((item) => {
-            const textLabel = `[${item.id}] ${item.name} (${item.type})`;
-            
-            const opt1 = document.createElement('option');
-            opt1.value = item.index;
-            opt1.innerText = textLabel;
-            dropdownForm.appendChild(opt1);
-
-            const opt2 = document.createElement('option');
-            opt2.value = item.index;
-            opt2.innerText = textLabel;
-            dropdownMain.appendChild(opt2);
-        });
-
-        let currentPage = 1;
-        const rowsPerPage = 10;
-        let filteredData = [...mockData];
-        let selectedIndex = 0;
-
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = "";
-
-            const totalRows = filteredData.length;
-            if (totalRows === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">ไม่พบข้อมูลที่ค้นหา</td></tr>`;
-                document.getElementById('paginationInfo').innerText = `แสดง 0 จากทั้งหมด 0 รายการ`;
-                document.getElementById('prevBtn').disabled = true;
-                document.getElementById('nextBtn').disabled = true;
-                return;
-            }
-
-            const totalPages = Math.ceil(totalRows / rowsPerPage);
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
-            const startIdx = (currentPage - 1) * rowsPerPage;
-            const endIdx = Math.min(startIdx + rowsPerPage, totalRows);
-            const pageItems = filteredData.slice(startIdx, endIdx);
-
-            pageItems.forEach((item, idx) => {
-                const globalIndex = startIdx + idx + 1;
-                let badgeClass = "normal";
-                if (item.status === "เฝ้าระวัง") badgeClass = "warning";
-                if (item.status === "วิกฤต") badgeClass = "danger";
-
-                let typeBadge = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
-                let isUrgent = item.dayOffset <= 5;
-
-                const tr = document.createElement('tr');
-                tr.onclick = () => {
-                    selectAsset(item.index);
-                    switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);
-                };
-                tr.innerHTML = `
-                    <td><strong>#${globalIndex}</strong></td>
-                    <td><strong>${item.id}</strong></td>
-                    <td>${item.name}</td>
-                    <td><span class="badge ${typeBadge}">${item.type}</span></td>
-                    <td><strong>${item.hi}</strong></td>
-                    <td><span class="badge ${badgeClass}">${item.status}</span></td>
-                    <td><strong style="color: ${isUrgent ? 'var(--status-danger)' : 'inherit'}">${item.dateStr} ${isUrgent ? '(ด่วน)' : ''}</strong></td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('paginationInfo').innerText = `แสดง ${startIdx + 1}-${endIdx} จากทั้งหมด ${totalRows} รายการ (หน้า ${currentPage}/${totalPages})`;
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage === totalPages;
-        }
-
-        function selectAsset(index) {
-            selectedIndex = index;
-            const item = mockData.find(d => d.index === index);
-            
-            dropdownForm.value = index;
-            dropdownMain.value = index;
-            document.getElementById('headerSelectedId').innerText = item.id;
-
-            document.getElementById('formId').value = item.id;
-            document.getElementById('formType').value = item.type;
-            document.getElementById('formName').value = item.name;
-            document.getElementById('formHI').value = item.hi;
-            document.getElementById('formStatus').value = item.status;
-            document.getElementById('formParam1').value = item.param1;
-            document.getElementById('formParam2').value = item.param2;
-            document.getElementById('formH2').value = item.h2Val;
-            document.getElementById('formC2H2').value = item.c2h2Val;
-            document.getElementById('formStrategy').value = item.strategy;
-
-            if (item.type === "หม้อแปลง") {
-                document.getElementById('labelParam1').innerText = "อุณหภูมิน้ำมัน (Top Oil Temp)";
-            } else {
-                document.getElementById('labelParam1').innerText = "แรงดันก๊าซ SF6 (Pressure)";
-            }
-        }
-
-        function onDropdownSelect(val) {
-            selectAsset(parseInt(val));
-        }
-
-        function onMainDropdownSearch(val) {
-            if (val === "") return;
-            const idx = parseInt(val);
-            selectAsset(idx);
-            switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);
-        }
-
         function switchPanel(panelId, btnElement) {
             const panels = document.querySelectorAll('.content-panel');
             panels.forEach(p => p.classList.remove('active'));
@@ -865,30 +375,6 @@
             document.getElementById(panelId).classList.add('active');
             btnElement.classList.add('active');
         }
-
-        function changePage(direction) {
-            currentPage += direction;
-            renderTable();
-        }
-
-        function filterTable() {
-            const typeVal = document.getElementById('typeFilter').value;
-            const statusVal = document.getElementById('statusFilter').value;
-
-            filteredData = mockData.filter(item => {
-                const matchType = typeVal === "" || item.type === typeVal;
-                const matchStatus = statusVal === "" || item.status === statusVal;
-
-                return matchType && matchStatus;
-            });
-
-            currentPage = 1;
-            renderTable();
-        }
-
-        // Initial setup
-        renderTable();
-        selectAsset(0);
     </script>
 </body>
 </html>
