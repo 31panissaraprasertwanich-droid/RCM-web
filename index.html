@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - Transformer & GIS</title>
+    <title>RCM Expert System - Transformer & GIS</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Prompt -->
@@ -24,27 +24,24 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-30 flex flex-col w-64 bg-slate-900 text-white transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
             <div class="flex items-center justify-between h-16 bg-slate-800 px-4">
-                <h1 class="text-xl font-bold tracking-wider text-blue-400"><i class="fa-solid fa-bolt-lightning mr-2"></i>RCM Asset</h1>
+                <h1 class="text-xl font-bold tracking-wider text-blue-400"><i class="fa-solid fa-bolt-lightning mr-2"></i>RCM Expert</h1>
                 <button id="close-sidebar" class="md:hidden text-gray-400 hover:text-white focus:outline-none">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
             <nav class="flex-1 px-4 py-6 space-y-2">
                 <a href="#" onclick="switchTab('dashboard')" class="nav-link flex items-center px-4 py-3 text-sm font-medium bg-blue-600 rounded-lg text-white" data-target="dashboard">
-                    <i class="fa-solid fa-chart-pie w-6"></i>ภาพรวม (Dashboard)
-                </a>
-                <a href="#" onclick="switchTab('priority')" class="nav-link flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300" data-target="priority">
-                    <i class="fa-solid fa-list-ol w-6"></i>จัดลำดับทำ PM ก่อน-หลัง
+                    <i class="fa-solid fa-chart-pie w-6"></i>หน้าแรก (Dashboard)
                 </a>
                 <a href="#" onclick="switchTab('testing')" class="nav-link flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300" data-target="testing">
-                    <i class="fa-solid fa-file-waveform w-6"></i>รายละเอียดการทดสอบ
+                    <i class="fa-solid fa-flask w-6"></i>รายละเอียดการทดสอบ (DGA/Duval)
                 </a>
-                <a href="#" onclick="switchTab('plan')" class="nav-link flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300" data-target="plan">
-                    <i class="fa-solid fa-calendar-check w-6"></i>แผนบำรุงรักษา
+                <a href="#" onclick="switchTab('fmea')" class="nav-link flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300" data-target="fmea">
+                    <i class="fa-solid fa-table-cells w-6"></i>วิเคราะห์ FMEA & RPN
                 </a>
             </nav>
             <div class="p-4 bg-slate-800 text-xs text-center text-gray-400">
-                ระบบ RCM ไฟฟ้า v2.0
+                ระบบ RCM ไฟฟ้า v3.0
             </div>
         </aside>
 
@@ -56,10 +53,10 @@
                     <button id="open-sidebar" class="md:hidden text-gray-600 focus:outline-none p-2">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
-                    <span id="page-title" class="font-semibold text-base md:text-lg text-gray-700">ภาพรวมระบบ (Dashboard)</span>
+                    <span id="page-title" class="font-semibold text-base md:text-lg text-gray-700">หน้าแรก (Dashboard & PM Schedule)</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2 cursor-pointer" onclick="openModal('ข้อมูลผู้ใช้งาน', 'ชื่อ: สมชาย ใจดี\nตำแหน่ง: วิศวกรอาวุโส (Admin)')">
+                    <div class="flex items-center space-x-2 cursor-pointer" onclick="openModal('ข้อมูลผู้ใช้งาน', 'ชื่อ: วิศวกรสถานีไฟฟ้า\nสิทธิ์การใช้งาน: ผู้ดูแลระบบ RCM')">
                         <div class="w-9 h-9 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">EN</div>
                         <span class="hidden sm:inline text-sm font-medium">วิศวกรไฟฟ้า (Admin)</span>
                     </div>
@@ -69,134 +66,98 @@
             <!-- Scrollable Content -->
             <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
                 
-                <!-- TAB 1: DASHBOARD -->
+                <!-- TAB 1: DASHBOARD & PM SCHEDULE -->
                 <div id="tab-dashboard" class="tab-content space-y-6">
+                    
+                    <!-- KPI Summary Cards (ป้ายแสดงอุปกรณ์ทั้งหมด, ปลอดภัย, เฝ้าระวัง, วิกฤต) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div onclick="switchTab('priority')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:border-blue-300 transition">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-gray-500">อุปกรณ์ที่ต้องทำ PM ด่วน</p>
-                                <h3 class="text-2xl font-bold text-red-600 mt-1">2 ยูนิต</h3>
-                                <span class="text-xs text-red-600 font-medium"><i class="fa-solid fa-triangle-exclamation"></i> ลำดับที่ 1-2</span>
+                                <p class="text-sm font-medium text-gray-500">อุปกรณ์ทั้งหมด</p>
+                                <h3 class="text-3xl font-bold text-gray-900 mt-1">60 ยูนิต</h3>
+                                <span class="text-xs text-blue-600 font-medium">Transformer 24 / GIS 36 Bay</span>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-charging-station"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">อุปกรณ์ปลอดภัย (Normal)</p>
+                                <h3 class="text-3xl font-bold text-green-600 mt-1">54 ยูนิต</h3>
+                                <span class="text-xs text-green-600 font-medium"><i class="fa-solid fa-circle-check"></i> Health Index HI-1, 2</span>
+                            </div>
+                            <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">เฝ้าระวัง (Warning)</p>
+                                <h3 class="text-3xl font-bold text-yellow-600 mt-1">4 ยูนิต</h3>
+                                <span class="text-xs text-yellow-600 font-medium"><i class="fa-solid fa-triangle-exclamation"></i> Health Index HI-3, 4</span>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-50 text-yellow-600 rounded-xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">วิกฤต (Critical)</p>
+                                <h3 class="text-3xl font-bold text-red-600 mt-1">2 ยูนิต</h3>
+                                <span class="text-xs text-red-600 font-medium"><i class="fa-solid fa-fire"></i> Health Index HI-5 (ซ่อมด่วน)</span>
                             </div>
                             <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-xl">
-                                <i class="fa-solid fa-list-ol"></i>
-                            </div>
-                        </div>
-
-                        <div onclick="switchTab('testing')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:border-indigo-300 transition">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">ผลการทดสอบทั้งหมด</p>
-                                <h3 class="text-2xl font-bold text-gray-900 mt-1">60 รายการ</h3>
-                                <span class="text-xs text-green-600 font-medium"><i class="fa-solid fa-check"></i> อัปเดตล่าสุดวันนี้</span>
-                            </div>
-                            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
-                                <i class="fa-solid fa-file-waveform"></i>
+                                <i class="fa-solid fa-radiation"></i>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Quick Preview Priority Table -->
+                    <!-- PM Schedule Table (ตารางการเข้าทำ PM ก่อน-หลัง) -->
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-base font-bold text-gray-800"><i class="fa-solid fa-arrow-down-1-9 text-red-600 mr-2"></i>ลำดับเร่งด่วนในการเข้าทำ PM (Top Priority)</h2>
-                            <button onclick="switchTab('priority')" class="text-sm text-blue-600 font-medium hover:underline">ดูทั้งหมด</button>
+                            <h2 class="text-base font-bold text-gray-800"><i class="fa-solid fa-list-ol text-blue-600 mr-2"></i>ตารางลำดับการเข้าทำ PM (PM Prioritized Schedule)</h2>
+                            <button onclick="switchTab('testing')" class="text-sm text-blue-600 font-medium hover:underline">ดูผลทดสอบเชิงลึก</button>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[500px]">
-                                <thead>
-                                    <tr class="border-b text-xs font-semibold text-gray-500 uppercase">
-                                        <th class="py-3 px-2">ลำดับ PM</th>
-                                        <th class="py-3 px-2">รหัสอุปกรณ์</th>
-                                        <th class="py-3 px-2">ประเภท</th>
-                                        <th class="py-3 px-2">Health Index</th>
-                                        <th class="py-3 px-2">ความเสี่ยง / อาการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y text-sm">
-                                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="switchTab('testing')">
-                                        <td class="py-3 px-2 font-bold text-red-600">#1 (ด่วนที่สุด)</td>
-                                        <td class="py-3 px-2 font-medium">TR-Substation B1</td>
-                                        <td class="py-3 px-2">Transformer</td>
-                                        <td class="py-3 px-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold">HI-5 (วิกฤต)</span></td>
-                                        <td class="py-3 px-2 text-red-600">อุณหภูมิน้ำมันสูง (88.4°C)</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="switchTab('testing')">
-                                        <td class="py-3 px-2 font-bold text-yellow-600">#2 (เร่งด่วน)</td>
-                                        <td class="py-3 px-2 font-medium">GIS-Bay 02</td>
-                                        <td class="py-3 px-2">GIS</td>
-                                        <td class="py-3 px-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3 (เตือน)</span></td>
-                                        <td class="py-3 px-2 text-yellow-600">SF6 Pressure ต่ำ (0.52 MPa)</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: PRIORITY TABLE (จัดลำดับ PM ก่อน-หลัง) -->
-                <div id="tab-priority" class="tab-content hidden space-y-6">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h2 class="text-lg font-bold text-gray-800 mb-2"><i class="fa-solid fa-list-ol text-blue-600 mr-2"></i>ตารางจัดลำดับการเข้าบำรุงรักษา (PM Prioritization Matrix)</h2>
-                        <p class="text-sm text-gray-500 mb-6">จัดเรียงลำดับความสำคัญโดยอ้างอิงจาก Health Index (HI) และผลการทดสอบเชิงวิเคราะห์ (RCM)</p>
-                        
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[700px]">
+                            <table class="w-full text-left border-collapse min-w-[650px]">
                                 <thead>
                                     <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
                                         <th class="py-3 px-3">ลำดับ PM</th>
                                         <th class="py-3 px-3">รหัสอุปกรณ์</th>
                                         <th class="py-3 px-3">ประเภท</th>
-                                        <th class="py-3 px-3">Health Index</th>
-                                        <th class="py-3 px-3">ข้อบ่งชี้ความผิดปกติ</th>
-                                        <th class="py-3 px-3">กลยุทธ์แนะนำ</th>
+                                        <th class="py-3 px-3">สถานะความเสี่ยง</th>
+                                        <th class="py-3 px-3">ข้อบ่งชี้ทางเทคนิค</th>
                                         <th class="py-3 px-3">การกระทำ</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y text-sm">
                                     <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-3 font-bold text-red-600">1</td>
+                                        <td class="py-3 px-3 font-bold text-red-600">#1 (วิกฤต)</td>
                                         <td class="py-3 px-3 font-medium">TR-Substation B1</td>
                                         <td class="py-3 px-3">Transformer</td>
-                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold">HI-5</span></td>
-                                        <td class="py-3 px-3 text-red-600">น้ำมันร้อนเกิน (88.4°C), DGA ก๊าซสูง</td>
-                                        <td class="py-3 px-3">Corrective Action (ซ่อมด่วน)</td>
+                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold">HI-5 (วิกฤต)</span></td>
+                                        <td class="py-3 px-3 text-red-600">Duval Triangle: Thermal Fault (>700°C)</td>
                                         <td class="py-3 px-3"><button onclick="selectAssetAndTest('TR-Substation B1')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-3 font-bold text-yellow-600">2</td>
+                                        <td class="py-3 px-3 font-bold text-yellow-600">#2 (เฝ้าระวัง)</td>
                                         <td class="py-3 px-3 font-medium">GIS-Bay 02</td>
                                         <td class="py-3 px-3">GIS</td>
-                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3</span></td>
-                                        <td class="py-3 px-3 text-yellow-600">แรงดัน SF6 ต่ำ (0.52 MPa), PD ปานกลาง</td>
-                                        <td class="py-3 px-3">Condition-based (เติมก๊าซ/Leak test)</td>
+                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3 (เฝ้าระวัง)</span></td>
+                                        <td class="py-3 px-3 text-yellow-600">SF6 Pressure ต่ำ (0.52 MPa), Partial Discharge สูง</td>
                                         <td class="py-3 px-3"><button onclick="selectAssetAndTest('GIS-Bay 02')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-3 font-bold text-gray-700">3</td>
+                                        <td class="py-3 px-3 font-bold text-gray-700">#3 (ตามรอบ)</td>
                                         <td class="py-3 px-3 font-medium">TR-Substation A2</td>
                                         <td class="py-3 px-3">Transformer</td>
-                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3</span></td>
-                                        <td class="py-3 px-3 text-gray-600">ความเป็นฉนวนเริ่มเสื่อมตามรอบเวลา</td>
-                                        <td class="py-3 px-3">Condition-based (ทดสอบน้ำมันซ้ำ)</td>
+                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3 (เฝ้าระวัง)</span></td>
+                                        <td class="py-3 px-3 text-gray-600">Key Gas: Methane เริ่มสะสม</td>
                                         <td class="py-3 px-3"><button onclick="selectAssetAndTest('TR-Substation A2')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-3 font-bold text-gray-700">4</td>
-                                        <td class="py-3 px-3 font-medium">TR-Substation A1</td>
-                                        <td class="py-3 px-3">Transformer</td>
-                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">HI-1</span></td>
-                                        <td class="py-3 px-3 text-green-600">ปกติทุกพารามิเตอร์</td>
-                                        <td class="py-3 px-3">Time-based (ตามรอบปกติ)</td>
-                                        <td class="py-3 px-3"><button onclick="selectAssetAndTest('TR-Substation A1')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-3 font-bold text-gray-700">5</td>
-                                        <td class="py-3 px-3 font-medium">GIS-Bay 01 & 03</td>
-                                        <td class="py-3 px-3">GIS</td>
-                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">HI-1</span></td>
-                                        <td class="py-3 px-3 text-green-600">ปกติทุกพารามิเตอร์</td>
-                                        <td class="py-3 px-3">Routine Check</td>
-                                        <td class="py-3 px-3"><button onclick="selectAssetAndTest('GIS-Bay 01')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -204,57 +165,88 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: DETAILED TESTING RESULTS (เลือกดูรายละเอียดการทดสอบอุปกรณ์) -->
+                <!-- TAB 2: DETAILED TESTING (DGA, Key Gas, Duval Triangle) -->
                 <div id="tab-testing" class="tab-content hidden space-y-6">
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
                         
-                        <!-- Header & Dropdown Selector -->
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-file-waveform text-indigo-600 mr-2"></i>รายละเอียดผลการทดสอบรายอุปกรณ์</h2>
-                                <p class="text-sm text-gray-500">เลือกอุปกรณ์ที่ต้องการเพื่อตรวจสอบผลการทดสอบทางห้องปฏิบัติการและออนไลน์</p>
+                                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-flask text-indigo-600 mr-2"></i>รายละเอียดการทดสอบเชิงลึก (DGA & Duval Triangle)</h2>
+                                <p class="text-sm text-gray-500">ตรวจสอบวิเคราะห์ก๊าซละลายในน้ำมันหม้อแปลง (Key Gases) และการวินิจฉัยความผิดปกติ</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
                                 <label class="text-sm font-medium text-gray-700 whitespace-nowrap">เลือกอุปกรณ์:</label>
-                                <select id="asset-selector" onchange="updateTestDetails()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 bg-white w-full md:w-64">
+                                <select id="asset-selector" onchange="updateTestingView()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 bg-white w-full md:w-64">
                                     <option value="TR-Substation B1">TR-Substation B1 (Transformer - วิกฤต)</option>
-                                    <option value="GIS-Bay 02">GIS-Bay 02 (GIS - เตือน)</option>
-                                    <option value="TR-Substation A2">TR-Substation A2 (Transformer - ปานกลาง)</option>
-                                    <option value="TR-Substation A1">TR-Substation A1 (Transformer - ปกติ)</option>
-                                    <option value="GIS-Bay 01">GIS-Bay 01 (GIS - ปกติ)</option>
+                                    <option value="GIS-Bay 02">GIS-Bay 02 (GIS - เฝ้าระวัง)</option>
+                                    <option value="TR-Substation A2">TR-Substation A2 (Transformer - เฝ้าระวัง)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Dynamic Test Content Container -->
-                        <div id="test-content-container" class="space-y-6">
-                            <!-- เนื้อหาจะถูกเรนเดอร์ด้วย JavaScript ตามอุปกรณ์ที่เลือก -->
+                        <!-- Test Detail Container -->
+                        <div id="testing-detail-container" class="space-y-6">
+                            <!-- Rendered by JS -->
                         </div>
 
                     </div>
                 </div>
 
-                <!-- TAB 4: RCM PLAN -->
-                <div id="tab-plan" class="tab-content hidden space-y-6">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-calendar-check text-green-600 mr-2"></i>แผนการบำรุงรักษาเชิงคาดการณ์</h2>
-                        <div class="space-y-3">
-                            <div class="p-4 bg-gray-50 rounded-lg border flex justify-between items-center">
-                                <div>
-                                    <span class="text-xs bg-red-100 text-red-800 font-semibold px-2 py-0.5 rounded">PM ลำดับที่ #1</span>
-                                    <h4 class="font-semibold text-gray-800 mt-1">DGA Oil Testing & Overhaul (TR-Substation B1)</h4>
-                                    <p class="text-xs text-gray-500">กำหนดการ: 28 ส.ค. 2026</p>
-                                </div>
-                                <span class="text-xs text-red-600 font-bold">ต้องดำเนินการด่วน</span>
-                            </div>
-                            <div class="p-4 bg-gray-50 rounded-lg border flex justify-between items-center">
-                                <div>
-                                    <span class="text-xs bg-yellow-100 text-yellow-800 font-semibold px-2 py-0.5 rounded">PM ลำดับที่ #2</span>
-                                    <h4 class="font-semibold text-gray-800 mt-1">SF6 Gas Refilling & Leak Test (GIS-Bay 02)</h4>
-                                    <p class="text-xs text-gray-500">กำหนดการ: 30 ส.ค. 2026</p>
-                                </div>
-                                <span class="text-xs text-yellow-600 font-bold">ตามแผนเร่งด่วน</span>
-                            </div>
+                <!-- TAB 3: FMEA & RPN ANALYSIS -->
+                <div id="tab-fmea" class="tab-content hidden space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-table-cells text-blue-600 mr-2"></i>การวิเคราะห์ FMEA และค่า RPN (Risk Priority Number)</h2>
+                            <p class="text-sm text-gray-500 mt-1">ประเมินโหมดความล้มเหลว (Failure Mode) ผลกระทบ (Severity) โอกาสเกิด (Occurrence) และความสามารถในการตรวจจับ (Detection)</p>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[850px]">
+                                <thead>
+                                    <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
+                                        <th class="py-3 px-3">ระบบอุปกรณ์</th>
+                                        <th class="py-3 px-3">โหมดความล้มเหลว (Failure Mode)</th>
+                                        <th class="py-3 px-3">ผลกระทบ (Effects)</th>
+                                        <th class="py-3 px-3 text-center">S (1-10)</th>
+                                        <th class="py-3 px-3 text-center">O (1-10)</th>
+                                        <th class="py-3 px-3 text-center">D (1-10)</th>
+                                        <th class="py-3 px-3 text-center">RPN (S×O×D)</th>
+                                        <th class="py-3 px-3">การจัดการ RCM</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y text-sm">
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-3 px-3 font-medium">Transformer (ขดลวด)</td>
+                                        <td class="py-3 px-3">เกิดความร้อนสูงสะสม / Short Circuit ระหว่างรอบ</td>
+                                        <td class="py-3 px-3 text-red-600">หม้อแปลงระเบิด, ไฟไหม้, ไฟดับเป็นวงกว้าง</td>
+                                        <td class="py-3 px-3 text-center font-bold">10</td>
+                                        <td class="py-3 px-3 text-center font-bold">4</td>
+                                        <td class="py-3 px-3 text-center font-bold">3</td>
+                                        <td class="py-3 px-3 text-center"><span class="px-2 py-1 bg-red-100 text-red-700 font-bold rounded">120 (สูงมาก)</span></td>
+                                        <td class="py-3 px-3 text-gray-700">Online DGA Monitoring & ตรวจวัดอุณหภูมิทุกเดือน</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-3 px-3 font-medium">GIS (ระบบก๊าซ SF6)</td>
+                                        <td class="py-3 px-3">ก๊าซ SF6 รั่วซึมตามซีลข้อต่อ</td>
+                                        <td class="py-3 px-3 text-yellow-600">ความเป็นฉนวนลดลง, เกิด Flashover ภายในตู้</td>
+                                        <td class="py-3 px-3 text-center font-bold">9</td>
+                                        <td class="py-3 px-3 text-center font-bold">3</td>
+                                        <td class="py-3 px-3 text-center font-bold">4</td>
+                                        <td class="py-3 px-3 text-center"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 font-bold rounded">108 (สูง)</span></td>
+                                        <td class="py-3 px-3 text-gray-700">ติดตั้ง Densimeter เตือนภัยอัตโนมัติ + Acoustic PD Test</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-3 px-3 font-medium">Transformer (ฉนวนน้ำมัน)</td>
+                                        <td class="py-3 px-3">ความชื้นและกรดในน้ำมันสูงเกินเกณฑ์</td>
+                                        <td class="py-3 px-3 text-gray-600">ฉนวนกระดาษเสื่อมสภาพเร็วกว่ากำหนด</td>
+                                        <td class="py-3 px-3 text-center font-bold">7</td>
+                                        <td class="py-3 px-3 text-center font-bold">5</td>
+                                        <td class="py-3 px-3 text-center font-bold">2</td>
+                                        <td class="py-3 px-3 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 font-bold rounded">70 (ปานกลาง)</span></td>
+                                        <td class="py-3 px-3 text-gray-700">Oil Filtration / สุ่มตรวจค่า Breakdown Voltage ทุกปี</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -274,7 +266,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- SCRIPT -->
     <script>
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
@@ -309,10 +301,9 @@
             });
 
             const titles = {
-                'dashboard': 'ภาพรวมระบบ (Dashboard)',
-                'priority': 'ตารางจัดลำดับ PM ก่อน-หลัง',
-                'testing': 'รายละเอียดผลการทดสอบรายอุปกรณ์',
-                'plan': 'แผนบำรุงรักษาเชิงคาดการณ์ (RCM Plan)'
+                'dashboard': 'หน้าแรก (Dashboard & PM Schedule)',
+                'testing': 'รายละเอียดการทดสอบ (DGA, Key Gas & Duval Triangle)',
+                'fmea': 'การวิเคราะห์ FMEA และค่า RPN'
             };
             pageTitle.innerText = titles[tabName] || 'RCM Portal';
 
@@ -331,82 +322,78 @@
             appModal.classList.add('hidden');
         }
 
-        // ฐานข้อมูลผลการทดสอบจำลองสำหรับแต่ละอุปกรณ์
-        const testDatabase = {
+        // ฐานข้อมูล DGA และ Duval Triangle สำหรับแต่ละอุปกรณ์
+        const testingData = {
             "TR-Substation B1": {
-                type: "Transformer",
+                type: "Transformer (Oil-immersed)",
                 hi: "HI-5 (วิกฤต)",
                 hiColor: "bg-red-100 text-red-700",
-                pmOrder: "ลำดับที่ 1 (ซ่อมด่วนที่สุด)",
-                tests: [
-                    { name: "1. DGA (Dissolved Gas Analysis)", result: "พบก๊าซ Acetylene และ Ethylene สูงผิดปกติ", status: "Critical", statusColor: "text-red-600 font-bold" },
-                    { name: "2. Breakdown Voltage (ASTM D1816)", result: "32 kV (ต่ำกว่าเกณฑ์มาตรฐานที่ 45 kV)", status: "Fail", statusColor: "text-red-600 font-bold" },
-                    { name: "3. Interfacial Tension (IFT)", result: "18 mN/m (น้ำมันเสื่อมสภาพเกิดกรด)", status: "Fail", statusColor: "text-red-600 font-bold" },
-                    { name: "4. Winding Resistance", result: "Phase A, B, C สมดุลดี (Error < 1%)", status: "Pass", statusColor: "text-green-600" },
-                    { name: "5. Bushing Power Factor (C1/C2)", result: "0.45% (ฉนวนบูชิงยังปกติ)", status: "Pass", statusColor: "text-green-600" }
+                keyGases: [
+                    { gas: "Hydrogen (H2)", value: "1,250 ppm", status: "Critical (สูงมาก)", color: "text-red-600 font-bold" },
+                    { gas: "Methane (CH4)", value: "450 ppm", status: "High", color: "text-red-600 font-bold" },
+                    { gas: "Acetylene (C2H2)", value: "85 ppm", status: "Critical (พบการอาร์คไฟฟ้า)", color: "text-red-600 font-bold" },
+                    { gas: "Ethylene (C2H4)", value: "920 ppm", status: "Critical (ความร้อนสูง > 700°C)", color: "text-red-600 font-bold" },
+                    { gas: "Ethane (C2H6)", value: "210 ppm", status: "High", color: "text-yellow-600" }
+                ],
+                duval: {
+                    zone: "T3 (Thermal Fault > 700°C) และ D1 (Discharge of High Energy)",
+                    desc: "พิกัดเปอร์เซ็นต์ก๊าซในสามเหลี่ยมดุวัล ตกอยู่ในโซนความร้อนจัดและมีการสпар์คของกระแสไฟฟ้าแรงสูง แนะนำให้ปลดส N (Out of service) ทันทีเพื่อซ่อมแซมขดลวด"
+                },
+                otherTests: [
+                    { name: "Breakdown Voltage", result: "32 kV (เกณฑ์ปกติ > 45 kV)", status: "Fail" },
+                    { name: "Interfacial Tension (IFT)", result: "18 mN/m", status: "Fail" },
+                    { name: "Water Content", result: "38 ppm (ชื้นสูง)", status: "Warning" }
                 ]
             },
             "GIS-Bay 02": {
                 type: "GIS (Gas Insulated Switchgear)",
-                hi: "HI-3 (ปานกลาง / เตือน)",
+                hi: "HI-3 (เฝ้าระวัง)",
                 hiColor: "bg-yellow-100 text-yellow-700",
-                pmOrder: "ลำดับที่ 2 (เร่งด่วน)",
-                tests: [
-                    { name: "1. SF6 Gas Pressure & Density", result: "0.52 MPa (ต่ำกว่าเกณฑ์ปกติที่ 0.65 MPa)", status: "Warning", statusColor: "text-yellow-600 font-bold" },
-                    { name: "2. SF6 Moisture (Dew Point)", result: "-25°C (ไอน้ำในก๊าซสูงเกินมาตรฐานเล็กน้อย)", status: "Warning", statusColor: "text-yellow-600 font-bold" },
-                    { name: "3. Partial Discharge (UHF & Acoustic)", result: "15 pC (พบสัญญาณรบกวนบางส่วนที่หน้าสัมผัส)", status: "Warning", statusColor: "text-yellow-600 font-bold" },
-                    { name: "4. Circuit Breaker Timing Test", result: "Opening time: 38 ms (อยู่ในเกณฑ์)", status: "Pass", statusColor: "text-green-600" },
-                    { name: "5. Contact Resistance (DC)", result: "42 micro-ohm (ปกติ)", status: "Pass", statusColor: "text-green-600" }
+                keyGases: [
+                    { gas: "SF6 Gas Pressure", value: "0.52 MPa", status: "Warning (ต่ำกว่า 0.65 MPa)", color: "text-yellow-600 font-bold" },
+                    { gas: "Moisture (Dew Point)", value: "-25 °C", status: "Warning", color: "text-yellow-600" },
+                    { gas: "CF4 (Byproduct)", value: "45 ppm", status: "Normal", color: "text-green-600" }
+                ],
+                duval: {
+                    zone: "ไม่เกี่ยวข้องกับระบบน้ำมัน (ใช้การวิเคราะห์ Partial Discharge แทน)",
+                    desc: "ตรวจพบสัญญาณ Partial Discharge ขนาด 15 pC บริเวณหน้าสัมผัสเซอร์กิตเบรกเกอร์ พร้อมแรงดันก๊าซลดลง ชี้ว่ามีจุดรั่วซึมขนาดเล็ก (Micro-leak)"
+                },
+                otherTests: [
+                    { name: "Partial Discharge (UHF)", result: "15 pC (Medium Risk)", status: "Warning" },
+                    { name: "Contact Resistance", result: "42 micro-ohm", status: "Pass" }
                 ]
             },
             "TR-Substation A2": {
-                type: "Transformer",
-                hi: "HI-3 (ปานกลาง)",
+                type: "Transformer (Oil-immersed)",
+                hi: "HI-3 (เฝ้าระวัง)",
                 hiColor: "bg-yellow-100 text-yellow-700",
-                pmOrder: "ลำดับที่ 3",
-                tests: [
-                    { name: "1. DGA (Dissolved Gas Analysis)", result: "พบก๊าซ Methane เล็กน้อยตามอายุใช้งาน", status: "Normal", statusColor: "text-yellow-600" },
-                    { name: "2. Breakdown Voltage (ASTM D1816)", result: "48 kV (เกณฑ์มาตรฐาน > 45 kV)", status: "Pass", statusColor: "text-green-600" },
-                    { name: "3. Water Content in Oil", result: "22 ppm (ปกติ)", status: "Pass", statusColor: "text-green-600" },
-                    { name: "4. Turns Ratio Test (TTR)", result: "Dev < 0.2%", status: "Pass", statusColor: "text-green-600" }
-                ]
-            },
-            "TR-Substation A1": {
-                type: "Transformer",
-                hi: "HI-1 (ปกติมาก)",
-                hiColor: "bg-green-100 text-green-700",
-                pmOrder: "ลำดับที่ 4 (รอบปกติ)",
-                tests: [
-                    { name: "1. DGA (Dissolved Gas Analysis)", result: "ไม่พบก๊าซผิดปกติ", status: "Pass", statusColor: "text-green-600" },
-                    { name: "2. Breakdown Voltage", result: "58 kV", status: "Pass", statusColor: "text-green-600" },
-                    { name: "3. Power Factor Test", result: "0.22%", status: "Pass", statusColor: "text-green-600" }
-                ]
-            },
-            "GIS-Bay 01": {
-                type: "GIS",
-                hi: "HI-1 (ปกติมาก)",
-                hiColor: "bg-green-100 text-green-700",
-                pmOrder: "ลำดับที่ 5 (รอบปกติ)",
-                tests: [
-                    { name: "1. SF6 Gas Pressure", result: "0.65 MPa (ปกติ)", status: "Pass", statusColor: "text-green-600" },
-                    { name: "2. Partial Discharge", result: "< 5 pC (ต่ำมาก)", status: "Pass", statusColor: "text-green-600" },
-                    { name: "3. Contact Resistance", result: "38 micro-ohm", status: "Pass", statusColor: "text-green-600" }
+                keyGases: [
+                    { gas: "Hydrogen (H2)", value: "85 ppm", status: "Normal", color: "text-green-600" },
+                    { gas: "Methane (CH4)", value: "65 ppm", status: "Warning (เริ่มสะสม)", color: "text-yellow-600 font-bold" },
+                    { gas: "Acetylene (C2H2)", value: "0 ppm", status: "Normal", color: "text-green-600" },
+                    { gas: "Ethylene (C2H4)", value: "40 ppm", status: "Normal", color: "text-green-600" }
+                ],
+                duval: {
+                    zone: "S (Stray gassing / ความร้อนต่ำปกติของน้ำมันอายุมาก)",
+                    desc: "ก๊าซอยู่ในเกณฑ์ปลอดภัย ยังไม่มีความร้อนสูงผิดปกติ แนะนำให้ติดตามผลทดสอบซ้ำในอีก 3 เดือนข้างหน้า"
+                },
+                otherTests: [
+                    { name: "Breakdown Voltage", result: "48 kV", status: "Pass" },
+                    { name: "Water Content", result: "20 ppm", status: "Pass" }
                 ]
             }
         };
 
-        // ฟังก์ชันเมื่อกดปุ่มจากตารางจัดลำดับ ให้กระโดดไปหน้าทดสอบและเลือกอุปกรณ์นั้นทันที
         function selectAssetAndTest(assetName) {
             document.getElementById('asset-selector').value = assetName;
             switchTab('testing');
-            updateTestDetails();
+            updateTestingView();
         }
 
-        // อัปเดตตารางผลการทดสอบตาม Dropdown
-        function updateTestDetails() {
-            const selectedAsset = document.getElementById('asset-selector').value;
-            const data = testDatabase[selectedAsset];
-            const container = document.getElementById('test-content-container');
+        function updateTestingView() {
+            const assetKey = document.getElementById('asset-selector').value;
+            const data = testingData[assetKey];
+            const container = document.getElementById('testing-detail-container');
 
             let html = `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border">
@@ -415,50 +402,59 @@
                         <h4 class="font-bold text-gray-800">${data.type}</h4>
                     </div>
                     <div>
-                        <span class="text-xs text-gray-500">Health Index (HI)</span>
+                        <span class="text-xs text-gray-500">Health Index</span>
                         <div class="mt-1"><span class="px-2 py-1 rounded text-xs font-bold ${data.hiColor}">${data.hi}</span></div>
                     </div>
                     <div>
-                        <span class="text-xs text-gray-500">สถานะลำดับ PM</span>
-                        <h4 class="font-bold text-blue-600 mt-1">${data.pmOrder}</h4>
+                        <span class="text-xs text-gray-500">โหมดการวิเคราะห์หลัก</span>
+                        <h4 class="font-bold text-indigo-600 mt-1">DGA & Duval Triangle</h4>
                     </div>
                 </div>
 
-                <h3 class="font-bold text-gray-800 text-base mt-4"><i class="fa-solid fa-list-check mr-2 text-indigo-600"></i>รายการทดสอบห้องปฏิบัติการและออนไลน์ (Test Parameters)</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[600px]">
-                        <thead>
-                            <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
-                                <th class="py-3 px-3">รายการทดสอบ (Test Items)</th>
-                                <th class="py-3 px-3">ผลการวัด (Measured Result)</th>
-                                <th class="py-3 px-3">สถานะ (Status)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y text-sm">
+                <!-- Key Gas Table -->
+                <div>
+                    <h3 class="font-bold text-gray-800 text-base mb-3"><i class="fa-solid fa-gauge-high mr-2 text-blue-600"></i>การวิเคราะห์ก๊าซสำคัญ (Key Gases)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
+                                    <th class="py-3 px-3">ชนิดก๊าซ (Key Gas)</th>
+                                    <th class="py-3 px-3">ค่าที่วัดได้ (Concentration)</th>
+                                    <th class="py-3 px-3">การประเมินสถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y text-sm">
             `;
 
-            data.tests.forEach(test => {
+            data.keyGases.forEach(gas => {
                 html += `
                     <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-3 font-medium text-gray-800">${test.name}</td>
-                        <td class="py-3 px-3 text-gray-600">${test.result}</td>
-                        <td class="py-3 px-3 ${test.statusColor}">${test.status}</td>
+                        <td class="py-3 px-3 font-medium">${gas.gas}</td>
+                        <td class="py-3 px-3">${gas.value}</td>
+                        <td class="py-3 px-3 ${gas.color}">${gas.status}</td>
                     </tr>
                 `;
             });
 
             html += `
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Duval Triangle Section -->
+                <div class="p-5 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
+                    <h3 class="font-bold text-indigo-900 text-base"><i class="fa-solid fa-triangle-exclamation mr-2 text-indigo-600"></i>ผลวิเคราะห์สามเหลี่ยมดุวัล (Duval's Triangle Diagnosis)</h3>
+                    <p class="text-sm font-semibold text-indigo-800">พิกัดโซน: ${data.duval.zone}</p>
+                    <p class="text-xs text-indigo-700 leading-relaxed">${data.duval.desc}</p>
                 </div>
             `;
 
             container.innerHTML = html;
         }
 
-        // โหลดข้อมูลเริ่มต้นเมื่อเปิดหน้าเว็บ
         window.onload = function() {
-            updateTestDetails();
+            updateTestingView();
         };
     </script>
 </body>
