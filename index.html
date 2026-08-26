@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แถบเมนูซ้ายสไตล์ Sidebar)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เลือกอุปกรณ์ด้วย Dropdown)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -206,21 +206,6 @@
             font-weight: 600;
         }
 
-        .selected-asset-box {
-            margin-top: 15px;
-            background: var(--bg-color);
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-size: 0.85rem;
-        }
-
-        .selected-asset-box h4 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
         /* Right Panel Container */
         .right-panel {
             display: flex;
@@ -325,11 +310,6 @@
 
         tr:hover {
             background-color: #f1ede4;
-        }
-
-        tr.selected {
-            background-color: #e5ede7 !important;
-            border-left: 4px solid var(--primary);
         }
 
         /* Badges */
@@ -481,7 +461,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | แถบเมนูด้านซ้ายสไตล์ Sidebar สำหรับสลับหน้าจอและบันทึกผล</p>
+                <p>สถานีไฟฟ้าย่อย | แถบเมนูด้านซ้ายและช่องเลือกอุปกรณ์แบบ Dropdown สะดวกต่อการค้นหา</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -521,7 +501,7 @@
 
         <!-- Main Workspace Layout -->
         <div class="workspace">
-            <!-- Left Sidebar Menu (Gemini style small tabs) -->
+            <!-- Left Sidebar Menu (Gemini style small menu tabs) -->
             <div class="sidebar-menu">
                 <div class="sidebar-header">เมนูหลัก (Navigation)</div>
                 <button class="menu-item active" onclick="switchPanel('tablePanel', this)">
@@ -530,12 +510,6 @@
                 <button class="menu-item" onclick="switchPanel('formPanel', this)">
                     📝 บันทึกผลทดสอบหน้างาน
                 </button>
-
-                <div class="selected-asset-box">
-                    <h4>อุปกรณ์ที่กำลังเลือก:</h4>
-                    <p id="sidebarAssetName" style="font-weight:600; color:var(--text-main);">Power Transformer Unit #1</p>
-                    <p id="sidebarAssetId" style="font-size: 0.78rem; color: var(--text-muted);">รหัส: TR-01</p>
-                </div>
             </div>
 
             <!-- Right Content Panels -->
@@ -602,6 +576,17 @@
                             📄 กระดาษบันทึกผลทดสอบหน้างานแบบละเอียด
                         </h2>
                         
+                        <!-- Dropdown Asset Selector for Field Workers -->
+                        <div class="form-section-title" style="background: #e5ede7; color: var(--primary);">🔍 เลือกอุปกรณ์ที่ต้องการบันทึกผล (Dropdown)</div>
+                        <div class="form-row">
+                            <div class="form-group full">
+                                <label>เลือกจากรายชื่ออุปกรณ์ทั้งหมดในสถานี</label>
+                                <select id="assetDropdown" onchange="onDropdownSelect(this.value)" style="font-weight: bold; background: #fff;">
+                                    <!-- Populated by JS -->
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-section-title">1. ข้อมูลทั่วไปอุปกรณ์</div>
                         <div class="form-row">
                             <div class="form-group">
@@ -686,7 +671,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แถบเมนูด้านซ้ายสไตล์ Sidebar สลับดูตารางและฟอร์มบันทึกผล</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แถบเมนูด้านซ้ายสไตล์ Sidebar & ช่อง Dropdown เลือกอุปกรณ์</p>
         </footer>
     </div>
 
@@ -734,6 +719,7 @@
             let c2h2Val = type === "หม้อแปลง" ? (status === "วิกฤต" ? "35.1" : "0.5") : "-";
 
             mockData.push({
+                index: i - 1,
                 id,
                 name,
                 type,
@@ -755,10 +741,19 @@
         document.getElementById('count-danger').innerText = dangerCount;
         document.getElementById('avg-hi').innerText = (totalHI / 40).toFixed(1) + " / 100";
 
+        // Populate Dropdown for Form
+        const dropdown = document.getElementById('assetDropdown');
+        mockData.forEach((item, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx;
+            opt.innerText = `[${item.id}] ${item.name} (${item.type}) - สถานะ: ${item.status}`;
+            dropdown.appendChild(opt);
+        });
+
         let currentPage = 1;
         const rowsPerPage = 10;
         let filteredData = [...mockData];
-        let selectedRowIndex = 0;
+        let selectedIndex = 0;
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
@@ -789,11 +784,12 @@
 
                 let typeBadge = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
                 let isUrgent = item.dayOffset <= 5;
-                let isSelected = selectedRowIndex === (startIdx + idx);
 
                 const tr = document.createElement('tr');
-                if (isSelected) tr.classList.add('selected');
-                tr.onclick = () => selectAsset(startIdx + idx);
+                tr.onclick = () => {
+                    selectAsset(item.index);
+                    switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);
+                };
                 tr.innerHTML = `
                     <td><strong>#${globalIndex}</strong></td>
                     <td><strong>${item.id}</strong></td>
@@ -812,15 +808,13 @@
         }
 
         function selectAsset(index) {
-            selectedRowIndex = index;
-            const item = filteredData[index];
+            selectedIndex = index;
+            const item = mockData[index];
             
-            // Update Sidebar Selected Info
-            document.getElementById('sidebarAssetName').innerText = item.name;
-            document.getElementById('sidebarAssetId').innerText = `รหัส: ${item.id} (${item.type})`;
+            dropdown.value = index;
             document.getElementById('headerSelectedId').innerText = item.id;
 
-            // Populate Form Tab
+            // Populate Form Fields
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -837,8 +831,10 @@
             } else {
                 document.getElementById('labelParam1').innerText = "แรงดันก๊าซ SF6 (Pressure)";
             }
+        }
 
-            renderTable();
+        function onDropdownSelect(val) {
+            selectAsset(parseInt(val));
         }
 
         function switchPanel(panelId, btnElement) {
@@ -875,7 +871,7 @@
             renderTable();
         }
 
-        // Initial select first item
+        // Initial setup
         renderTable();
         selectAsset(0);
     </script>
