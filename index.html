@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ฉบับสมบูรณ์ครบทุกฟีเจอร์)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (Enterprise Edition ครบทุกฟีเจอร์)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -88,6 +88,7 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .mini-stat {
@@ -102,6 +103,27 @@
         .mini-stat span {
             font-weight: bold;
             color: var(--primary);
+        }
+
+        /* Role Selector Badge */
+        .role-badge {
+            background: #eae6db;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+        .role-badge select {
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            color: var(--primary);
+            outline: none;
+            cursor: pointer;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.85rem;
         }
 
         /* Summary Cards */
@@ -303,6 +325,7 @@
             display: flex;
             gap: 8px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
         .btn-export {
@@ -696,16 +719,20 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | แผนผังตำแหน่ง, ส่งออกไฟล์, แนบรูปความเสียหาย FMEA & ติดตามสถานะงานซ่อมบำรุง</p>
+                <p>สถานีไฟฟ้าย่อย | Enterprise Edition (Inventory, Trends, Alerts, RBAC & Logbook)</p>
             </div>
             <div class="header-stats">
+                <div class="role-badge">
+                    <span>👤 บทบาทผู้ใช้งาน (RBAC):</span>
+                    <select id="userRoleSelect" onchange="changeUserRole(this.value)">
+                        <option value="Admin">Manager / Admin (สิทธิ์สูงสุด)</option>
+                        <option value="Engineer" selected>Engineer (วิศวกร)</option>
+                        <option value="Technician">Field Technician (ช่างสนาม)</option>
+                    </select>
+                </div>
                 <div class="mini-stat">
                     <span>อุปกรณ์ทั้งหมด</span>
                     <strong>40 รายการ</strong>
-                </div>
-                <div class="mini-stat">
-                    <span>สถานะเลือกปัจจุบัน</span>
-                    <strong id="headerSelectedId">TR-01</strong>
                 </div>
             </div>
         </header>
@@ -738,7 +765,7 @@
         <div class="workspace">
             <!-- Left Sidebar Menu -->
             <div class="sidebar-menu">
-                <div class="sidebar-header">เมนูหลัก (Navigation)</div>
+                <div class="sidebar-header">เมนูหลัก (Enterprise)</div>
                 <button class="menu-item active" onclick="switchPanel('tablePanel', this)">
                     📊 รายการอุปกรณ์ & แผน PM
                 </button>
@@ -751,11 +778,20 @@
                 <button class="menu-item" onclick="switchPanel('statusPanel', this)">
                     📌 สถานะการดำเนินงาน (Status)
                 </button>
+                <button class="menu-item" onclick="switchPanel('inventoryPanel', this)">
+                    📦 คลังพัสดุ & อะไหล่สำรอง
+                </button>
+                <button class="menu-item" onclick="switchPanel('trendPanel', this)">
+                    📈 แดชบอร์ดวิเคราะห์แนวโน้ม
+                </button>
+                <button class="menu-item" onclick="switchPanel('logbookPanel', this)">
+                    📖 ประวัติซ่อมบำรุงย้อนหลัง
+                </button>
             </div>
 
             <!-- Right Content Panels -->
             <div class="right-panel">
-                <!-- Panel 1: Table & PM Schedule with Dropdown Filter -->
+                <!-- Panel 1: Table & PM Schedule -->
                 <div id="tablePanel" class="content-panel active">
                     <div class="control-panel" style="margin-bottom: 15px;">
                         <div class="search-dropdown-box">
@@ -820,7 +856,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Paper Form with Location -->
+                <!-- Panel 2: Paper Form -->
                 <div id="formPanel" class="content-panel">
                     <div class="inspection-form">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
@@ -954,7 +990,7 @@
                     </div>
 
                     <!-- Form to Add New FMEA Entry -->
-                    <div class="fmea-add-box">
+                    <div class="fmea-add-box" id="fmeaAddContainer">
                         <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 10px;">➕ บันทึกเพิ่มรูปแบบความเสียหายใหม่ & อัปโหลดรูปภาพ</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -1008,7 +1044,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 4: Workflow Status Tracker (Left Tab View) -->
+                <!-- Panel 4: Workflow Status Tracker -->
                 <div id="statusPanel" class="content-panel">
                     <div class="status-tracker-card">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
@@ -1081,11 +1117,140 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Panel 5: Inventory & Spare Parts (Feature 1) -->
+                <div id="inventoryPanel" class="content-panel">
+                    <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                        📦 ระบบจัดการอะไหล่และคลังพัสดุ (Spare Parts Inventory)
+                    </h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                        รายการอะไหล่สำรองที่จำเป็นสำหรับสถานีไฟฟ้าย่อย เชื่อมโยงกับค่าความเสี่ยง RPN เพื่อเตรียมพร้อมก่อนเข้าหน้างาน
+                    </p>
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>รหัสอะไหล่</th>
+                                        <th>ชื่อรายการอะไหล่ (Spare Part Name)</th>
+                                        <th>ประเภทอุปกรณ์ที่ใช้</th>
+                                        <th>คงเหลือ (Qty)</th>
+                                        <th>จุดสั่งซื้อ (Min Level)</th>
+                                        <th>สถานะคลังพัสดุ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>SP-01</td>
+                                        <td>Transformer Gasket Set (ชุดปะเก็นซีล)</td>
+                                        <td>หม้อแปลงไฟฟ้า</td>
+                                        <td><strong>2 ชุด</strong></td>
+                                        <td>3 ชุด</td>
+                                        <td><span class="badge warning">ใกล้หมด (Low Stock)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SP-02</td>
+                                        <td>SF6 Gas Cylinder (ถังแก๊ส SF6 สำรอง 50kg)</td>
+                                        <td>GIS Bay</td>
+                                        <td><strong>5 ถัง</strong></td>
+                                        <td>2 ถัง</td>
+                                        <td><span class="badge normal">ปกติ (Available)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SP-03</td>
+                                        <td>High Voltage Bushing 115kV</td>
+                                        <td>หม้อแปลงไฟฟ้า</td>
+                                        <td><strong>1 ต้น</strong></td>
+                                        <td>2 ต้น</td>
+                                        <td><span class="badge danger">วิกฤต - ต้องจัดซื้อด่วน</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SP-04</td>
+                                        <td>Circuit Breaker Trip Coil 110V DC</td>
+                                        <td>GIS Bay</td>
+                                        <td><strong>8 ชิ้น</strong></td>
+                                        <td>4 ชิ้น</td>
+                                        <td><span class="badge normal">ปกติ (Available)</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 6: Trend Analysis & Graph (Feature 2) -->
+                <div id="trendPanel" class="content-panel">
+                    <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                        📈 แดชบอร์ดวิเคราะห์แนวโน้มการเสื่อมสภาพ (Historical Trend Analysis)
+                    </h2>
+                    <div class="hi-calc-card">
+                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">กราฟจำลองอัตราการเสื่อมสภาพค่าน้ำมัน DGA (Hydrogen H₂ Over Time)</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                            เปรียบเทียบค่าพารามิเตอร์ย้อนหลัง 12 เดือน เพื่อคาดการณ์ Predictive Maintenance
+                        </p>
+                        <div style="background: var(--bg-color); padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed var(--border-color);">
+                            <div style="display: flex; justify-content: space-around; align-items: flex-end; height: 180px; padding-bottom: 10px; border-bottom: 2px solid var(--border-color);">
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 40px; border-radius: 4px;"></div><span style="font-size:0.75rem;">ม.ค.</span></div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 45px; border-radius: 4px;"></div><span style="font-size:0.75rem;">ก.พ.</span></div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 50px; border-radius: 4px;"></div><span style="font-size:0.75rem;">มี.ค.</span></div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 60px; border-radius: 4px;"></div><span style="font-size:0.75rem;">เม.ย.</span></div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--accent-blue); width: 25px; height: 75px; border-radius: 4px;"></div><span style="font-size:0.75rem;">พ.ค.</span></div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--status-warning); width: 25px; height: 110px; border-radius: 4px;"></div><span style="font-size:0.75rem;">มิ.ย.</span></div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="background: var(--status-danger); width: 25px; height: 150px; border-radius: 4px;"></div><span style="font-size:0.75rem; font-weight:bold;">ก.ค. (Current)</span></div>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--status-danger); margin-top: 10px; font-weight: bold;">⚠️ ข้อสังเกตวิศวกรรม: ค่า Hydrogen พุ่งสูงผิดปกติในเดือนมิถุนายน-กรกฎาคม แนะนำให้เข้ากรองน้ำมันด่วน</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 7: Asset Maintenance Logbook History (Feature 5) -->
+                <div id="logbookPanel" class="content-panel">
+                    <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                        📖 ประวัติการซ่อมบำรุงย้อนหลัง (Asset Maintenance Logbook)
+                    </h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                        บันทึกประวัติการซ่อมแซมและผลทดสอบรอบก่อนหน้าของอุปกรณ์ในสถานีไฟฟ้า
+                    </p>
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>วันที่ทำรายการ</th>
+                                        <th>รหัสอุปกรณ์</th>
+                                        <th>ประเภทใบงาน (Work Order)</th>
+                                        <th>รายละเอียดการปฏิบัติงาน</th>
+                                        <th>ผู้บันทึกผล</th>
+                                        <th>เอกสารแนบ (Manual/Drawing)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>15 ม.ค. 2025</td>
+                                        <td><strong>TR-01</strong></td>
+                                        <td><span class="badge-workflow">Preventive Maintenance</span></td>
+                                        <td>ทดสอบความเป็นฉนวนน้ำมัน (BDV) และทำความสะอาด Bushing</td>
+                                        <td>ช่างวิชัย</td>
+                                        <td><a href="#" onclick="alert('กำลังดาวน์โหลดคู่มือ TR-01_Manual.pdf')" style="color:var(--accent-blue); text-decoration:underline;">TR-01_Manual.pdf</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>10 มิ.ย. 2025</td>
+                                        <td><strong>GIS-01</strong></td>
+                                        <td><span class="badge warning">Corrective Maintenance</span></td>
+                                        <td>เติมก๊าซ SF6 เพิ่มเนื่องจากความดันลดลงต่ำกว่าเกณฑ์ปกติเล็กน้อย</td>
+                                        <td>ช่างอภิชาติ</td>
+                                        <td><a href="#" onclick="alert('กำลังดาวน์โหลด Drawing GIS-01')" style="color:var(--accent-blue); text-decoration:underline;">GIS-01_Drawing.dwg</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แสตนด์บายสถานะการดำเนินงานฝั่งซ้าย บอกผู้ดูแลและกำหนดการเสร็จ</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | Enterprise Edition ครบถ้วนทั้งคลังพัสดุ, แนวโน้ม, การแจ้งเตือน และสิทธิ์ผู้ใช้งาน</p>
         </footer>
     </div>
 
@@ -1240,6 +1405,18 @@
         let filteredData = [...mockData];
         let selectedIndex = 0;
         let customFMEARows = {};
+        let currentUserRole = "Engineer";
+
+        function changeUserRole(role) {
+            currentUserRole = role;
+            alert(`สลับบทบาทผู้ใช้งานเป็น: ${role} เรียบร้อย`);
+            // RBAC Enforcement example
+            if (role === "Technician") {
+                document.getElementById('fmeaAddContainer').style.display = 'none';
+            } else {
+                document.getElementById('fmeaAddContainer').style.display = 'block';
+            }
+        }
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
@@ -1305,7 +1482,6 @@
             dropdownStatus.value = index;
             document.getElementById('headerSelectedId').innerText = item.id;
             
-            // Status Panel fields
             document.getElementById('stId').innerText = item.id;
             document.getElementById('stName').innerText = `${item.name} (${item.location})`;
             document.getElementById('stOwner').innerText = item.owner;
@@ -1314,7 +1490,6 @@
             document.getElementById('statusPanelSelect').value = item.workflow;
             updateVerticalPipelineUI(item.workflow);
 
-            // Form Fields
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -1341,6 +1516,7 @@
             item.workflow = val;
             updateVerticalPipelineUI(val);
             renderTable();
+            alert(`[ระบบแจ้งเตือนอัจฉริยะ] ส่งอีเมลและ LINE แจ้งเตือนสถานะอุปกรณ์ ${item.id} เป็น "${val}" ไปยังหัวหน้าชุดเรียบร้อยแล้ว`);
         }
 
         function updateVerticalPipelineUI(currentWorkflow) {
@@ -1441,6 +1617,11 @@
         }
 
         function addNewFMEARow() {
+            if (currentUserRole === "Technician") {
+                alert("สิทธิ์ Field Technician ไม่สามารถเพิ่มหรือแก้ไขข้อมูล FMEA ได้ (จำกัดสิทธิ์ตาม RBAC)");
+                return;
+            }
+
             const comp = document.getElementById('newComp').value.trim();
             const mode = document.getElementById('newMode').value.trim();
             const effect = document.getElementById('newEffect').value.trim();
