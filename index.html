@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แท็บสถานะฝั่งซ้าย & รายละเอียดการดำเนินงาน)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เพิ่มฟอร์มมอบหมายงานซ่อมบำรุง)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -446,14 +446,13 @@
         .close-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
         .modal-body { padding: 20px; text-align: center; }
 
-        /* Workflow Status Panel Styles (Left Panel View) */
+        /* Status Tracker Card Styles */
         .status-tracker-card {
             background: #fffef9;
             border: 1px solid var(--border-color);
             padding: 20px;
             border-radius: 8px;
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
         }
         .pipeline-vertical {
             display: flex;
@@ -697,7 +696,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | แผนผังตำแหน่ง, ส่งออกไฟล์, แนบรูปความเสียหาย FMEA & ติดตามสถานะงานซ่อมบำรุง</p>
+                <p>สถานีไฟฟ้าย่อย | ติดตามสถานะงานซ่อมบำรุง, ผู้รับผิดชอบ และกำหนดการแล้วเสร็จ</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -1026,9 +1025,9 @@
                         <div style="background: var(--bg-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                             <p style="font-size: 0.9rem;"><strong>รหัสอุปกรณ์:</strong> <span id="stId" style="color:var(--primary); font-weight:bold;">--</span></p>
                             <p style="font-size: 0.9rem;"><strong>ชื่ออุปกรณ์:</strong> <span id="stName">--</span></p>
-                            <p style="font-size: 0.9rem;"><strong>ผู้รับผิดชอบดูแล (Engineer/Tech):</strong> <span id="stOwner" style="font-weight:600; color:var(--accent-blue);">วิศวกรสมชาย ใจดี (Lead Tech: ช่างวิชัย)</span></p>
-                            <p style="font-size: 0.9rem;"><strong>กำหนดการเริ่มต้น:</strong> <span id="stStartDate">26 ส.ค. 2026</span></p>
-                            <p style="font-size: 0.9rem;"><strong>คาดว่าจะแล้วเสร็จ:</strong> <span id="stTargetDate" style="font-weight:bold; color:var(--status-danger);">05 ก.ย. 2026</span></p>
+                            <p style="font-size: 0.9rem;"><strong>ผู้รับผิดชอบดูแล (Engineer/Tech):</strong> <span id="stOwner" style="font-weight:600; color:var(--accent-blue);">--</span></p>
+                            <p style="font-size: 0.9rem;"><strong>กำหนดการเริ่มต้น:</strong> <span id="stStartDate">--</span></p>
+                            <p style="font-size: 0.9rem;"><strong>คาดว่าจะแล้วเสร็จ:</strong> <span id="stTargetDate" style="font-weight:bold; color:var(--status-danger);">--</span></p>
                             
                             <div style="margin-top: 12px;">
                                 <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">อัปเดตสถานะการดำเนินงาน:</label>
@@ -1086,7 +1085,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | เมนูสถานะการดำเนินงานฝั่งซ้าย บอกผู้ดูแลและกำหนดการเสร็จ</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แสตนด์บายสถานะการดำเนินงานฝั่งซ้าย บอกผู้ดูแลและกำหนดการเสร็จ</p>
         </footer>
     </div>
 
@@ -1349,7 +1348,6 @@
                 const stepEl = document.getElementById(`vStep${i}`);
                 stepEl.classList.remove('active', 'completed');
                 
-                let stepName = workflowSteps[i-1];
                 let currentIndex = workflowSteps.indexOf(currentWorkflow);
                 let thisIndex = i - 1;
 
@@ -1485,7 +1483,7 @@
 
         // Export Functions
         function exportToCSV() {
-            let csv = '﻿ลำดับ,รหัสอุปกรณ์,ชื่ออุปกรณ์,ประเภท,ตำแหน่งติดตั้ง,สถานะการดำเนินงาน,คะแนน HI,ค่า RPN,สถานะสุขภาพ,วันที่เข้าทำ PM\n';
+            let csv = '\uFEFFลำดับ,รหัสอุปกรณ์,ชื่ออุปกรณ์,ประเภท,ตำแหน่งติดตั้ง,สถานะการดำเนินงาน,คะแนน HI,ค่า RPN,สถานะสุขภาพ,วันที่เข้าทำ PM\n';
             filteredData.forEach((item, idx) => {
                 csv += `${idx + 1},${item.id},"${item.name}",${item.type},"${item.location}","${item.workflow}",${item.hi},${item.maxRpn},${item.status},${item.dateStr}\n`;
             });
