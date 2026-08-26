@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แท็บซ้าย & สามเหลี่ยม Duval DGA)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (พร้อมฟอร์มบันทึกผลทดสอบ)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -167,7 +167,7 @@
         .search-box {
             display: flex;
             gap: 10px;
-            flex-min: 1;
+            flex: 1;
             max-width: 400px;
         }
 
@@ -371,7 +371,7 @@
 
         @media (min-width: 768px) {
             .modal-sidebar {
-                width: 210px;
+                width: 220px;
                 flex-direction: column;
                 border-bottom: none;
                 border-right: 1px solid var(--border-color);
@@ -503,6 +503,74 @@
             border-left: 3px solid var(--primary);
         }
 
+        /* Printable Inspection Form Styles */
+        .inspection-form {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: #faf9f5;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        .form-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-hover);
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -514,6 +582,8 @@
             header { padding: 15px; }
             .header-title h1 { font-size: 1.2rem; }
             .detail-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
         }
     </style>
 </head>
@@ -523,7 +593,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | แผนซ่อมบำรุง, ตรวจสอบ DGA และสามเหลี่ยม Duval Triangle 1</p>
+                <p>สถานีไฟฟ้าย่อย | ระบบจัดการแผน PM และบันทึกผลทดสอบหน้างาน</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -532,7 +602,7 @@
                 </div>
                 <div class="mini-stat">
                     <span>คำแนะนำ</span>
-                    <strong>คลิกแถวเพื่อดูผลวิเคราะห์ DGA สามเหลี่ยม</strong>
+                    <strong>คลิกแถวเพื่อเปิดดูและกรอกผลทดสอบ</strong>
                 </div>
             </div>
         </header>
@@ -618,11 +688,11 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แผงควบคุมแท็บด้านซ้าย & วิเคราะห์ DGA สามเหลี่ยม Duval Triangle</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ออกแบบด้วยโทนสีนวลสบายตา</p>
         </footer>
     </div>
 
-    <!-- Modal for Detailed Test Results -->
+    <!-- Modal for Detailed Test Results & Forms -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-container">
             <div class="modal-header">
@@ -633,7 +703,7 @@
             <div class="modal-layout">
                 <!-- Left Sidebar Navigation -->
                 <div class="modal-sidebar" id="modalSidebar">
-                    <!-- Populated dynamically based on asset type -->
+                    <!-- Populated dynamically -->
                 </div>
 
                 <!-- Right / Main Content Area -->
@@ -719,7 +789,6 @@
                     co2: { val: co2, limit: "< 2500 ppm", status: "Pass" }
                 };
 
-                // Duval Triangle 1 calculations: %CH4, %C2H4, %C2H2
                 const totalDuvalGases = ch4 + c2h4 + c2h2;
                 const pctCH4 = ((ch4 / totalDuvalGases) * 100).toFixed(1);
                 const pctC2H4 = ((c2h4 / totalDuvalGases) * 100).toFixed(1);
@@ -743,13 +812,7 @@
                     duvalZone = "T1";
                 }
 
-                duvalData = {
-                    pctCH4,
-                    pctC2H4,
-                    pctC2H2,
-                    duvalFault,
-                    duvalZone
-                };
+                duvalData = { pctCH4, pctC2H4, pctC2H2, duvalFault, duvalZone };
 
             } else {
                 const sf6Pressure = (0.42 + Math.random() * 0.18).toFixed(2);
@@ -876,6 +939,7 @@
             // Build Left Sidebar Tabs
             let sidebarHtml = `
                 <button class="tab-btn active" onclick="switchTab('generalTab', this)">📋 ข้อมูลทั่วไป</button>
+                <button class="tab-btn" onclick="switchTab('inputFormTab', this)">📝 บันทึกผลทดสอบใหม่</button>
             `;
 
             if (item.type === "หม้อแปลง" && item.dgaDetails) {
@@ -911,7 +975,58 @@
             });
             generalTestsHtml += `</tbody></table>`;
 
-            // DGA Table Tab HTML
+            // Input Form Tab HTML (สำหรับให้ผู้ตรวจบันทึกค่าลงฟอร์ม)
+            let inputFormTabHtml = `
+                <div id="inputFormTab" class="tab-content">
+                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 10px;">แบบฟอร์มบันทึกผลการทดสอบภาคสนาม (Field Inspection Form)</h3>
+                    <div class="inspection-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>รหัสอุปกรณ์ (Asset ID)</label>
+                                <input type="text" value="${item.id}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>วันที่ปฏิบัติงาน (Inspection Date)</label>
+                                <input type="date" value="2026-08-26">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ผู้ตรวจสอบ (Inspector Name)</label>
+                                <input type="text" placeholder="ระบุชื่อ-นามสกุลผู้ตรวจสอบ">
+                            </div>
+                            <div class="form-group">
+                                <label>ผลการประเมินสถานะ</label>
+                                <select>
+                                    <option ${item.status==='ปกติ'?'selected':''}>ปกติ (Normal)</option>
+                                    <option ${item.status==='เฝ้าระวัง'?'selected':''}>เฝ้าระวัง (Warning)</option>
+                                    <option ${item.status==='วิกฤต'?'selected':''}>วิกฤต (Critical)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ค่าพารามิเตอร์หลักที่วัดได้</label>
+                                <input type="text" placeholder="เช่น อุณหภูมิ หรือ แรงดันก๊าซ">
+                            </div>
+                            <div class="form-group">
+                                <label>คะแนนสุขภาพประเมินใหม่ (New HI)</label>
+                                <input type="number" value="${item.hi}" min="0" max="100" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full">
+                                <label>บันทึกข้อสังเกต / ข้อเสนอแนะการซ่อมบำรุง</label>
+                                <textarea rows="3" placeholder="กรอกรายละเอียดความผิดปกติหรือข้อเสนอแนะเพิ่มเติม...">${item.strategy}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-save" onclick="alert('บันทึกข้อมูลผลทดสอบเรียบร้อยแล้ว!')">💾 บันทึกข้อมูลลงระบบ</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
             let dgaTableTabHtml = "";
             let duvalTabHtml = "";
 
@@ -942,7 +1057,6 @@
                     </div>
                 `;
 
-                // Calculate triangle coordinates (Ternary plot to 2D Cartesian)
                 const pCH4 = parseFloat(item.duvalData.pctCH4) / 100;
                 const pC2H4 = parseFloat(item.duvalData.pctC2H4) / 100;
                 const pC2H2 = parseFloat(item.duvalData.pctC2H2) / 100;
@@ -956,20 +1070,13 @@
                         <div class="duval-container">
                             <div class="triangle-box">
                                 <svg viewBox="0 0 250 230">
-                                    <!-- Triangle Base -->
                                     <polygon points="125,30 25,200 225,200" fill="#eae6db" stroke="#4a7c59" stroke-width="2"/>
-                                    
-                                    <!-- Simplified Duval Zones -->
-                                    <polygon points="125,30 100,75 150,75" fill="#fcf4e5" opacity="0.7"/> <!-- PD/T1 -->
-                                    <polygon points="100,75 25,200 120,200 130,130" fill="#faeaea" opacity="0.7"/> <!-- D1/D2 -->
-                                    <polygon points="150,75 130,130 120,200 225,200" fill="#fcebe6" opacity="0.7"/> <!-- T2/T3 -->
-                                    
-                                    <!-- Gas Labels -->
+                                    <polygon points="125,30 100,75 150,75" fill="#fcf4e5" opacity="0.7"/>
+                                    <polygon points="100,75 25,200 120,200 130,130" fill="#faeaea" opacity="0.7"/>
+                                    <polygon points="150,75 130,130 120,200 225,200" fill="#fcebe6" opacity="0.7"/>
                                     <text x="125" y="20" font-size="11" font-weight="bold" fill="#2c3e35" text-anchor="middle">%CH4 (ยอด)</text>
                                     <text x="15" y="218" font-size="10" font-weight="bold" fill="#2c3e35" text-anchor="start">%C2H2</text>
                                     <text x="235" y="218" font-size="10" font-weight="bold" fill="#2c3e35" text-anchor="end">%C2H4</text>
-                                    
-                                    <!-- Plot Point -->
                                     <circle cx="${ptX}" cy="${ptY}" r="6" fill="#c25e52" stroke="#ffffff" stroke-width="2"/>
                                     <circle cx="${ptX}" cy="${ptY}" r="9" fill="none" stroke="#c25e52" stroke-width="1.5" stroke-dasharray="2,2"/>
                                 </svg>
@@ -996,9 +1103,7 @@
                 `;
             }
 
-            // Build Main Content Body
             document.getElementById('modalContentArea').innerHTML = `
-                <!-- Overview Info Card (Always Visible) -->
                 <div class="detail-grid">
                     <div class="detail-item">
                         <span>รหัสอุปกรณ์</span>
@@ -1026,16 +1131,13 @@
                     </div>
                 </div>
 
-                <!-- General Tab Content -->
                 <div id="generalTab" class="tab-content active">
                     <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">ผลการตรวจวัดประจำรอบ</h3>
                     ${generalTestsHtml}
                 </div>
 
-                <!-- DGA Table Tab Content -->
+                ${inputFormTabHtml}
                 ${dgaTableTabHtml}
-
-                <!-- Duval Tab Content -->
                 ${duvalTabHtml}
 
                 <div>
