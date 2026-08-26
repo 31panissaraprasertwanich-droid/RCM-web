@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ค้นหาด้วย Dropdown ไม่มีสถานะ)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เรียงเลขอุปกรณ์ใน Dropdown)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -460,7 +460,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | ค้นหาชื่ออุปกรณ์ด้วย Dropdown (ไม่มีสถานะ)</p>
+                <p>สถานีไฟฟ้าย่อย | ค้นหาชื่ออุปกรณ์ด้วย Dropdown (เรียงเลขอุปกรณ์)</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -519,7 +519,7 @@
                         <div class="search-dropdown-box">
                             <select id="mainSearchDropdown" onchange="onMainDropdownSearch(this.value)">
                                 <option value="">-- ค้นหาและเลือกชื่ออุปกรณ์ --</option>
-                                <!-- Populated by JS without status -->
+                                <!-- Populated sorted by asset ID -->
                             </select>
                         </div>
                         <div class="filter-group">
@@ -578,13 +578,13 @@
                             📄 กระดาษบันทึกผลทดสอบหน้างานแบบละเอียด
                         </h2>
                         
-                        <!-- Dropdown Asset Selector for Field Workers (No Status) -->
+                        <!-- Dropdown Asset Selector for Field Workers (Sorted by ID, No Status) -->
                         <div class="form-section-title" style="background: #e5ede7; color: var(--primary);">🔍 เลือกอุปกรณ์ที่ต้องการบันทึกผล</div>
                         <div class="form-row">
                             <div class="form-group full">
-                                <label>เลือกจากรายชื่ออุปกรณ์ในสถานี</label>
+                                <label>เลือกจากรายชื่ออุปกรณ์ในสถานี (เรียงตามเลขอุปกรณ์)</label>
                                 <select id="assetDropdown" onchange="onDropdownSelect(this.value)" style="font-weight: bold; background: #fff;">
-                                    <!-- Populated by JS without status -->
+                                    <!-- Populated sorted by asset ID -->
                                 </select>
                             </div>
                         </div>
@@ -673,7 +673,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ค้นหาชื่อด้วย Dropdown ไม่มีสถานะ</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ค้นหาชื่อด้วย Dropdown (เรียงเลขอุปกรณ์)</p>
         </footer>
     </div>
 
@@ -737,26 +737,26 @@
             });
         }
 
+        const dropdownSortedData = [...mockData].sort((a, b) => a.id.localeCompare(b.id));
         mockData.sort((a, b) => a.dayOffset - b.dayOffset);
 
         document.getElementById('count-warning').innerText = warningCount;
         document.getElementById('count-danger').innerText = dangerCount;
         document.getElementById('avg-hi').innerText = (totalHI / 40).toFixed(1) + " / 100";
 
-        // Populate Dropdowns without status
         const dropdownForm = document.getElementById('assetDropdown');
         const dropdownMain = document.getElementById('mainSearchDropdown');
 
-        mockData.forEach((item, idx) => {
+        dropdownSortedData.forEach((item) => {
             const textLabel = `[${item.id}] ${item.name} (${item.type})`;
             
             const opt1 = document.createElement('option');
-            opt1.value = idx;
+            opt1.value = item.index;
             opt1.innerText = textLabel;
             dropdownForm.appendChild(opt1);
 
             const opt2 = document.createElement('option');
-            opt2.value = idx;
+            opt2.value = item.index;
             opt2.innerText = textLabel;
             dropdownMain.appendChild(opt2);
         });
@@ -820,12 +820,12 @@
 
         function selectAsset(index) {
             selectedIndex = index;
-            const item = mockData[index];
+            const item = mockData.find(d => d.index === index);
             
             dropdownForm.value = index;
+            dropdownMain.value = index;
             document.getElementById('headerSelectedId').innerText = item.id;
 
-            // Populate Form Fields
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -892,4 +892,3 @@
     </script>
 </body>
 </html>
-```[cite: 5]
