@@ -3,727 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Expert System - Transformer & GIS</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Prompt -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ระบบบริหารจัดการการซ่อมบำรุงเชิงความน่าเชื่อถือ (RCM) - หม้อแปลงและ GIS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Prompt', sans-serif; }
+        :root {
+            --bg-color: #f7f6f2; /* สีนวลถนอมตา */
+            --card-bg: #ffffff;
+            --text-main: #2c3e35;
+            --text-muted: #6b7c74;
+            --primary: #4a7c59; /* เขียวพาสเทลตุ่นๆ */
+            --primary-hover: #3b6347;
+            --accent-blue: #5b7c99;
+            --border-color: #e2ded4;
+            --shadow: 0 4px 12px rgba(44, 62, 53, 0.05);
+            --radius: 10px;
+            
+            /* Status Colors */
+            --status-normal: #4a7c59;
+            --status-warning: #d99b26;
+            --status-danger: #c25e52;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 15px;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            padding: 20px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .header-title h1 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .header-title p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mini-stat {
+            background: var(--bg-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mini-stat span {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 576px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .summary-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .card.warning { border-left-color: var(--status-warning); }
+        .card.danger { border-left-color: var(--status-danger); }
+        .card.blue { border-left-color: var(--accent-blue); }
+
+        .card h3 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .card .desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Controls & Filters */
+        .control-panel {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .control-panel {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input, .filter-box select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .search-box input:focus, .filter-box select:focus {
+            border-color: var(--primary);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Data Table Container */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+            min-width: 900px;
+        }
+
+        th {
+            background-color: #eae6db;
+            color: var(--text-main);
+            padding: 14px 15px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        tr:hover {
+            background-color: #faf9f5;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.normal { background: #e5ede7; color: var(--status-normal); }
+        .badge.warning { background: #fcf4e5; color: #b37410; }
+        .badge.danger { background: #faeaea; color: var(--status-danger); }
+        .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
+        .badge.type-gis { background: #f0eaf2; color: #7a5180; }
+
+        /* Footer Info */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 15px; }
+            .header-title h1 { font-size: 1.2rem; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-700">
-
-    <div class="flex h-screen overflow-hidden relative">
-        
-        <!-- Mobile Sidebar Overlay -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-20 hidden md:hidden"></div>
-
-        <!-- Sidebar -->
-        <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-30 flex flex-col w-64 bg-white border-r border-slate-200 text-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
-            <div class="flex items-center justify-between h-16 px-6 border-b border-slate-100">
-                <h1 class="text-base font-semibold tracking-wide text-slate-900"><i class="fa-solid fa-bolt text-blue-500 mr-2"></i>RCM Expert System</h1>
-                <button id="close-sidebar" class="md:hidden text-slate-400 hover:text-slate-600 focus:outline-none">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
+                <p>ระบบติดตามสุขภาพอุปกรณ์ วิเคราะห์ความเสี่ยง และวางแผนซ่อมบำรุงเชิงพยากรณ์</p>
             </div>
-            <nav class="flex-1 px-4 py-6 space-y-1.5">
-                <a href="#" onclick="switchTab('dashboard')" class="nav-link flex items-center px-4 py-2.5 text-sm font-medium bg-blue-50 text-blue-600 rounded-xl transition" data-target="dashboard">
-                    <i class="fa-solid fa-chart-pie w-5 mr-1"></i>ภาพรวมระบบ & PM
-                </a>
-                <a href="#" onclick="switchTab('testing')" class="nav-link flex items-center px-4 py-2.5 text-sm font-medium hover:bg-slate-50 text-slate-600 rounded-xl transition" data-target="testing">
-                    <i class="fa-solid fa-flask w-5 mr-1"></i>ผลการทดสอบ & ดุวัล
-                </a>
-                <a href="#" onclick="switchTab('fmea')" class="nav-link flex items-center px-4 py-2.5 text-sm font-medium hover:bg-slate-50 text-slate-600 rounded-xl transition" data-target="fmea">
-                    <i class="fa-solid fa-table-cells w-5 mr-1"></i>วิเคราะห์ FMEA & RPN
-                </a>
-            </nav>
-            <div class="p-4 mx-4 mb-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-center text-slate-400">
-                Reliability-Centered Maintenance
+            <div class="header-stats">
+                <div class="mini-stat">
+                    <span>สถานีไฟฟ้าทั้งหมด</span>
+                    <strong>8 สถานี</strong>
+                </div>
+                <div class="mini-stat">
+                    <span>อุปกรณ์ในระบบ</span>
+                    <strong>40 รายการ</strong>
+                </div>
             </div>
-        </aside>
+        </header>
 
-        <!-- Main Content Area -->
-        <div class="flex flex-col flex-1 h-full overflow-hidden w-full">
-            <!-- Top Navbar -->
-            <header class="flex items-center justify-between h-16 bg-white border-b border-slate-200 px-6 z-10">
-                <div class="flex items-center space-x-3">
-                    <button id="open-sidebar" class="md:hidden text-slate-600 focus:outline-none p-1">
-                        <i class="fa-solid fa-bars text-lg"></i>
-                    </button>
-                    <span id="page-title" class="font-medium text-slate-800 text-base">ภาพรวมระบบ & PM Schedule</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <span class="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-                        <i class="fa-solid fa-server mr-1.5 text-blue-500"></i> อุปกรณ์ทั้งหมด 40 ยูนิต
-                    </span>
-                </div>
-            </header>
-
-            <!-- Scrollable Content -->
-            <main class="flex-1 overflow-y-auto p-6 space-y-6">
-                
-                <!-- TAB 1: DASHBOARD -->
-                <div id="tab-dashboard" class="tab-content space-y-6">
-                    
-                    <!-- KPI Cards -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">อุปกรณ์ทั้งหมด</p>
-                                <h3 class="text-2xl font-semibold text-slate-800 mt-1">40 ยูนิต</h3>
-                                <span class="text-xs text-slate-500">Transformer & GIS</span>
-                            </div>
-                            <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-charging-station"></i>
-                            </div>
-                        </div>
-
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">ปกติ (Normal)</p>
-                                <h3 class="text-2xl font-semibold text-emerald-600 mt-1">34 ยูนิต</h3>
-                                <span class="text-xs text-emerald-600 font-medium">สถานะปลอดภัย (HI-1, 2)</span>
-                            </div>
-                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-shield-halved"></i>
-                            </div>
-                        </div>
-
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">เฝ้าระวัง (Warning)</p>
-                                <h3 class="text-2xl font-semibold text-amber-500 mt-1">4 ยูนิต</h3>
-                                <span class="text-xs text-amber-600 font-medium">ต้องติดตาม (HI-3, 4)</span>
-                            </div>
-                            <div class="w-10 h-10 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                            </div>
-                        </div>
-
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">วิกฤติ (Critical)</p>
-                                <h3 class="text-2xl font-semibold text-rose-600 mt-1">2 ยูนิต</h3>
-                                <span class="text-xs text-rose-600 font-medium">ต้องซ่อมด่วน (HI-5)</span>
-                            </div>
-                            <div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center">
-                                <i class="fa-solid fa-radiation"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PM Schedule Table (Pagination 10 items per page) -->
-                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                            <div>
-                                <h2 class="text-base font-semibold text-slate-800">ตารางลำดับการเข้าทำ PM</h2>
-                                <p class="text-xs text-slate-400">แสดงผลครั้งละ 10 อุปกรณ์ เรียงลำดับจากวิกฤติไปจนถึงปกติ</p>
-                            </div>
-                            <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg" id="pagination-info">
-                                หน้า 1 จาก 4 (ทั้งหมด 40 รายการ)
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[700px]">
-                                <thead>
-                                    <tr class="border-b border-slate-100 text-xs font-medium text-slate-400 uppercase">
-                                        <th class="py-3 px-3">ลำดับ PM</th>
-                                        <th class="py-3 px-3">รหัสอุปกรณ์</th>
-                                        <th class="py-3 px-3">ประเภท</th>
-                                        <th class="py-3 px-3">สถานะสุขภาพ</th>
-                                        <th class="py-3 px-3">ข้อบ่งชี้ทางเทคนิค</th>
-                                        <th class="py-3 px-3 text-right">การจัดการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pm-table-body" class="divide-y divide-slate-100 text-sm">
-                                    <!-- Rendered by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination Buttons -->
-                        <div class="flex justify-between items-center pt-2">
-                            <button onclick="prevPage()" id="prev-btn" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
-                                <i class="fa-solid fa-chevron-left mr-1"></i> ก่อนหน้า
-                            </button>
-                            <div id="page-numbers" class="flex space-x-1"></div>
-                            <button onclick="nextPage()" id="next-btn" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
-                                ถัดไป <i class="fa-solid fa-chevron-right ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: DETAILED TESTING & INPUT FORM -->
-                <div id="tab-testing" class="tab-content hidden space-y-6">
-                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-6">
-                        
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-100">
-                            <div>
-                                <h2 class="text-base font-semibold text-slate-800">ผลการทดสอบเชิงลึก & สามเหลี่ยมดุวัล (เลือกดูได้ครบทั้ง 40 อุปกรณ์)</h2>
-                                <p class="text-xs text-slate-400">ตรวจสอบผลตรวจ DGA, เกณฑ์มาตรฐาน และสามารถกรอก/อัปเดตผลทดสอบใหม่ได้ทันที</p>
-                            </div>
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <label class="text-xs font-medium text-slate-500 whitespace-nowrap">เลือกอุปกรณ์:</label>
-                                <select id="asset-selector" onchange="updateTestingView()" class="border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 bg-white w-full md:w-64">
-                                    <!-- Populated by JS for Equipment 01 to 40 -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Analysis Method Tabs -->
-                        <div class="flex flex-wrap gap-2 border-b border-slate-100 pb-3">
-                            <button onclick="switchMethod('duval')" id="btn-duval" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium shadow-2xs transition">Duval Triangle</button>
-                            <button onclick="switchMethod('keygas')" id="btn-keygas" class="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition">Key Gas & DGA</button>
-                            <button onclick="switchMethod('other')" id="btn-other" class="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition">Electrical & Physical Tests</button>
-                            <button onclick="switchMethod('input')" id="btn-input" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-medium shadow-2xs transition"><i class="fa-solid fa-plus mr-1"></i> กรอก/อัปเดตผลทดสอบ</button>
-                        </div>
-
-                        <div id="testing-detail-container" class="space-y-6">
-                            <!-- Rendered by JS -->
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- TAB 3: FMEA & RPN ANALYSIS -->
-                <div id="tab-fmea" class="tab-content hidden space-y-6">
-                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-6">
-                        
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-100">
-                            <div>
-                                <h2 class="text-base font-semibold text-slate-800">การวิเคราะห์ FMEA และค่า RPN</h2>
-                                <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูโหมดความล้มเหลวและค่าคะแนนความเสี่ยง</p>
-                            </div>
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <label class="text-xs font-medium text-slate-500 whitespace-nowrap">เลือกอุปกรณ์:</label>
-                                <select id="fmea-asset-selector" onchange="updateFMEAView()" class="border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 bg-white w-full md:w-64">
-                                    <!-- Populated by JS -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="fmea-container" class="overflow-x-auto">
-                            <!-- Rendered by JS -->
-                        </div>
-
-                    </div>
-                </div>
-
-            </main>
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="card">
+                <h3>อุปกรณ์ทั้งหมด (Assets)</h3>
+                <div class="value">40</div>
+                <div class="desc">หม้อแปลง 20 ตัว | GIS Bay 20 ชุด</div>
+            </div>
+            <div class="card warning">
+                <h3>สถานะเฝ้าระวัง (Warning)</h3>
+                <div class="value" id="count-warning">--</div>
+                <div class="desc">ต้องติดตามค่า DGA หรือ SF6 ใกล้เกณฑ์</div>
+            </div>
+            <div class="card danger">
+                <h3>สถานะวิกฤต (Critical)</h3>
+                <div class="value" id="count-danger">--</div>
+                <div class="desc">แนะนำวางแผนซ่อมบำรุงด่วน</div>
+            </div>
+            <div class="card blue">
+                <h3>ดัชนีสุขภาพเฉลี่ย (Avg HI)</h3>
+                <div class="value" id="avg-hi">--</div>
+                <div class="desc">ภาพรวมระบบอยู่ในเกณฑ์ดี (Good)</div>
+            </div>
         </div>
-    </div>
 
-    <!-- SCRIPT -->
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const openSidebarBtn = document.getElementById('open-sidebar');
-        const closeSidebarBtn = document.getElementById('close-sidebar');
-        const pageTitle = document.getElementById('page-title');
-
-        let currentMethod = 'duval';
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            sidebarOverlay.classList.toggle('hidden');
-        }
-
-        openSidebarBtn.addEventListener('click', toggleSidebar);
-        closeSidebarBtn.addEventListener('click', toggleSidebar);
-        sidebarOverlay.addEventListener('click', toggleSidebar);
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('bg-blue-50', 'text-blue-600');
-                link.classList.add('hover:bg-slate-50', 'text-slate-600');
-                if(link.getAttribute('data-target') === tabName) {
-                    link.classList.add('bg-blue-50', 'text-blue-600');
-                    link.classList.remove('hover:bg-slate-50', 'text-slate-600');
-                }
-            });
-
-            const titles = {
-                'dashboard': 'ภาพรวมระบบ & PM Schedule',
-                'testing': 'ผลการทดสอบ & สามเหลี่ยมดุวัล (Duval Triangle)',
-                'fmea': 'การวิเคราะห์ FMEA และค่า RPN'
-            };
-            pageTitle.innerText = titles[tabName] || 'RCM Portal';
-
-            if(window.innerWidth < 768) {
-                toggleSidebar();
-            }
-        }
-
-        function switchMethod(method) {
-            currentMethod = method;
-            ['duval', 'keygas', 'other', 'input'].forEach(m => {
-                const btn = document.getElementById(`btn-${m}`);
-                if (btn) {
-                    if (m === method) {
-                        btn.className = "px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium shadow-2xs transition";
-                    } else if (m === 'input') {
-                        btn.className = "px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-medium shadow-2xs transition";
-                    } else {
-                        btn.className = "px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition";
-                    }
-                }
-            });
-            updateTestingView();
-        }
-
-        // สร้างรายการอุปกรณ์ 40 ตัว เรียงเป็นรหัสตัวเลข (Equipment 01 ถึง 40)
-        const allAssets = [];
-        // วิกฤติ 2 ตัว (Equipment 01, 02)
-        allAssets.push({ id: "Equipment 01", type: "Transformer", status: "วิกฤติ", statusClass: "bg-rose-50 text-rose-600", note: "Duval Zone T3 (Thermal > 700°C)", order: 1 });
-        allAssets.push({ id: "Equipment 02", type: "GIS", status: "วิกฤติ", statusClass: "bg-rose-50 text-rose-600", note: "SF6 Pressure ต่ำวิกฤติ (0.48 MPa)", order: 2 });
-        // เฝ้าระวัง 4 ตัว (Equipment 03 ถึง 06)
-        allAssets.push({ id: "Equipment 03", type: "Transformer", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Duval Zone S (Stray gassing)", order: 3 });
-        allAssets.push({ id: "Equipment 04", type: "GIS", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Partial Discharge ปานกลาง", order: 4 });
-        allAssets.push({ id: "Equipment 05", type: "Transformer", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Water Content สูงกว่าเกณฑ์", order: 5 });
-        allAssets.push({ id: "Equipment 06", type: "GIS", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Moisture ในก๊าซสูง", order: 6 });
-        // ปกติ ที่เหลือให้ครบ 40 ตัว (Equipment 07 ถึง 40)
-        for (let i = 7; i <= 40; i++) {
-            const numStr = i < 10 ? '0' + i : '' + i;
-            allAssets.push({ 
-                id: `Equipment ${numStr}`, 
-                type: i % 2 === 0 ? "Transformer" : "GIS", 
-                status: "ปกติ", 
-                statusClass: "bg-emerald-50 text-emerald-600", 
-                note: "ผลทดสอบปกติสมบูรณ์", 
-                order: i 
-            });
-        }
-
-        let currentPage = 1;
-        const itemsPerPage = 10;
-
-        function renderPMTable() {
-            const tbody = document.getElementById('pm-table-body');
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const currentItems = allAssets.slice(startIndex, endIndex);
-
-            let html = '';
-            currentItems.forEach(item => {
-                html += `
-                    <tr class="hover:bg-slate-50/50 transition">
-                        <td class="py-3 px-3 font-medium text-slate-600">#${item.order}</td>
-                        <td class="py-3 px-3 font-semibold text-slate-800">${item.id}</td>
-                        <td class="py-3 px-3 text-slate-500">${item.type}</td>
-                        <td class="py-3 px-3"><span class="px-2.5 py-1 rounded-lg text-xs font-medium ${item.statusClass}">${item.status}</span></td>
-                        <td class="py-3 px-3 text-slate-600">${item.note}</td>
-                        <td class="py-3 px-3 text-right">
-                            <button onclick="selectAssetAndTest('${item.id}')" class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-lg text-xs font-medium transition">
-                                ดูผลตรวจ <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-
-            const totalPages = Math.ceil(allAssets.length / itemsPerPage);
-            document.getElementById('pagination-info').innerText = `หน้า ${currentPage} จาก ${totalPages} (ทั้งหมด ${allAssets.length} รายการ)`;
-            document.getElementById('prev-btn').disabled = currentPage === 1;
-            document.getElementById('next-btn').disabled = currentPage === totalPages;
-
-            let pageNumHtml = '';
-            for (let p = 1; p <= totalPages; p++) {
-                pageNumHtml += `
-                    <button onclick="goToPage(${p})" class="w-8 h-8 rounded-lg text-xs font-medium ${p === currentPage ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100'} transition">
-                        ${p}
-                    </button>
-                `;
-            }
-            document.getElementById('page-numbers').innerHTML = pageNumHtml;
-        }
-
-        function nextPage() { if (currentPage < Math.ceil(allAssets.length / itemsPerPage)) { currentPage++; renderPMTable(); } }
-        function prevPage() { if (currentPage > 1) { currentPage--; renderPMTable(); } }
-        function goToPage(p) { currentPage = p; renderPMTable(); }
-
-        function populateSelectors() {
-            const testingSelect = document.getElementById('asset-selector');
-            const fmeaSelect = document.getElementById('fmea-asset-selector');
-            let optionsHtml = '';
-            allAssets.forEach(item => {
-                optionsHtml += `<option value="${item.id}">${item.id} (${item.type} - ${item.status})</option>`;
-            });
-            testingSelect.innerHTML = optionsHtml;
-            fmeaSelect.innerHTML = optionsHtml;
-        }
-
-        // เก็บข้อมูลผลทดสอบจำลอง แยกตามรหัสอุปกรณ์
-        const customTestData = {};
-
-        function getAssetTestData(assetId) {
-            if (customTestData[assetId]) {
-                return customTestData[assetId];
-            }
-
-            const asset = allAssets.find(a => a.id === assetId);
-            if (!asset) return null;
-
-            if (asset.status === "วิกฤติ") {
-                return {
-                    type: "Transformer (Oil-immersed)",
-                    status: "วิกฤติ (HI-5)",
-                    statusClass: "bg-rose-50 text-rose-600",
-                    zone: "T3",
-                    faultType: "Thermal > 700°C",
-                    ch4: "20.3%",
-                    c2h2: "0.0%",
-                    c2h4: "79.7%",
-                    gases: [
-                        { name: "H2 (Hydrogen)", ppm: 20, std: "< 100 ppm", status: "Normal" },
-                        { name: "CH4 (Methane)", ppm: 160, std: "< 50 ppm", status: "Critical" },
-                        { name: "C2H6 (Ethane)", ppm: 190, std: "< 50 ppm", status: "Critical" },
-                        { name: "C2H4 (Ethylene)", ppm: 630, std: "< 50 ppm", status: "Critical" },
-                        { name: "C2H2 (Acetylene)", ppm: 0, std: "< 1 ppm", status: "Normal" },
-                        { name: "CO (Carbon Monoxide)", ppm: 0, std: "< 350 ppm", status: "Normal" }
-                    ],
-                    otherTests: [
-                        { name: "Breakdown Voltage (ASTM D1816)", val: "32 kV", std: "> 45 kV", status: "Fail", color: "text-rose-600 font-medium" },
-                        { name: "Interfacial Tension (IFT)", val: "18 mN/m", std: "> 30 mN/m", status: "Fail", color: "text-rose-600 font-medium" },
-                        { name: "Water Content in Oil", val: "38 ppm", std: "< 25 ppm", status: "Warning", color: "text-amber-500" },
-                        { name: "Power Factor Test", val: "1.45%", std: "< 0.5%", status: "Fail", color: "text-rose-600 font-medium" }
-                    ]
-                };
-            } else if (asset.status === "เฝ้าระวัง") {
-                return {
-                    type: "Transformer / GIS",
-                    status: "เฝ้าระวัง (HI-3, 4)",
-                    statusClass: "bg-amber-50 text-amber-600",
-                    zone: "S",
-                    faultType: "Stray Gassing",
-                    ch4: "60.0%",
-                    c2h2: "5.0%",
-                    c2h4: "35.0%",
-                    gases: [
-                        { name: "H2 (Hydrogen)", ppm: 45, std: "< 100 ppm", status: "Normal" },
-                        { name: "CH4 (Methane)", ppm: 85, std: "< 50 ppm", status: "Warning" },
-                        { name: "C2H6 (Ethane)", ppm: 50, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H4 (Ethylene)", ppm: 40, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H2 (Acetylene)", ppm: 2, std: "< 1 ppm", status: "Warning" },
-                        { name: "CO (Carbon Monoxide)", ppm: 120, std: "< 350 ppm", status: "Normal" }
-                    ],
-                    otherTests: [
-                        { name: "Breakdown Voltage", val: "47 kV", std: "> 45 kV", status: "Pass", color: "text-emerald-600" },
-                        { name: "Water Content", val: "24 ppm", std: "< 25 ppm", status: "Pass", color: "text-emerald-600" }
-                    ]
-                };
-            } else {
-                return {
-                    type: "Transformer / GIS",
-                    status: "ปกติ (HI-1, 2)",
-                    statusClass: "bg-emerald-50 text-emerald-600",
-                    zone: "Normal",
-                    faultType: "No Fault Detected",
-                    ch4: "10.0%",
-                    c2h2: "0.0%",
-                    c2h4: "10.0%",
-                    gases: [
-                        { name: "H2 (Hydrogen)", ppm: 10, std: "< 100 ppm", status: "Normal" },
-                        { name: "CH4 (Methane)", ppm: 15, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H6 (Ethane)", ppm: 10, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H4 (Ethylene)", ppm: 10, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H2 (Acetylene)", ppm: 0, std: "< 1 ppm", status: "Normal" },
-                        { name: "CO (Carbon Monoxide)", ppm: 20, std: "< 350 ppm", status: "Normal" }
-                    ],
-                    otherTests: [
-                        { name: "Breakdown Voltage", val: "58 kV", std: "> 45 kV", status: "Pass", color: "text-emerald-600" },
-                        { name: "Water Content", val: "10 ppm", std: "< 25 ppm", status: "Pass", color: "text-emerald-600" },
-                        { name: "Power Factor", val: "0.15%", std: "< 0.5%", status: "Pass", color: "text-emerald-600" }
-                    ]
-                };
-            }
-        }
-
-        function selectAssetAndTest(assetName) {
-            document.getElementById('asset-selector').value = assetName;
-            switchTab('testing');
-            updateTestingView();
-        }
-
-        function updateTestingView() {
-            const assetKey = document.getElementById('asset-selector').value;
-            const data = getAssetTestData(assetKey);
-            const container = document.getElementById('testing-detail-container');
-
-            let innerContent = '';
-
-            if (currentMethod === 'duval') {
-                innerContent = `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="lg:col-span-2 bg-slate-900 p-6 rounded-2xl flex flex-col items-center justify-center relative shadow-inner">
-                            <span class="absolute top-4 left-4 text-xs font-medium text-slate-400">Duval Triangle (IEEE C57.104)</span>
-                            <svg viewBox="0 0 300 260" class="w-72 h-64 mt-4">
-                                <polygon points="150,20 20,240 280,240" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
-                                <line x1="150" y1="20" x2="150" y2="240" stroke="#475569" stroke-dasharray="4" stroke-width="1.5"/>
-                                <line x1="20" y1="240" x2="200" y2="130" stroke="#475569" stroke-dasharray="4" stroke-width="1.5"/>
-                                <text x="140" y="80" font-size="9" fill="#94a3b8" font-weight="600">PD</text>
-                                <text x="90" y="180" font-size="9" fill="#94a3b8" font-weight="600">T1 / T2</text>
-                                <text x="180" y="180" font-size="9" fill="#ef4444" font-weight="600">T3</text>
-                                <circle cx="190" cy="160" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
-                                <text x="135" y="12" font-size="10" fill="#f8fafc" font-weight="600">% CH4</text>
-                                <text x="0" y="255" font-size="10" fill="#f8fafc" font-weight="600">% C2H2</text>
-                                <text x="260" y="255" font-size="10" fill="#f8fafc" font-weight="600">% C2H4</text>
-                            </svg>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="bg-slate-900 text-white p-5 rounded-2xl space-y-3">
-                                <h3 class="text-xs font-medium text-slate-400 uppercase tracking-wider">Plot Coordinates</h3>
-                                <div class="flex justify-between text-xs py-1 border-b border-slate-800">
-                                    <span class="text-slate-400">Zone:</span>
-                                    <span class="px-2 py-0.5 bg-amber-600 rounded font-bold text-white">${data.zone}</span>
-                                </div>
-                                <div class="flex justify-between text-xs py-1 border-b border-slate-800">
-                                    <span class="text-slate-400">Fault Type:</span>
-                                    <span class="font-medium">${data.faultType}</span>
-                                </div>
-                                <div class="flex justify-between text-xs py-1 border-b border-slate-800">
-                                    <span class="text-slate-400">%CH4:</span>
-                                    <span class="font-medium">${data.ch4}</span>
-                                </div>
-                                <div class="flex justify-between text-xs py-1 border-b border-slate-800">
-                                    <span class="text-slate-400">%C2H2:</span>
-                                    <span class="font-medium">${data.c2h2}</span>
-                                </div>
-                                <div class="flex justify-between text-xs py-1">
-                                    <span class="text-slate-400">%C2H4:</span>
-                                    <span class="font-medium">${data.c2h4}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (currentMethod === 'keygas') {
-                innerContent = `
-                    <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-4">
-                        <h3 class="text-sm font-semibold text-slate-800">Key Gas & DGA Values (ppm) เทียบเกณฑ์มาตรฐาน</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                               <thead>
-                                    <tr class="border-b border-slate-100 text-xs font-medium text-slate-400 uppercase">
-                                        <th class="py-2 px-3">Gas Name</th>
-                                        <th class="py-2 px-3">Measured (ppm)</th>
-                                        <th class="py-2 px-3">Standard Limit</th>
-                                        <th class="py-2 px-3">Status</th>
-                                    </tr>
-                               </thead>
-                               <tbody class="divide-y divide-slate-100 text-xs">
-                                    ${data.gases.map(g => `
-                                        <tr>
-                                            <td class="py-3 px-3 font-medium">${g.name}</td>
-                                            <td class="py-3 px-3 font-semibold">${g.ppm}</td>
-                                            <td class="py-3 px-3 text-slate-400">${g.std}</td>
-                                            <td class="py-3 px-3 ${g.status === 'Critical' ? 'text-rose-600 font-bold' : (g.status === 'Warning' ? 'text-amber-500 font-medium' : 'text-emerald-600')}">${g.status}</td>
-                                        </tr>
-                                    `).join('')}
-                               </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
-            } else if (currentMethod === 'other') {
-                innerContent = `
-                    <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-4">
-                        <h3 class="text-sm font-semibold text-slate-800">ผลการทดสอบทางไฟฟ้าและกายภาพอื่นๆ (Electrical & Physical Tests)</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                               <thead>
-                                    <tr class="border-b border-slate-100 text-xs font-medium text-slate-400 uppercase">
-                                        <th class="py-2 px-3">Test Item</th>
-                                        <th class="py-2 px-3">Measured Value</th>
-                                        <th class="py-2 px-3">Standard Limit</th>
-                                        <th class="py-2 px-3">Status</th>
-                                    </tr>
-                               </thead>
-                               <tbody class="divide-y divide-slate-100 text-xs">
-                                    ${data.otherTests.map(t => `
-                                        <tr>
-                                            <td class="py-3 px-3 font-medium">${t.name}</td>
-                                            <td class="py-3 px-3 font-semibold">${t.val}</td>
-                                            <td class="py-3 px-3 text-slate-400">${t.std}</td>
-                                            <td class="py-3 px-3 ${t.color}">${t.status}</td>
-                                        </tr>
-                                    `).join('')}
-                               </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
-            } else if (currentMethod === 'input') {
-                // ช่องสำหรับการกรอกและอัปเดตผลทดสอบ
-                innerContent = `
-                    <div class="bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 space-y-4">
-                        <h3 class="text-sm font-semibold text-emerald-900"><i class="fa-solid fa-pen-to-square mr-1"></i> กรอกและอัปเดตผลการทดสอบสำหรับ ${assetKey}</h3>
-                        <form onsubmit="saveCustomTest(event, '${assetKey}')" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                            <div>
-                                <label class="block font-medium text-slate-600 mb-1">Hydrogen (H2) ppm</label>
-                                <input type="number" id="input-h2" value="${data.gases[0].ppm}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
-                            </div>
-                            <div>
-                                <label class="block font-medium text-slate-600 mb-1">Methane (CH4) ppm</label>
-                                <input type="number" id="input-ch4" value="${data.gases[1].ppm}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
-                            </div>
-                            <div>
-                                <label class="block font-medium text-slate-600 mb-1">Ethylene (C2H4) ppm</label>
-                                <input type="number" id="input-c2h4" value="${data.gases[3].ppm}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
-                            </div>
-                            <div>
-                                <label class="block font-medium text-slate-600 mb-1">Breakdown Voltage (kV)</label>
-                                <input type="text" id="input-bv" value="${data.otherTests[0] ? data.otherTests[0].val : '45 kV'}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
-                            </div>
-                            <div>
-                                <label class="block font-medium text-slate-600 mb-1">สถานะสุขภาพ (Health Index)</label>
-                                <select id="input-hi" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white">
-                                    <option value="ปกติ (HI-1, 2)">ปกติ (HI-1, 2)</option>
-                                    <option value="เฝ้าระวัง (HI-3, 4)">เฝ้าระวัง (HI-3, 4)</option>
-                                    <option value="วิกฤติ (HI-5)">วิกฤติ (HI-5)</option>
-                                </select>
-                            </div>
-                            <div class="flex items-end">
-                                <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition shadow-2xs">
-                                    บันทึกผลการทดสอบ
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <div>
-                        <span class="text-xs text-slate-400">ประเภทอุปกรณ์</span>
-                        <h4 class="font-medium text-slate-800 text-sm mt-0.5">${data.type}</h4>
-                    </div>
-                    <div>
-                        <span class="text-xs text-slate-400">สถานะสุขภาพ</span>
-                        <div class="mt-1"><span class="px-2.5 py-1 rounded-lg text-xs font-medium ${data.statusClass}">${data.status}</span></div>
-                    </div>
-                    <div>
-                        <span class="text-xs text-slate-400">รหัสอุปกรณ์</span>
-                        <h4 class="font-semibold text-blue-600 text-sm mt-0.5">${assetKey}</h4>
-                    </div>
+        <!-- Control Panel (Search & Filter) -->
+        <div class="control-panel">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ค้นหาชื่ออุปกรณ์, สถานี, หรือรหัส..." onkeyup="filterTable()">
+            </div>
+            <div class="filter-group">
+                <div class="filter-box">
+                    <select id="typeFilter" onchange="filterTable()">
+                        <option value="">ทุกประเภทอุปกรณ์</option>
+                        <option value="หม้อแปลง">หม้อแปลงไฟฟ้า (Transformer)</option>
+                        <option value="GIS">GIS Bay</option>
+                    </select>
                 </div>
-                ${innerContent}
-            `;
-        }
+                <div class="filter-box">
+                    <select id="statusFilter" onchange="filterTable()">
+                        <option value="">ทุกสถานะสุขภาพ</option>
+                        <option value="ปกติ">ปกติ (Normal)</option>
+                        <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
+                        <option value="วิกฤต">วิกฤต (Critical)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-        function saveCustomTest(e, assetKey) {
-            e.preventDefault();
-            const h2 = document.getElementById('input-h2').value;
-            const ch4 = document.getElementById('input-ch4').value;
-            const c2h4 = document.getElementById('input-c2h4').value;
-            const bv = document.getElementById('input-bv').value;
-            const hi = document.getElementById('input-hi').value;
-
-            let statusClass = "bg-emerald-50 text-emerald-600";
-            if (hi.includes("วิกฤติ")) statusClass = "bg-rose-50 text-rose-600";
-            else if (hi.includes("เฝ้าระวัง")) statusClass = "bg-amber-50 text-amber-600";
-
-            customTestData[assetKey] = {
-                type: "Transformer (Oil-immersed)",
-                status: hi,
-                statusClass: statusClass,
-                zone: hi.includes("วิกฤติ") ? "T3" : "Normal",
-                faultType: hi.includes("วิกฤติ") ? "Thermal > 700°C" : "Normal Operation",
-                ch4: "30.0%",
-                c2h2: "0.0%",
-                c2h4: "70.0%",
-                gases: [
-                    { name: "H2 (Hydrogen)", ppm: h2, std: "< 100 ppm", status: h2 > 100 ? "Critical" : "Normal" },
-                    { name: "CH4 (Methane)", ppm: ch4, std: "< 50 ppm", status: ch4 > 50 ? "Critical" : "Normal" },
-                    { name: "C2H6 (Ethane)", ppm: 30, std: "< 50 ppm", status: "Normal" },
-                    { name: "C2H4 (Ethylene)", ppm: c2h4, std: "< 50 ppm", status: c2h4 > 50 ? "Critical" : "Normal" },
-                    { name: "C2H2 (Acetylene)", ppm: 0, std: "< 1 ppm", status: "Normal" },
-                    { name: "CO (Carbon Monoxide)", ppm: 50, std: "< 350 ppm", status: "Normal" }
-                ],
-                otherTests: [
-                    { name: "Breakdown Voltage", val: bv, std: "> 45 kV", status: "Pass", color: "text-emerald-600" },
-                    { name: "Water Content", val: "15 ppm", std: "< 25 ppm", status: "Pass", color: "text-emerald-600" }
-                ]
-            };
-
-            // อัปเดตสถานะในตารางหลักด้วย
-            const assetObj = allAssets.find(a => a.id === assetKey);
-            if (assetObj) {
-                assetObj.status = hi.split(' ')[0];
-                assetObj.statusClass = statusClass;
-                assetObj.note = `อัปเดตผลทดสอบใหม่ (H2: ${h2}, CH4: ${ch4})`;
-            }
-
-            alert(`บันทึกผลการทดสอบของ ${assetKey} สำเร็จเรียบร้อย!`);
-            renderPMTable();
-            switchMethod('keygas');
-        }
-
-        function updateFMEAView() {
-            const assetKey = document.getElementById('fmea-asset-selector').value;
-            const asset = allAssets.find(a => a.id === assetKey);
-            const container = document.getElementById('fmea-container');
-
-            let items = [];
-            if (asset && asset.status === "วิกฤติ") {
-                items = [
-                    { mode: "เกิดความร้อนสูงในขดลวด / Overheated Oil", effect: "หม้อแปลงระเบิด ไฟดับเป็นวงกว้าง", s: 10, o: 4, d: 3, rpn: 120, rpnClass: "bg-rose-50 text-rose-600", action: "Online DGA Monitoring & Overhaul ด่วน" }
-                ];
-            } else {
-                items = [
-                    { mode: "ความร้อนสะสมตามรอบเวลาปกติ", effect: "อายุการใช้งานฉนวนลดลงตามวัฏจักร", s: 5, o: 2, d: 2, rpn: 20, rpnClass: "bg-emerald-50 text-emerald-600", action: "ตรวจสอบตามวาระ Time-based ปกติ" }
-                ];
-            }
-
-            let html = `
-                <table class="w-full text-left border-collapse min-w-[800px]">
+        <!-- Data Table -->
+        <div class="table-container">
+            <div class="table-responsive">
+                <table id="assetTable">
                     <thead>
-                        <tr class="border-b border-slate-100 text-xs font-medium text-slate-400 uppercase">
-                            <th class="py-3 px-3">โหมดความล้มเหลว (Failure Mode)</th>
-                            <th class="py-3 px-3">ผลกระทบ (Effects)</th>
-                            <th class="py-3 px-3 text-center">S</th>
-                            <th class="py-3 px-3 text-center">O</th>
-                            <th class="py-3 px-3 text-center">D</th>
-                            <th class="py-3 px-3 text-center">RPN</th>
-                            <th class="py-3 px-3">การจัดการ RCM</th>
+                        <tr>
+                            <th>รหัสอุปกรณ์</th>
+                            <th>ชื่ออุปกรณ์</th>
+                            <th>ประเภท</th>
+                            <th>สถานีไฟฟ้า</th>
+                            <th>คะแนนสุขภาพ (HI)</th>
+                            <th>สถานะ</th>
+                            <th>พารามิเตอร์เด่น</th>
+                            <th>กลยุทธ์ RCM ที่แนะนำ</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-sm">
-            `;
+                    <tbody id="tableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            items.forEach(item => {
-                html += `
-                    <tr class="hover:bg-slate-50/50">
-                        <td class="py-3 px-3 font-medium text-slate-800">${item.mode}</td>
-                        <td class="py-3 px-3 text-slate-600">${item.effect}</td>
-                        <td class="py-3 px-3 text-center font-semibold">${item.s}</td>
-                        <td class="py-3 px-3 text-center font-semibold">${item.o}</td>
-                        <td class="py-3 px-3 text-center font-semibold">${item.d}</td>
-                        <td class="py-3 px-3 text-center"><span class="px-2.5 py-1 ${item.rpnClass} font-semibold rounded-lg">${item.rpn}</span></td>
-                        <td class="py-3 px-3 text-slate-600">${item.action}</td>
-                    </tr>
-                `;
+        <footer>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ดีไซน์โทนสีนวลสบายตา รองรับทุกหน้าจอ</p>
+        </footer>
+    </div>
+
+    <script>
+        const substations = ["สฟ.ลาดพร้าว", "สฟ.บางกะปิ", "สฟ.บางเขน", "สฟ.มีนบุรี", "สฟ.นนทบุรี", "สฟ.ปทุมธานี", "สฟ.สามเสน", "สฟ.ธนบุรี"];
+        const assetTypes = ["หม้อแปลง", "GIS"];
+        
+        const mockData = [];
+        let warningCount = 0;
+        let dangerCount = 0;
+        let totalHI = 0;
+
+        for (let i = 1; i <= 40; i++) {
+            const type = assetTypes[(i - 1) % 2];
+            const sub = substations[(i * 3) % substations.length];
+            const id = type === "หม้อแปลง" ? `TR-${100 + i}` : `GIS-${200 + i}`;
+            const name = type === "หม้อแปลง" ? `Main Power Transformer #${i}` : `GIS Feeder Bay #${i}`;
+            
+            let hi, status, param, strategy;
+            const rand = (i * 13) % 100;
+            
+            if (rand < 15) {
+                hi = (60 + Math.random() * 14).toFixed(1);
+                status = "วิกฤต";
+                dangerCount++;
+            } else if (rand < 40) {
+                hi = (75 + Math.random() * 9).toFixed(1);
+                status = "เฝ้าระวัง";
+                warningCount++;
+            } else {
+                hi = (85 + Math.random() * 14.9).toFixed(1);
+                status = "ปกติ";
+            }
+            totalHI += parseFloat(hi);
+
+            if (type === "หม้อแปลง") {
+                const temp = (65 + Math.random() * 25).toFixed(1);
+                param = `อุณหภูมิน้ำมัน: ${temp} °C`;
+                strategy = status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : status === "เฝ้าระวัง" ? "ตรวจสอบระบบระบายความร้อน" : "บำรุงรักษาตามวาระ (Time-based)";
+            } else {
+                const sf6 = (0.45 + Math.random() * 0.15).toFixed(2);
+                param = `แรงดัน SF6: ${sf6} MPa`;
+                strategy = status === "วิกฤต" ? "เติมก๊าซ SF6 / ตรวจหาจุดรั่วซึม" : status === "เฝ้าระวัง" ? "ทดสอบค่าความต้านทานสัมผัส" : "ตรวจสอบภาพถ่ายความร้อน (Thermography)";
+            }
+
+            mockData.push({
+                id,
+                name,
+                type,
+                sub,
+                hi: parseFloat(hi),
+                status,
+                param,
+                strategy
             });
-
-            html += `</tbody></table>`;
-            container.innerHTML = html;
         }
 
-        window.onload = function() {
-            renderPMTable();
-            populateSelectors();
-            updateTestingView();
-            updateFMEAView();
-        };
+        document.getElementById('count-warning').innerText = warningCount;
+        document.getElementById('count-danger').innerText = dangerCount;
+        document.getElementById('avg-hi').innerText = (totalHI / 40).toFixed(1) + " / 100";
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-muted);">ไม่พบข้อมูลที่ค้นหา</td></tr>`;
+                return;
+            }
+
+            data.forEach(item => {
+                let badgeClass = "normal";
+                if (item.status === "เฝ้าระวัง") badgeClass = "warning";
+                if (item.status === "วิกฤต") badgeClass = "danger";
+
+                let typeBadge = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${item.id}</strong></td>
+                    <td>${item.name}</td>
+                    <td><span class="badge ${typeBadge}">${item.type}</span></td>
+                    <td>${item.sub}</td>
+                    <td><strong>${item.hi}</strong></td>
+                    <td><span class="badge ${badgeClass}">${item.status}</span></td>
+                    <td>${item.param}</td>
+                    <td>${item.strategy}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        renderTable(mockData);
+
+        function filterTable() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const typeVal = document.getElementById('typeFilter').value;
+            const statusVal = document.getElementById('statusFilter').value;
+
+            const filtered = mockData.filter(item => {
+                const matchSearch = item.id.toLowerCase().includes(searchVal) || 
+                                    item.name.toLowerCase().includes(searchVal) || 
+                                    item.sub.toLowerCase().includes(searchVal);
+                const matchType = typeVal === "" || item.type === typeVal;
+                const matchStatus = statusVal === "" || item.status === statusVal;
+
+                return matchSearch && matchType && matchStatus;
+            });
+
+            renderTable(filtered);
+        }
     </script>
 </body>
 </html>
