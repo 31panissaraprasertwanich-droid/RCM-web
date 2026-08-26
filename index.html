@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ผลทดสอบ DGA ละเอียด & เลือกดูหมวดหมู่ได้)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แท็บซ้าย & สามเหลี่ยม Duval DGA)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -167,7 +167,7 @@
         .search-box {
             display: flex;
             gap: 10px;
-            flex: 1;
+            flex-min: 1;
             max-width: 400px;
         }
 
@@ -299,7 +299,7 @@
             cursor: not-allowed;
         }
 
-        /* Modal / Detail Panel Styles */
+        /* Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -314,11 +314,11 @@
         .modal-container {
             background: var(--card-bg);
             width: 100%;
-            max-width: 900px;
+            max-width: 980px;
             border-radius: var(--radius);
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             overflow: hidden;
-            max-height: 90vh;
+            max-height: 92vh;
             display: flex;
             flex-direction: column;
         }
@@ -344,38 +344,76 @@
             color: var(--text-muted);
         }
 
-        .modal-body {
-            padding: 20px;
-            overflow-y: auto;
+        /* Modal Body with Left Sidebar Tabs */
+        .modal-layout {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            overflow: hidden;
+            flex: 1;
         }
 
-        /* Tab Buttons inside Modal */
-        .modal-tabs {
+        @media (min-width: 768px) {
+            .modal-layout {
+                flex-direction: row;
+            }
+        }
+
+        .modal-sidebar {
+            width: 100%;
+            background: #f1ede4;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            gap: 10px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
+            flex-direction: row;
+            overflow-x: auto;
+            padding: 10px;
+            gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .modal-sidebar {
+                width: 210px;
+                flex-direction: column;
+                border-bottom: none;
+                border-right: 1px solid var(--border-color);
+                padding: 15px 10px;
+                gap: 6px;
+            }
         }
 
         .tab-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 6px;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 10px 14px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 600;
+            color: var(--text-main);
+            font-weight: 500;
+            text-align: left;
+            white-space: nowrap;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(74, 124, 89, 0.1);
         }
 
         .tab-btn.active {
             background: var(--primary);
             color: white;
-            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .modal-content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .tab-content {
@@ -393,6 +431,7 @@
             background: var(--bg-color);
             padding: 15px;
             border-radius: 8px;
+            margin-bottom: 15px;
         }
 
         .detail-item span {
@@ -422,6 +461,48 @@
             background: #f1ede4;
         }
 
+        /* Duval Triangle Layout */
+        .duval-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .duval-container {
+                grid-template-columns: 320px 1fr;
+            }
+        }
+
+        .triangle-box {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .triangle-box svg {
+            width: 100%;
+            max-width: 270px;
+            height: auto;
+        }
+
+        .duval-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .duval-stat-card {
+            background: var(--bg-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            border-left: 3px solid var(--primary);
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -442,7 +523,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | มีระบบดูรายละเอียดผลทดสอบ DGA แยกหมวดหมู่</p>
+                <p>สถานีไฟฟ้าย่อย | แผนซ่อมบำรุง, ตรวจสอบ DGA และสามเหลี่ยม Duval Triangle 1</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -451,7 +532,7 @@
                 </div>
                 <div class="mini-stat">
                     <span>คำแนะนำ</span>
-                    <strong>คลิกแถวเพื่อเปิดดูผลทดสอบและ DGA เชิงลึก</strong>
+                    <strong>คลิกแถวเพื่อดูผลวิเคราะห์ DGA สามเหลี่ยม</strong>
                 </div>
             </div>
         </header>
@@ -537,7 +618,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | มีระบบวิเคราะห์ DGA แยกหมวดหมู่</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แผงควบคุมแท็บด้านซ้าย & วิเคราะห์ DGA สามเหลี่ยม Duval Triangle</p>
         </footer>
     </div>
 
@@ -548,8 +629,17 @@
                 <h2 id="modalTitle">รายละเอียดผลทดสอบอุปกรณ์</h2>
                 <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Dynamically filled content -->
+            
+            <div class="modal-layout">
+                <!-- Left Sidebar Navigation -->
+                <div class="modal-sidebar" id="modalSidebar">
+                    <!-- Populated dynamically based on asset type -->
+                </div>
+
+                <!-- Right / Main Content Area -->
+                <div class="modal-content-area" id="modalContentArea">
+                    <!-- Tab contents dynamically filled -->
+                </div>
             </div>
         </div>
     </div>
@@ -594,6 +684,7 @@
 
             let testResults = [];
             let dgaDetails = null;
+            let duvalData = null;
             let mainParam = "";
 
             if (type === "หม้อแปลง") {
@@ -610,11 +701,11 @@
                     { test: "Interfacial Tension (IFT)", result: "38 mN/m", status: "Pass" }
                 ];
 
-                const h2 = status === "วิกฤต" ? (150 + Math.random() * 200).toFixed(1) : (10 + Math.random() * 30).toFixed(1);
-                const ch4 = status === "วิกฤต" ? (80 + Math.random() * 100).toFixed(1) : (5 + Math.random() * 15).toFixed(1);
-                const c2h2 = status === "วิกฤต" ? (15 + Math.random() * 50).toFixed(1) : (0.1 + Math.random() * 1.5).toFixed(1);
-                const c2h4 = status === "วิกฤต" ? (60 + Math.random() * 90).toFixed(1) : (8 + Math.random() * 20).toFixed(1);
-                const c2h6 = status === "วิกฤต" ? (40 + Math.random() * 60).toFixed(1) : (5 + Math.random() * 15).toFixed(1);
+                const h2 = parseFloat(status === "วิกฤต" ? (150 + Math.random() * 200).toFixed(1) : (10 + Math.random() * 30).toFixed(1));
+                const ch4 = parseFloat(status === "วิกฤต" ? (80 + Math.random() * 100).toFixed(1) : (5 + Math.random() * 15).toFixed(1));
+                const c2h2 = parseFloat(status === "วิกฤต" ? (15 + Math.random() * 50).toFixed(1) : (0.2 + Math.random() * 1.5).toFixed(1));
+                const c2h4 = parseFloat(status === "วิกฤต" ? (60 + Math.random() * 90).toFixed(1) : (8 + Math.random() * 20).toFixed(1));
+                const c2h6 = parseFloat(status === "วิกฤต" ? (40 + Math.random() * 60).toFixed(1) : (5 + Math.random() * 15).toFixed(1));
                 const co = (200 + Math.random() * 300).toFixed(1);
                 const co2 = (1200 + Math.random() * 800).toFixed(1);
 
@@ -625,8 +716,39 @@
                     c2h4: { val: c2h4, limit: "< 50 ppm", status: c2h4 < 50 ? "Pass" : "Fail" },
                     c2h6: { val: c2h6, limit: "< 65 ppm", status: c2h6 < 65 ? "Pass" : "Fail" },
                     co: { val: co, limit: "< 350 ppm", status: co < 350 ? "Pass" : "Warning" },
-                    co2: { val: co2, limit: "< 2500 ppm", status: "Pass" },
-                    diagnosis: status === "วิกฤต" ? "พบความผิดปกติประเภท Thermal Fault (> 700°C) และ Arc Discharge" : "สภาพก๊าซละลายในน้ำมันปกติ ไม่พบความร้อนสูงผิดปกติ"
+                    co2: { val: co2, limit: "< 2500 ppm", status: "Pass" }
+                };
+
+                // Duval Triangle 1 calculations: %CH4, %C2H4, %C2H2
+                const totalDuvalGases = ch4 + c2h4 + c2h2;
+                const pctCH4 = ((ch4 / totalDuvalGases) * 100).toFixed(1);
+                const pctC2H4 = ((c2h4 / totalDuvalGases) * 100).toFixed(1);
+                const pctC2H2 = ((c2h2 / totalDuvalGases) * 100).toFixed(1);
+
+                let duvalFault = "ปกติ (Normal / Aging)";
+                let duvalZone = "Normal";
+                if (status === "วิกฤต") {
+                    if (pctC2H2 > 29) {
+                        duvalFault = "Discharges of high energy (D2) - อาร์กพลังงานสูง";
+                        duvalZone = "D2";
+                    } else if (pctC2H4 > 50) {
+                        duvalFault = "Thermal fault T3 (> 700°C) - ความร้อนสูงมาก";
+                        duvalZone = "T3";
+                    } else {
+                        duvalFault = "Thermal fault T2 (300°C - 700°C) - ความร้อนปานกลาง";
+                        duvalZone = "T2";
+                    }
+                } else if (status === "เฝ้าระวัง") {
+                    duvalFault = "Thermal fault T1 (< 300°C) - เริ่มมีความร้อนสะสม";
+                    duvalZone = "T1";
+                }
+
+                duvalData = {
+                    pctCH4,
+                    pctC2H4,
+                    pctC2H2,
+                    duvalFault,
+                    duvalZone
                 };
 
             } else {
@@ -641,7 +763,6 @@
                     { test: "Main Circuit Resistance", result: `${contactRes} µΩ (เกณฑ์ < 50 µΩ)`, status: contactRes < 50 ? "Pass" : "Warning" },
                     { test: "Partial Discharge (PD) Test", result: status === "วิกฤต" ? "ตรวจพบสัญญาณ PD ผิดปกติที่ Compartment B" : "ต่ำกว่าเกณฑ์แจ้งเตือน (< 5 pC)", status: status === "วิกฤต" ? "Fail" : "Pass" }
                 ];
-                dgaDetails = null;
             }
 
             mockData.push({
@@ -655,7 +776,8 @@
                 mainParam,
                 strategy,
                 testResults,
-                dgaDetails
+                dgaDetails,
+                duvalData
             });
         }
 
@@ -751,11 +873,26 @@
             
             let statusBadgeClass = item.status === 'ปกติ' ? 'normal' : item.status === 'เฝ้าระวัง' ? 'warning' : 'danger';
             
+            // Build Left Sidebar Tabs
+            let sidebarHtml = `
+                <button class="tab-btn active" onclick="switchTab('generalTab', this)">📋 ข้อมูลทั่วไป</button>
+            `;
+
+            if (item.type === "หม้อแปลง" && item.dgaDetails) {
+                sidebarHtml += `
+                    <button class="tab-btn" onclick="switchTab('dgaTableTab', this)">🧪 ผลตรวจวัด DGA</button>
+                    <button class="tab-btn" onclick="switchTab('duvalTab', this)">📐 สามเหลี่ยม Duval</button>
+                `;
+            }
+
+            document.getElementById('modalSidebar').innerHTML = sidebarHtml;
+
+            // General Tests HTML
             let generalTestsHtml = `
                 <table class="test-result-table">
                     <thead>
                         <tr>
-                            <th>รายการทดสอบหลัก</th>
+                            <th>รายการทดสอบ</th>
                             <th>ผลการตรวจวัดล่าสุด</th>
                             <th>ผลการประเมิน</th>
                         </tr>
@@ -774,24 +911,22 @@
             });
             generalTestsHtml += `</tbody></table>`;
 
-            let dgaTabHtml = "";
-            let dgaTabButton = "";
+            // DGA Table Tab HTML
+            let dgaTableTabHtml = "";
+            let duvalTabHtml = "";
 
             if (item.type === "หม้อแปลง" && item.dgaDetails) {
-                dgaTabButton = `<button class="tab-btn" onclick="switchTab('dgaTab', this)">ผลทดสอบ DGA เชิงลึก</button>`;
                 let d = item.dgaDetails;
-                dgaTabHtml = `
-                    <div id="dgaTab" class="tab-content">
-                        <p style="font-size: 0.9rem; margin-bottom: 12px; background: #eae6db; padding: 10px; border-radius: 6px;">
-                            <strong>การวินิจฉัย DGA:</strong> ${d.diagnosis}
-                        </p>
+                dgaTableTabHtml = `
+                    <div id="dgaTableTab" class="tab-content">
+                        <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">ผลการวิเคราะห์ก๊าซละลายในน้ำมัน (Dissolved Gas Analysis)</h3>
                         <table class="test-result-table">
                             <thead>
                                <tr>
-                                   <th>ชนิดก๊าซละลาย (Dissolved Gas)</th>
-                                   <th>ปริมาณที่วัดได้</th>
-                                   <th>ค่ามาตรฐาน (Limit)</th>
-                                   <th>สถานะ</th>
+                                   <th>ชนิดก๊าซละลาย (Gas)</th>
+                                   <th>ปริมาณที่ตรวจวัด</th>
+                                   <th>ค่ามาตรฐานอ้างอิง (IEEE/IEC)</th>
+                                   <th>การประเมิน</th>
                                </tr>
                             </thead>
                             <tbody>
@@ -806,9 +941,64 @@
                         </table>
                     </div>
                 `;
+
+                // Calculate triangle coordinates (Ternary plot to 2D Cartesian)
+                const pCH4 = parseFloat(item.duvalData.pctCH4) / 100;
+                const pC2H4 = parseFloat(item.duvalData.pctC2H4) / 100;
+                const pC2H2 = parseFloat(item.duvalData.pctC2H2) / 100;
+
+                const ptX = (25 * pC2H2) + (225 * pC2H4) + (125 * pCH4);
+                const ptY = (200 * pC2H2) + (200 * pC2H4) + (30 * pCH4);
+
+                duvalTabHtml = `
+                    <div id="duvalTab" class="tab-content">
+                        <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">การวิเคราะห์ด้วยสามเหลี่ยม Duval Triangle 1 (IEC 60599)</h3>
+                        <div class="duval-container">
+                            <div class="triangle-box">
+                                <svg viewBox="0 0 250 230">
+                                    <!-- Triangle Base -->
+                                    <polygon points="125,30 25,200 225,200" fill="#eae6db" stroke="#4a7c59" stroke-width="2"/>
+                                    
+                                    <!-- Simplified Duval Zones -->
+                                    <polygon points="125,30 100,75 150,75" fill="#fcf4e5" opacity="0.7"/> <!-- PD/T1 -->
+                                    <polygon points="100,75 25,200 120,200 130,130" fill="#faeaea" opacity="0.7"/> <!-- D1/D2 -->
+                                    <polygon points="150,75 130,130 120,200 225,200" fill="#fcebe6" opacity="0.7"/> <!-- T2/T3 -->
+                                    
+                                    <!-- Gas Labels -->
+                                    <text x="125" y="20" font-size="11" font-weight="bold" fill="#2c3e35" text-anchor="middle">%CH4 (ยอด)</text>
+                                    <text x="15" y="218" font-size="10" font-weight="bold" fill="#2c3e35" text-anchor="start">%C2H2</text>
+                                    <text x="235" y="218" font-size="10" font-weight="bold" fill="#2c3e35" text-anchor="end">%C2H4</text>
+                                    
+                                    <!-- Plot Point -->
+                                    <circle cx="${ptX}" cy="${ptY}" r="6" fill="#c25e52" stroke="#ffffff" stroke-width="2"/>
+                                    <circle cx="${ptX}" cy="${ptY}" r="9" fill="none" stroke="#c25e52" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                </svg>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">ตำแหน่งจุดพิกัดก๊าซในสามเหลี่ยม</div>
+                            </div>
+                            
+                            <div class="duval-details">
+                                <div class="duval-stat-card">
+                                    <strong>สัดส่วนก๊าซในสามเหลี่ยม (Duval Ratio):</strong>
+                                    <ul style="margin-left: 18px; margin-top: 5px; font-size: 0.85rem;">
+                                        <li>% Methane (%CH₄): <strong>${item.duvalData.pctCH4}%</strong></li>
+                                        <li>% Ethylene (%C₂H₄): <strong>${item.duvalData.pctC2H4}%</strong></li>
+                                        <li>% Acetylene (%C₂H₂): <strong>${item.duvalData.pctC2H2}%</strong></li>
+                                    </ul>
+                                </div>
+                                <div class="duval-stat-card" style="border-left-color: ${item.status === 'วิกฤต' ? 'var(--status-danger)' : item.status === 'เฝ้าระวัง' ? 'var(--status-warning)' : 'var(--status-normal)'};">
+                                    <strong>ผลการวินิจฉัยความผิดปกติ (Duval Diagnosis):</strong>
+                                    <p style="margin-top: 4px; font-weight: 600; color: ${item.status === 'วิกฤต' ? 'var(--status-danger)' : 'var(--text-main)'};">${item.duvalData.duvalFault}</p>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 3px;">โซนพื้นที่ในสามเหลี่ยม: <strong>${item.duvalData.duvalZone}</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
 
-            document.getElementById('modalBody').innerHTML = `
+            // Build Main Content Body
+            document.getElementById('modalContentArea').innerHTML = `
+                <!-- Overview Info Card (Always Visible) -->
                 <div class="detail-grid">
                     <div class="detail-item">
                         <span>รหัสอุปกรณ์</span>
@@ -836,17 +1026,17 @@
                     </div>
                 </div>
 
-                <div class="modal-tabs">
-                    <button class="tab-btn active" onclick="switchTab('generalTab', this)">ผลทดสอบทั่วไป</button>
-                    ${dgaTabButton}
-                </div>
-
+                <!-- General Tab Content -->
                 <div id="generalTab" class="tab-content active">
                     <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">ผลการตรวจวัดประจำรอบ</h3>
                     ${generalTestsHtml}
                 </div>
 
-                ${dgaTabHtml}
+                <!-- DGA Table Tab Content -->
+                ${dgaTableTabHtml}
+
+                <!-- Duval Tab Content -->
+                ${duvalTabHtml}
 
                 <div>
                     <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 5px;">ข้อเสนอแนะกลยุทธ์ RCM</h3>
