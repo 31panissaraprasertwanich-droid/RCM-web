@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ฟอร์มบันทึกผลทดสอบด้านซ้าย)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แถบเมนูซ้ายสไตล์ Sidebar)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -144,7 +144,7 @@
             margin-top: 5px;
         }
 
-        /* Main Workspace Layout (Left Form, Right Table) */
+        /* Main Workspace Layout (Left Sidebar, Right Content) */
         .workspace {
             display: grid;
             grid-template-columns: 1fr;
@@ -154,145 +154,93 @@
 
         @media (min-width: 1100px) {
             .workspace {
-                grid-template-columns: 450px 1fr;
+                grid-template-columns: 280px 1fr;
             }
         }
 
-        /* Left Side: Tabs + Paper Form */
-        .left-sidebar-panel {
+        /* Left Sidebar (Gemini style small menu tabs) */
+        .sidebar-menu {
             background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            gap: 8px;
             height: fit-content;
         }
 
-        .sidebar-tabs {
-            display: flex;
-            background: #eae6db;
-            border-bottom: 1px solid var(--border-color);
+        .sidebar-header {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            padding: 5px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .sidebar-tab-btn {
-            flex: 1;
-            padding: 12px;
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
             background: transparent;
             border: none;
             font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .sidebar-tab-btn.active {
-            background: #fffef9;
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
-        }
-
-        .sidebar-body {
-            padding: 20px;
-            background: #fffef9;
-        }
-
-        .tab-pane {
-            display: none;
-        }
-
-        .tab-pane.active {
-            display: block;
-        }
-
-        .paper-form h2 {
-            font-size: 1rem;
-            color: var(--primary);
-            margin-bottom: 12px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 6px;
-        }
-
-        .form-section-title {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            background: #f1ede4;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-top: 10px;
-            margin-bottom: 6px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .form-group.full {
-            grid-column: span 2;
-        }
-
-        .form-group label {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            padding: 7px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            background: #ffffff;
             color: var(--text-main);
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--primary);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .btn-action {
-            flex: 1;
-            padding: 9px;
-            border-radius: 6px;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 0.88rem;
-            font-weight: 600;
-            border: none;
-            transition: background 0.2s;
+            text-align: left;
+            transition: all 0.2s;
+            width: 100%;
         }
 
-        .btn-save { background: var(--primary); color: white; }
-        .btn-save:hover { background: var(--primary-hover); }
+        .menu-item:hover {
+            background: #f1ede4;
+        }
 
-        .btn-print { background: var(--accent-blue); color: white; }
-        .btn-print:hover { background: #48637a; }
+        .menu-item.active {
+            background: #e5ede7;
+            color: var(--primary);
+            font-weight: 600;
+        }
 
-        /* Right Side: Control panel + Table */
+        .selected-asset-box {
+            margin-top: 15px;
+            background: var(--bg-color);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .selected-asset-box h4 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        /* Right Panel Container */
         .right-panel {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
+        .content-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        /* Control Panel & Table */
         .control-panel {
             background: var(--card-bg);
             padding: 20px;
@@ -399,6 +347,81 @@
         .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
         .badge.type-gis { background: #f0eaf2; color: #7a5180; }
 
+        /* Paper Form Styles */
+        .inspection-form {
+            background: #fffef9;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .form-section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: #f1ede4;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.88rem;
+            background: #ffffff;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-save { background: var(--primary); color: white; }
+        .btn-save:hover { background: var(--primary-hover); }
+
+        .btn-print { background: var(--accent-blue); color: white; }
+        .btn-print:hover { background: #48637a; }
+
         /* Pagination Controls */
         .pagination-container {
             background: var(--card-bg);
@@ -458,7 +481,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | เมนูบันทึกผลทดสอบทางซ้าย และตารางรายการด้านขวา</p>
+                <p>สถานีไฟฟ้าย่อย | แถบเมนูด้านซ้ายสไตล์ Sidebar สำหรับสลับหน้าจอและบันทึกผล</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -466,8 +489,8 @@
                     <strong>40 รายการ</strong>
                 </div>
                 <div class="mini-stat">
-                    <span>คำแนะนำ</span>
-                    <strong>คลิกแถวในตารางเพื่อเลือกอุปกรณ์แล้วกรอกฟอร์มซ้าย</strong>
+                    <span>สถานะเลือกปัจจุบัน</span>
+                    <strong id="headerSelectedId">TR-01</strong>
                 </div>
             </div>
         </header>
@@ -492,174 +515,178 @@
             <div class="card blue">
                 <h3>ดัชนีสุขภาพเฉลี่ย (Avg HI)</h3>
                 <div class="value" id="avg-hi">--</div>
-                <div class="desc">ภาพรวมสถานีอยู่ในเกณฑ์ดี</div>
+                <div class="desc">ภาพรวมระบบอยู่ในเกณฑ์ดี</div>
             </div>
         </div>
 
         <!-- Main Workspace Layout -->
         <div class="workspace">
-            <!-- Left Side: Panel with Tabs (Overview & Inspection Form) -->
-            <div class="left-sidebar-panel">
-                <div class="sidebar-tabs">
-                    <button class="sidebar-tab-btn active" onclick="switchLeftTab('overviewPane', this)">📋 ข้อมูลทั่วไป</button>
-                    <button class="sidebar-tab-btn" onclick="switchLeftTab('formPane', this)">📝 บันทึกผลทดสอบ</button>
-                </div>
-                
-                <div class="sidebar-body">
-                    <!-- Tab 1: Overview -->
-                    <div id="overviewPane" class="tab-pane active">
-                        <h2 style="font-size: 1rem; color: var(--primary); margin-bottom: 10px;">ข้อมูลสรุปอุปกรณ์ที่เลือก</h2>
-                        <div id="overviewContent" style="font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 8px;">
-                            <p style="color: var(--text-muted);">กรุณาคลิกเลือกอุปกรณ์จากตารางทางขวา เพื่อดูรายละเอียดและบันทึกผลการทดสอบ</p>
-                        </div>
-                    </div>
+            <!-- Left Sidebar Menu (Gemini style small tabs) -->
+            <div class="sidebar-menu">
+                <div class="sidebar-header">เมนูหลัก (Navigation)</div>
+                <button class="menu-item active" onclick="switchPanel('tablePanel', this)">
+                    📊 รายการอุปกรณ์ & แผน PM
+                </button>
+                <button class="menu-item" onclick="switchPanel('formPanel', this)">
+                    📝 บันทึกผลทดสอบหน้างาน
+                </button>
 
-                    <!-- Tab 2: Detailed Paper Inspection Form -->
-                    <div id="formPane" class="tab-pane">
-                        <div class="paper-form">
-                            <h2>📄 กระดาษบันทึกผลทดสอบภาคสนาม</h2>
-                            
-                            <div class="form-section-title">1. ข้อมูลอุปกรณ์</div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>รหัสอุปกรณ์</label>
-                                    <input type="text" id="formId" readonly style="font-weight:bold; color:var(--primary);">
-                                </div>
-                                <div class="form-group">
-                                    <label>ประเภท</label>
-                                    <input type="text" id="formType" readonly>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group full">
-                                    <label>ชื่ออุปกรณ์</label>
-                                    <input type="text" id="formName" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-section-title">2. ค่าตรวจวัดหน้างาน</div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label id="labelParam1">อุณหภูมิ / แรงดันก๊าซ</label>
-                                    <input type="text" id="formParam1" placeholder="ระบุค่า">
-                                </div>
-                                <div class="form-group">
-                                    <label>ค่าทดสอบ (kV / µΩ)</label>
-                                    <input type="text" id="formParam2" placeholder="ระบุค่า">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>คะแนนสุขภาพ (HI)</label>
-                                    <input type="number" id="formHI" min="0" max="100" step="0.1">
-                                </div>
-                                <div class="form-group">
-                                    <label>สถานะประเมิน</label>
-                                    <select id="formStatus">
-                                        <option value="ปกติ">ปกติ (Normal)</option>
-                                        <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
-                                        <option value="วิกฤต">วิกฤต (Critical)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-section-title">3. รายละเอียดก๊าซ DGA (หม้อแปลง)</div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Hydrogen (H₂ - ppm)</label>
-                                    <input type="text" id="formH2">
-                                </div>
-                                <div class="form-group">
-                                    <label>Acetylene (C₂H₂ - ppm)</label>
-                                    <input type="text" id="formC2H2">
-                                </div>
-                            </div>
-
-                            <div class="form-section-title">4. ความเห็นและข้อเสนอแนะ</div>
-                            <div class="form-row">
-                                <div class="form-group full">
-                                    <label>แผนซ่อมบำรุง / ข้อสังเกต</label>
-                                    <textarea id="formStrategy" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>ผู้ตรวจสอบ</label>
-                                    <input type="text" placeholder="ชื่อผู้ตรวจวัด">
-                                </div>
-                                <div class="form-group">
-                                    <label>ผู้อนุมัติ</label>
-                                    <input type="text" placeholder="ชื่อวิศวกรผู้รับรอง">
-                                </div>
-                            </div>
-
-                            <div class="form-actions">
-                                <button class="btn-action btn-save" onclick="alert('บันทึกผลการทดสอบเรียบร้อยแล้ว!')">💾 บันทึก</button>
-                                <button class="btn-action btn-print" onclick="window.print()">🖨️ พิมพ์</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="selected-asset-box">
+                    <h4>อุปกรณ์ที่กำลังเลือก:</h4>
+                    <p id="sidebarAssetName" style="font-weight:600; color:var(--text-main);">Power Transformer Unit #1</p>
+                    <p id="sidebarAssetId" style="font-size: 0.78rem; color: var(--text-muted);">รหัส: TR-01</p>
                 </div>
             </div>
 
-            <!-- Right Side: Control Panel & Table -->
+            <!-- Right Content Panels -->
             <div class="right-panel">
-                <div class="control-panel">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="ค้นหาชื่ออุปกรณ์ หรือรหัส..." onkeyup="filterTable()">
-                    </div>
-                    <div class="filter-group">
-                        <div class="filter-box">
-                            <select id="typeFilter" onchange="filterTable()">
-                                <option value="">ทุกประเภทอุปกรณ์</option>
-                                <option value="หม้อแปลง">หม้อแปลงไฟฟ้า (Transformer)</option>
-                                <option value="GIS">GIS Bay</option>
-                            </select>
+                <!-- Panel 1: Table & PM Schedule -->
+                <div id="tablePanel" class="content-panel active">
+                    <div class="control-panel" style="margin-bottom: 20px;">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="ค้นหาชื่ออุปกรณ์ หรือรหัส..." onkeyup="filterTable()">
                         </div>
-                        <div class="filter-box">
-                            <select id="statusFilter" onchange="filterTable()">
-                                <option value="">ทุกสถานะสุขภาพ</option>
-                                <option value="ปกติ">ปกติ (Normal)</option>
-                                <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
-                                <option value="วิกฤต">วิกฤต (Critical)</option>
-                            </select>
+                        <div class="filter-group">
+                            <div class="filter-box">
+                                <select id="typeFilter" onchange="filterTable()">
+                                    <option value="">ทุกประเภทอุปกรณ์</option>
+                                    <option value="หม้อแปลง">หม้อแปลงไฟฟ้า (Transformer)</option>
+                                    <option value="GIS">GIS Bay</option>
+                                </select>
+                            </div>
+                            <div class="filter-box">
+                                <select id="statusFilter" onchange="filterTable()">
+                                    <option value="">ทุกสถานะสุขภาพ</option>
+                                    <option value="ปกติ">ปกติ (Normal)</option>
+                                    <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
+                                    <option value="วิกฤต">วิกฤต (Critical)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container" style="margin-bottom: 20px;">
+                        <div class="table-responsive">
+                            <table id="assetTable">
+                               <thead>
+                                    <tr>
+                                        <th>ลำดับ PM</th>
+                                        <th>รหัสอุปกรณ์</th>
+                                        <th>ชื่ออุปกรณ์</th>
+                                        <th>ประเภท</th>
+                                        <th>คะแนน (HI)</th>
+                                        <th>สถานะ</th>
+                                        <th>วันที่เข้าทำ PM</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    <!-- Data populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="pagination-container">
+                        <div class="pagination-info" id="paginationInfo">แสดง 1-10 จากทั้งหมด 40 รายการ</div>
+                        <div class="pagination-buttons">
+                            <button class="page-btn" id="prevBtn" onclick="changePage(-1)">ย้อนกลับ</button>
+                            <button class="page-btn" id="nextBtn" onclick="changePage(1)">ถัดไป</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="table-container">
-                    <div class="table-responsive">
-                        <table id="assetTable">
-                            <thead>
-                                <tr>
-                                    <th>ลำดับ PM</th>
-                                    <th>รหัสอุปกรณ์</th>
-                                    <th>ชื่ออุปกรณ์</th>
-                                    <th>ประเภท</th>
-                                    <th>คะแนน (HI)</th>
-                                    <th>สถานะ</th>
-                                    <th>วันที่เข้าทำ PM</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                                <!-- Data populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <!-- Panel 2: Paper Form for Inspection Testing -->
+                <div id="formPanel" class="content-panel">
+                    <div class="inspection-form">
+                        <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                            📄 กระดาษบันทึกผลทดสอบหน้างานแบบละเอียด
+                        </h2>
+                        
+                        <div class="form-section-title">1. ข้อมูลทั่วไปอุปกรณ์</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>รหัสอุปกรณ์ (Asset ID)</label>
+                                <input type="text" id="formId" readonly style="font-weight:bold; color:var(--primary);">
+                            </div>
+                            <div class="form-group">
+                                <label>ประเภท (Type)</label>
+                                <input type="text" id="formType" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full">
+                                <label>ชื่ออุปกรณ์</label>
+                                <input type="text" id="formName" readonly>
+                            </div>
+                        </div>
 
-                <div class="pagination-container">
-                    <div class="pagination-info" id="paginationInfo">แสดง 1-10 จากทั้งหมด 40 รายการ</div>
-                    <div class="pagination-buttons">
-                        <button class="page-btn" id="prevBtn" onclick="changePage(-1)">ย้อนกลับ</button>
-                        <button class="page-btn" id="nextBtn" onclick="changePage(1)">ถัดไป</button>
+                        <div class="form-section-title">2. ค่าตรวจวัดหน้างาน</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label id="labelParam1">อุณหภูมิน้ำมัน / แรงดัน SF6</label>
+                                <input type="text" id="formParam1" placeholder="ระบุค่าที่วัดได้">
+                            </div>
+                            <div class="form-group">
+                                <label>ค่าทดสอบทางไฟฟ้า (kV / µΩ)</label>
+                                <input type="text" id="formParam2" placeholder="ระบุผลทดสอบ">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>คะแนนสุขภาพ (Health Index)</label>
+                                <input type="number" id="formHI" min="0" max="100" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>สถานะประเมิน (Status)</label>
+                                <select id="formStatus">
+                                    <option value="ปกติ">ปกติ (Normal)</option>
+                                    <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
+                                    <option value="วิกฤต">วิกฤต (Critical)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-section-title">3. รายละเอียดก๊าซ DGA (สำหรับหม้อแปลง)</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Hydrogen (H₂ - ppm)</label>
+                                <input type="text" id="formH2">
+                            </div>
+                            <div class="form-group">
+                                <label>Acetylene (C₂H₂ - ppm)</label>
+                                <input type="text" id="formC2H2">
+                            </div>
+                        </div>
+
+                        <div class="form-section-title">4. ความเห็นและข้อเสนอแนะ RCM</div>
+                        <div class="form-row">
+                            <div class="form-group full">
+                                <label>บันทึกผลปฏิบัติงาน / แผนซ่อมบำรุง</label>
+                                <textarea id="formStrategy" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ผู้ตรวจสอบ (Inspector)</label>
+                                <input type="text" placeholder="ชื่อผู้ตรวจวัด">
+                            </div>
+                            <div class="form-group">
+                                <label>ผู้อนุมัติ (Approver)</label>
+                                <input type="text" placeholder="ชื่อวิศวกรผู้รับรอง">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-action btn-save" onclick="alert('บันทึกผลทดสอบเรียบร้อยแล้ว!')">💾 บันทึกผลทดสอบ</button>
+                            <button class="btn-action btn-print" onclick="window.print()">🖨️ พิมพ์กระดาษฟอร์ม</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แผงเมนูซ้ายมือสลับดูข้อมูลและฟอร์มบันทึกผลทดสอบ</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แถบเมนูด้านซ้ายสไตล์ Sidebar สลับดูตารางและฟอร์มบันทึกผล</p>
         </footer>
     </div>
 
@@ -731,7 +758,7 @@
         let currentPage = 1;
         const rowsPerPage = 10;
         let filteredData = [...mockData];
-        let selectedRowIndex = null;
+        let selectedRowIndex = 0;
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
@@ -788,16 +815,10 @@
             selectedRowIndex = index;
             const item = filteredData[index];
             
-            // Populate Overview Tab
-            document.getElementById('overviewContent').innerHTML = `
-                <p><strong>รหัสอุปกรณ์:</strong> ${item.id}</p>
-                <p><strong>ชื่ออุปกรณ์:</strong> ${item.name}</p>
-                <p><strong>ประเภท:</strong> ${item.type}</p>
-                <p><strong>คะแนนสุขภาพ (HI):</strong> ${item.hi} / 100</p>
-                <p><strong>สถานะ:</strong> ${item.status}</p>
-                <p><strong>กำหนดการ PM:</strong> ${item.dateStr}</p>
-                <p><strong>กลยุทธ์ RCM:</strong> ${item.strategy}</p>
-            `;
+            // Update Sidebar Selected Info
+            document.getElementById('sidebarAssetName').innerText = item.name;
+            document.getElementById('sidebarAssetId').innerText = `รหัส: ${item.id} (${item.type})`;
+            document.getElementById('headerSelectedId').innerText = item.id;
 
             // Populate Form Tab
             document.getElementById('formId').value = item.id;
@@ -820,14 +841,14 @@
             renderTable();
         }
 
-        function switchLeftTab(paneId, btnElement) {
-            const panes = document.querySelectorAll('.tab-pane');
-            panes.forEach(p => p.classList.remove('active'));
+        function switchPanel(panelId, btnElement) {
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach(p => p.classList.remove('active'));
 
-            const buttons = document.querySelectorAll('.sidebar-tab-btn');
+            const buttons = document.querySelectorAll('.menu-item');
             buttons.forEach(b => b.classList.remove('active'));
 
-            document.getElementById(paneId).classList.add('active');
+            document.getElementById(panelId).classList.add('active');
             btnElement.classList.add('active');
         }
 
