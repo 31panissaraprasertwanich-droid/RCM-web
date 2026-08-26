@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCM Dashboard - Transformer & GIS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Prompt & Sarabun from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar (Desktop & Tablet) -->
+        <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-white">
+            <div class="flex items-center justify-center h-16 bg-slate-800 px-4">
+                <h1 class="text-xl font-bold tracking-wider text-blue-400"><i class="fa-solid fa-bolt-lightning mr-2"></i>RCM Asset System</h1>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 text-sm font-medium bg-blue-600 rounded-lg text-white"><i class="fa-solid fa-chart-pie w-6"></i>ภาพรวม (Dashboard)</a>
+                <a href="#" class="flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300"><i class="fa-solid fa-charging-station w-6"></i>หม้อแปลง (Transformer)</a>
+                <a href="#" class="flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300"><i class="fa-solid fa-cube w-6"></i>ระบบ GIS</a>
+                <a href="#" class="flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300"><i class="fa-solid fa-calendar-check w-6"></i>แผนบำรุงรักษา (RCM Plan)</a>
+                <a href="#" class="flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300"><i class="fa-solid fa-triangle-exclamation w-6"></i>แจ้งเตือนความผิดปกติ</a>
+            </nav>
+            <div class="p-4 bg-slate-800 text-xs text-center text-gray-400">
+                ระบบจัดการความน่าเชื่อถือสินทรัพย์ไฟฟ้า v1.0
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex flex-col flex-1 h-full overflow-hidden">
+            <!-- Top Navbar -->
+            <header class="flex items-center justify-between h-16 bg-white border-b px-6 shadow-sm">
+                <div class="flex items-center space-x-3">
+                    <button class="md:hidden text-gray-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <span class="font-semibold text-lg text-gray-700">ระบบวิเคราะห์ความน่าเชื่อถือ (RCM Portal)</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="relative">
+                        <i class="fa-regular fa-bell text-xl text-gray-600 cursor-pointer"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </span>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-9 h-9 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">EN</div>
+                        <span class="hidden sm:inline text-sm font-medium">วิศวกรไฟฟ้า (Admin)</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+                
+                <!-- KPI / Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">หม้อแปลงทั้งหมด</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">24 ยูนิต</h3>
+                            <span class="text-xs text-green-600 font-medium"><i class="fa-solid fa-arrow-up"></i> สถานะปกติ 22</span>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-charging-station"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">ช่อง GIS ทั้งหมด</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">36 เบย์</h3>
+                            <span class="text-xs text-green-600 font-medium"><i class="fa-solid fa-arrow-up"></i> สถานะปกติ 34</span>
+                        </div>
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-cube"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">ความเสี่ยงสูง (High Risk)</p>
+                            <h3 class="text-2xl font-bold text-red-600 mt-1">2 ยูนิต</h3>
+                            <span class="text-xs text-red-600 font-medium"><i class="fa-solid fa-triangle-exclamation"></i> ต้องซ่อมด่วน</span>
+                        </div>
+                        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">แผนบำรุงรักษาเดือนนี้</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">8 งาน</h3>
+                            <span class="text-xs text-blue-600 font-medium">ดำเนินการแล้ว 5 งาน</span>
+                        </div>
+                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid Section: Asset Status Tables -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Transformer RCM Status Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-charging-station text-blue-600 mr-2"></i>สถานะหม้อแปลง (Transformer Health Index)</h2>
+                            <button class="text-sm text-blue-600 font-medium hover:underline">ดูทั้งหมด</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b text-xs font-semibold text-gray-500 uppercase">
+                                        <th class="py-3 px-2">ID / ชื่ออุปกรณ์</th>
+                                        <th class="py-3 px-2">Health Index</th>
+                                        <th class="py-3 px-2">อุณหภูมิน้ำมัน</th>
+                                        <th class="py-3 px-2">กลยุทธ์ RCM</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y text-sm">
+                                    <tr>
+                                        <td class="py-3 px-2 font-medium">TR-Substation A1</td>
+                                        <td class="py-3 px-2"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">HI-1 (ดีมาก)</span></td>
+                                        <td class="py-3 px-2">65.2 °C</td>
+                                        <td class="py-3 px-2 text-gray-600">Time-based</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-2 font-medium">TR-Substation A2</td>
+                                        <td class="py-3 px-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3 (ปานกลาง)</span></td>
+                                        <td class="py-3 px-2">78.5 °C</td>
+                                        <td class="py-3 px-2 text-gray-600">Condition-based</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-2 font-medium">TR-Substation B1</td>
+                                        <td class="py-3 px-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold">HI-5 (วิกฤต)</span></td>
+                                        <td class="py-3 px-2 text-red-600 font-bold">88.4 °C</td>
+                                        <td class="py-3 px-2 text-red-600 font-bold">Corrective Action</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- GIS RCM Status Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-cube text-indigo-600 mr-2"></i>สถานะระบบ GIS (SF6 & Partial Discharge)</h2>
+                            <button class="text-sm text-indigo-600 font-medium hover:underline">ดูทั้งหมด</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b text-xs font-semibold text-gray-500 uppercase">
+                                        <th class="py-3 px-2">Bay Name</th>
+                                        <th class="py-3 px-2">แรงดัน SF6</th>
+                                        <th class="py-3 px-2">Partial Discharge</th>
+                                        <th class="py-3 px-2">กลยุทธ์ RCM</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y text-sm">
+                                    <tr>
+                                        <td class="py-3 px-2 font-medium">GIS-Bay 01 (Line feeder)</td>
+                                        <td class="py-3 px-2"><span class="text-green-600 font-medium">Normal (0.65 MPa)</span></td>
+                                        <td class="py-3 px-2"><span class="text-green-600">Low (&lt; 5 pC)</span></td>
+                                        <td class="py-3 px-2 text-gray-600">Routine Check</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-2 font-medium">GIS-Bay 02 (Transformer bay)</td>
+                                        <td class="py-3 px-2"><span class="text-yellow-600 font-medium">Warning (0.52 MPa)</span></td>
+                                        <td class="py-3 px-2"><span class="text-yellow-600">Medium (15 pC)</span></td>
+                                        <td class="py-3 px-2 text-gray-600">Online Monitoring</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-2 font-medium">GIS-Bay 03 (Bus Coupler)</td>
+                                        <td class="py-3 px-2"><span class="text-green-600 font-medium">Normal (0.65 MPa)</span></td>
+                                        <td class="py-3 px-2"><span class="text-green-600">Low (&lt; 5 pC)</span></td>
+                                        <td class="py-3 px-2 text-gray-600">Routine Check</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Action / Maintenance Schedule Panel -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-list-check text-green-600 mr-2"></i>แผนการบำรุงรักษาเชิงคาดการณ์ (Predictive Maintenance Tasks)</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <span class="text-xs bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded">Transformer</span>
+                            <h4 class="font-semibold text-gray-800 mt-2">DGA Oil Testing (TR-A2)</h4>
+                            <p class="text-xs text-gray-500 mt-1">วิเคราะห์ก๊าซละลายในน้ำมันหม้อแปลงเพื่อเช็คความร้อนสูงเกินไป</p>
+                            <div class="mt-4 flex justify-between items-center text-xs text-gray-600">
+                                <span><i class="fa-regular fa-calendar mr-1"></i> 30 ส.ค. 2026</span>
+                                <span class="font-medium text-blue-600">รอดำเนินการ</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <span class="text-xs bg-red-100 text-red-800 font-semibold px-2 py-0.5 rounded">Urgent Action</span>
+                            <h4 class="font-semibold text-gray-800 mt-2">SF6 Gas Refilling & Leak Test</h4>
+                            <p class="text-xs text-gray-500 mt-1">เติมก๊าซและตรวจสอบจุดรั่วซึมที่ GIS-Bay 02</p>
+                            <div class="mt-4 flex justify-between items-center text-xs text-gray-600">
+                                <span><i class="fa-regular fa-calendar mr-1"></i> 28 ส.ค. 2026</span>
+                                <span class="font-medium text-red-600">ด่วนพิเศษ</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <span class="text-xs bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded">GIS</span>
+                            <h4 class="font-semibold text-gray-800 mt-2">Partial Discharge Acoustic Scan</h4>
+                            <p class="text-xs text-gray-500 mt-1">ตรวจวัดคลื่นเสียงอัลตราโซนิกและ UHF ในตู้ GIS ทุก Bay</p>
+                            <div class="mt-4 flex justify-between items-center text-xs text-gray-600">
+                                <span><i class="fa-regular fa-calendar mr-1"></i> 5 ก.ย. 2026</span>
+                                <span class="font-medium text-green-600">ตามแผนปกติ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
