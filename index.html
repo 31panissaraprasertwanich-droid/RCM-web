@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ส่งออกไฟล์, อัปโหลดรูป FMEA และติดตามสถานะงานซ่อมบำรุง)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (แท็บสถานะฝั่งซ้าย & รายละเอียดการดำเนินงาน)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -164,11 +164,11 @@
 
         @media (min-width: 1100px) {
             .workspace {
-                grid-template-columns: 300px 1fr;
+                grid-template-columns: 280px 1fr;
             }
         }
 
-        /* Left Sidebar with Workflow Status Pipeline */
+        /* Left Sidebar Menu */
         .sidebar-menu {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -176,7 +176,7 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             height: fit-content;
         }
 
@@ -214,49 +214,6 @@
             background: #e5ede7;
             color: var(--primary);
             font-weight: 600;
-        }
-
-        /* Workflow Status Pipeline Box in Left Sidebar */
-        .workflow-pipeline-box {
-            background: #fffef9;
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        .workflow-pipeline-box h4 {
-            font-size: 0.85rem;
-            color: var(--primary);
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 4px;
-        }
-
-        .pipeline-step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.78rem;
-            padding: 5px 0;
-            color: var(--text-muted);
-        }
-
-        .pipeline-step.active {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .pipeline-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--border-color);
-        }
-
-        .pipeline-step.active .pipeline-dot {
-            background: var(--primary);
-            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.2);
         }
 
         /* Right Panel Container */
@@ -457,7 +414,7 @@
         }
         .btn-map:hover { background: var(--accent-blue); color: #fff; }
 
-        /* Map & Image Modals */
+        /* Modals */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -488,6 +445,62 @@
         .modal-header h3 { font-size: 1rem; color: var(--primary); }
         .close-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
         .modal-body { padding: 20px; text-align: center; }
+
+        /* Workflow Status Panel Styles (Left Panel View) */
+        .status-tracker-card {
+            background: #fffef9;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .pipeline-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+            position: relative;
+            padding-left: 10px;
+        }
+        .pipeline-v-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative;
+        }
+        .pipeline-v-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--border-color);
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 1px var(--border-color);
+            z-index: 2;
+            margin-top: 2px;
+        }
+        .pipeline-v-step.active .pipeline-v-dot {
+            background: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.2), 0 0 0 1px var(--primary);
+        }
+        .pipeline-v-step.completed .pipeline-v-dot {
+            background: var(--accent-blue);
+        }
+        .pipeline-v-content h5 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .pipeline-v-step.active .pipeline-v-content h5 {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .pipeline-v-step.completed .pipeline-v-content h5 {
+            color: var(--accent-blue);
+        }
+        .pipeline-v-content p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
 
         /* Paper Form Styles */
         .inspection-form {
@@ -724,7 +737,7 @@
 
         <!-- Main Workspace Layout -->
         <div class="workspace">
-            <!-- Left Sidebar Menu & Status Pipeline -->
+            <!-- Left Sidebar Menu -->
             <div class="sidebar-menu">
                 <div class="sidebar-header">เมนูหลัก (Navigation)</div>
                 <button class="menu-item active" onclick="switchPanel('tablePanel', this)">
@@ -736,31 +749,14 @@
                 <button class="menu-item" onclick="switchPanel('fmeaPanel', this)">
                     ⚙️ ตาราง FMEA & แนบรูปความเสียหาย
                 </button>
-
-                <!-- Left Sidebar Workflow Pipeline Status -->
-                <div class="workflow-pipeline-box">
-                    <h4>📌 สถานะการดำเนินงานซ่อมบำรุง</h4>
-                    <div style="margin-bottom: 8px;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted);">ปรับสถานะอุปกรณ์ปัจจุบัน:</label>
-                        <select id="sidebarWorkflowSelect" onchange="updateAssetWorkflow(this.value)" style="width:100%; padding:6px; font-size:0.8rem; border:1px solid var(--border-color); border-radius:4px; margin-top:3px;">
-                            <option value="1. รอดำเนินการ (Pending)">1. รอดำเนินการ (Pending)</option>
-                            <option value="2. กำลังเข้าตรวจวัด (In Progress)">2. กำลังเข้าตรวจวัด (In Progress)</option>
-                            <option value="3. วิเคราะห์ FMEA/RCM (Analysis)">3. วิเคราะห์ FMEA/RCM (Analysis)</option>
-                            <option value="4. ดำเนินการซ่อมบำรุง (Maintenance)">4. ดำเนินการซ่อมบำรุง (Maintenance)</option>
-                            <option value="5. เสร็จสิ้นสมบูรณ์ (Completed)">5. เสร็จสิ้นสมบูรณ์ (Completed)</option>
-                        </select>
-                    </div>
-                    <div class="pipeline-step" id="step1"><div class="pipeline-dot"></div> 1. รอดำเนินการ</div>
-                    <div class="pipeline-step" id="step2"><div class="pipeline-dot"></div> 2. กำลังเข้าตรวจวัด</div>
-                    <div class="pipeline-step" id="step3"><div class="pipeline-dot"></div> 3. วิเคราะห์ FMEA/RCM</div>
-                    <div class="pipeline-step" id="step4"><div class="pipeline-dot"></div> 4. ดำเนินการซ่อมบำรุง</div>
-                    <div class="pipeline-step" id="step5"><div class="pipeline-dot"></div> 5. เสร็จสิ้นสมบูรณ์</div>
-                </div>
+                <button class="menu-item" onclick="switchPanel('statusPanel', this)">
+                    📌 สถานะการดำเนินงาน (Status)
+                </button>
             </div>
 
             <!-- Right Content Panels -->
             <div class="right-panel">
-                <!-- Panel 1: Table & PM Schedule with Export & Dropdown Filter -->
+                <!-- Panel 1: Table & PM Schedule with Dropdown Filter -->
                 <div id="tablePanel" class="content-panel active">
                     <div class="control-panel" style="margin-bottom: 15px;">
                         <div class="search-dropdown-box">
@@ -789,8 +785,8 @@
 
                     <!-- Export Buttons Bar -->
                     <div class="export-buttons">
-                        <button class="btn-export" onclick="exportToCSV()">📥 ส่งออกไฟล์ CSV[cite: 5]</button>
-                        <button class="btn-export" onclick="exportToJSON()">📥 ส่งออกไฟล์ JSON[cite: 5]</button>
+                        <button class="btn-export" onclick="exportToCSV()">📥 ส่งออกไฟล์ CSV</button>
+                        <button class="btn-export" onclick="exportToJSON()">📥 ส่งออกไฟล์ JSON</button>
                         <button class="btn-export" onclick="window.print()">🖨️ พิมพ์รายงานตาราง</button>
                     </div>
 
@@ -825,11 +821,11 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Paper Form (Standardized Inspection Sheet) -->
+                <!-- Panel 2: Paper Form with Location -->
                 <div id="formPanel" class="content-panel">
                     <div class="inspection-form">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-                            📄 กระดาษบันทึกผลทดสอบหน้างานแบบมาตรฐาน (Standard Field Test Sheet)
+                            📄 กระดาษบันทึกผลทดสอบหน้างานแบบละเอียด
                         </h2>
                         
                         <div class="form-section-title" style="background: #e5ede7; color: var(--primary);">🔍 เลือกอุปกรณ์ที่ต้องการบันทึกผล</div>
@@ -1012,11 +1008,85 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Panel 4: Workflow Status Tracker (Left Tab View) -->
+                <div id="statusPanel" class="content-panel">
+                    <div class="status-tracker-card">
+                        <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
+                            📌 ติดตามสถานะงานซ่อมบำรุงเชิงรายอุปกรณ์
+                        </h2>
+                        
+                        <div class="form-row" style="margin-bottom: 15px;">
+                            <div class="form-group full">
+                                <label>เลือกอุปกรณ์ที่ต้องการตรวจสอบสถานะ</label>
+                                <select id="statusPanelDropdown" onchange="onStatusDropdownSelect(this.value)" style="font-weight: bold; background: #fff; padding: 10px;"></select>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <p style="font-size: 0.9rem;"><strong>รหัสอุปกรณ์:</strong> <span id="stId" style="color:var(--primary); font-weight:bold;">--</span></p>
+                            <p style="font-size: 0.9rem;"><strong>ชื่ออุปกรณ์:</strong> <span id="stName">--</span></p>
+                            <p style="font-size: 0.9rem;"><strong>ผู้รับผิดชอบดูแล (Engineer/Tech):</strong> <span id="stOwner" style="font-weight:600; color:var(--accent-blue);">วิศวกรสมชาย ใจดี (Lead Tech: ช่างวิชัย)</span></p>
+                            <p style="font-size: 0.9rem;"><strong>กำหนดการเริ่มต้น:</strong> <span id="stStartDate">26 ส.ค. 2026</span></p>
+                            <p style="font-size: 0.9rem;"><strong>คาดว่าจะแล้วเสร็จ:</strong> <span id="stTargetDate" style="font-weight:bold; color:var(--status-danger);">05 ก.ย. 2026</span></p>
+                            
+                            <div style="margin-top: 12px;">
+                                <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">อัปเดตสถานะการดำเนินงาน:</label>
+                                <select id="statusPanelSelect" onchange="updateAssetWorkflowFromPanel(this.value)" style="width:100%; padding:8px; font-size:0.9rem; border:1px solid var(--border-color); border-radius:6px; margin-top:5px; background:#fff;">
+                                    <option value="1. รอดำเนินการ (Pending)">1. รอดำเนินการ (Pending)</option>
+                                    <option value="2. กำลังเข้าตรวจวัด (In Progress)">2. กำลังเข้าตรวจวัด (In Progress)</option>
+                                    <option value="3. วิเคราะห์ FMEA/RCM (Analysis)">3. วิเคราะห์ FMEA/RCM (Analysis)</option>
+                                    <option value="4. ดำเนินการซ่อมบำรุง (Maintenance)">4. ดำเนินการซ่อมบำรุง (Maintenance)</option>
+                                    <option value="5. เสร็จสิ้นสมบูรณ์ (Completed)">5. เสร็จสิ้นสมบูรณ์ (Completed)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 10px;">ไทม์ไลน์ขั้นตอนการดำเนินงาน (Workflow Pipeline)</h4>
+                        <div class="pipeline-vertical">
+                            <div class="pipeline-v-step" id="vStep1">
+                                <div class="pipeline-v-dot"></div>
+                                <div class="pipeline-v-content">
+                                    <h5>1. รอดำเนินการ (Pending)</h5>
+                                    <p>รอดึงข้อมูลรอบการซ่อมบำรุงตามแผนประจำปี</p>
+                                </div>
+                            </div>
+                            <div class="pipeline-v-step" id="vStep2">
+                                <div class="pipeline-v-dot"></div>
+                                <div class="pipeline-v-content">
+                                    <h5>2. กำลังเข้าตรวจวัด (In Progress)</h5>
+                                    <p>ทีมช่างเข้าพื้นที่หน้างาน วัดค่า DGA, อุณหภูมิ และค่าไฟฟ้า</p>
+                                </div>
+                            </div>
+                            <div class="pipeline-v-step" id="vStep3">
+                                <div class="pipeline-v-dot"></div>
+                                <div class="pipeline-v-content">
+                                    <h5>3. วิเคราะห์ FMEA/RCM (Analysis)</h5>
+                                    <p>วิศวกรประเมินคะแนน Health Index และคำนวณค่า RPN</p>
+                                </div>
+                            </div>
+                            <div class="pipeline-v-step" id="vStep4">
+                                <div class="pipeline-v-dot"></div>
+                                <div class="pipeline-v-content">
+                                    <h5>4. ดำเนินการซ่อมบำรุง (Maintenance)</h5>
+                                    <p>ดำเนินการบำรุงรักษาเชิงป้องกันหรือแก้ไขตามข้อเสนอแนะ RCM</p>
+                                </div>
+                            </div>
+                            <div class="pipeline-v-step" id="vStep5">
+                                <div class="pipeline-v-dot"></div>
+                                <div class="pipeline-v-content">
+                                    <h5>5. เสร็จสิ้นสมบูรณ์ (Completed)</h5>
+                                    <p>ตรวจรับงานและปิดใบงาน Work Order เรียบร้อย</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แผนผังตำแหน่งหน้างาน & ฟอร์มบันทึกผลทดสอบมาตรฐานเดียวกัน</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | เมนูสถานะการดำเนินงานฝั่งซ้าย บอกผู้ดูแลและกำหนดการเสร็จ</p>
         </footer>
     </div>
 
@@ -1056,6 +1126,7 @@
         const assetTypes = ["หม้อแปลง", "GIS"];
         const locationsTr = ["Yard A - Transformer Bay 1", "Yard A - Transformer Bay 2", "Yard B - Transformer Bay 3", "Yard B - Transformer Bay 4", "Indoor TR Pad 5"];
         const locationsGis = ["Switchgear Room - Bay G1", "Switchgear Room - Bay G2", "Switchgear Room - Bay G3", "Switchgear Room - Bay G4", "Switchgear Room - Bay G5"];
+        const ownersList = ["วิศวกรสมชาย ใจดี (ช่างผู้รับผิดชอบ: ช่างวิชัย)", "วิศวกรปิยะ ภูมิใจ (ช่างผู้รับผิดชอบ: ช่างอภิชาติ)", "วิศวกรกิตติศักดิ์ มั่นคง (ช่างผู้รับผิดชอบ: ช่างธนพล)"];
         const workflowSteps = [
             "1. รอดำเนินการ (Pending)",
             "2. กำลังเข้าตรวจวัด (In Progress)",
@@ -1076,6 +1147,7 @@
             const id = type === "หม้อแปลง" ? `TR-${String(i).padStart(2, '0')}` : `GIS-${String(i).padStart(2, '0')}`;
             const name = type === "หม้อแปลง" ? `Power Transformer Unit #${i}` : `GIS Feeder Bay #${i}`;
             const location = type === "หม้อแปลง" ? locationsTr[(i * 3) % locationsTr.length] : locationsGis[(i * 3) % locationsGis.length];
+            const owner = ownersList[i % ownersList.length];
             const workflow = workflowSteps[(i * 2) % workflowSteps.length];
             
             let hi, status, strategy, dayOffset;
@@ -1102,6 +1174,10 @@
             pmDateObj.setDate(baseDate.getDate() + dayOffset);
             const dateStr = pmDateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
+            const targetDateObj = new Date(baseDate);
+            targetDateObj.setDate(baseDate.getDate() + dayOffset + 3);
+            const targetDateStr = targetDateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+
             let param1 = type === "หม้อแปลง" ? (65 + Math.random() * 20).toFixed(1) + " °C" : (0.45 + Math.random() * 0.15).toFixed(2) + " MPa";
             let param2 = type === "หม้อแปลง" ? (55 + Math.random() * 15).toFixed(1) + " kV" : (40 + Math.random() * 20).toFixed(1) + " µΩ";
             let h2Val = type === "หม้อแปลง" ? (status === "วิกฤต" ? "185.4" : "18.2") : "-";
@@ -1114,11 +1190,13 @@
                 name,
                 type,
                 location,
+                owner,
                 workflow,
                 hi: parseFloat(hi),
                 status,
                 dayOffset,
                 dateStr,
+                targetDateStr,
                 maxRpn,
                 param1,
                 param2,
@@ -1137,6 +1215,7 @@
 
         const dropdownForm = document.getElementById('assetDropdown');
         const dropdownMain = document.getElementById('mainSearchDropdown');
+        const dropdownStatus = document.getElementById('statusPanelDropdown');
 
         dropdownSortedData.forEach((item) => {
             const textLabel = `[${item.id}] ${item.name} (${item.type})`;
@@ -1150,6 +1229,11 @@
             opt2.value = item.index;
             opt2.innerText = textLabel;
             dropdownMain.appendChild(opt2);
+
+            const opt3 = document.createElement('option');
+            opt3.value = item.index;
+            opt3.innerText = textLabel;
+            dropdownStatus.appendChild(opt3);
         });
 
         let currentPage = 1;
@@ -1199,7 +1283,7 @@
                         <span style="font-size:0.82rem; color:var(--text-muted);">📍 ${item.location}</span>
                         <button class="btn-map" onclick="event.stopPropagation(); openMapModal(${item.index})">🗺️ แผนที่</button>
                     </td>
-                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><span class="badge-workflow">${item.workflow}</span></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('statusPanel', document.querySelectorAll('.menu-item')[3]);"><span class="badge-workflow">${item.workflow}</span></td>
                     <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong>${item.hi}</strong></td>
                     <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong style="color: ${rpnColor}">${item.maxRpn}</strong></td>
                     <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><span class="badge ${badgeClass}">${item.status}</span></td>
@@ -1219,10 +1303,19 @@
             
             dropdownForm.value = index;
             dropdownMain.value = index;
+            dropdownStatus.value = index;
             document.getElementById('headerSelectedId').innerText = item.id;
-            document.getElementById('sidebarWorkflowSelect').value = item.workflow;
-            updatePipelineUI(item.workflow);
+            
+            // Status Panel fields
+            document.getElementById('stId').innerText = item.id;
+            document.getElementById('stName').innerText = `${item.name} (${item.location})`;
+            document.getElementById('stOwner').innerText = item.owner;
+            document.getElementById('stStartDate').innerText = item.dateStr;
+            document.getElementById('stTargetDate').innerText = item.targetDateStr;
+            document.getElementById('statusPanelSelect').value = item.workflow;
+            updateVerticalPipelineUI(item.workflow);
 
+            // Form Fields
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -1244,22 +1337,32 @@
             renderFMEA(item);
         }
 
-        function updateAssetWorkflow(val) {
+        function updateAssetWorkflowFromPanel(val) {
             const item = mockData.find(d => d.index === selectedIndex);
             item.workflow = val;
-            updatePipelineUI(val);
+            updateVerticalPipelineUI(val);
             renderTable();
         }
 
-        function updatePipelineUI(currentWorkflow) {
+        function updateVerticalPipelineUI(currentWorkflow) {
             for (let i = 1; i <= 5; i++) {
-                const stepEl = document.getElementById(`step${i}`);
-                if (workflowSteps[i-1] === currentWorkflow) {
+                const stepEl = document.getElementById(`vStep${i}`);
+                stepEl.classList.remove('active', 'completed');
+                
+                let stepName = workflowSteps[i-1];
+                let currentIndex = workflowSteps.indexOf(currentWorkflow);
+                let thisIndex = i - 1;
+
+                if (thisIndex < currentIndex) {
+                    stepEl.classList.add('completed');
+                } else if (thisIndex === currentIndex) {
                     stepEl.classList.add('active');
-                } else {
-                    stepEl.classList.remove('active');
                 }
             }
+        }
+
+        function onStatusDropdownSelect(val) {
+            selectAsset(parseInt(val));
         }
 
         function openMapModal(index) {
@@ -1382,7 +1485,7 @@
 
         // Export Functions
         function exportToCSV() {
-            let csv = '\uFEFFลำดับ,รหัสอุปกรณ์,ชื่ออุปกรณ์,ประเภท,ตำแหน่งติดตั้ง,สถานะการดำเนินงาน,คะแนน HI,ค่า RPN,สถานะสุขภาพ,วันที่เข้าทำ PM\n';
+            let csv = '﻿ลำดับ,รหัสอุปกรณ์,ชื่ออุปกรณ์,ประเภท,ตำแหน่งติดตั้ง,สถานะการดำเนินงาน,คะแนน HI,ค่า RPN,สถานะสุขภาพ,วันที่เข้าทำ PM\n';
             filteredData.forEach((item, idx) => {
                 csv += `${idx + 1},${item.id},"${item.name}",${item.type},"${item.location}","${item.workflow}",${item.hi},${item.maxRpn},${item.status},${item.dateStr}\n`;
             });
@@ -1398,11 +1501,10 @@
             const jsonStr = JSON.stringify(filteredData, null, 2);
             const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
-            const a = URL.createObjectURL(blob);
-            const aElem = document.createElement('a');
-            aElem.href = url;
-            aElem.download = 'RCM_Substation_Data.json';
-            aElem.click();
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'RCM_Substation_Data.json';
+            a.click();
         }
 
         function onDropdownSelect(val) {
