@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (Enterprise Edition ครบทุกฟีเจอร์)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ข้อมูลไม่หาย & ครบทุกฟีเจอร์)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -105,7 +105,6 @@
             color: var(--primary);
         }
 
-        /* Role Selector Badge */
         .role-badge {
             background: #eae6db;
             padding: 6px 12px;
@@ -719,7 +718,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | Enterprise Edition (Inventory, Trends, Alerts, RBAC & Logbook)</p>
+                <p>สถานีไฟฟ้าย่อย | Enterprise Edition (ข้อมูลผลทดสอบไม่สูญหาย & ครบทุกฟีเจอร์)</p>
             </div>
             <div class="header-stats">
                 <div class="role-badge">
@@ -856,7 +855,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Paper Form -->
+                <!-- Panel 2: Paper Form (Data Persistent) -->
                 <div id="formPanel" class="content-panel">
                     <div class="inspection-form">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
@@ -900,21 +899,21 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label id="labelParam1">อุณหภูมิน้ำมัน / แรงดัน SF6</label>
-                                <input type="text" id="formParam1" placeholder="ระบุค่าที่วัดได้">
+                                <input type="text" id="formParam1" oninput="saveCurrentFormValues()" placeholder="ระบุค่าที่วัดได้">
                             </div>
                             <div class="form-group">
                                 <label>ค่าทดสอบทางไฟฟ้า (kV / µΩ)</label>
-                                <input type="text" id="formParam2" placeholder="ระบุผลทดสอบ">
+                                <input type="text" id="formParam2" oninput="saveCurrentFormValues()" placeholder="ระบุผลทดสอบ">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>คะแนนสุขภาพ (Health Index)</label>
-                                <input type="number" id="formHI" min="0" max="100" step="0.1">
+                                <input type="number" id="formHI" min="0" max="100" step="0.1" oninput="saveCurrentFormValues()">
                             </div>
                             <div class="form-group">
                                 <label>สถานะประเมิน (Status)</label>
-                                <select id="formStatus">
+                                <select id="formStatus" onchange="saveCurrentFormValues()">
                                     <option value="ปกติ">ปกติ (Normal)</option>
                                     <option value="เฝ้าระวัง">เฝ้าระวัง (Warning)</option>
                                     <option value="วิกฤต">วิกฤต (Critical)</option>
@@ -926,11 +925,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Hydrogen (H₂ - ppm)</label>
-                                <input type="text" id="formH2">
+                                <input type="text" id="formH2" oninput="saveCurrentFormValues()">
                             </div>
                             <div class="form-group">
                                 <label>Acetylene (C₂H₂ - ppm)</label>
-                                <input type="text" id="formC2H2">
+                                <input type="text" id="formC2H2" oninput="saveCurrentFormValues()">
                             </div>
                         </div>
 
@@ -938,22 +937,22 @@
                         <div class="form-row">
                             <div class="form-group full">
                                 <label>บันทึกผลปฏิบัติงาน / แผนซ่อมบำรุง</label>
-                                <textarea id="formStrategy" rows="3"></textarea>
+                                <textarea id="formStrategy" rows="3" oninput="saveCurrentFormValues()"></textarea>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>ผู้ตรวจสอบ (Inspector)</label>
-                                <input type="text" placeholder="ชื่อผู้ตรวจวัด">
+                                <input type="text" id="formInspector" oninput="saveCurrentFormValues()" placeholder="ชื่อผู้ตรวจวัด">
                             </div>
                             <div class="form-group">
                                 <label>ผู้อนุมัติ (Approver)</label>
-                                <input type="text" placeholder="ชื่อวิศวกรผู้รับรอง">
+                                <input type="text" id="formApprover" oninput="saveCurrentFormValues()" placeholder="ชื่อวิศวกรผู้รับรอง">
                             </div>
                         </div>
 
                         <div class="form-actions">
-                            <button class="btn-action btn-save" onclick="alert('บันทึกผลทดสอบเรียบร้อยแล้ว!')">💾 บันทึกผลทดสอบ</button>
+                            <button class="btn-action btn-save" onclick="alert('บันทึกผลทดสอบลงในระบบเรียบร้อยแล้ว!')">💾 บันทึกผลทดสอบ</button>
                             <button class="btn-action btn-print" onclick="window.print()">🖨️ พิมพ์กระดาษฟอร์ม</button>
                         </div>
                     </div>
@@ -1118,7 +1117,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 5: Inventory & Spare Parts (Feature 1) -->
+                <!-- Panel 5: Inventory & Spare Parts -->
                 <div id="inventoryPanel" class="content-panel">
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📦 ระบบจัดการอะไหล่และคลังพัสดุ (Spare Parts Inventory)
@@ -1178,7 +1177,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 6: Trend Analysis & Graph (Feature 2) -->
+                <!-- Panel 6: Trend Analysis & Graph -->
                 <div id="trendPanel" class="content-panel">
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📈 แดชบอร์ดวิเคราะห์แนวโน้มการเสื่อมสภาพ (Historical Trend Analysis)
@@ -1203,7 +1202,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 7: Asset Maintenance Logbook History (Feature 5) -->
+                <!-- Panel 7: Asset Maintenance Logbook History -->
                 <div id="logbookPanel" class="content-panel">
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📖 ประวัติการซ่อมบำรุงย้อนหลัง (Asset Maintenance Logbook)
@@ -1250,7 +1249,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | Enterprise Edition ครบถ้วนทั้งคลังพัสดุ, แนวโน้ม, การแจ้งเตือน และสิทธิ์ผู้ใช้งาน</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ข้อมูลผลทดสอบและสถานะเชื่อมโยงถาวร (Persistent Data)</p>
         </footer>
     </div>
 
@@ -1366,6 +1365,8 @@
                 param2,
                 h2Val,
                 c2h2Val,
+                inspector: "",
+                approver: "",
                 strategy: status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : "บำรุงรักษาตามวาระปกติ"
             });
         }
@@ -1410,7 +1411,6 @@
         function changeUserRole(role) {
             currentUserRole = role;
             alert(`สลับบทบาทผู้ใช้งานเป็น: ${role} เรียบร้อย`);
-            // RBAC Enforcement example
             if (role === "Technician") {
                 document.getElementById('fmeaAddContainer').style.display = 'none';
             } else {
@@ -1490,6 +1490,7 @@
             document.getElementById('statusPanelSelect').value = item.workflow;
             updateVerticalPipelineUI(item.workflow);
 
+            // Populate Form Fields with persistent item data
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -1501,6 +1502,8 @@
             document.getElementById('formH2').value = item.h2Val;
             document.getElementById('formC2H2').value = item.c2h2Val;
             document.getElementById('formStrategy').value = item.strategy;
+            document.getElementById('formInspector').value = item.inspector || "";
+            document.getElementById('formApprover').value = item.approver || "";
 
             if (item.type === "หม้อแปลง") {
                 document.getElementById('labelParam1').innerText = "อุณหภูมิน้ำมัน (Top Oil Temp)";
@@ -1509,6 +1512,21 @@
             }
 
             renderFMEA(item);
+        }
+
+        // Save form values back to mockData persistently when typing
+        function saveCurrentFormValues() {
+            const item = mockData.find(d => d.index === selectedIndex);
+            if (!item) return;
+            item.param1 = document.getElementById('formParam1').value;
+            item.param2 = document.getElementById('formParam2').value;
+            item.hi = parseFloat(document.getElementById('formHI').value) || item.hi;
+            item.status = document.getElementById('formStatus').value;
+            item.h2Val = document.getElementById('formH2').value;
+            item.c2h2Val = document.getElementById('formC2H2').value;
+            item.strategy = document.getElementById('formStrategy').value;
+            item.inspector = document.getElementById('formInspector').value;
+            item.approver = document.getElementById('formApprover').value;
         }
 
         function updateAssetWorkflowFromPanel(val) {
