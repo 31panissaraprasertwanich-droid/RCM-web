@@ -14,9 +14,40 @@
         body { font-family: 'Prompt', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100 text-gray-800">
 
-    <div class="flex h-screen overflow-hidden relative">
+    <!-- ==================== LOGIN SCREEN ==================== -->
+    <div id="login-screen" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900">RCM Expert Portal</h1>
+                <p class="text-sm text-gray-500">ระบบจัดการความน่าเชื่อถือหม้อแปลงและระบบ GIS</p>
+            </div>
+            
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">ชื่อผู้ใช้งาน (Username)</label>
+                    <input type="text" id="login-user" value="engineer_admin" required class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">รหัสผ่าน (Password)</label>
+                    <input type="password" id="login-pass" value="123456" required class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-blue-600">
+                </div>
+                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition">
+                    เข้าสู่ระบบ (Login)
+                </button>
+            </form>
+            <div class="text-center text-xs text-gray-400">
+                * สามารถกดเข้าสู่ระบบได้ทันทีด้วยบัญชีทดสอบ
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN APP ==================== -->
+    <div id="main-app" class="flex h-screen overflow-hidden relative hidden">
         
         <!-- Mobile Sidebar Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
@@ -34,14 +65,20 @@
                     <i class="fa-solid fa-chart-pie w-6"></i>หน้าแรก (Dashboard)
                 </a>
                 <a href="#" onclick="switchTab('testing')" class="nav-link flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300" data-target="testing">
-                    <i class="fa-solid fa-flask w-6"></i>รายละเอียดการทดสอบ (DGA/Duval)
+                    <i class="fa-solid fa-flask w-6"></i>ผลการทดสอบ & ดุวัล
                 </a>
                 <a href="#" onclick="switchTab('fmea')" class="nav-link flex items-center px-4 py-3 text-sm font-medium hover:bg-slate-800 rounded-lg text-gray-300" data-target="fmea">
                     <i class="fa-solid fa-table-cells w-6"></i>วิเคราะห์ FMEA & RPN
                 </a>
             </nav>
-            <div class="p-4 bg-slate-800 text-xs text-center text-gray-400">
-                ระบบ RCM ไฟฟ้า v3.0
+            <div class="p-4 bg-slate-800 flex items-center justify-between border-t border-slate-700">
+                <div class="text-xs">
+                    <p class="font-bold text-white">วิศวกรไฟฟ้า</p>
+                    <p class="text-gray-400">Online</p>
+                </div>
+                <button onclick="handleLogout()" class="px-3 py-1.5 bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white rounded-lg text-xs font-semibold transition">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i>ออก
+                </button>
             </div>
         </aside>
 
@@ -56,7 +93,7 @@
                     <span id="page-title" class="font-semibold text-base md:text-lg text-gray-700">หน้าแรก (Dashboard & PM Schedule)</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2 cursor-pointer" onclick="openModal('ข้อมูลผู้ใช้งาน', 'ชื่อ: วิศวกรสถานีไฟฟ้า\nสิทธิ์การใช้งาน: ผู้ดูแลระบบ RCM')">
+                    <div class="flex items-center space-x-2">
                         <div class="w-9 h-9 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">EN</div>
                         <span class="hidden sm:inline text-sm font-medium">วิศวกรไฟฟ้า (Admin)</span>
                     </div>
@@ -66,10 +103,10 @@
             <!-- Scrollable Content -->
             <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
                 
-                <!-- TAB 1: DASHBOARD & PM SCHEDULE -->
+                <!-- TAB 1: DASHBOARD -->
                 <div id="tab-dashboard" class="tab-content space-y-6">
                     
-                    <!-- KPI Summary Cards (ป้ายแสดงอุปกรณ์ทั้งหมด, ปลอดภัย, เฝ้าระวัง, วิกฤต) -->
+                    <!-- KPI Summary Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                             <div>
@@ -116,14 +153,14 @@
                         </div>
                     </div>
 
-                    <!-- PM Schedule Table (ตารางการเข้าทำ PM ก่อน-หลัง) -->
+                    <!-- PM Schedule Table (ครบทุกอุปกรณ์) -->
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-base font-bold text-gray-800"><i class="fa-solid fa-list-ol text-blue-600 mr-2"></i>ตารางลำดับการเข้าทำ PM (PM Prioritized Schedule)</h2>
+                            <h2 class="text-base font-bold text-gray-800"><i class="fa-solid fa-list-ol text-blue-600 mr-2"></i>ตารางลำดับการเข้าทำ PM ครบทุกอุปกรณ์ (All Assets Priority)</h2>
                             <button onclick="switchTab('testing')" class="text-sm text-blue-600 font-medium hover:underline">ดูผลทดสอบเชิงลึก</button>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[650px]">
+                            <table class="w-full text-left border-collapse min-w-[750px]">
                                 <thead>
                                     <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
                                         <th class="py-3 px-3">ลำดับ PM</th>
@@ -140,7 +177,7 @@
                                         <td class="py-3 px-3 font-medium">TR-Substation B1</td>
                                         <td class="py-3 px-3">Transformer</td>
                                         <td class="py-3 px-3"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold">HI-5 (วิกฤต)</span></td>
-                                        <td class="py-3 px-3 text-red-600">Duval Triangle: Thermal Fault (>700°C)</td>
+                                        <td class="py-3 px-3 text-red-600">Duval Zone T3 (Thermal > 700°C)</td>
                                         <td class="py-3 px-3"><button onclick="selectAssetAndTest('TR-Substation B1')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50">
@@ -148,16 +185,32 @@
                                         <td class="py-3 px-3 font-medium">GIS-Bay 02</td>
                                         <td class="py-3 px-3">GIS</td>
                                         <td class="py-3 px-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3 (เฝ้าระวัง)</span></td>
-                                        <td class="py-3 px-3 text-yellow-600">SF6 Pressure ต่ำ (0.52 MPa), Partial Discharge สูง</td>
+                                        <td class="py-3 px-3 text-yellow-600">SF6 Pressure ต่ำ (0.52 MPa), PD สูง</td>
                                         <td class="py-3 px-3"><button onclick="selectAssetAndTest('GIS-Bay 02')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-3 font-bold text-gray-700">#3 (ตามรอบ)</td>
+                                        <td class="py-3 px-3 font-bold text-yellow-600">#3 (เฝ้าระวัง)</td>
                                         <td class="py-3 px-3 font-medium">TR-Substation A2</td>
                                         <td class="py-3 px-3">Transformer</td>
                                         <td class="py-3 px-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">HI-3 (เฝ้าระวัง)</span></td>
-                                        <td class="py-3 px-3 text-gray-600">Key Gas: Methane เริ่มสะสม</td>
+                                        <td class="py-3 px-3 text-yellow-600">Duval Zone S (Stray gassing)</td>
                                         <td class="py-3 px-3"><button onclick="selectAssetAndTest('TR-Substation A2')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-3 px-3 font-bold text-gray-700">#4-26</td>
+                                        <td class="py-3 px-3 font-medium">Transformer ทั้งหมด (21 ยูนิตที่เหลือ)</td>
+                                        <td class="py-3 px-3">Transformer</td>
+                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">HI-1, 2 (ปลอดภัย)</span></td>
+                                        <td class="py-3 px-3 text-green-600">ผลทดสอบปกติทุกค่า ตามรอบ Time-based</td>
+                                        <td class="py-3 px-3"><button onclick="selectAssetAndTest('TR-Substation A1')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-3 px-3 font-bold text-gray-700">#27-60</td>
+                                        <td class="py-3 px-3 font-medium">GIS Bay ทั้งหมด (34 เบย์ที่เหลือ)</td>
+                                        <td class="py-3 px-3">GIS</td>
+                                        <td class="py-3 px-3"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">HI-1, 2 (ปลอดภัย)</span></td>
+                                        <td class="py-3 px-3 text-green-600">แรงดัน SF6 ปกติ ไม่มี Partial Discharge</td>
+                                        <td class="py-3 px-3"><button onclick="selectAssetAndTest('GIS-Bay 01')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">ดูผลทดสอบ</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -165,14 +218,14 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: DETAILED TESTING (DGA, Key Gas, Duval Triangle) -->
+                <!-- TAB 2: DETAILED TESTING & DUVAL TRIANGLE -->
                 <div id="tab-testing" class="tab-content hidden space-y-6">
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
                         
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-flask text-indigo-600 mr-2"></i>รายละเอียดการทดสอบเชิงลึก (DGA & Duval Triangle)</h2>
-                                <p class="text-sm text-gray-500">ตรวจสอบวิเคราะห์ก๊าซละลายในน้ำมันหม้อแปลง (Key Gases) และการวินิจฉัยความผิดปกติ</p>
+                                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-flask text-indigo-600 mr-2"></i>ผลการทดสอบเชิงลึก & สามเหลี่ยมดุวัล (Duval's Triangle)</h2>
+                                <p class="text-sm text-gray-500">เลือกอุปกรณ์เพื่อดูผล DGA, Key Gas, รูปสามเหลี่ยมดุวัล และผลทดสอบอื่นๆ</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
                                 <label class="text-sm font-medium text-gray-700 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -180,6 +233,8 @@
                                     <option value="TR-Substation B1">TR-Substation B1 (Transformer - วิกฤต)</option>
                                     <option value="GIS-Bay 02">GIS-Bay 02 (GIS - เฝ้าระวัง)</option>
                                     <option value="TR-Substation A2">TR-Substation A2 (Transformer - เฝ้าระวัง)</option>
+                                    <option value="TR-Substation A1">TR-Substation A1 (Transformer - ปลอดภัย)</option>
+                                    <option value="GIS-Bay 01">GIS-Bay 01 (GIS - ปลอดภัย)</option>
                                 </select>
                             </div>
                         </div>
@@ -255,28 +310,26 @@
         </div>
     </div>
 
-    <!-- GENERAL MODAL -->
-    <div id="app-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl">
-            <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-2"></h3>
-            <p id="modal-desc" class="text-sm text-gray-600 whitespace-pre-line mb-6"></p>
-            <div class="flex justify-end">
-                <button onclick="closeModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">ปิด</button>
-            </div>
-        </div>
-    </div>
-
     <!-- SCRIPT -->
     <script>
+        const loginScreen = document.getElementById('login-screen');
+        const mainApp = document.getElementById('main-app');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const openSidebarBtn = document.getElementById('open-sidebar');
         const closeSidebarBtn = document.getElementById('close-sidebar');
         const pageTitle = document.getElementById('page-title');
-        
-        const appModal = document.getElementById('app-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
+
+        function handleLogin(e) {
+            e.preventDefault();
+            loginScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+        }
+
+        function handleLogout() {
+            mainApp.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+        }
 
         function toggleSidebar() {
             sidebar.classList.toggle('-translate-x-full');
@@ -302,7 +355,7 @@
 
             const titles = {
                 'dashboard': 'หน้าแรก (Dashboard & PM Schedule)',
-                'testing': 'รายละเอียดการทดสอบ (DGA, Key Gas & Duval Triangle)',
+                'testing': 'ผลการทดสอบ & สามเหลี่ยมดุวัล (Duval Triangle)',
                 'fmea': 'การวิเคราะห์ FMEA และค่า RPN'
             };
             pageTitle.innerText = titles[tabName] || 'RCM Portal';
@@ -312,37 +365,26 @@
             }
         }
 
-        function openModal(title, desc) {
-            modalTitle.innerText = title;
-            modalDesc.innerText = desc;
-            appModal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            appModal.classList.add('hidden');
-        }
-
-        // ฐานข้อมูล DGA และ Duval Triangle สำหรับแต่ละอุปกรณ์
-        const testingData = {
+        // ฐานข้อมูลผลการทดสอบเชิงลึก พร้อมพิกัดสามเหลี่ยมดุวัล (CH4, C2H2, C2H4)
+        const testingDatabase = {
             "TR-Substation B1": {
                 type: "Transformer (Oil-immersed)",
-                hi: "HI-5 (วิกฤต)",
+                hi: "HI-5 (วิกฤต - ซ่อมด่วน)",
                 hiColor: "bg-red-100 text-red-700",
                 keyGases: [
-                    { gas: "Hydrogen (H2)", value: "1,250 ppm", status: "Critical (สูงมาก)", color: "text-red-600 font-bold" },
+                    { gas: "Hydrogen (H2)", value: "1,250 ppm", status: "Critical", color: "text-red-600 font-bold" },
                     { gas: "Methane (CH4)", value: "450 ppm", status: "High", color: "text-red-600 font-bold" },
-                    { gas: "Acetylene (C2H2)", value: "85 ppm", status: "Critical (พบการอาร์คไฟฟ้า)", color: "text-red-600 font-bold" },
-                    { gas: "Ethylene (C2H4)", value: "920 ppm", status: "Critical (ความร้อนสูง > 700°C)", color: "text-red-600 font-bold" },
+                    { gas: "Acetylene (C2H2)", value: "85 ppm", status: "Critical", color: "text-red-600 font-bold" },
+                    { gas: "Ethylene (C2H4)", value: "920 ppm", status: "Critical", color: "text-red-600 font-bold" },
                     { gas: "Ethane (C2H6)", value: "210 ppm", status: "High", color: "text-yellow-600" }
                 ],
-                duval: {
-                    zone: "T3 (Thermal Fault > 700°C) และ D1 (Discharge of High Energy)",
-                    desc: "พิกัดเปอร์เซ็นต์ก๊าซในสามเหลี่ยมดุวัล ตกอยู่ในโซนความร้อนจัดและมีการสпар์คของกระแสไฟฟ้าแรงสูง แนะนำให้ปลดส N (Out of service) ทันทีเพื่อซ่อมแซมขดลวด"
-                },
+                duvalValues: { ch4: 30, c2h2: 25, c2h4: 45, zone: "T3 (Thermal Fault > 700°C)", desc: "พิกัดตกอยู่ในโซนความร้อนสูงจัดและอาร์คไฟฟ้าแรงสูง (T3/D1) แนะนำปลดสะพานไฟทันที" },
                 otherTests: [
-                    { name: "Breakdown Voltage", result: "32 kV (เกณฑ์ปกติ > 45 kV)", status: "Fail" },
-                    { name: "Interfacial Tension (IFT)", result: "18 mN/m", status: "Fail" },
-                    { name: "Water Content", result: "38 ppm (ชื้นสูง)", status: "Warning" }
+                    { name: "Breakdown Voltage (ASTM D1816)", result: "32 kV (เกณฑ์ปกติ > 45 kV)", status: "Fail", color: "text-red-600 font-bold" },
+                    { name: "Interfacial Tension (IFT)", result: "18 mN/m (น้ำมันเสื่อมสภาพเป็นกรด)", status: "Fail", color: "text-red-600 font-bold" },
+                    { name: "Water Content in Oil", result: "38 ppm (ชื้นสูง)", status: "Warning", color: "text-yellow-600" },
+                    { name: "Power Factor Test", result: "1.45% (ฉนวนสูญเสียพลังงานสูง)", status: "Fail", color: "text-red-600 font-bold" },
+                    { name: "Winding Resistance", result: "Phase A ผิด 2.8% (ความต้านทานไม่สมดุล)", status: "Warning", color: "text-yellow-600" }
                 ]
             },
             "GIS-Bay 02": {
@@ -350,17 +392,16 @@
                 hi: "HI-3 (เฝ้าระวัง)",
                 hiColor: "bg-yellow-100 text-yellow-700",
                 keyGases: [
-                    { gas: "SF6 Gas Pressure", value: "0.52 MPa", status: "Warning (ต่ำกว่า 0.65 MPa)", color: "text-yellow-600 font-bold" },
+                    { gas: "SF6 Gas Pressure", value: "0.52 MPa", status: "Warning", color: "text-yellow-600 font-bold" },
                     { gas: "Moisture (Dew Point)", value: "-25 °C", status: "Warning", color: "text-yellow-600" },
-                    { gas: "CF4 (Byproduct)", value: "45 ppm", status: "Normal", color: "text-green-600" }
+                    { gas: "CF4 Byproduct", value: "45 ppm", status: "Normal", color: "text-green-600" }
                 ],
-                duval: {
-                    zone: "ไม่เกี่ยวข้องกับระบบน้ำมัน (ใช้การวิเคราะห์ Partial Discharge แทน)",
-                    desc: "ตรวจพบสัญญาณ Partial Discharge ขนาด 15 pC บริเวณหน้าสัมผัสเซอร์กิตเบรกเกอร์ พร้อมแรงดันก๊าซลดลง ชี้ว่ามีจุดรั่วซึมขนาดเล็ก (Micro-leak)"
-                },
+                duvalValues: null, // GIS ไม่มีสามเหลี่ยมดุวัล
                 otherTests: [
-                    { name: "Partial Discharge (UHF)", result: "15 pC (Medium Risk)", status: "Warning" },
-                    { name: "Contact Resistance", result: "42 micro-ohm", status: "Pass" }
+                    { name: "Partial Discharge (UHF & Acoustic)", result: "15 pC (พบสัญญาณรบกวนที่หน้าสัมผัส)", status: "Warning", color: "text-yellow-600 font-bold" },
+                    { name: "Circuit Breaker Timing Test", result: "Opening time: 38 ms (ปกติ)", status: "Pass", color: "text-green-600" },
+                    { name: "Contact Resistance (DC)", result: "45 micro-ohm", status: "Pass", color: "text-green-600" },
+                    { name: "SF6 Leak Test", result: "พบจุดรั่วซึมเล็กน้อยที่โอริงวาล์วเติมก๊าซ", status: "Warning", color: "text-yellow-600 font-bold" }
                 ]
             },
             "TR-Substation A2": {
@@ -369,17 +410,45 @@
                 hiColor: "bg-yellow-100 text-yellow-700",
                 keyGases: [
                     { gas: "Hydrogen (H2)", value: "85 ppm", status: "Normal", color: "text-green-600" },
-                    { gas: "Methane (CH4)", value: "65 ppm", status: "Warning (เริ่มสะสม)", color: "text-yellow-600 font-bold" },
+                    { gas: "Methane (CH4)", value: "65 ppm", status: "Warning", color: "text-yellow-600 font-bold" },
                     { gas: "Acetylene (C2H2)", value: "0 ppm", status: "Normal", color: "text-green-600" },
                     { gas: "Ethylene (C2H4)", value: "40 ppm", status: "Normal", color: "text-green-600" }
                 ],
-                duval: {
-                    zone: "S (Stray gassing / ความร้อนต่ำปกติของน้ำมันอายุมาก)",
-                    desc: "ก๊าซอยู่ในเกณฑ์ปลอดภัย ยังไม่มีความร้อนสูงผิดปกติ แนะนำให้ติดตามผลทดสอบซ้ำในอีก 3 เดือนข้างหน้า"
-                },
+                duvalValues: { ch4: 60, c2h2: 5, c2h4: 35, zone: "S (Stray gassing)", desc: "ก๊าซสะสมตามธรรมชาติจากอายุของน้ำมัน ยังไม่อยู่ในเกณฑ์อันตราย" },
                 otherTests: [
-                    { name: "Breakdown Voltage", result: "48 kV", status: "Pass" },
-                    { name: "Water Content", result: "20 ppm", status: "Pass" }
+                    { name: "Breakdown Voltage", result: "48 kV (ปกติ)", status: "Pass", color: "text-green-600" },
+                    { name: "Water Content", result: "20 ppm", status: "Pass", color: "text-green-600" },
+                    { name: "Power Factor", result: "0.35%", status: "Pass", color: "text-green-600" }
+                ]
+            },
+            "TR-Substation A1": {
+                type: "Transformer (Oil-immersed)",
+                hi: "HI-1 (ปลอดภัย)",
+                hiColor: "bg-green-100 text-green-700",
+                keyGases: [
+                    { gas: "Hydrogen (H2)", value: "15 ppm", status: "Normal", color: "text-green-600" },
+                    { gas: "Methane (CH4)", value: "10 ppm", status: "Normal", color: "text-green-600" },
+                    { gas: "Acetylene (C2H2)", value: "0 ppm", status: "Normal", color: "text-green-600" }
+                ],
+                duvalValues: { ch4: 50, c2h2: 0, c2h4: 50, zone: "PD or T1 (Normal aging)", desc: "อยู่ในเกณฑ์ปลอดภัยสมบูรณ์" },
+                otherTests: [
+                    { name: "Breakdown Voltage", result: "58 kV", status: "Pass", color: "text-green-600" },
+                    { name: "Water Content", result: "12 ppm", status: "Pass", color: "text-green-600" },
+                    { name: "Power Factor", result: "0.18%", status: "Pass", color: "text-green-600" }
+                ]
+            },
+            "GIS-Bay 01": {
+                type: "GIS",
+                hi: "HI-1 (ปลอดภัย)",
+                hiColor: "bg-green-100 text-green-700",
+                keyGases: [
+                    { gas: "SF6 Gas Pressure", value: "0.65 MPa", status: "Normal", color: "text-green-600" },
+                    { gas: "Moisture", value: "-35 °C", status: "Normal", color: "text-green-600" }
+                ],
+                duvalValues: null,
+                otherTests: [
+                    { name: "Partial Discharge", result: "< 5 pC (ต่ำมาก)", status: "Pass", color: "text-green-600" },
+                    { name: "Contact Resistance", result: "38 micro-ohm", status: "Pass", color: "text-green-600" }
                 ]
             }
         };
@@ -392,7 +461,7 @@
 
         function updateTestingView() {
             const assetKey = document.getElementById('asset-selector').value;
-            const data = testingData[assetKey];
+            const data = testingDatabase[assetKey];
             const container = document.getElementById('testing-detail-container');
 
             let html = `
@@ -406,20 +475,20 @@
                         <div class="mt-1"><span class="px-2 py-1 rounded text-xs font-bold ${data.hiColor}">${data.hi}</span></div>
                     </div>
                     <div>
-                        <span class="text-xs text-gray-500">โหมดการวิเคราะห์หลัก</span>
-                        <h4 class="font-bold text-indigo-600 mt-1">DGA & Duval Triangle</h4>
+                        <span class="text-xs text-gray-500">สถานะการทดสอบ</span>
+                        <h4 class="font-bold text-indigo-600 mt-1">อัปเดตล่าสุดสมบูรณ์</h4>
                     </div>
                 </div>
 
                 <!-- Key Gas Table -->
                 <div>
-                    <h3 class="font-bold text-gray-800 text-base mb-3"><i class="fa-solid fa-gauge-high mr-2 text-blue-600"></i>การวิเคราะห์ก๊าซสำคัญ (Key Gases)</h3>
+                    <h3 class="font-bold text-gray-800 text-base mb-3"><i class="fa-solid fa-gauge-high mr-2 text-blue-600"></i>การวิเคราะห์ก๊าซสำคัญ (Key Gases & DGA / SF6)</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[500px]">
                             <thead>
                                 <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
-                                    <th class="py-3 px-3">ชนิดก๊าซ (Key Gas)</th>
-                                    <th class="py-3 px-3">ค่าที่วัดได้ (Concentration)</th>
+                                    <th class="py-3 px-3">พารามิเตอร์ก๊าซ</th>
+                                    <th class="py-3 px-3">ค่าที่วัดได้</th>
                                     <th class="py-3 px-3">การประเมินสถานะ</th>
                                 </tr>
                             </thead>
@@ -441,12 +510,87 @@
                         </table>
                     </div>
                 </div>
+            `;
 
-                <!-- Duval Triangle Section -->
-                <div class="p-5 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
-                    <h3 class="font-bold text-indigo-900 text-base"><i class="fa-solid fa-triangle-exclamation mr-2 text-indigo-600"></i>ผลวิเคราะห์สามเหลี่ยมดุวัล (Duval's Triangle Diagnosis)</h3>
-                    <p class="text-sm font-semibold text-indigo-800">พิกัดโซน: ${data.duval.zone}</p>
-                    <p class="text-xs text-indigo-700 leading-relaxed">${data.duval.desc}</p>
+            // ถ้าระบบมีสามเหลี่ยมดุวัล (Transformer) ให้แสดง SVG สามเหลี่ยม
+            if (data.duvalValues) {
+                html += `
+                    <div class="p-5 bg-indigo-50 border border-indigo-100 rounded-xl space-y-4">
+                        <h3 class="font-bold text-indigo-900 text-base"><i class="fa-solid fa-triangle-exclamation mr-2 text-indigo-600"></i>ผลวิเคราะห์สามเหลี่ยมดุวัล (Duval's Triangle Diagnosis)</h3>
+                        
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <!-- SVG Duval Triangle Graphic -->
+                            <div class="w-full md:w-1/2 flex justify-center bg-white p-4 rounded-xl shadow-sm border">
+                                <svg viewBox="0 0 300 260" class="w-64 h-56">
+                                    <!-- Triangle Outline -->
+                                    <polygon points="150,20 20,240 280,240" fill="#f8fafc" stroke="#3b82f6" stroke-width="3"/>
+                                    
+                                    <!-- Zone Lines (Simplified Duval zones) -->
+                                    <line x1="150" y1="20" x2="150" y2="240" stroke="#cbd5e1" stroke-dasharray="4" stroke-width="2"/>
+                                    <line x1="20" y1="240" x2="200" y2="130" stroke="#cbd5e1" stroke-dasharray="4" stroke-width="2"/>
+                                    
+                                    <!-- Zone Labels -->
+                                    <text x="140" y="80" font-size="10" fill="#64748b" font-weight="bold">PD</text>
+                                    <text x="90" y="180" font-size="10" fill="#64748b" font-weight="bold">T1 / T2</text>
+                                    <text x="180" y="180" font-size="10" fill="#ef4444" font-weight="bold">T3 (Critical)</text>
+                                    <text x="135" y="220" font-size="10" fill="#64748b" font-weight="bold">S</text>
+
+                                    <!-- Corner Labels (CH4, C2H2, C2H4) -->
+                                    <text x="140" y="12" font-size="11" fill="#1e293b" font-weight="bold">CH4 (%)</text>
+                                    <text x="0" y="255" font-size="11" fill="#1e293b" font-weight="bold">C2H2 (%)</text>
+                                    <text x="270" y="255" font-size="11" fill="#1e293b" font-weight="bold">C2H4 (%)</text>
+
+                                    <!-- Plotted Fault Point -->
+                                    <circle cx="190" cy="160" r="7" fill="#dc2626" stroke="#white" stroke-width="2"/>
+                                    <text x="202" y="164" font-size="11" fill="#dc2626" font-weight="bold">จุดพิกัดอุปกรณ์</text>
+                                </svg>
+                            </div>
+
+                            <!-- Duval Text Detail -->
+                            <div class="w-full md:w-1/2 space-y-2">
+                                <p class="text-sm font-bold text-indigo-900">โซนความผิดปกติ: ${data.duvalValues.zone}</p>
+                                <p class="text-xs text-indigo-700 leading-relaxed">${data.duvalValues.desc}</p>
+                                <div class="text-xs bg-white p-3 rounded-lg border border-indigo-200 text-gray-700 space-y-1">
+                                    <p>• สัดส่วน CH4: <b>${data.duvalValues.ch4}%</b></p>
+                                    <p>• สัดส่วน C2H2: <b>${data.duvalValues.c2h2}%</b></p>
+                                    <p>• สัดส่วน C2H4: <b>${data.duvalValues.c2h4}%</b></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // แสดงผลการทดสอบอื่นๆ ที่เกี่ยวข้อง (Other Related Tests)
+            html += `
+                <div>
+                    <h3 class="font-bold text-gray-800 text-base mb-3"><i class="fa-solid fa-list-check mr-2 text-green-600"></i>ผลการทดสอบอื่นๆ ที่เกี่ยวข้อง (Electrical & Physical Tests)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr class="border-b bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
+                                    <th class="py-3 px-3">หัวข้อการทดสอบ</th>
+                                    <th class="py-3 px-3">ผลการตรวจวัด</th>
+                                    <th class="py-3 px-3">สถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y text-sm">
+            `;
+
+            data.otherTests.forEach(test => {
+                html += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-3 font-medium">${test.name}</td>
+                        <td class="py-3 px-3 text-gray-600">${test.result}</td>
+                        <td class="py-3 px-3 ${test.color}">${test.status}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             `;
 
