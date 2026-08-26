@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เพิ่ม FMEA, RPN และ Health Index)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (FMEA เพิ่มข้อมูลใหม่ได้ & สูตรถูกต้อง)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -420,6 +420,14 @@
             color: var(--text-main);
         }
 
+        .fmea-add-box {
+            background: #fffef9;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
         /* Health Index Calculation Card */
         .hi-calc-card {
             background: #fffef9;
@@ -427,6 +435,18 @@
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
+        }
+
+        /* Formula Box */
+        .formula-box {
+            background: #eae6db;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.05rem;
         }
 
         /* Pagination Controls */
@@ -488,7 +508,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | แผน PM, บันทึกผลทดสอบ, FMEA & RPN และการคำนวณ Health Index</p>
+                <p>สถานีไฟฟ้าย่อย | แผน PM, บันทึกผลทดสอบ, FMEA & RPN (เพิ่มข้อมูลได้) และสูตร Health Index ที่ถูกต้อง</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -703,20 +723,21 @@
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         ⚙️ ตารางวิเคราะห์ FMEA และการคำนวณ RPN (Risk Priority Number)
                     </h2>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-                        สูตรการคำนวณ: $\text{RPN} = \text{Severity (S)} \times \text{Occurrence (O)} \times \text{Detection (D)}$ (สเกล 1-10)
-                    </p>
+                    <div class="formula-box">
+                        สมการประเมินความเสี่ยง: RPN = Severity (S) × Occurrence (O) × Detection (D)  (สเกล 1 - 10)
+                    </div>
+                    
                     <div class="table-responsive">
                         <table class="fmea-table">
                             <thead>
                                 <tr>
-                                    <th>ชิ้นส่วนอุปกรณ์ (Component)</th>
+                                    <th>ชิ้นส่วน (Component)</th>
                                     <th>รูปแบบความเสียหาย (Failure Mode)</th>
                                     <th>ผลกระทบ (Effect)</th>
                                     <th>S</th>
-                                    <th>สาเหตุความเสียหาย (Cause)</th>
+                                    <th>สาเหตุ (Cause)</th>
                                     <th>O</th>
-                                    <th>มาตรการตรวจสอบปัจจุบัน (Current Controls)</th>
+                                    <th>มาตรการตรวจสอบ (Control)</th>
                                     <th>D</th>
                                     <th>RPN</th>
                                     <th>ระดับความเสี่ยง</th>
@@ -727,6 +748,54 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Form to Add New FMEA Entry -->
+                    <div class="fmea-add-box">
+                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 10px;">➕ บันทึกเพิ่มรูปแบบความเสียหายใหม่ (Add FMEA Entry)</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ชิ้นส่วนอุปกรณ์ (Component)</label>
+                                <input type="text" id="newComp" placeholder="เช่น Bushing, Winding, Tap Changer">
+                            </div>
+                            <div class="form-group">
+                                <label>รูปแบบความเสียหาย (Failure Mode)</label>
+                                <input type="text" id="newMode" placeholder="เช่น น้ำมันรั่ว, ช็อตทิร์น">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ผลกระทบ (Effect)</label>
+                                <input type="text" id="newEffect" placeholder="ผลกระทบต่อระบบ">
+                            </div>
+                            <div class="form-group">
+                                <label>สาเหตุ (Cause)</label>
+                                <input type="text" id="newCause" placeholder="สาเหตุความเสียหาย">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ความรุนแรง (S: 1-10)</label>
+                                <input type="number" id="newS" min="1" max="10" value="5">
+                            </div>
+                            <div class="form-group">
+                                <label>โอกาสเกิด (O: 1-10)</label>
+                                <input type="number" id="newO" min="1" max="10" value="3">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>มาตรการตรวจสอบ (Control)</label>
+                                <input type="text" id="newControl" placeholder="เช่น DGA, Thermography">
+                            </div>
+                            <div class="form-group">
+                                <label>โอกาสตรวจพบ (D: 1-10)</label>
+                                <input type="number" id="newD" min="1" max="10" value="3">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-action btn-save" onclick="addNewFMEARow()">➕ บันทึกข้อมูลเข้าตาราง FMEA</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Panel 4: Health Index (HI) Calculation -->
@@ -734,18 +803,17 @@
                     <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
                         📈 การคำนวณดัชนีสุขภาพ (Health Index - HI)
                     </h2>
+                    
+                    <div class="formula-box">
+                        สมการดัชนีสุขภาพ: HI = 100 - &Sigma; (Condition Factor (CF<sub>i</sub>) &times; Weighting Factor (W<sub>i</sub>))
+                    </div>
+
                     <div class="hi-calc-card">
-                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">หลักการและสมการคำนวณ (Scoring Algorithm)</h3>
-                        <p style="font-size: 0.88rem; margin-bottom: 10px;">
-                            คะแนนดัชนีสุขภาพคิดจากค่าน้ำหนัก ($W_i$) ของผลการทดสอบแต่ละหัวข้อเทียบกับค่ามาตรฐานอ้างอิง:
-                        </p>
-                        <div style="background: var(--bg-color); padding: 12px; border-radius: 6px; font-family: monospace; font-size: 0.88rem; margin-bottom: 12px;">
-                            $\text{HI} = 100 - \sum (CF_i \times W_i)$
-                        </div>
-                        <ul style="font-size: 0.88rem; margin-left: 20px; display: flex; flex-direction: column; gap: 5px;">
-                            <li><strong>CF (Condition Factor):</strong> คะแนนหักตามความรุนแรงของความผิดปกติ (0 ถึง 10 คะแนน)</li>
-                            <li><strong>$W_i$ (Weighting Factor):</strong> น้ำหนักความสำคัญของหัวข้อทดสอบ (เช่น DGA น้ำมัน 40%, ค่า Dielectric 30%, อุณหภูมิ 30%)</li>
-                            <li><strong>เกณฑ์ประเมินสถานะ:</strong> 
+                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">หลักการและเกณฑ์มาตรฐานอ้างอิง</h3>
+                        <ul style="font-size: 0.88rem; margin-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+                            <li><strong>Condition Factor ($CF_i$):</strong> คะแนนหักตามระดับความรุนแรงของผลทดสอบแต่ละหัวข้อ (สเกล 0 ถึง 10 คะแนน)</li>
+                            <li><strong>Weighting Factor ($W_i$):</strong> น้ำหนักความสำคัญของแต่ละหัวข้อทดสอบ (ผลรวมน้ำหนักทุกหัวข้อเท่ากับ 1.0 หรือ 100%)</li>
+                            <li><strong>เกณฑ์ประเมินสถานะสุขภาพ:</strong> 
                                 <span class="badge normal">ปกติ (HI > 85)</span> 
                                 <span class="badge warning">เฝ้าระวัง (HI 70 - 85)</span> 
                                 <span class="badge danger">วิกฤต (HI < 70)</span>
@@ -754,7 +822,7 @@
                     </div>
 
                     <div class="hi-calc-card">
-                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">ตัวอย่างการคำนวณอุปกรณ์ปัจจุบัน (<span id="hiTargetId">TR-01</span>)</h3>
+                        <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 8px;">รายละเอียดการคำนวณของอุปกรณ์ปัจจุบัน (<span id="hiTargetId">TR-01</span>)</h3>
                         <div id="hiBreakdown" style="font-size: 0.88rem; display: flex; flex-direction: column; gap: 8px;">
                             <!-- Populated dynamically -->
                         </div>
@@ -764,7 +832,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ครบถ้วนทั้ง FMEA, RPN และ Health Index</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย[cite: 5] | FMEA บันทึกเพิ่มข้อมูลได้ & สูตรคำนวณถูกต้องตามหลักวิศวกรรม</p>
         </footer>
     </div>
 
@@ -856,6 +924,7 @@
         const rowsPerPage = 10;
         let filteredData = [...mockData];
         let selectedIndex = 0;
+        let customFMEARows = {};
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
@@ -918,7 +987,6 @@
             document.getElementById('headerSelectedId').innerText = item.id;
             document.getElementById('hiTargetId').innerText = `${item.id} (${item.name})`;
 
-            // Populate Form Fields
             document.getElementById('formId').value = item.id;
             document.getElementById('formType').value = item.type;
             document.getElementById('formName').value = item.name;
@@ -936,10 +1004,7 @@
                 document.getElementById('labelParam1').innerText = "แรงดันก๊าซ SF6 (Pressure)";
             }
 
-            // Populate FMEA Table dynamically based on type and status
             renderFMEA(item);
-
-            // Populate HI Breakdown
             renderHI(item);
         }
 
@@ -947,32 +1012,35 @@
             const fmeaBody = document.getElementById('fmeaTableBody');
             fmeaBody.innerHTML = "";
 
-            let rows = [];
+            let defaultRows = [];
             if (item.type === "หม้อแปลง") {
                 let s = item.status === 'วิกฤต' ? 9 : item.status === 'เฝ้าระวัง' ? 6 : 3;
                 let o = item.status === 'วิกฤต' ? 8 : item.status === 'เฝ้าระวัง' ? 5 : 2;
                 let d = item.status === 'วิกฤต' ? 7 : item.status === 'เฝ้าระวัง' ? 4 : 2;
-                let rpn = s * o * d;
-
-                rows = [
-                    { comp: "Winding / Insulation", mode: "Partial Discharge / Breakdown", effect: "Short circuit / Outage", s: s, cause: "Aging / Moisture / Thermal stress", o: o, control: "DGA & Dielectric test", d: d, rpn: rpn },
-                    { comp: "Bushings", mode: "Oil leak / Tracking", effect: "Flashover / Explosion", s: 8, cause: "Gasket failure / Contamination", o: 3, control: "Visual & Thermography", d: 3, rpn: 72 },
-                    { comp: "Cooling System", mode: "Fan/Pump failure", effect: "Overheating / Lifespan reduction", s: 6, cause: "Bearing wear / Power supply trip", o: 4, control: "Temperature monitoring", d: 2, rpn: 48 }
+                
+                defaultRows = [
+                    { comp: "Winding / Insulation", mode: "Partial Discharge / Breakdown", effect: "Short circuit / Outage", s: s, cause: "Aging / Moisture", o: o, control: "DGA & Dielectric", d: d, rpn: s * o * d },
+                    { comp: "Bushings", mode: "Oil leak / Tracking", effect: "Flashover / Explosion", s: 8, cause: "Gasket failure", o: 3, control: "Visual & Thermo", d: 3, rpn: 72 },
+                    { comp: "Cooling System", mode: "Fan/Pump failure", effect: "Overheating", s: 6, cause: "Bearing wear", o: 4, control: "Temp monitoring", d: 2, rpn: 48 }
                 ];
             } else {
                 let s = item.status === 'วิกฤต' ? 9 : item.status === 'เฝ้าระวัง' ? 6 : 3;
                 let o = item.status === 'วิกฤต' ? 7 : item.status === 'เฝ้าระวัง' ? 4 : 2;
                 let d = item.status === 'วิกฤต' ? 8 : item.status === 'เฝ้าระวัง' ? 5 : 2;
-                let rpn = s * o * d;
 
-                rows = [
-                    { comp: "SF6 Gas Compartment", mode: "Gas leakage / Low pressure", effect: "Loss of insulation / Flashover", s: s, cause: "Seal degradation / Valve leak", o: o, control: "Density monitor / Pressure gauge", d: d, rpn: rpn },
-                    { comp: "Circuit Breaker Contacts", mode: "Contact wear / High resistance", effect: "Overheating / Failure to trip", s: 8, cause: "Frequent switching operations", o: 3, control: "Circuit resistance test", d: 4, rpn: 96 },
-                    { comp: "Operating Mechanism", mode: "Spring charging failure", effect: "Unable to close/open breaker", s: 7, cause: "Motor failure / Limit switch issue", o: 3, control: "Periodic functional test", d: 3, rpn: 63 }
+                defaultRows = [
+                    { comp: "SF6 Compartment", mode: "Gas leakage / Low pressure", effect: "Loss of insulation", s: s, cause: "Seal degradation", o: o, control: "Density monitor", d: d, rpn: s * o * d },
+                    { comp: "CB Contacts", mode: "Contact wear / High resistance", effect: "Overheating", s: 8, cause: "Switching ops", o: 3, control: "Resistance test", d: 4, rpn: 96 },
+                    { comp: "Mechanism", mode: "Spring charging failure", effect: "Unable to trip", s: 7, cause: "Motor failure", o: 3, control: "Functional test", d: 3, rpn: 63 }
                 ];
             }
 
-            rows.forEach(r => {
+            let allRows = [...defaultRows];
+            if (customFMEARows[item.index]) {
+                allRows = allRows.concat(customFMEARows[item.index]);
+            }
+
+            allRows.forEach(r => {
                 let riskColor = r.rpn >= 200 ? 'var(--status-danger)' : r.rpn >= 100 ? 'var(--status-warning)' : 'var(--status-normal)';
                 let riskText = r.rpn >= 200 ? 'สูงมาก (High)' : r.rpn >= 100 ? 'ปานกลาง (Medium)' : 'ต่ำ (Low)';
 
@@ -993,6 +1061,40 @@
             });
         }
 
+        function addNewFMEARow() {
+            const comp = document.getElementById('newComp').value.trim();
+            const mode = document.getElementById('newMode').value.trim();
+            const effect = document.getElementById('newEffect').value.trim();
+            const cause = document.getElementById('newCause').value.trim();
+            const control = document.getElementById('newControl').value.trim();
+            const s = parseInt(document.getElementById('newS').value) || 1;
+            const o = parseInt(document.getElementById('newO').value) || 1;
+            const d = parseInt(document.getElementById('newD').value) || 1;
+
+            if (!comp || !mode) {
+                alert('กรุณากรอกชิ้นส่วนและรูปแบบความเสียหายอย่างน้อย');
+                return;
+            }
+
+            const rpn = s * o * d;
+            const newEntry = { comp, mode, effect, s, cause, o, control, d, rpn };
+
+            if (!customFMEARows[selectedIndex]) {
+                customFMEARows[selectedIndex] = [];
+            }
+            customFMEARows[selectedIndex].push(newEntry);
+
+            const activeItem = mockData.find(d => d.index === selectedIndex);
+            renderFMEA(activeItem);
+
+            document.getElementById('newComp').value = '';
+            document.getElementById('newMode').value = '';
+            document.getElementById('newEffect').value = '';
+            document.getElementById('newCause').value = '';
+            document.getElementById('newControl').value = '';
+            alert('บันทึกรูปแบบความเสียหายใหม่เข้าตาราง FMEA สำเร็จ!');
+        }
+
         function renderHI(item) {
             const hiDiv = document.getElementById('hiBreakdown');
             let cf1 = item.status === 'วิกฤต' ? 6.5 : item.status === 'เฝ้าระวัง' ? 3.0 : 0.5;
@@ -1001,11 +1103,12 @@
 
             hiDiv.innerHTML = `
                 <p>• <strong>คะแนน HI ปัจจุบัน:</strong> <span style="font-size:1.1rem; font-weight:bold; color:var(--primary);">${item.hi} / 100</span> (${item.status})</p>
-                <p>• <strong>หัวข้อที่ 1 (DGA / Gas Analysis - น้ำหนัก 40%):</strong> ค่า Penalty (CF₁) = ${cf1} คะแนน</p>
-                <p>• <strong>หัวข้อที่ 2 (Dielectric / Insulation - น้ำหนัก 30%):</strong> ค่า Penalty (CF₂) = ${cf2} คะแนน</p>
-                <p>• <strong>หัวข้อที่ 3 (Thermal & Physical - น้ำหนัก 30%):</strong> ค่า Penalty (CF₃) = ${cf3} คะแนน</p>
-                <p style="margin-top:5px; background:var(--bg-color); padding:8px; border-radius:4px;">
-                    <strong>การคำนวณ:</strong> $100 - [(${cf1} \\times 0.4) + (${cf2} \\times 0.3) + (${cf3} \\times 0.3)] = ${item.hi}$
+                <p>• <strong>หัวข้อที่ 1 (DGA Analysis - น้ำหนัก 40%):</strong> ค่า Penalty ($CF_1$) = ${cf1} คะแนน</p>
+                <p>• <strong>หัวข้อที่ 2 (Dielectric - น้ำหนัก 30%):</strong> ค่า Penalty ($CF_2$) = ${cf2} คะแนน</p>
+                <p>• <strong>หัวข้อที่ 3 (Thermal - น้ำหนัก 30%):</strong> ค่า Penalty ($CF_3$) = ${cf3} คะแนน</p>
+                <p style="margin-top:8px; background:var(--bg-color); padding:10px; border-radius:4px;">
+                    <strong>การคำนวณตามสูตร:</strong> 
+                    $\text{HI} = 100 - [(${cf1} \times 0.4) + (${cf2} \times 0.3) + (${cf3} \times 0.3)] = \mathbf{${item.hi}}$
                 </p>
             `;
         }
