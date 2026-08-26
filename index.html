@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (Single Substation)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (กำหนดการเป็นวันที่ & แบ่งหน้า)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -199,7 +199,7 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .table-responsive {
@@ -252,6 +252,52 @@
         .badge.danger { background: #faeaea; color: var(--status-danger); }
         .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
         .badge.type-gis { background: #f0eaf2; color: #7a5180; }
+
+        /* Pagination Controls */
+        .pagination-container {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pagination-info {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .page-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
         /* Modal / Detail Panel Styles */
         .modal-overlay {
@@ -342,7 +388,6 @@
             background: #f1ede4;
         }
 
-        /* Footer Info */
         footer {
             text-align: center;
             padding: 20px;
@@ -363,7 +408,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อยหลัก (Single Substation) | เรียงลำดับตามกำหนดการเข้าทำ PM</p>
+                <p>สถานีไฟฟ้าย่อย (Single Substation) | กำหนดการเข้าทำ PM เป็นรูปแบบวันที่</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -437,7 +482,7 @@
                             <th>ประเภท</th>
                             <th>คะแนนสุขภาพ (HI)</th>
                             <th>สถานะ</th>
-                            <th>กำหนดการเข้าทำ PM</th>
+                            <th>วันที่เข้าทำ PM</th>
                             <th>กลยุทธ์ RCM ที่แนะนำ</th>
                         </tr>
                     </thead>
@@ -448,8 +493,17 @@
             </div>
         </div>
 
+        <!-- Pagination Bar -->
+        <div class="pagination-container">
+            <div class="pagination-info" id="paginationInfo">แสดง 1-10 จากทั้งหมด 40 รายการ</div>
+            <div class="pagination-buttons">
+                <button class="page-btn" id="prevBtn" onclick="changePage(-1)">ย้อนกลับ</button>
+                <button class="page-btn" id="nextBtn" onclick="changePage(1)">ถัดไป</button>
+            </div>
+        </div>
+
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ออกแบบด้วยโทนสีนวลสบายตา รองรับทุกอุปกรณ์</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ออกแบบด้วยโทนสีนวลสบายตา รองรับการแบ่งหน้า</p>
         </footer>
     </div>
 
@@ -473,30 +527,36 @@
         let dangerCount = 0;
         let totalHI = 0;
 
+        const baseDate = new Date(2026, 7, 26);
+
         for (let i = 1; i <= 40; i++) {
             const type = assetTypes[(i - 1) % 2];
             const id = type === "หม้อแปลง" ? `TR-${String(i).padStart(2, '0')}` : `GIS-${String(i).padStart(2, '0')}`;
             const name = type === "หม้อแปลง" ? `Power Transformer Unit #${i}` : `GIS Feeder Bay #${i}`;
             
-            let hi, status, strategy, pmDays;
+            let hi, status, strategy, dayOffset;
             const rand = (i * 17) % 100;
             
             if (rand < 15) {
                 hi = (55 + Math.random() * 15).toFixed(1);
                 status = "วิกฤต";
-                pmDays = Math.floor(Math.random() * 7) + 1;
+                dayOffset = Math.floor(Math.random() * 5) + 1;
                 dangerCount++;
             } else if (rand < 42) {
                 hi = (73 + Math.random() * 11).toFixed(1);
                 status = "เฝ้าระวัง";
-                pmDays = Math.floor(Math.random() * 20) + 8;
+                dayOffset = Math.floor(Math.random() * 20) + 6;
                 warningCount++;
             } else {
                 hi = (86 + Math.random() * 13.9).toFixed(1);
                 status = "ปกติ";
-                pmDays = Math.floor(Math.random() * 60) + 30;
+                dayOffset = Math.floor(Math.random() * 60) + 26;
             }
             totalHI += parseFloat(hi);
+
+            const pmDateObj = new Date(baseDate);
+            pmDateObj.setDate(baseDate.getDate() + dayOffset);
+            const dateStr = pmDateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
             let testResults = [];
             let mainParam = "";
@@ -533,61 +593,86 @@
                 type,
                 hi: parseFloat(hi),
                 status,
-                pmDays,
+                dayOffset,
+                dateStr,
                 mainParam,
                 strategy,
                 testResults
             });
         }
 
-        // Sort by PM priority (urgent days first)
-        mockData.sort((a, b) => a.pmDays - b.pmDays);
+        mockData.sort((a, b) => a.dayOffset - b.dayOffset);
 
         document.getElementById('count-warning').innerText = warningCount;
         document.getElementById('count-danger').innerText = dangerCount;
         document.getElementById('avg-hi').innerText = (totalHI / 40).toFixed(1) + " / 100";
 
-        function renderTable(data) {
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let filteredData = [...mockData];
+
+        function renderTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = "";
 
-            if (data.length === 0) {
+            const totalRows = filteredData.length;
+            if (totalRows === 0) {
                 tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-muted);">ไม่พบข้อมูลที่ค้นหา</td></tr>`;
+                document.getElementById('paginationInfo').innerText = `แสดง 0 จากทั้งหมด 0 รายการ`;
+                document.getElementById('prevBtn').disabled = true;
+                document.getElementById('nextBtn').disabled = true;
                 return;
             }
 
-            data.forEach((item, index) => {
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIdx = (currentPage - 1) * rowsPerPage;
+            const endIdx = Math.min(startIdx + rowsPerPage, totalRows);
+            const pageItems = filteredData.slice(startIdx, endIdx);
+
+            pageItems.forEach((item, idx) => {
+                const globalIndex = startIdx + idx + 1;
                 let badgeClass = "normal";
                 if (item.status === "เฝ้าระวัง") badgeClass = "warning";
                 if (item.status === "วิกฤต") badgeClass = "danger";
 
                 let typeBadge = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
-                let pmText = item.pmDays <= 7 ? `อีก ${item.pmDays} วัน (ด่วน)` : `อีก ${item.pmDays} วัน`;
+                let isUrgent = item.dayOffset <= 5;
 
                 const tr = document.createElement('tr');
                 tr.onclick = () => openDetailModal(item);
                 tr.innerHTML = `
-                    <td><strong>#${index + 1}</strong></td>
+                    <td><strong>#${globalIndex}</strong></td>
                     <td><strong>${item.id}</strong></td>
                     <td>${item.name}</td>
                     <td><span class="badge ${typeBadge}">${item.type}</span></td>
                     <td><strong>${item.hi}</strong></td>
                     <td><span class="badge ${badgeClass}">${item.status}</span></td>
-                    <td><strong style="color: ${item.pmDays <= 7 ? 'var(--status-danger)' : 'inherit'}">${pmText}</strong></td>
+                    <td><strong style="color: ${isUrgent ? 'var(--status-danger)' : 'inherit'}">${item.dateStr} ${isUrgent ? '(ด่วน)' : ''}</strong></td>
                     <td>${item.strategy}</td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            document.getElementById('paginationInfo').innerText = `แสดง ${startIdx + 1}-${endIdx} จากทั้งหมด ${totalRows} รายการ (หน้า ${currentPage}/${totalPages})`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
         }
 
-        renderTable(mockData);
+        function changePage(direction) {
+            currentPage += direction;
+            renderTable();
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+        }
 
         function filterTable() {
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             const typeVal = document.getElementById('typeFilter').value;
             const statusVal = document.getElementById('statusFilter').value;
 
-            const filtered = mockData.filter(item => {
+            filteredData = mockData.filter(item => {
                 const matchSearch = item.id.toLowerCase().includes(searchVal) || 
                                     item.name.toLowerCase().includes(searchVal);
                 const matchType = typeVal === "" || item.type === typeVal;
@@ -596,8 +681,11 @@
                 return matchSearch && matchType && matchStatus;
             });
 
-            renderTable(filtered);
+            currentPage = 1;
+            renderTable();
         }
+
+        renderTable();
 
         function openDetailModal(item) {
             const modal = document.getElementById('detailModal');
@@ -653,7 +741,7 @@
                     </div>
                     <div class="detail-item">
                         <span>กำหนดการเข้าทำ PM</span>
-                        <strong>อีก ${item.pmDays} วันข้างหน้า</strong>
+                        <strong>${item.dateStr}</strong>
                     </div>
                 </div>
                 <div>
