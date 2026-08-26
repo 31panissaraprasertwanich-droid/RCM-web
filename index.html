@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (กำหนดการเป็นวันที่ & แบ่งหน้า)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ผลทดสอบ DGA ละเอียด & เลือกดูหมวดหมู่ได้)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -314,7 +314,7 @@
         .modal-container {
             background: var(--card-bg);
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             border-radius: var(--radius);
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             overflow: hidden;
@@ -350,6 +350,40 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+        }
+
+        /* Tab Buttons inside Modal */
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .detail-grid {
@@ -408,7 +442,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย (Single Substation) | กำหนดการเข้าทำ PM เป็นรูปแบบวันที่</p>
+                <p>สถานีไฟฟ้าย่อย | มีระบบดูรายละเอียดผลทดสอบ DGA แยกหมวดหมู่</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -417,7 +451,7 @@
                 </div>
                 <div class="mini-stat">
                     <span>คำแนะนำ</span>
-                    <strong>คลิกแถวเพื่อดูผลทดสอบละเอียด</strong>
+                    <strong>คลิกแถวเพื่อเปิดดูผลทดสอบและ DGA เชิงลึก</strong>
                 </div>
             </div>
         </header>
@@ -503,7 +537,7 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | ออกแบบด้วยโทนสีนวลสบายตา รองรับการแบ่งหน้า</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | มีระบบวิเคราะห์ DGA แยกหมวดหมู่</p>
         </footer>
     </div>
 
@@ -559,7 +593,9 @@
             const dateStr = pmDateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
             let testResults = [];
+            let dgaDetails = null;
             let mainParam = "";
+
             if (type === "หม้อแปลง") {
                 const oilTemp = (65 + Math.random() * 25).toFixed(1);
                 const breakdownV = (45 + Math.random() * 20).toFixed(1);
@@ -568,11 +604,31 @@
                 strategy = status === "วิกฤต" ? "ทดสอบ DGA ด่วน / กรองน้ำมัน" : status === "เฝ้าระวัง" ? "ตรวจสอบระบบระบายความร้อน" : "บำรุงรักษาตามวาระปกติ";
                 
                 testResults = [
-                    { test: "Dissolved Gas Analysis (DGA)", result: status === "วิกฤต" ? "พบก๊าซ Hydrogen & Acetylene สูง" : "ปกติ (Ethylene อยู่ในเกณฑ์มาตรฐาน)", status: status === "วิกฤต" ? "Fail" : "Pass" },
                     { test: "Dielectric Breakdown Voltage", result: `${breakdownV} kV (เกณฑ์ > 50 kV)`, status: breakdownV > 50 ? "Pass" : "Warning" },
                     { test: "Oil Moisture Content", result: `${moisture} ppm`, status: moisture < 20 ? "Pass" : "Warning" },
-                    { test: "Winding Insulation Resistance", result: "1,200 MΩ at 2.5 kV", status: "Pass" }
+                    { test: "Winding Insulation Resistance", result: "1,200 MΩ at 2.5 kV", status: "Pass" },
+                    { test: "Interfacial Tension (IFT)", result: "38 mN/m", status: "Pass" }
                 ];
+
+                const h2 = status === "วิกฤต" ? (150 + Math.random() * 200).toFixed(1) : (10 + Math.random() * 30).toFixed(1);
+                const ch4 = status === "วิกฤต" ? (80 + Math.random() * 100).toFixed(1) : (5 + Math.random() * 15).toFixed(1);
+                const c2h2 = status === "วิกฤต" ? (15 + Math.random() * 50).toFixed(1) : (0.1 + Math.random() * 1.5).toFixed(1);
+                const c2h4 = status === "วิกฤต" ? (60 + Math.random() * 90).toFixed(1) : (8 + Math.random() * 20).toFixed(1);
+                const c2h6 = status === "วิกฤต" ? (40 + Math.random() * 60).toFixed(1) : (5 + Math.random() * 15).toFixed(1);
+                const co = (200 + Math.random() * 300).toFixed(1);
+                const co2 = (1200 + Math.random() * 800).toFixed(1);
+
+                dgaDetails = {
+                    h2: { val: h2, limit: "< 100 ppm", status: h2 < 100 ? "Pass" : "Fail" },
+                    ch4: { val: ch4, limit: "< 50 ppm", status: ch4 < 50 ? "Pass" : "Fail" },
+                    c2h2: { val: c2h2, limit: "< 1 ppm", status: c2h2 < 1 ? "Pass" : "Fail" },
+                    c2h4: { val: c2h4, limit: "< 50 ppm", status: c2h4 < 50 ? "Pass" : "Fail" },
+                    c2h6: { val: c2h6, limit: "< 65 ppm", status: c2h6 < 65 ? "Pass" : "Fail" },
+                    co: { val: co, limit: "< 350 ppm", status: co < 350 ? "Pass" : "Warning" },
+                    co2: { val: co2, limit: "< 2500 ppm", status: "Pass" },
+                    diagnosis: status === "วิกฤต" ? "พบความผิดปกติประเภท Thermal Fault (> 700°C) และ Arc Discharge" : "สภาพก๊าซละลายในน้ำมันปกติ ไม่พบความร้อนสูงผิดปกติ"
+                };
+
             } else {
                 const sf6Pressure = (0.42 + Math.random() * 0.18).toFixed(2);
                 const contactRes = (35 + Math.random() * 25).toFixed(1);
@@ -585,6 +641,7 @@
                     { test: "Main Circuit Resistance", result: `${contactRes} µΩ (เกณฑ์ < 50 µΩ)`, status: contactRes < 50 ? "Pass" : "Warning" },
                     { test: "Partial Discharge (PD) Test", result: status === "วิกฤต" ? "ตรวจพบสัญญาณ PD ผิดปกติที่ Compartment B" : "ต่ำกว่าเกณฑ์แจ้งเตือน (< 5 pC)", status: status === "วิกฤต" ? "Fail" : "Pass" }
                 ];
+                dgaDetails = null;
             }
 
             mockData.push({
@@ -597,7 +654,8 @@
                 dateStr,
                 mainParam,
                 strategy,
-                testResults
+                testResults,
+                dgaDetails
             });
         }
 
@@ -693,21 +751,20 @@
             
             let statusBadgeClass = item.status === 'ปกติ' ? 'normal' : item.status === 'เฝ้าระวัง' ? 'warning' : 'danger';
             
-            let testsHtml = `
+            let generalTestsHtml = `
                 <table class="test-result-table">
                     <thead>
                         <tr>
-                            <th>รายการทดสอบ (Test Item)</th>
+                            <th>รายการทดสอบหลัก</th>
                             <th>ผลการตรวจวัดล่าสุด</th>
                             <th>ผลการประเมิน</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
-            
             item.testResults.forEach(t => {
                 let sColor = t.status === 'Pass' ? 'var(--status-normal)' : t.status === 'Warning' ? 'var(--status-warning)' : 'var(--status-danger)';
-                testsHtml += `
+                generalTestsHtml += `
                     <tr>
                         <td>${t.test}</td>
                         <td>${t.result}</td>
@@ -715,7 +772,41 @@
                     </tr>
                 `;
             });
-            testsHtml += `</tbody></table>`;
+            generalTestsHtml += `</tbody></table>`;
+
+            let dgaTabHtml = "";
+            let dgaTabButton = "";
+
+            if (item.type === "หม้อแปลง" && item.dgaDetails) {
+                dgaTabButton = `<button class="tab-btn" onclick="switchTab('dgaTab', this)">ผลทดสอบ DGA เชิงลึก</button>`;
+                let d = item.dgaDetails;
+                dgaTabHtml = `
+                    <div id="dgaTab" class="tab-content">
+                        <p style="font-size: 0.9rem; margin-bottom: 12px; background: #eae6db; padding: 10px; border-radius: 6px;">
+                            <strong>การวินิจฉัย DGA:</strong> ${d.diagnosis}
+                        </p>
+                        <table class="test-result-table">
+                            <thead>
+                               <tr>
+                                   <th>ชนิดก๊าซละลาย (Dissolved Gas)</th>
+                                   <th>ปริมาณที่วัดได้</th>
+                                   <th>ค่ามาตรฐาน (Limit)</th>
+                                   <th>สถานะ</th>
+                               </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Hydrogen (H₂)</td><td>${d.h2.val} ppm</td><td>${d.h2.limit}</td><td><strong style="color:${d.h2.status=='Pass'?'var(--status-normal)':'var(--status-danger)'}">${d.h2.status}</strong></td></tr>
+                                <tr><td>Methane (CH₄)</td><td>${d.ch4.val} ppm</td><td>${d.ch4.limit}</td><td><strong style="color:${d.ch4.status=='Pass'?'var(--status-normal)':'var(--status-danger)'}">${d.ch4.status}</strong></td></tr>
+                                <tr><td>Acetylene (C₂H₂)</td><td>${d.c2h2.val} ppm</td><td>${d.c2h2.limit}</td><td><strong style="color:${d.c2h2.status=='Pass'?'var(--status-normal)':'var(--status-danger)'}">${d.c2h2.status}</strong></td></tr>
+                                <tr><td>Ethylene (C₂H₄)</td><td>${d.c2h4.val} ppm</td><td>${d.c2h4.limit}</td><td><strong style="color:${d.c2h4.status=='Pass'?'var(--status-normal)':'var(--status-danger)'}">${d.c2h4.status}</strong></td></tr>
+                                <tr><td>Ethane (C₂H₆)</td><td>${d.c2h6.val} ppm</td><td>${d.c2h6.limit}</td><td><strong style="color:${d.c2h6.status=='Pass'?'var(--status-normal)':'var(--status-danger)'}">${d.c2h6.status}</strong></td></tr>
+                                <tr><td>Carbon Monoxide (CO)</td><td>${d.co.val} ppm</td><td>${d.co.limit}</td><td><strong style="color:${d.co.status=='Pass'?'var(--status-normal)':'var(--status-warning)'}">${d.co.status}</strong></td></tr>
+                                <tr><td>Carbon Dioxide (CO₂)</td><td>${d.co2.val} ppm</td><td>${d.co2.limit}</td><td><strong style="color:var(--status-normal)">Pass</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
 
             document.getElementById('modalBody').innerHTML = `
                 <div class="detail-grid">
@@ -744,10 +835,19 @@
                         <strong>${item.dateStr}</strong>
                     </div>
                 </div>
-                <div>
-                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">ผลการทดสอบเชิงลึก (Diagnostic Test Results)</h3>
-                    ${testsHtml}
+
+                <div class="modal-tabs">
+                    <button class="tab-btn active" onclick="switchTab('generalTab', this)">ผลทดสอบทั่วไป</button>
+                    ${dgaTabButton}
                 </div>
+
+                <div id="generalTab" class="tab-content active">
+                    <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">ผลการตรวจวัดประจำรอบ</h3>
+                    ${generalTestsHtml}
+                </div>
+
+                ${dgaTabHtml}
+
                 <div>
                     <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 5px;">ข้อเสนอแนะกลยุทธ์ RCM</h3>
                     <p style="font-size: 0.9rem; background: var(--bg-color); padding: 12px; border-radius: 6px; border-left: 3px solid var(--primary);">${item.strategy}</p>
@@ -755,6 +855,17 @@
             `;
 
             modal.style.display = 'flex';
+        }
+
+        function switchTab(tabId, btnElement) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
         }
 
         function closeModal() {
