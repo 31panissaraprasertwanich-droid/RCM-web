@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เพิ่มฟอร์มมอบหมายงานซ่อมบำรุง)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (ฉบับสมบูรณ์)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -383,7 +383,7 @@
         }
 
         .badge.normal { background: #e5ede7; color: var(--status-normal); }
-        .badge.warning { background: #fcf4e5; color: #b37410; }
+        .badge.warning { background: #fcf4e5; color: var(--status-warning); }
         .badge.danger { background: #faeaea; color: var(--status-danger); }
         .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
         .badge.type-gis { background: #f0eaf2; color: #7a5180; }
@@ -696,7 +696,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | ติดตามสถานะงานซ่อมบำรุง, ผู้รับผิดชอบ และกำหนดการแล้วเสร็จ</p>
+                <p>สถานีไฟฟ้าย่อย | แผนผังตำแหน่ง, ส่งออกไฟล์, แนบรูปความเสียหาย FMEA & ติดตามสถานะงานซ่อมบำรุง</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -784,8 +784,8 @@
 
                     <!-- Export Buttons Bar -->
                     <div class="export-buttons">
-                        <button class="btn-export" onclick="exportToCSV()">📥 ส่งออกไฟล์ CSV</button>
-                        <button class="btn-export" onclick="exportToJSON()">📥 ส่งออกไฟล์ JSON</button>
+                        <button class="btn-export" onclick="exportToCSV()">📥 ส่งออกไฟล์ CSV[cite: 5]</button>
+                        <button class="btn-export" onclick="exportToJSON()">📥 ส่งออกไฟล์ JSON[cite: 5]</button>
                         <button class="btn-export" onclick="window.print()">🖨️ พิมพ์รายงานตาราง</button>
                     </div>
 
@@ -1012,7 +1012,7 @@
                 <div id="statusPanel" class="content-panel">
                     <div class="status-tracker-card">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
-                            📌 ติดตามสถานะงานซ่อมบำรุงเชิงรายอุปกรณ์
+                            📌 ติดตามสถานะงานซ่อมบำรุงเชิงรายอุปกรณ์[cite: 14]
                         </h2>
                         
                         <div class="form-row" style="margin-bottom: 15px;">
