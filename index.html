@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (เต็มจอ Responsive & ระบุตำแหน่งอุปกรณ์)</title>
+    <title>ระบบ RCM หม้อแปลงและ GIS - สถานีไฟฟ้าย่อย (พร้อมแผนที่ตำแหน่ง & ฟอร์มมาตรฐาน)</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -363,6 +363,58 @@
         .badge.type-tr { background: #e8edf2; color: var(--accent-blue); }
         .badge.type-gis { background: #f0eaf2; color: #7a5180; }
 
+        /* Map Button Style */
+        .btn-map {
+            background: #eef2f5;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-map:hover {
+            background: var(--accent-blue);
+            color: #fff;
+        }
+
+        /* Map Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 53, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+        .modal-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            background: #eae6db;
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 { font-size: 1rem; color: var(--primary); }
+        .close-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
+        .modal-body { padding: 20px; text-align: center; }
+
         /* Paper Form Styles */
         .inspection-form {
             background: #fffef9;
@@ -479,7 +531,6 @@
             margin-top: 15px;
         }
 
-        /* Formula Box */
         .formula-box {
             background: #eae6db;
             padding: 10px 12px;
@@ -551,7 +602,7 @@
         <header>
             <div class="header-title">
                 <h1>RCM Dashboard: หม้อแปลง และ GIS</h1>
-                <p>สถานีไฟฟ้าย่อย | เต็มหน้าจอ Responsive พร้อมระบุตำแหน่งติดตั้งอุปกรณ์ (Location)</p>
+                <p>สถานีไฟฟ้าย่อย | แผนผังตำแหน่งหน้างาน & ฟอร์มบันทึกผลทดสอบมาตรฐานเดียวกัน</p>
             </div>
             <div class="header-stats">
                 <div class="mini-stat">
@@ -664,7 +715,7 @@
                     </div>
                 </div>
 
-                <!-- Panel 2: Paper Form with Location -->
+                <!-- Panel 2: Paper Form with Map Button -->
                 <div id="formPanel" class="content-panel">
                     <div class="inspection-form">
                         <h2 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">
@@ -696,12 +747,15 @@
                                 <input type="text" id="formName" readonly>
                             </div>
                             <div class="form-group">
-                                <label>📍 ตำแหน่งติดตั้ง (Location)</label>
-                                <input type="text" id="formLocation" readonly style="font-weight:bold; background:#eae6db;">
+                                <label>📍 ตำแหน่งติดตั้ง (Location & Map)</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="formLocation" readonly style="font-weight:bold; background:#eae6db; flex: 1;">
+                                    <button type="button" class="btn-map" onclick="openMapModalFromForm()">📍 ดูแผนผัง</button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-section-title">2. ค่าตรวจวัดหน้างาน</div>
+                        <div class="form-section-title">2. ค่าตรวจวัดหน้างาน (Standard Field Test Sheet)</div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label id="labelParam1">อุณหภูมิน้ำมัน / แรงดัน SF6</label>
@@ -845,8 +899,27 @@
         </div>
 
         <footer>
-            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย[cite: 5] | Responsive เต็มหน้าจอ & ระบุตำแหน่งติดตั้ง (Location)</p>
+            <p>© 2026 ระบบ RCM สถานีไฟฟ้าย่อย | แผนผังตำแหน่งหน้างาน & ฟอร์มบันทึกผลทดสอบมาตรฐานเดียวกัน</p>
         </footer>
+    </div>
+
+    <!-- Map Modal -->
+    <div class="modal-overlay" id="mapModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="mapModalTitle">แผนผังตำแหน่งภายในสถานีไฟฟ้า</h3>
+                <button class="close-btn" onclick="closeMapModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: #eae6db; padding: 25px; border-radius: 8px; border: 2px dashed var(--primary); margin-bottom: 15px;">
+                    <div style="font-size: 2rem; margin-bottom: 5px;">🗺️</div>
+                    <strong id="mapAssetId" style="font-size: 1.1rem; color: var(--primary);">TR-01</strong>
+                    <p id="mapAssetLocation" style="font-size: 0.95rem; color: var(--text-main); margin-top: 5px;">Yard A - Transformer Bay 1</p>
+                    <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 10px;">(จำลองแผนผังโซนติดตั้งในสถานีไฟฟ้าย่อย สำหรับส่งทีมช่างหน้างาน)</p>
+                </div>
+                <button class="btn-action btn-save" onclick="closeMapModal()">ตกลง</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -978,20 +1051,19 @@
                 let rpnColor = item.maxRpn >= 200 ? 'var(--status-danger)' : item.maxRpn >= 100 ? 'var(--status-warning)' : 'var(--status-normal)';
 
                 const tr = document.createElement('tr');
-                tr.onclick = () => {
-                    selectAsset(item.index);
-                    switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);
-                };
                 tr.innerHTML = `
-                    <td><strong>#${globalIndex}</strong></td>
-                    <td><strong>${item.id}</strong></td>
-                    <td>${item.name}</td>
-                    <td><span class="badge ${typeBadge}">${item.type}</span></td>
-                    <td><span style="font-size:0.82rem; color:var(--text-muted);">📍 ${item.location}</span></td>
-                    <td><strong>${item.hi}</strong></td>
-                    <td><strong style="color: ${rpnColor}">${item.maxRpn}</strong></td>
-                    <td><span class="badge ${badgeClass}">${item.status}</span></td>
-                    <td><strong style="color: ${isUrgent ? 'var(--status-danger)' : 'inherit'}">${item.dateStr} ${isUrgent ? '(ด่วน)' : ''}</strong></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong>#${globalIndex}</strong></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong>${item.id}</strong></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);">${item.name}</td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><span class="badge ${typeBadge}">${item.type}</span></td>
+                    <td>
+                        <span style="font-size:0.82rem; color:var(--text-muted);">📍 ${item.location}</span>
+                        <button class="btn-map" onclick="event.stopPropagation(); openMapModal(${item.index})">🗺️ แผนที่</button>
+                    </td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong>${item.hi}</strong></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong style="color: ${rpnColor}">${item.maxRpn}</strong></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><span class="badge ${badgeClass}">${item.status}</span></td>
+                    <td onclick="selectAsset(${item.index}); switchPanel('formPanel', document.querySelectorAll('.menu-item')[1]);"><strong style="color: ${isUrgent ? 'var(--status-danger)' : 'inherit'}">${item.dateStr} ${isUrgent ? '(ด่วน)' : ''}</strong></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1028,6 +1100,21 @@
             }
 
             renderFMEA(item);
+        }
+
+        function openMapModal(index) {
+            const item = mockData.find(d => d.index === index);
+            document.getElementById('mapAssetId').innerText = item.id;
+            document.getElementById('mapAssetLocation').innerText = `${item.name} | ตำแหน่ง: ${item.location}`;
+            document.getElementById('mapModal').style.display = 'flex';
+        }
+
+        function openMapModalFromForm() {
+            openMapModal(selectedIndex);
+        }
+
+        function closeMapModal() {
+            document.getElementById('mapModal').style.display = 'none';
         }
 
         function renderFMEA(item) {
