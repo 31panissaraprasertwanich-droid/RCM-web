@@ -24,7 +24,7 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-30 flex flex-col w-64 bg-white border-r border-slate-200 text-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
             <div class="flex items-center justify-between h-16 px-6 border-b border-slate-100">
-                <h1 class="text-base font-semibold tracking-wide text-slate-900"><i class="fa-solid fa-bolt text-blue-500 mr-2"></i>RCM System</h1>
+                <h1 class="text-base font-semibold tracking-wide text-slate-900"><i class="fa-solid fa-bolt text-blue-500 mr-2"></i>RCM Expert System</h1>
                 <button id="close-sidebar" class="md:hidden text-slate-400 hover:text-slate-600 focus:outline-none">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
@@ -41,7 +41,7 @@
                 </a>
             </nav>
             <div class="p-4 mx-4 mb-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-center text-slate-400">
-                ระบบจัดการความน่าเชื่อถือ v6.0
+                Reliability-Centered Maintenance
             </div>
         </aside>
 
@@ -68,13 +68,13 @@
                 <!-- TAB 1: DASHBOARD -->
                 <div id="tab-dashboard" class="tab-content space-y-6">
                     
-                    <!-- KPI Cards (อุปกรณ์ทั้งหมด, ปกติ, เฝ้าระวัง, วิกฤติ) -->
+                    <!-- KPI Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">อุปกรณ์ทั้งหมด</p>
                                 <h3 class="text-2xl font-semibold text-slate-800 mt-1">40 ยูนิต</h3>
-                                <span class="text-xs text-slate-500">TR 16 / GIS 24 Bay</span>
+                                <span class="text-xs text-slate-500">Transformer & GIS</span>
                             </div>
                             <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center">
                                 <i class="fa-solid fa-charging-station"></i>
@@ -120,7 +120,7 @@
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                             <div>
                                 <h2 class="text-base font-semibold text-slate-800">ตารางลำดับการเข้าทำ PM</h2>
-                                <p class="text-xs text-slate-400">แสดงผลครั้งละ 10 อุปกรณ์ จัดลำดับจากวิกฤติไปจนถึงปกติ</p>
+                                <p class="text-xs text-slate-400">แสดงผลครั้งละ 10 อุปกรณ์ เรียงลำดับจากวิกฤติไปจนถึงปกติ</p>
                             </div>
                             <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg" id="pagination-info">
                                 หน้า 1 จาก 4 (ทั้งหมด 40 รายการ)
@@ -158,19 +158,19 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: DETAILED TESTING (Multi-Method & Comprehensive Test Results) -->
+                <!-- TAB 2: DETAILED TESTING & INPUT FORM -->
                 <div id="tab-testing" class="tab-content hidden space-y-6">
                     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-6">
                         
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-100">
                             <div>
-                                <h2 class="text-base font-semibold text-slate-800">ผลการทดสอบเชิงลึก & สามเหลี่ยมดุวัล (Multi-Method Analysis)</h2>
-                                <p class="text-xs text-slate-400">เลือกดูผลตรวจครบถ้วนทั้ง 40 อุปกรณ์ พร้อมเทียบเกณฑ์มาตรฐาน</p>
+                                <h2 class="text-base font-semibold text-slate-800">ผลการทดสอบเชิงลึก & สามเหลี่ยมดุวัล (เลือกดูได้ครบทั้ง 40 อุปกรณ์)</h2>
+                                <p class="text-xs text-slate-400">ตรวจสอบผลตรวจ DGA, เกณฑ์มาตรฐาน และสามารถกรอก/อัปเดตผลทดสอบใหม่ได้ทันที</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
                                 <label class="text-xs font-medium text-slate-500 whitespace-nowrap">เลือกอุปกรณ์:</label>
                                 <select id="asset-selector" onchange="updateTestingView()" class="border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 bg-white w-full md:w-64">
-                                    <!-- Populated by JS -->
+                                    <!-- Populated by JS for Equipment 01 to 40 -->
                                 </select>
                             </div>
                         </div>
@@ -180,6 +180,7 @@
                             <button onclick="switchMethod('duval')" id="btn-duval" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium shadow-2xs transition">Duval Triangle</button>
                             <button onclick="switchMethod('keygas')" id="btn-keygas" class="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition">Key Gas & DGA</button>
                             <button onclick="switchMethod('other')" id="btn-other" class="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition">Electrical & Physical Tests</button>
+                            <button onclick="switchMethod('input')" id="btn-input" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-medium shadow-2xs transition"><i class="fa-solid fa-plus mr-1"></i> กรอก/อัปเดตผลทดสอบ</button>
                         </div>
 
                         <div id="testing-detail-container" class="space-y-6">
@@ -263,31 +264,42 @@
 
         function switchMethod(method) {
             currentMethod = method;
-            ['duval', 'keygas', 'other'].forEach(m => {
+            ['duval', 'keygas', 'other', 'input'].forEach(m => {
                 const btn = document.getElementById(`btn-${m}`);
-                if (m === method) {
-                    btn.className = "px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium shadow-2xs transition";
-                } else {
-                    btn.className = "px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition";
+                if (btn) {
+                    if (m === method) {
+                        btn.className = "px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium shadow-2xs transition";
+                    } else if (m === 'input') {
+                        btn.className = "px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-medium shadow-2xs transition";
+                    } else {
+                        btn.className = "px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl text-xs font-medium transition";
+                    }
                 }
             });
             updateTestingView();
         }
 
-        // สร้างรายการอุปกรณ์ 40 ตัว (เรียงจาก วิกฤติ -> เฝ้าระวัง -> ปกติ)
+        // สร้างรายการอุปกรณ์ 40 ตัว เรียงเป็นรหัสตัวเลข (Equipment 01 ถึง 40)
         const allAssets = [];
-        // วิกฤติ 2 ตัว
-        allAssets.push({ id: "TR-Substation B1", type: "Transformer", status: "วิกฤติ", statusClass: "bg-rose-50 text-rose-600", note: "Duval Zone T3 (Thermal > 700°C)", order: 1 });
-        allAssets.push({ id: "GIS-Bay 02", type: "GIS", status: "วิกฤติ", statusClass: "bg-rose-50 text-rose-600", note: "SF6 Pressure ต่ำวิกฤติ (0.48 MPa)", order: 2 });
-        // เฝ้าระวัง 4 ตัว
-        allAssets.push({ id: "TR-Substation A2", type: "Transformer", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Duval Zone S (Stray gassing)", order: 3 });
-        allAssets.push({ id: "GIS-Bay 05", type: "GIS", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Partial Discharge ปานกลาง", order: 4 });
-        allAssets.push({ id: "TR-Substation C3", type: "Transformer", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Water Content สูงกว่าเกณฑ์", order: 5 });
-        allAssets.push({ id: "GIS-Bay 12", type: "GIS", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Moisture ในก๊าซสูง", order: 6 });
-        // ปกติ ที่เหลือให้ครบ 40 ตัว
-        let currentLen = allAssets.length;
-        for (let i = 1; i <= 40 - currentLen; i++) {
-            allAssets.push({ id: `Asset-Unit ${i < 10 ? '0'+i : i}`, type: i % 2 === 0 ? "Transformer" : "GIS", status: "ปกติ", statusClass: "bg-emerald-50 text-emerald-600", note: "ผลทดสอบปกติสมบูรณ์", order: currentLen + i });
+        // วิกฤติ 2 ตัว (Equipment 01, 02)
+        allAssets.push({ id: "Equipment 01", type: "Transformer", status: "วิกฤติ", statusClass: "bg-rose-50 text-rose-600", note: "Duval Zone T3 (Thermal > 700°C)", order: 1 });
+        allAssets.push({ id: "Equipment 02", type: "GIS", status: "วิกฤติ", statusClass: "bg-rose-50 text-rose-600", note: "SF6 Pressure ต่ำวิกฤติ (0.48 MPa)", order: 2 });
+        // เฝ้าระวัง 4 ตัว (Equipment 03 ถึง 06)
+        allAssets.push({ id: "Equipment 03", type: "Transformer", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Duval Zone S (Stray gassing)", order: 3 });
+        allAssets.push({ id: "Equipment 04", type: "GIS", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Partial Discharge ปานกลาง", order: 4 });
+        allAssets.push({ id: "Equipment 05", type: "Transformer", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Water Content สูงกว่าเกณฑ์", order: 5 });
+        allAssets.push({ id: "Equipment 06", type: "GIS", status: "เฝ้าระวัง", statusClass: "bg-amber-50 text-amber-600", note: "Moisture ในก๊าซสูง", order: 6 });
+        // ปกติ ที่เหลือให้ครบ 40 ตัว (Equipment 07 ถึง 40)
+        for (let i = 7; i <= 40; i++) {
+            const numStr = i < 10 ? '0' + i : '' + i;
+            allAssets.push({ 
+                id: `Equipment ${numStr}`, 
+                type: i % 2 === 0 ? "Transformer" : "GIS", 
+                status: "ปกติ", 
+                statusClass: "bg-emerald-50 text-emerald-600", 
+                note: "ผลทดสอบปกติสมบูรณ์", 
+                order: i 
+            });
         }
 
         let currentPage = 1;
@@ -349,7 +361,14 @@
             fmeaSelect.innerHTML = optionsHtml;
         }
 
+        // เก็บข้อมูลผลทดสอบจำลอง แยกตามรหัสอุปกรณ์
+        const customTestData = {};
+
         function getAssetTestData(assetId) {
+            if (customTestData[assetId]) {
+                return customTestData[assetId];
+            }
+
             const asset = allAssets.find(a => a.id === assetId);
             if (!asset) return null;
 
@@ -364,12 +383,12 @@
                     c2h2: "0.0%",
                     c2h4: "79.7%",
                     gases: [
-                        { name: "H2", ppm: 20, std: "< 100 ppm", status: "Normal" },
-                        { name: "CH4", ppm: 160, std: "< 50 ppm", status: "Critical" },
-                        { name: "C2H6", ppm: 190, std: "< 50 ppm", status: "Critical" },
-                        { name: "C2H4", ppm: 630, std: "< 50 ppm", status: "Critical" },
-                        { name: "C2H2", ppm: 0, std: "< 1 ppm", status: "Normal" },
-                        { name: "CO", ppm: 0, std: "< 350 ppm", status: "Normal" }
+                        { name: "H2 (Hydrogen)", ppm: 20, std: "< 100 ppm", status: "Normal" },
+                        { name: "CH4 (Methane)", ppm: 160, std: "< 50 ppm", status: "Critical" },
+                        { name: "C2H6 (Ethane)", ppm: 190, std: "< 50 ppm", status: "Critical" },
+                        { name: "C2H4 (Ethylene)", ppm: 630, std: "< 50 ppm", status: "Critical" },
+                        { name: "C2H2 (Acetylene)", ppm: 0, std: "< 1 ppm", status: "Normal" },
+                        { name: "CO (Carbon Monoxide)", ppm: 0, std: "< 350 ppm", status: "Normal" }
                     ],
                     otherTests: [
                         { name: "Breakdown Voltage (ASTM D1816)", val: "32 kV", std: "> 45 kV", status: "Fail", color: "text-rose-600 font-medium" },
@@ -389,12 +408,12 @@
                     c2h2: "5.0%",
                     c2h4: "35.0%",
                     gases: [
-                        { name: "H2", ppm: 45, std: "< 100 ppm", status: "Normal" },
-                        { name: "CH4", ppm: 85, std: "< 50 ppm", status: "Warning" },
-                        { name: "C2H6", ppm: 50, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H4", ppm: 40, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H2", ppm: 2, std: "< 1 ppm", status: "Warning" },
-                        { name: "CO", ppm: 120, std: "< 350 ppm", status: "Normal" }
+                        { name: "H2 (Hydrogen)", ppm: 45, std: "< 100 ppm", status: "Normal" },
+                        { name: "CH4 (Methane)", ppm: 85, std: "< 50 ppm", status: "Warning" },
+                        { name: "C2H6 (Ethane)", ppm: 50, std: "< 50 ppm", status: "Normal" },
+                        { name: "C2H4 (Ethylene)", ppm: 40, std: "< 50 ppm", status: "Normal" },
+                        { name: "C2H2 (Acetylene)", ppm: 2, std: "< 1 ppm", status: "Warning" },
+                        { name: "CO (Carbon Monoxide)", ppm: 120, std: "< 350 ppm", status: "Normal" }
                     ],
                     otherTests: [
                         { name: "Breakdown Voltage", val: "47 kV", std: "> 45 kV", status: "Pass", color: "text-emerald-600" },
@@ -412,12 +431,12 @@
                     c2h2: "0.0%",
                     c2h4: "10.0%",
                     gases: [
-                        { name: "H2", ppm: 10, std: "< 100 ppm", status: "Normal" },
-                        { name: "CH4", ppm: 15, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H6", ppm: 10, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H4", ppm: 10, std: "< 50 ppm", status: "Normal" },
-                        { name: "C2H2", ppm: 0, std: "< 1 ppm", status: "Normal" },
-                        { name: "CO", ppm: 20, std: "< 350 ppm", status: "Normal" }
+                        { name: "H2 (Hydrogen)", ppm: 10, std: "< 100 ppm", status: "Normal" },
+                        { name: "CH4 (Methane)", ppm: 15, std: "< 50 ppm", status: "Normal" },
+                        { name: "C2H6 (Ethane)", ppm: 10, std: "< 50 ppm", status: "Normal" },
+                        { name: "C2H4 (Ethylene)", ppm: 10, std: "< 50 ppm", status: "Normal" },
+                        { name: "C2H2 (Acetylene)", ppm: 0, std: "< 1 ppm", status: "Normal" },
+                        { name: "CO (Carbon Monoxide)", ppm: 20, std: "< 350 ppm", status: "Normal" }
                     ],
                     otherTests: [
                         { name: "Breakdown Voltage", val: "58 kV", std: "> 45 kV", status: "Pass", color: "text-emerald-600" },
@@ -444,7 +463,6 @@
             if (currentMethod === 'duval') {
                 innerContent = `
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- Duval Triangle SVG -->
                         <div class="lg:col-span-2 bg-slate-900 p-6 rounded-2xl flex flex-col items-center justify-center relative shadow-inner">
                             <span class="absolute top-4 left-4 text-xs font-medium text-slate-400">Duval Triangle (IEEE C57.104)</span>
                             <svg viewBox="0 0 300 260" class="w-72 h-64 mt-4">
@@ -460,8 +478,6 @@
                                 <text x="260" y="255" font-size="10" fill="#f8fafc" font-weight="600">% C2H4</text>
                             </svg>
                         </div>
-
-                        <!-- Plot Coordinates -->
                         <div class="space-y-4">
                             <div class="bg-slate-900 text-white p-5 rounded-2xl space-y-3">
                                 <h3 class="text-xs font-medium text-slate-400 uppercase tracking-wider">Plot Coordinates</h3>
@@ -517,7 +533,7 @@
                         </div>
                     </div>
                 `;
-            } else {
+            } else if (currentMethod === 'other') {
                 innerContent = `
                     <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-4">
                         <h3 class="text-sm font-semibold text-slate-800">ผลการทดสอบทางไฟฟ้าและกายภาพอื่นๆ (Electrical & Physical Tests)</h3>
@@ -545,6 +561,44 @@
                         </div>
                     </div>
                 `;
+            } else if (currentMethod === 'input') {
+                // ช่องสำหรับการกรอกและอัปเดตผลทดสอบ
+                innerContent = `
+                    <div class="bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 space-y-4">
+                        <h3 class="text-sm font-semibold text-emerald-900"><i class="fa-solid fa-pen-to-square mr-1"></i> กรอกและอัปเดตผลการทดสอบสำหรับ ${assetKey}</h3>
+                        <form onsubmit="saveCustomTest(event, '${assetKey}')" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                            <div>
+                                <label class="block font-medium text-slate-600 mb-1">Hydrogen (H2) ppm</label>
+                                <input type="number" id="input-h2" value="${data.gases[0].ppm}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-600 mb-1">Methane (CH4) ppm</label>
+                                <input type="number" id="input-ch4" value="${data.gases[1].ppm}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-600 mb-1">Ethylene (C2H4) ppm</label>
+                                <input type="number" id="input-c2h4" value="${data.gases[3].ppm}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-600 mb-1">Breakdown Voltage (kV)</label>
+                                <input type="text" id="input-bv" value="${data.otherTests[0] ? data.otherTests[0].val : '45 kV'}" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white" required>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-600 mb-1">สถานะสุขภาพ (Health Index)</label>
+                                <select id="input-hi" class="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white">
+                                    <option value="ปกติ (HI-1, 2)">ปกติ (HI-1, 2)</option>
+                                    <option value="เฝ้าระวัง (HI-3, 4)">เฝ้าระวัง (HI-3, 4)</option>
+                                    <option value="วิกฤติ (HI-5)">วิกฤติ (HI-5)</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition shadow-2xs">
+                                    บันทึกผลการทดสอบ
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
             }
 
             container.innerHTML = `
@@ -564,6 +618,54 @@
                 </div>
                 ${innerContent}
             `;
+        }
+
+        function saveCustomTest(e, assetKey) {
+            e.preventDefault();
+            const h2 = document.getElementById('input-h2').value;
+            const ch4 = document.getElementById('input-ch4').value;
+            const c2h4 = document.getElementById('input-c2h4').value;
+            const bv = document.getElementById('input-bv').value;
+            const hi = document.getElementById('input-hi').value;
+
+            let statusClass = "bg-emerald-50 text-emerald-600";
+            if (hi.includes("วิกฤติ")) statusClass = "bg-rose-50 text-rose-600";
+            else if (hi.includes("เฝ้าระวัง")) statusClass = "bg-amber-50 text-amber-600";
+
+            customTestData[assetKey] = {
+                type: "Transformer (Oil-immersed)",
+                status: hi,
+                statusClass: statusClass,
+                zone: hi.includes("วิกฤติ") ? "T3" : "Normal",
+                faultType: hi.includes("วิกฤติ") ? "Thermal > 700°C" : "Normal Operation",
+                ch4: "30.0%",
+                c2h2: "0.0%",
+                c2h4: "70.0%",
+                gases: [
+                    { name: "H2 (Hydrogen)", ppm: h2, std: "< 100 ppm", status: h2 > 100 ? "Critical" : "Normal" },
+                    { name: "CH4 (Methane)", ppm: ch4, std: "< 50 ppm", status: ch4 > 50 ? "Critical" : "Normal" },
+                    { name: "C2H6 (Ethane)", ppm: 30, std: "< 50 ppm", status: "Normal" },
+                    { name: "C2H4 (Ethylene)", ppm: c2h4, std: "< 50 ppm", status: c2h4 > 50 ? "Critical" : "Normal" },
+                    { name: "C2H2 (Acetylene)", ppm: 0, std: "< 1 ppm", status: "Normal" },
+                    { name: "CO (Carbon Monoxide)", ppm: 50, std: "< 350 ppm", status: "Normal" }
+                ],
+                otherTests: [
+                    { name: "Breakdown Voltage", val: bv, std: "> 45 kV", status: "Pass", color: "text-emerald-600" },
+                    { name: "Water Content", val: "15 ppm", std: "< 25 ppm", status: "Pass", color: "text-emerald-600" }
+                ]
+            };
+
+            // อัปเดตสถานะในตารางหลักด้วย
+            const assetObj = allAssets.find(a => a.id === assetKey);
+            if (assetObj) {
+                assetObj.status = hi.split(' ')[0];
+                assetObj.statusClass = statusClass;
+                assetObj.note = `อัปเดตผลทดสอบใหม่ (H2: ${h2}, CH4: ${ch4})`;
+            }
+
+            alert(`บันทึกผลการทดสอบของ ${assetKey} สำเร็จเรียบร้อย!`);
+            renderPMTable();
+            switchMethod('keygas');
         }
 
         function updateFMEAView() {
