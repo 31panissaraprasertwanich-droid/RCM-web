@@ -3,748 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substation RCM Enterprise System - ระบบบริหารจัดการบำรุงรักษาสถานีไฟฟ้าย่อย</title>
+    <title>Substation RCM System (Transformer & GIS)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-body: #f4f3ee;
-            --card-bg: #ffffff;
-            --text-main: #233128;
-            --text-muted: #627267;
-            --primary: #3b6347;
-            --primary-hover: #2e4e37;
-            --accent: #5b7c99;
-            --border: #dcd7cd;
-            --shadow: 0 4px 16px rgba(35, 49, 40, 0.06);
-            --radius: 12px;
-            
-            --c-normal: #3b6347;
-            --c-warning: #c68a12;
-            --c-danger: #b94a3d;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Sarabun', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            padding: 12px;
-            line-height: 1.5;
-        }
-
-        @media(min-width: 768px) {
-            body { padding: 20px; }
-        }
-
-        .app-wrapper {
-            max-width: 1600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* Top Header */
-        .app-header {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        @media(min-width: 768px) {
-            .app-header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .header-brand h1 {
-            font-size: 1.4rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .header-brand p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .header-meta {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .meta-pill {
-            background: var(--bg-body);
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border);
-        }
-
-        .meta-pill strong {
-            color: var(--primary);
-        }
-
-        /* Layout Grid: Sidebar + Content */
-        .app-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        @media(min-width: 1024px) {
-            .app-layout {
-                grid-template-columns: 260px 1fr;
-            }
-        }
-
-        /* Sidebar Navigation */
-        .app-sidebar {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            height: fit-content;
-        }
-
-        .sidebar-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 4px 8px;
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            padding: 11px 14px;
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-main);
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s;
-        }
-
-        .nav-btn:hover {
-            background: #eae5dc;
-        }
-
-        .nav-btn.active {
-            background: #e2ede5;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* Main Content Area */
-        .app-content {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 20px;
-            min-height: 650px;
-        }
-
-        .panel-view {
-            display: none;
-        }
-
-        .panel-view.active {
-            display: block;
-        }
-
-        .panel-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Summary Cards in Overview */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        @media(min-width: 576px) {
-            .stat-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        .stat-card {
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 4px solid var(--primary);
-        }
-        .stat-card.warning { border-left-color: var(--c-warning); }
-        .stat-card.danger { border-left-color: var(--c-danger); }
-
-        .stat-card h4 { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; }
-        .stat-card .num { font-size: 1.6rem; font-weight: 700; color: var(--text-main); }
-
-        /* Tables & Controls */
-        .control-bar {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        @media(min-width: 768px) {
-            .control-bar {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .search-select, .filter-select {
-            padding: 9px 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--bg-body);
-            font-size: 0.88rem;
-            color: var(--text-main);
-            outline: none;
-            width: 100%;
-        }
-
-        @media(min-width: 768px) {
-            .search-select { max-width: 320px; }
-        }
-
-        .table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.88rem;
-            min-width: 900px;
-        }
-
-        th {
-            background: #eae5dc;
-            color: var(--text-main);
-            padding: 12px 14px;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border);
-        }
-
-        td {
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-main);
-        }
-
-        tr:hover { background: #f9f8f5; cursor: pointer; }
-
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 3px 9px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .badge.normal { background: #e2ede5; color: var(--c-normal); }
-        .badge.warning { background: #fcf4e5; color: var(--c-warning); }
-        .badge.danger { background: #fce8e6; color: var(--c-danger); }
-        .badge.type-tr { background: #e8edf2; color: var(--accent); }
-        .badge.type-gis { background: #f0eaf2; color: #7a5180; }
-
-        /* Form Controls */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-        @media(min-width: 768px) {
-            .form-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .form-group.full { grid-column: 1 / -1; }
-        .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-        .form-group input, .form-group select, .form-group textarea {
-            padding: 9px 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.88rem;
-            background: #fff;
-            outline: none;
-        }
-
-        .btn-main {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-main:hover { background: var(--primary-hover); }
-
-        /* Footer */
-        .app-footer {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            padding: 10px;
-        }
+        body { font-family: 'Sarabun', sans-serif; }
     </style>
 </head>
-<body>
-    <div class="app-wrapper">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-brand">
-                <h1>RCM Substation Platform</h1>
-                <p>ระบบบริหารจัดการและวิเคราะห์ความน่าเชื่อถือสถานีไฟฟ้าย่อย (หม้อแปลง และ GIS)</p>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Top Navigation -->
+    <header class="bg-blue-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <h1 class="text-lg md:text-xl font-bold">Substation RCM Dashboard</h1>
             </div>
-            <div class="header-meta">
-                <div class="meta-pill">
-                    <span>สถานีไฟฟ้าหลัก</span>
-                    <strong>Chidlom Terminal Station</strong>
-                </div>
-                <div class="meta-pill">
-                    <span>อุปกรณ์ทั้งหมด</span>
-                    <strong id="totalAssetCount">40 รายการ</strong>
-                </div>
+            <div class="text-xs md:text-sm bg-blue-800 px-3 py-1 rounded-full">
+                สถานี: บางซื่อ (GIS & TRX)
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Layout Body -->
-        <div class="app-layout">
-            <!-- Sidebar Navigation -->
-            <nav class="app-sidebar">
-                <div class="sidebar-title">เมนูหลัก (Navigation)</div>
-                <button class="nav-btn active" onclick="switchTab('dashboardTab', this)">📊 ภาพรวมสถานี (Dashboard)</button>
-                <button class="nav-btn" onclick="switchTab('assetTab', this)">⚡ รายการอุปกรณ์ & แผน PM</button>
-                <button class="nav-btn" onclick="switchTab('formTab', this)">📝 บันทึกผลทดสอบหน้างาน</button>
-                <button class="nav-btn" onclick="switchTab('fmeaTab', this)">⚙️ วิเคราะห์ความเสี่ยง FMEA</button>
-                <button class="nav-btn" onclick="switchTab('inventoryTab', this)">📦 คลังอะไหล่สำรอง</button>
-                <button class="nav-btn" onclick="switchTab('logbookTab', this)">📖 ประวัติใบงานย้อนหลัง</button>
-            </nav>
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
 
-            <!-- Main Content Views -->
-            <main class="app-content">
-                <!-- Tab 1: Dashboard Overview -->
-                <div id="dashboardTab" class="panel-view active">
-                    <div class="panel-title">ภาพรวมระบบ RCM และสถิติความเสี่ยงสถานี</div>
-                    <div class="stat-grid">
-                        <div class="stat-card">
-                            <h4>ดัชนีสุขภาพเฉลี่ย (Average HI)</h4>
-                            <div class="num" id="statAvgHI">-- / 100</div>
-                        </div>
-                        <div class="stat-card warning">
-                            <h4>อุปกรณ์เฝ้าระวัง (Warning)</h4>
-                            <div class="num" id="statWarning">--</div>
-                        </div>
-                        <div class="stat-card danger">
-                            <h4>อุปกรณ์วิกฤตเร่งด่วน (Critical)</h4>
-                            <div class="num" id="statCritical">--</div>
-                        </div>
-                    </div>
-                    <div style="background: var(--bg-body); padding: 20px; border-radius: 10px; border: 1px solid var(--border);">
-                        <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 8px;">💡 คำแนะนำระบบ RCM อัตโนมัติ</h3>
-                        <p style="font-size: 0.88rem; color: var(--text-main);" id="rcmRecommendation">กำลังประมวลผลข้อมูลสถานี...</p>
-                    </div>
-                </div>
-
-                <!-- Tab 2: Asset List & PM Schedule -->
-                <div id="assetTab" class="panel-view">
-                    <div class="panel-title">รายการอุปกรณ์ทั้งหมดและแผนบำรุงรักษาประจำปี</div>
-                    <div class="control-bar">
-                        <select id="assetDropdown" class="search-select" onchange="selectAssetFromDropdown(this.value)">
-                            <option value="">-- ค้นหาและเลือกอุปกรณ์ --</option>
-                        </select>
-                        <div style="display: flex; gap: 8px;">
-                            <select id="filterType" class="filter-select" onchange="filterAssets()">
-                                <option value="">ทุกประเภท</option>
-                                <option value="หม้อแปลง">หม้อแปลงไฟฟ้า</option>
-                                <option value="GIS">GIS Bay</option>
-                            </select>
-                            <select id="filterStatus" class="filter-select" onchange="filterAssets()">
-                                <option value="">ทุกสถานะ</option>
-                                <option value="ปกติ">ปกติ</option>
-                                <option value="เฝ้าระวัง">เฝ้าระวัง</option>
-                                <option value="วิกฤต">วิกฤต</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>รหัสอุปกรณ์</th>
-                                    <th>ชื่ออุปกรณ์</th>
-                                    <th>ประเภท</th>
-                                    <th>ตำแหน่งติดตั้ง</th>
-                                    <th>Health Index</th>
-                                    <th>สถานะ</th>
-                                    <th>กำหนดการ PM</th>
-                                </tr>
-                            </thead>
-                            <tbody id="assetTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab 3: Inspection Form -->
-                <div id="formTab" class="panel-view">
-                    <div class="panel-title">ฟอร์มบันทึกผลการทดสอบภาคสนาม (Field Test Sheet)</div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>รหัสอุปกรณ์</label>
-                            <input type="text" id="formId" readonly style="background: var(--bg-body); font-weight: bold;">
-                        </div>
-                        <div class="form-group">
-                            <label>ประเภทอุปกรณ์</label>
-                            <input type="text" id="formType" readonly style="background: var(--bg-body);">
-                        </div>
-                        <div class="form-group full">
-                            <label>ชื่ออุปกรณ์ & ตำแหน่ง</label>
-                            <input type="text" id="formNameLoc" readonly style="background: var(--bg-body);">
-                        </div>
-                        <div class="form-group">
-                            <label id="formParamLabel1">อุณหภูมิน้ำมัน / แรงดันก๊าซ</label>
-                            <input type="text" id="formParam1" placeholder="ระบุค่าที่วัดได้">
-                        </div>
-                        <div class="form-group">
-                            <label>คะแนนสุขภาพ (Health Index)</label>
-                            <input type="number" id="formHI" min="0" max="100" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>สถานะประเมิน</label>
-                            <select id="formStatus">
-                                <option value="ปกติ">ปกติ</option>
-                                <option value="เฝ้าระวัง">เฝ้าระวัง</option>
-                                <option value="วิกฤต">วิกฤต</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ผู้ตรวจสอบหน้างาน</label>
-                            <input type="text" id="formInspector" placeholder="ระบุชื่อเจ้าหน้าที่">
-                        </div>
-                        <div class="form-group full">
-                            <label>ข้อเสนอแนะกลยุทธ์ RCM</label>
-                            <textarea id="formStrategy" rows="3" placeholder="ระบุแนวทางปฏิบัติงาน..."></textarea>
-                        </div>
-                        <div class="form-group full">
-                            <button class="btn-main" onclick="alert('บันทึกผลการทดสอบเรียบร้อยแล้ว!')">💾 บันทึกข้อมูลเข้าสู่ระบบ</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab 4: FMEA & RPN Analysis -->
-                <div id="fmeaTab" class="panel-view">
-                    <div class="panel-title">ตารางวิเคราะห์โหมดความเสียหายและผลกระทบ (FMEA & RPN)</div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">สูตรประเมินความเสี่ยง: RPN = Severity (S) × Occurrence (O) × Detection (D)</p>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ชิ้นส่วน (Component)</th>
-                                    <th>รูปแบบความเสียหาย (Failure Mode)</th>
-                                    <th>ผลกระทบ (Effect)</th>
-                                    <th>S</th>
-                                    <th>สาเหตุ (Cause)</th>
-                                    <th>O</th>
-                                    <th>มาตรการตรวจสอบ</th>
-                                    <th>D</th>
-                                    <th>RPN</th>
-                                    <th>ความเสี่ยง</th>
-                                </tr>
-                            </thead>
-                            <tbody id="fmeaTableBody">
-                                <tr>
-                                    <td>Winding / Insulation</td>
-                                    <td>Partial Discharge</td>
-                                    <td>Short Circuit</td>
-                                    <td><strong>8</strong></td>
-                                    <td>Moisture / Aging</td>
-                                    <td><strong>4</strong></td>
-                                    <td>DGA & Dielectric Test</td>
-                                    <td><strong>3</strong></td>
-                                    <td><strong style="color: var(--c-danger);">96</strong></td>
-                                    <td><span class="badge warning">ปานกลาง</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Bushing</td>
-                                    <td>Oil Leakage / Tracking</td>
-                                    <td>Flashover / Explosion</td>
-                                    <td><strong>9</strong></td>
-                                    <td>Gasket Degraded</td>
-                                    <td><strong>3</strong></td>
-                                    <td>Visual & Thermography</td>
-                                    <td><strong>2</strong></td>
-                                    <td><strong style="color: var(--c-danger);">54</strong></td>
-                                    <td><span class="badge normal">ต่ำ</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab 5: Spare Parts Inventory -->
-                <div id="inventoryTab" class="panel-view">
-                    <div class="panel-title">ระบบจัดการคลังอะไหล่สำรอง (Spare Parts Inventory)</div>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>รหัสอะไหล่</th>
-                                    <th>ชื่อรายการอะไหล่</th>
-                                    <th>ประเภทอุปกรณ์</th>
-                                    <th>คงเหลือ</th>
-                                    <th>จุดสั่งซื้อขั้นต่ำ</th>
-                                    <th>สถานะคลัง</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>SP-01</td>
-                                    <td>Transformer Gasket Seal Kit</td>
-                                    <td>หม้อแปลงไฟฟ้า</td>
-                                    <td><strong>2 ชุด</strong></td>
-                                    <td>5 ชุด</td>
-                                    <td><span class="badge danger">ใกล้หมด (Reorder)</span></td>
-                                </tr>
-                                <tr>
-                                    <td>SP-02</td>
-                                    <td>SF6 Gas Cylinder (50kg)</td>
-                                    <td>GIS Bay</td>
-                                    <td><strong>10 ถัง</strong></td>
-                                    <td>4 ถัง</td>
-                                    <td><span class="badge normal">ปกติ</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Tab 6: Maintenance Logbook -->
-                <div id="logbookTab" class="panel-view">
-                    <div class="panel-title">ประวัติการซ่อมบำรุงย้อนหลัง (Asset Maintenance Logbook)</div>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>วันที่</th>
-                                    <th>ประเภทใบงาน</th>
-                                    <th>รหัสอุปกรณ์</th>
-                                    <th>รายละเอียดการปฏิบัติงาน</th>
-                                    <th>ผู้รับผิดชอบ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>12 ม.ค. 2569</td>
-                                    <td>Preventive Maintenance</td>
-                                    <td>TR-01</td>
-                                    <td>ทดสอบความเป็นฉนวนน้ำมัน และตรวจสอบระบบระบายความร้อน</td>
-                                    <td>ช่างวิชัย / วศ.สมชาย</td>
-                                </tr>
-                                <tr>
-                                    <td>15 ส.ค. 2568</td>
-                                    <td>Corrective Maintenance</td>
-                                    <td>GIS-03</td>
-                                    <td>ตรวจสอบแรงดันก๊าซ SF6 และเติมชดเชยตามเกณฑ์มาตรฐาน</td>
-                                    <td>ช่างอภิชาติ / วศ.ปิยะ</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                <p class="text-sm text-slate-500">อุปกรณ์ทั้งหมด</p>
+                <h3 class="text-2xl font-bold text-slate-900">24 ตัว</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                <p class="text-sm text-slate-500">สถานะปกติ (Normal)</p>
+                <h3 class="text-2xl font-bold text-emerald-600">18 ตัว</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                <p class="text-sm text-slate-500">ต้องเฝ้าระวัง (Warning)</p>
+                <h3 class="text-2xl font-bold text-amber-500">4 ตัว</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                <p class="text-sm text-slate-500">วิกฤต (Critical)</p>
+                <h3 class="text-2xl font-bold text-rose-600">2 ตัว</h3>
+            </div>
         </div>
 
-        <footer class="app-footer">
-            <p>© 2026 RCM Substation Management Platform | ออกแบบใหม่ทั้งหมดเพื่อประสิทธิภาพสูงสุด</p>
-        </footer>
-    </div>
-
-    <script>
-        // Mock Data Generation (40 Assets)
-        const types = ["หม้อแปลง", "GIS"];
-        const assets = [];
-        let totalHI = 0;
-        let warningCount = 0;
-        let criticalCount = 0;
-
-        for (let i = 1; i <= 40; i++) {
-            const type = types[(i - 1) % 2];
-            const id = type === "หม้อแปลง" ? `TR-${String(i).padStart(2, '0')}` : `GIS-${String(i).padStart(2, '0')}`;
-            const name = type === "หม้อแปลง" ? `Power Transformer #${i}` : `GIS Feeder Bay #${i}`;
-            const location = type === "หม้อแปลง" ? `Yard A - Bay ${i}` : `Indoor GIS Room - G${i}`;
+        <!-- Asset Sections -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            let hi, status;
-            const rand = (i * 13) % 100;
-            if (rand < 15) {
-                hi = (55 + Math.random() * 15).toFixed(1);
-                status = "วิกฤต";
-                criticalCount++;
-            } else if (rand < 40) {
-                hi = (74 + Math.random() * 10).toFixed(1);
-                status = "เฝ้าระวัง";
-                warningCount++;
-            } else {
-                hi = (87 + Math.random() * 12).toFixed(1);
-                status = "ปกติ";
-            }
-            totalHI += parseFloat(hi);
+            <!-- Transformer Section -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-blue-900 flex items-center gap-2">
+                        <span>⚡</span> หม้อแปลงไฟฟ้า (Power Transformers)
+                    </h2>
+                    <span class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">TRX-01 ถึง TRX-12</span>
+                </div>
+                <div class="space-y-3">
+                    <!-- Item 1 -->
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <span class="font-semibold text-slate-800">TRX-01 (115/22kV)</span>
+                            <p class="text-xs text-slate-500">DGA: Hydrogen สูง | Health Index: 78%</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-amber-100 text-amber-800 font-medium">Warning</span>
+                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <span class="font-semibold text-slate-800">TRX-02 (115/22kV)</span>
+                            <p class="text-xs text-slate-500">Normal Operation | Health Index: 92%</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-medium">Normal</span>
+                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            const pmDate = new Date(2026, 7, 26);
-            pmDate.setDate(pmDate.getDate() + i);
-            const dateStr = pmDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+            <!-- GIS Section -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-blue-900 flex items-center gap-2">
+                        <span>🛡️</span> ระบบ GIS (Gas-Insulated Switchgear)
+                    </h2>
+                    <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md font-medium">Bay 01 - Bay 12</span>
+                </div>
+                <div class="space-y-3">
+                    <!-- Item 1 -->
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <span class="font-semibold text-slate-800">GIS Bay 03 (Line Feeder)</span>
+                            <p class="text-xs text-slate-500">SF6 Pressure: ต่ำกว่าเกณฑ์ | Health Index: 62%</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-rose-100 text-rose-800 font-medium">Critical</span>
+                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <span class="font-semibold text-slate-800">GIS Bay 04 (Transformer Feeder)</span>
+                            <p class="text-xs text-slate-500">Normal Operation | Health Index: 95%</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-medium">Normal</span>
+                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            assets.push({
-                index: i - 1,
-                id,
-                name,
-                type,
-                location,
-                hi: parseFloat(hi),
-                status,
-                dateStr,
-                param1: type === "หม้อแปลง" ? "72.4 °C" : "0.52 MPa",
-                inspector: "ช่างสมชาย ใจดี"
-            });
-        }
+        </div>
+    </main>
 
-        // Initialize Dashboard Stats
-        document.getElementById('statAvgHI').innerText = (totalHI / 40).toFixed(1) + " / 100";
-        document.getElementById('statWarning').innerText = warningCount + " รายการ";
-        document.getElementById('statCritical').innerText = criticalCount + " รายการ";
-        document.getElementById('rcmRecommendation').innerText = `พบอุปกรณ์อยู่ในเกณฑ์วิกฤต ${criticalCount} รายการ และเฝ้าระวัง ${warningCount} รายการ ระบบแนะนำให้จัดลำดับความเร่งด่วนเข้าซ่อมบำรุงเชิงป้องกัน (PM) ทันทีตามกำหนดการ`;
-
-        // Populate Dropdowns & Tables
-        const dropdown = document.getElementById('assetDropdown');
-        const tableBody = document.getElementById('assetTableBody');
-
-        function renderTable(data) {
-            tableBody.innerHTML = "";
-            data.forEach(item => {
-                let badgeCls = "normal";
-                if (item.status === "เฝ้าระวัง") badgeCls = "warning";
-                if (item.status === "วิกฤต") badgeCls = "danger";
-                let typeCls = item.type === "หม้อแปลง" ? "type-tr" : "type-gis";
-
-                const tr = document.createElement('tr');
-                tr.onclick = () => loadAssetToForm(item.index);
-                tr.innerHTML = `
-                    <td><strong>${item.id}</strong></td>
-                    <td>${item.name}</td>
-                    <td><span class="badge ${typeCls}">${item.type}</span></td>
-                    <td>${item.location}</td>
-                    <td><strong>${item.hi}</strong></td>
-                    <td><span class="badge ${badgeCls}">${item.status}</span></td>
-                    <td>${item.dateStr}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
-        }
-
-        assets.forEach(item => {
-            const opt = document.createElement('option');
-            opt.value = item.index;
-            opt.innerText = `[${item.id}] ${item.name} (${item.type})`;
-            dropdown.appendChild(opt);
-        });
-
-        renderTable(assets);
-
-        // Tab Switching Logic
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        // Form Loader
-        function loadAssetToForm(index) {
-            const item = assets.find(a => a.index === index);
-            dropdown.value = index;
-            document.getElementById('formId').value = item.id;
-            document.getElementById('formType').value = item.type;
-            document.getElementById('formNameLoc').value = `${item.name} | ตำแหน่ง: ${item.location}`;
-            document.getElementById('formHI').value = item.hi;
-            document.getElementById('formStatus').value = item.status;
-            document.getElementById('formParam1').value = item.param1;
-            document.getElementById('formInspector').value = item.inspector;
-            document.getElementById('formStrategy').value = item.status === 'วิกฤต' ? 'แผนเร่งด่วน: ตรวจสอบและซ่อมแซมทันที' : 'บำรุงรักษาตามวาระปกติ';
-            
-            if(item.type === 'หม้อแปลง') {
-                document.getElementById('formParamLabel1').innerText = "อุณหภูมิน้ำมัน (Top Oil Temp)";
-            } else {
-                document.getElementById('formParamLabel1').innerText = "แรงดันก๊าซ SF6 (Pressure)";
-            }
-
-            switchTab('formTab', document.querySelectorAll('.nav-btn')[2]);
-        }
-
-        function selectAssetFromDropdown(val) {
-            if(val !== "") loadAssetToForm(parseInt(val));
-        }
-
-        // Filtering Logic
-        function filterAssets() {
-            const typeVal = document.getElementById('filterType').value;
-            const statusVal = document.getElementById('filterStatus').value;
-            
-            const filtered = assets.filter(item => {
-                const matchType = typeVal === "" || item.type === typeVal;
-                const matchStatus = statusVal === "" || item.status === statusVal;
-                return matchType && matchStatus;
-            });
-            renderTable(filtered);
-        }
-    </script>
 </body>
 </html>
