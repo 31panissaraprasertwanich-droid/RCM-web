@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (DGA Detailed Analysis)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Detailed DGA)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -51,11 +51,11 @@
 
     <!-- Navigation Tabs -->
     <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto">
-        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
             <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
-        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
             <span>วิเคราะห์ DGA แบบละเอียด (6 วิธี & สามเหลี่ยม)</span>
         </button>
@@ -64,8 +64,8 @@
     <!-- Main Container -->
     <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
-        <!-- TAB 1: PM SCHEDULE -->
-        <section id="tab-pm-schedule" class="space-y-6 hidden">
+        <!-- TAB 1: PM SCHEDULE (DEFAULT VIEW) -->
+        <section id="tab-pm-schedule" class="space-y-6">
             <!-- Summary Statistic Cards -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
@@ -142,7 +142,7 @@
         </section>
 
         <!-- TAB 2: DETAILED DGA CALCULATOR (6 METHODS + TRIANGLE) -->
-        <section id="tab-dga-calc" class="space-y-6">
+        <section id="tab-dga-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
@@ -163,7 +163,7 @@
 
             <!-- Detailed 6 Methods Section -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Method 1: Duval Triangle (Visualizer + Detail) -->
+                <!-- Method 1: Duval Triangle -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -198,7 +198,7 @@
                     </div>
                 </div>
 
-                <!-- Method 2: Rogers Ratio Method -->
+                <!-- Method 2: Rogers Ratio -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -233,7 +233,7 @@
                     </div>
                 </div>
 
-                <!-- Method 3: IEC 3-Ratio Method -->
+                <!-- Method 3: IEC 3-Ratio -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -264,7 +264,7 @@
                     </div>
                 </div>
 
-                <!-- Method 4: Doernenburg Ratio Method -->
+                <!-- Method 4: Doernenburg -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -291,7 +291,7 @@
                     </div>
                 </div>
 
-                <!-- Method 5: Key Gas Method -->
+                <!-- Method 5: Key Gas -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -312,7 +312,7 @@
                     </div>
                 </div>
 
-                <!-- Method 6: TDCG & IEEE Condition Criteria -->
+                <!-- Method 6: TDCG & IEEE Condition -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -467,6 +467,7 @@
 
         assetsData.sort((a, b) => b.rpn - a.rpn);
 
+        // Update Stat Cards on Load
         document.getElementById('stat-normal').innerText = statCounts.normal;
         document.getElementById('stat-warning').innerText = statCounts.warning;
         document.getElementById('stat-critical').innerText = statCounts.critical;
@@ -625,7 +626,6 @@
         }
 
         function runDetailedDgaCalculations(g) {
-            // --- 1. Duval Triangle Calculation ---
             let totalTri = g.ch4 + g.c2h4 + g.c2h2;
             let p_ch4 = totalTri > 0 ? (g.ch4 / totalTri) : 0.33;
             let p_c2h4 = totalTri > 0 ? (g.c2h4 / totalTri) : 0.33;
@@ -644,7 +644,6 @@
             document.getElementById('res-duval-detail').innerText = duvalZone;
             drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
 
-            // --- 2. Rogers Ratio Calculation ---
             let r1 = g.c2h2 / g.ch4;
             let r2 = g.ch4 / g.h2;
             let r3 = g.c2h4 / g.c2h6;
@@ -662,7 +661,6 @@
             else if (g.c2h2 > 35) rogersRes = "Arcing (High energy discharge)";
             document.getElementById('res-rogers-detail').innerText = rogersRes;
 
-            // --- 3. IEC 3-Ratio Calculation ---
             let i1 = g.c2h2 / g.ch4;
             let i2 = g.c2h4 / g.c2h6;
             let i5 = g.ch4 / g.h2;
@@ -677,7 +675,6 @@
             else if (i5 > 1.0) iecRes = "Code [0 0 1] - Thermal Fault < 300°C";
             document.getElementById('res-iec-detail').innerText = iecRes;
 
-            // --- 4. Doernenburg Ratio Calculation ---
             let d1 = g.ch4 / g.h2;
             let d2 = g.c2h2 / g.c2h4;
             document.getElementById('doern-r1').innerText = d1.toFixed(2);
@@ -688,7 +685,6 @@
             else if (d2 > 1.0) doernRes = "Arcing Fault / Sparking Discharge";
             document.getElementById('res-doern-detail').innerText = doernRes;
 
-            // --- 5. Key Gas Method ---
             let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
             let keyName = "Hydrogen (H2)";
             let keyDesc = "Corona / Partial Discharge in oil";
@@ -700,7 +696,6 @@
             document.getElementById('keygas-name').innerText = keyName;
             document.getElementById('res-keygas-detail').innerText = keyDesc;
 
-            // --- 6. TDCG & IEEE Condition ---
             let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
 
@@ -744,7 +739,6 @@
             ctx.fillText('C2H4', B.x + 5, B.y + 10);
             ctx.fillText('C2H2', C.x - 25, C.y + 10);
 
-            // Barycentric mapping (Duval 1: A=C2H4, B=C2H2, C=CH4)
             let px = p_c2h4 * A.x + p_c2h2 * B.x + p_ch4 * C.x;
             let py = p_c2h4 * A.y + p_c2h2 * B.y + p_ch4 * C.y;
 
@@ -757,7 +751,9 @@
             ctx.stroke();
         }
 
+        // Initialize and render Table as Default View on Load
         renderTable();
+        switchTab('pm-schedule');
     </script>
 </body>
 </html>
