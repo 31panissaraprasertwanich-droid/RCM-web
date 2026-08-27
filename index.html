@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substation RCM System (Transformer & GIS)</title>
+    <title>Substation RCM Decision Support Dashboard</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,117 +11,216 @@
         body { font-family: 'Sarabun', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-slate-100 text-slate-800">
 
-    <!-- Top Navigation -->
-    <header class="bg-blue-900 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Top Header -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center space-x-3">
-                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                <h1 class="text-lg md:text-xl font-bold">Substation RCM Dashboard</h1>
+                <div class="bg-blue-600 p-2 rounded-lg text-white font-bold">RCM</div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold">Substation Maintenance Decision Support Dashboard</h1>
+                    <p class="text-xs text-slate-400">ระบบสนับสนุนการตัดสินใจบำรุงรักษาตามแนวคิด RCM (Transformer & GIS)</p>
+                </div>
             </div>
-            <div class="text-xs md:text-sm bg-blue-800 px-3 py-1 rounded-full">
-                สถานี: บางซื่อ (GIS & TRX)
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    <span class="w-2 h-2 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span> ระบบออนไลน์ (ETL Connected)
+                </span>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
 
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                <p class="text-sm text-slate-500">อุปกรณ์ทั้งหมด</p>
-                <h3 class="text-2xl font-bold text-slate-900">24 ตัว</h3>
+        <!-- Summary KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">อุปกรณ์วิกฤตทั้งหมด</p>
+                <h3 class="text-3xl font-bold text-slate-900 mt-2">24 <span class="text-sm font-normal text-slate-500">ยูนิต</span></h3>
+                <p class="text-xs text-slate-400 mt-1">หม้อแปลง 12 | GIS 12 Bay</p>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                <p class="text-sm text-slate-500">สถานะปกติ (Normal)</p>
-                <h3 class="text-2xl font-bold text-emerald-600">18 ตัว</h3>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">สถานะปกติ (Normal)</p>
+                <h3 class="text-3xl font-bold text-emerald-600 mt-2">16 <span class="text-sm font-normal text-slate-500">ยูนิต</span></h3>
+                <p class="text-xs text-emerald-600 mt-1">Health Index > 80%</p>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                <p class="text-sm text-slate-500">ต้องเฝ้าระวัง (Warning)</p>
-                <h3 class="text-2xl font-bold text-amber-500">4 ตัว</h3>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold uppercase tracking-wider text-amber-600">ต้องเฝ้าระวัง (Warning)</p>
+                <h3 class="text-3xl font-bold text-amber-600 mt-2">6 <span class="text-sm font-normal text-slate-500">ยูนิต</span></h3>
+                <p class="text-xs text-amber-600 mt-1">Health Index 60-79%</p>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                <p class="text-sm text-slate-500">วิกฤต (Critical)</p>
-                <h3 class="text-2xl font-bold text-rose-600">2 ตัว</h3>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs font-semibold uppercase tracking-wider text-rose-600">วิกฤต/เร่งด่วน (Critical)</p>
+                <h3 class="text-3xl font-bold text-rose-600 mt-2">2 <span class="text-sm font-normal text-slate-500">ยูนิต</span></h3>
+                <p class="text-xs text-rose-600 mt-1">Health Index < 60%</p>
             </div>
         </div>
 
-        <!-- Asset Sections -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Interactive Control Panel / Filters -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-2 w-full md:w-auto">
+                <span class="text-sm font-medium text-slate-700">กรองตามประเภทอุปกรณ์:</span>
+                <select id="assetFilter" onchange="filterTable()" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2">
+                    <option value="ALL">ทั้งหมด (All Assets)</option>
+                    <option value="TRX">หม้อแปลงไฟฟ้า (Power Transformer)</option>
+                    <option value="GIS">ชุดสวิตช์เกียร์ก๊าซ (GIS)</option>
+                </select>
+            </div>
+            <div class="text-xs text-slate-500">
+                *ข้อมูลจัดลำดับอัตโนมัติด้วยเกณฑ์ Health Index และค่าความเสี่ยง RPN ตามมาตรฐาน RCM
+            </div>
+        </div>
+
+        <!-- PM Prioritization Table Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <div>
+                    <h2 class="text-base font-bold text-slate-900">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (PM Prioritization Matrix)</h2>
+                    <p class="text-xs text-slate-500">แสดงลำดับความเร่งด่วนในการเข้าตรวจสอบและซ่อมบำรุงตามสภาพ (Condition-Based Maintenance)</p>
+                </div>
+                <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-200">เรียงตามความเสี่ยงสูงสุด</span>
+            </div>
             
-            <!-- Transformer Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold text-blue-900 flex items-center gap-2">
-                        <span>⚡</span> หม้อแปลงไฟฟ้า (Power Transformers)
-                    </h2>
-                    <span class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">TRX-01 ถึง TRX-12</span>
-                </div>
-                <div class="space-y-3">
-                    <!-- Item 1 -->
-                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <div>
-                            <span class="font-semibold text-slate-800">TRX-01 (115/22kV)</span>
-                            <p class="text-xs text-slate-500">DGA: Hydrogen สูง | Health Index: 78%</p>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-amber-100 text-amber-800 font-medium">Warning</span>
-                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
-                        </div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <div>
-                            <span class="font-semibold text-slate-800">TRX-02 (115/22kV)</span>
-                            <p class="text-xs text-slate-500">Normal Operation | Health Index: 92%</p>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-medium">Normal</span>
-                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse" id="pmTable">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 text-xs uppercase font-semibold border-b border-slate-200">
+                            <th class="p-3.5">ลำดับ PM</th>
+                            <th class="p-3.5">รหัสอุปกรณ์ (Asset ID)</th>
+                            <th class="p-3.5">ประเภท</th>
+                            <th class="p-3.5">ดัชนีสุขภาพ (HI)</th>
+                            <th class="p-3.5">ค่าความเสี่ยง (RPN)</th>
+                            <th class="p-3.5">สาเหตุความผิดปกติหลัก (Failure Mode)</th>
+                            <th class="p-3.5">สถานะ</th>
+                            <th class="p-3.5 text-center">จัดการ/ดูรายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-sm">
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-slate-50 transition-colors" data-type="GIS">
+                            <td class="p-3.5 font-bold text-rose-600">#01</td>
+                            <td class="p-3.5 font-medium text-slate-900">GIS-BAY-03</td>
+                            <td class="p-3.5 text-slate-600">GIS</td>
+                            <td class="p-3.5 font-semibold text-rose-600">52%</td>
+                            <td class="p-3.5 font-semibold text-rose-600">320 (High)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">SF6 Gas Pressure ต่ำกว่าเกณฑ์เตือน / Leakage risk</td>
+                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
+                            <td class="p-3.5 text-center">
+                                <button onclick="openModal('GIS-BAY-03', '52%', '320', 'SF6 Pressure ต่ำ และพบความผิดปกติของค่า Dew Point')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                            </td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
+                            <td class="p-3.5 font-bold text-rose-600">#02</td>
+                            <td class="p-3.5 font-medium text-slate-900">TRX-01</td>
+                            <td class="p-3.5 text-slate-600">Transformer</td>
+                            <td class="p-3.5 font-semibold text-rose-600">58%</td>
+                            <td class="p-3.5 font-semibold text-rose-600">280 (High)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">DGA: ก๊าซ Hydrogen ($H_2$) สูงผิดปกติ / Thermal Fault</td>
+                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
+                            <td class="p-3.5 text-center">
+                                <button onclick="openModal('TRX-01', '58%', '280', 'พบก๊าซ Hydrogen และ Acetylene สูงในน้ำมันฉนวน')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                            </td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
+                            <td class="p-3.5 font-bold text-amber-600">#03</td>
+                            <td class="p-3.5 font-medium text-slate-900">TRX-04</td>
+                            <td class="p-3.5 text-slate-600">Transformer</td>
+                            <td class="p-3.5 font-semibold text-amber-600">67%</td>
+                            <td class="p-3.5 font-semibold text-amber-600">190 (Med)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">OLTC Contact Resistance สูงกว่าค่ามาตรฐาน</td>
+                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
+                            <td class="p-3.5 text-center">
+                                <button onclick="openModal('TRX-04', '67%', '190', 'ค่าความต้านทานหน้าสัมผัสเครื่องเปลี่ยนแทปสูง')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                            </td>
+                        </tr>
+                        <!-- Row 4 -->
+                        <tr class="hover:bg-slate-50 transition-colors" data-type="GIS">
+                            <td class="p-3.5 font-bold text-amber-600">#04</td>
+                            <td class="p-3.5 font-medium text-slate-900">GIS-BAY-09</td>
+                            <td class="p-3.5 text-slate-600">GIS</td>
+                            <td class="p-3.5 font-semibold text-amber-600">72%</td>
+                            <td class="p-3.5 font-semibold text-amber-600">150 (Med)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">Partial Discharge (UHF) เริ่มตรวจพบสัญญาณอ่อนๆ</td>
+                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
+                            <td class="p-3.5 text-center">
+                                <button onclick="openModal('GIS-BAY-09', '72%', '150', 'ตรวจพบสัญญาณ Partial Discharge ด้วยวิธี UHF')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                            </td>
+                        </tr>
+                        <!-- Row 5 -->
+                        <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
+                            <td class="p-3.5 font-bold text-emerald-600">#05</td>
+                            <td class="p-3.5 font-medium text-slate-900">TRX-02</td>
+                            <td class="p-3.5 text-slate-600">Transformer</td>
+                            <td class="p-3.5 font-semibold text-emerald-600">92%</td>
+                            <td class="p-3.5 font-semibold text-emerald-600">45 (Low)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">Normal Operation / สภาพสมบูรณ์ตามรอบปี</td>
+                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Normal</span></td>
+                            <td class="p-3.5 text-center">
+                                <button onclick="openModal('TRX-02', '92%', '45', 'อุปกรณ์ทำงานปกติ บำรุงรักษาตามวาระประจำปี')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <!-- GIS Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold text-blue-900 flex items-center gap-2">
-                        <span>🛡️</span> ระบบ GIS (Gas-Insulated Switchgear)
-                    </h2>
-                    <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md font-medium">Bay 01 - Bay 12</span>
-                </div>
-                <div class="space-y-3">
-                    <!-- Item 1 -->
-                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <div>
-                            <span class="font-semibold text-slate-800">GIS Bay 03 (Line Feeder)</span>
-                            <p class="text-xs text-slate-500">SF6 Pressure: ต่ำกว่าเกณฑ์ | Health Index: 62%</p>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-rose-100 text-rose-800 font-medium">Critical</span>
-                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
-                        </div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <div>
-                            <span class="font-semibold text-slate-800">GIS Bay 04 (Transformer Feeder)</span>
-                            <p class="text-xs text-slate-500">Normal Operation | Health Index: 95%</p>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                            <span class="px-2.5 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-medium">Normal</span>
-                            <button class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700">ดู RCM FMEA</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
+
+    <!-- Interactive Detail Modal -->
+    <div id="rcmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 border border-slate-100">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <span>🔍</span> รายละเอียดวิเคราะห์ RCM & FMEA
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
+            </div>
+            <div class="space-y-3 text-sm text-slate-600">
+                <p><strong>รหัสอุปกรณ์:</strong> <span id="modalAsset" class="text-blue-600 font-semibold"></span></p>
+                <p><strong>ดัชนีสุขภาพ (Health Index):</strong> <span id="modalHI" class="font-semibold"></span></p>
+                <p><strong>ค่าความเสี่ยง (RPN Score):</strong> <span id="modalRPN" class="font-semibold"></span></p>
+                <p><strong>ผลการวิเคราะห์ข้อผิดพลาดเชิงวิศวกรรม:</strong> <span id="modalDesc" class="text-slate-800"></span></p>
+                <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 text-xs text-blue-900 mt-2">
+                    <strong>ข้อเสนอแนะเชิงกลยุทธ์ RCM:</strong> แนะนำให้ปรับเปลี่ยนแผน PM เป็นแบบ Condition-Based Maintenance (CBM) โดยเร่งตรวจสอบเฉพาะจุดและวางแผนแก้ไขก่อนครบกำหนดรอบปี
+                </div>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        function filterTable() {
+            let filter = document.getElementById('assetFilter').value;
+            let rows = document.querySelectorAll('#pmTable tbody tr');
+            
+            rows.forEach(row => {
+                let type = row.getAttribute('data-type');
+                if (filter === 'ALL' || type === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function openModal(asset, hi, rpn, desc) {
+            document.getElementById('modalAsset').innerText = asset;
+            document.getElementById('modalHI').innerText = hi;
+            document.getElementById('modalRPN').innerText = rpn;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('rcmModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('rcmModal').classList.add('hidden');
+        }
+    </script>
 
 </body>
 </html>
