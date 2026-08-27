@@ -13,7 +13,7 @@
 </head>
 <body class="bg-[#0c0a09] text-slate-100 min-h-screen">
 
-    <!-- Top Navigation Bar (Theme สีส้มอุตสาหกรรม) -->
+    <!-- Top Navigation Bar -->
     <header class="bg-[#17120f] border-b border-orange-900/40 shadow-2xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
@@ -48,28 +48,32 @@
                 </button>
             </nav>
             <div class="pt-4 border-t border-orange-900/40 px-1 text-[11px] text-slate-400 leading-relaxed">
-                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> ตารางหลักจะแสดงอุปกรณ์ทุกตัวเรียงตามลำดับความเร่งด่วนในการเข้าทำ PM โดยอัตโนมัติ
+                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> ตารางหลักแสดงอุปกรณ์ครบทั้ง 24 ยูนิต เรียงตามความเร่งด่วน PM พร้อมปุ่มกดดูผลทดสอบรายตัว
             </div>
         </aside>
 
         <!-- Right Dynamic Content Area -->
         <main class="lg:col-span-3 space-y-6">
 
-            <!-- VIEW 1: Dashboard & Full PM Prioritization Table -->
+            <!-- VIEW 1: Dashboard & Full PM Prioritization Table (24 Units) -->
             <div id="viewDashboard" class="space-y-6">
-                <!-- KPI Metric Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-[#17120f] p-5 rounded-3xl border border-orange-950 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">อุปกรณ์ทั้งหมดในระบบ</p>
-                        <h3 class="text-3xl font-extrabold text-slate-100 mt-2">24 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
+                <!-- KPI Metric Cards (เพิ่มป้ายแสดงอุปกรณ์ปกติ) -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">อุปกรณ์ทั้งหมด</p>
+                        <h3 class="text-2xl font-extrabold text-slate-100 mt-1">24 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
-                    <div class="bg-[#17120f] p-5 rounded-3xl border border-orange-950 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-amber-500">ต้องเฝ้าระวัง (Warning)</p>
-                        <h3 class="text-3xl font-extrabold text-amber-400 mt-2">6 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
+                    <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">สถานะปกติ (Normal)</p>
+                        <h3 class="text-2xl font-extrabold text-emerald-400 mt-1">16 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
-                    <div class="bg-[#17120f] p-5 rounded-3xl border border-orange-950 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-rose-500">วิกฤต/เร่งด่วน (Critical)</p>
-                        <h3 class="text-3xl font-extrabold text-rose-500 mt-2">2 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
+                    <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-400">ต้องเฝ้าระวัง (Warning)</p>
+                        <h3 class="text-2xl font-extrabold text-amber-400 mt-1">6 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
+                    </div>
+                    <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-rose-400">วิกฤต (Critical)</p>
+                        <h3 class="text-2xl font-extrabold text-rose-400 mt-1">2 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
                 </div>
 
@@ -78,30 +82,30 @@
                     <div class="flex items-center space-x-3 w-full md:w-auto">
                         <span class="text-sm font-medium text-slate-300">กรองประเภทอุปกรณ์:</span>
                         <select id="assetFilter" onchange="filterTable()" class="bg-[#0c0a09] border border-orange-900/50 text-slate-200 text-sm rounded-2xl focus:ring-orange-500 block p-2.5 px-4 outline-none">
-                            <option value="ALL">ทั้งหมด (All Assets)</option>
+                            <option value="ALL">ทั้งหมด (All 24 Assets)</option>
                             <option value="TRX">หม้อแปลงไฟฟ้า (Power Transformer)</option>
                             <option value="GIS">ชุดสวิตช์เกียร์ก๊าซ (GIS)</option>
                         </select>
                     </div>
                     <div class="text-xs text-orange-400/80 font-medium">
-                        *เรียงลำดับอุปกรณ์ทั้งหมดตามความเร่งด่วนในการเข้าทำ PM (Risk-Based Prioritization)
+                        *เรียงลำดับครบ 24 ยูนิต ตามความเร่งด่วน PM (Risk-Based Prioritization)
                     </div>
                 </div>
 
-                <!-- Main PM Table (แสดงอุปกรณ์ทุกตัว เรียงตามลำดับ PM) -->
+                <!-- Main PM Table (แสดงครบ 24 ยูนิต) -->
                 <div class="bg-[#17120f] rounded-3xl border border-orange-950 overflow-hidden shadow-2xl">
                     <div class="p-5 border-b border-orange-900/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
-                            <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (Full PM Prioritization Matrix)</h2>
-                            <p class="text-xs text-slate-400">แสดงอุปกรณ์ทุกตัวในระบบ เรียงลำดับจากความเสี่ยงสูงสุดไปจนถึงสถานะปกติ</p>
+                            <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (Full PM Prioritization Matrix - 24 Units)</h2>
+                            <p class="text-xs text-slate-400">แสดงอุปกรณ์ครบทุกตัวในระบบ เรียงลำดับจากความเสี่ยงสูงสุดไปจนถึงสถานะปกติ</p>
                         </div>
-                        <span class="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/20 font-semibold px-3.5 py-1.5 rounded-full">PM Schedule Sorted</span>
+                        <span class="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/20 font-semibold px-3.5 py-1.5 rounded-full">All 24 Units Listed</span>
                     </div>
                     
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
                         <table class="w-full text-left border-collapse" id="pmTable">
-                            <thead>
-                                <tr class="bg-[#0c0a09]/60 text-slate-400 text-xs uppercase font-semibold border-b border-orange-900/40">
+                            <thead class="sticky top-0 bg-[#120e0c] z-10">
+                                <tr class="text-slate-400 text-xs uppercase font-semibold border-b border-orange-900/40">
                                     <th class="p-4">ลำดับ PM</th>
                                     <th class="p-4">รหัสอุปกรณ์</th>
                                     <th class="p-4">ประเภท</th>
@@ -109,10 +113,11 @@
                                     <th class="p-4">RPN Score</th>
                                     <th class="p-4">โหมดความเสียหาย / รายละเอียด</th>
                                     <th class="p-4">สถานะ</th>
+                                    <th class="p-4 text-center">ดูผลทดสอบ</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-orange-950/40 text-sm text-slate-300">
-                                <!-- PM #01 (Critical) -->
+                                <!-- 1-2 Critical -->
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
                                     <td class="p-4 font-bold text-rose-500">#01</td>
                                     <td class="p-4 font-medium text-slate-100">GIS-BAY-03</td>
@@ -121,8 +126,10 @@
                                     <td class="p-4 font-semibold text-rose-500">320 (High)</td>
                                     <td class="p-4 text-slate-400 text-xs">SF6 Pressure ต่ำกว่าเกณฑ์เตือน / UHF PD สูง</td>
                                     <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">Critical</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('GIS-BAY-03', '52%', '320', 'Critical', 'SF6 Pressure: 5.2 bar [Alarm]\nDew Point: -15°C\nPD Level: 450 pC', 'Contact Resistance: 48 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #02 (Critical) -->
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
                                     <td class="p-4 font-bold text-rose-500">#02</td>
                                     <td class="p-4 font-medium text-slate-100">TRX-01</td>
@@ -131,8 +138,11 @@
                                     <td class="p-4 font-semibold text-rose-500">280 (High)</td>
                                     <td class="p-4 text-slate-400 text-xs">DGA: ก๊าซ Hydrogen & Acetylene สูง (Thermal/Arcing)</td>
                                     <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">Critical</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('TRX-01', '58%', '280', 'Critical', 'H2: 1250 ppm\nCH4: 320 ppm\nC2H2: 85 ppm\nC2H4: 450 ppm', 'BDV: 42 kV\nMoisture: 35 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #03 (Warning) -->
+                                <!-- 3-8 Warning -->
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
                                     <td class="p-4 font-bold text-amber-500">#03</td>
                                     <td class="p-4 font-medium text-slate-100">TRX-04</td>
@@ -141,8 +151,10 @@
                                     <td class="p-4 font-semibold text-amber-500">190 (Med)</td>
                                     <td class="p-4 text-slate-400 text-xs">OLTC Contact Resistance สูง / Thermal T1</td>
                                     <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('TRX-04', '67%', '190', 'Warning', 'H2: 180 ppm\nCH4: 110 ppm\nC2H4: 95 ppm', 'OLTC Contact Resistance: 85 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #04 (Warning) -->
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
                                     <td class="p-4 font-bold text-amber-500">#04</td>
                                     <td class="p-4 font-medium text-slate-100">GIS-BAY-09</td>
@@ -151,54 +163,82 @@
                                     <td class="p-4 font-semibold text-amber-500">150 (Med)</td>
                                     <td class="p-4 text-slate-400 text-xs">ตรวจพบสัญญาณ Partial Discharge เริ่มต้น (UHF Method)</td>
                                     <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('GIS-BAY-09', '72%', '150', 'Warning', 'SF6 Pressure: 6.0 bar\nPD Level: 85 pC [Warning]', 'Contact Resistance: 32 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #05 (Warning) -->
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
                                     <td class="p-4 font-bold text-amber-500">#05</td>
                                     <td class="p-4 font-medium text-slate-100">TRX-05</td>
                                     <td class="p-4 text-slate-400">Transformer</td>
                                     <td class="p-4 font-semibold text-amber-500">74%</td>
                                     <td class="p-4 font-semibold text-amber-500">140 (Med)</td>
-                                    <td class="p-4 text-slate-400 text-xs">ความเป็นฉนวนเริ่มลดลง / ตรวจสอบรอบปี</td>
+                                    <td class="p-4 text-slate-400 text-xs">ความเป็นฉนวนเริ่มลดลงเล็กน้อย / เฝ้าระวังความชื้น</td>
                                     <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('TRX-05', '74%', '140', 'Warning', 'H2: 95 ppm\nCO: 210 ppm', 'BDV: 52 kV\nMoisture: 24 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #06 (Normal) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
+                                    <td class="p-4 font-bold text-amber-500">#06</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-11</td>
+                                    <td class="p-4 text-slate-400">GIS</td>
+                                    <td class="p-4 font-semibold text-amber-500">75%</td>
+                                    <td class="p-4 font-semibold text-amber-500">130 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">ค่าความต้านทานหน้าสัมผัสสูงกว่าเกณฑ์เฉลี่ยเล็กน้อย</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('GIS-BAY-11', '75%', '130', 'Warning', 'SF6 Pressure: 5.9 bar\nDew Point: -18°C', 'Contact Resistance: 42 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
+                                </tr>
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
-                                    <td class="p-4 font-bold text-emerald-500">#06</td>
-                                    <td class="p-4 font-medium text-slate-100">TRX-02</td>
+                                    <td class="p-4 font-bold text-amber-500">#07</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-08</td>
                                     <td class="p-4 text-slate-400">Transformer</td>
-                                    <td class="p-4 font-semibold text-emerald-500">92%</td>
-                                    <td class="p-4 font-semibold text-emerald-500">45 (Low)</td>
-                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (บำรุงรักษาตามวาระปกติ)</td>
-                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
+                                    <td class="p-4 font-semibold text-amber-500">77%</td>
+                                    <td class="p-4 font-semibold text-amber-500">120 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">อุณหภูมิน้ำมันสูงกว่าเกณฑ์เฉลี่ยช่วง Peak Load</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('TRX-08', '77%', '120', 'Warning', 'H2: 110 ppm\nCH4: 40 ppm', 'Top Oil Temp: 82°C\nBDV: 54 kV')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #07 (Normal) -->
                                 <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
-                                    <td class="p-4 font-bold text-emerald-500">#07</td>
-                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-01</td>
+                                    <td class="p-4 font-bold text-amber-500">#08</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-05</td>
                                     <td class="p-4 text-slate-400">GIS</td>
-                                    <td class="p-4 font-semibold text-emerald-500">95%</td>
-                                    <td class="p-4 font-semibold text-emerald-500">30 (Low)</td>
-                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (ความดัน SF6 สมบูรณ์)</td>
-                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
+                                    <td class="p-4 font-semibold text-amber-500">79%</td>
+                                    <td class="p-4 font-semibold text-amber-500">110 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">ระบบตรวจสอบความหนาแน่นก๊าซตอบสนองช้า</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
+                                        <button onclick="openTestModal('GIS-BAY-05', '79%', '110', 'Warning', 'SF6 Pressure: 5.8 bar\nSensor Response: Delayed', 'Contact Resistance: 35 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button>
+                                    </td>
                                 </tr>
-                                <!-- PM #08 (Normal) -->
-                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
-                                    <td class="p-4 font-bold text-emerald-500">#08</td>
-                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-02</td>
-                                    <td class="p-4 text-slate-400">GIS</td>
-                                    <td class="p-4 font-semibold text-emerald-500">98%</td>
-                                    <td class="p-4 font-semibold text-emerald-500">20 (Low)</td>
-                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (ตรวจสอบประจำปีเรียบร้อย)</td>
-                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
-                                </tr>
+                                <!-- 9-24 Normal (อุปกรณ์ปกติ 16 ยูนิต) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#09</td><td class="p-4 font-medium text-slate-100">TRX-02</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">92%</td><td class="p-4 font-semibold text-emerald-500">45 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สมบูรณ์ตามรอบปี)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-02', '92%', '45', 'Normal', 'H2: 15 ppm\nCH4: 10 ppm', 'BDV: 70 kV\nMoisture: 8 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#10</td><td class="p-4 font-medium text-slate-100">GIS-BAY-01</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">95%</td><td class="p-4 font-semibold text-emerald-500">30 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ความดัน SF6 สมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-01', '95%', '30', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -30°C', 'Contact Resistance: 28 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#11</td><td class="p-4 font-medium text-slate-100">GIS-BAY-02</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">98%</td><td class="p-4 font-semibold text-emerald-500">20 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ตรวจสอบประจำปีเรียบร้อย)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-02', '98%', '20', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -32°C', 'Contact Resistance: 26 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#12</td><td class="p-4 font-medium text-slate-100">TRX-03</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">91%</td><td class="p-4 font-semibold text-emerald-500">48 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-03', '91%', '48', 'Normal', 'H2: 20 ppm\nCH4: 12 ppm', 'BDV: 68 kV\nMoisture: 10 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#13</td><td class="p-4 font-medium text-slate-100">TRX-06</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">90%</td><td class="p-4 font-semibold text-emerald-500">50 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-06', '90%', '50', 'Normal', 'H2: 25 ppm\nCH4: 15 ppm', 'BDV: 67 kV\nMoisture: 11 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#14</td><td class="p-4 font-medium text-slate-100">TRX-07</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">93%</td><td class="p-4 font-semibold text-emerald-500">40 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-07', '93%', '40', 'Normal', 'H2: 12 ppm\nCH4: 8 ppm', 'BDV: 71 kV\nMoisture: 7 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#15</td><td class="p-4 font-medium text-slate-100">TRX-09</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">94%</td><td class="p-4 font-semibold text-emerald-500">35 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-09', '94%', '35', 'Normal', 'H2: 10 ppm\nCH4: 5 ppm', 'BDV: 72 kV\nMoisture: 6 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#16</td><td class="p-4 font-medium text-slate-100">TRX-10</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">89%</td><td class="p-4 font-semibold text-emerald-500">55 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ใช้งานปกติ)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-10', '89%', '55', 'Normal', 'H2: 30 ppm\nCH4: 18 ppm', 'BDV: 65 kV\nMoisture: 12 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#17</td><td class="p-4 font-medium text-slate-100">TRX-11</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">96%</td><td class="p-4 font-semibold text-emerald-500">25 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ติดตั้งใหม่)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-11', '96%', '25', 'Normal', 'H2: 5 ppm\nCH4: 2 ppm', 'BDV: 75 kV\nMoisture: 5 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX"><td class="p-4 font-bold text-emerald-500">#18</td><td class="p-4 font-medium text-slate-100">TRX-12</td><td class="p-4 text-slate-400">Transformer</td><td class="p-4 font-semibold text-emerald-500">92%</td><td class="p-4 font-semibold text-emerald-500">42 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('TRX-12', '92%', '42', 'Normal', 'H2: 14 ppm\nCH4: 9 ppm', 'BDV: 69 kV\nMoisture: 9 ppm')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#19</td><td class="p-4 font-medium text-slate-100">GIS-BAY-04</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">97%</td><td class="p-4 font-semibold text-emerald-500">22 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ความดัน SF6 สมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-04', '97%', '22', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -33°C', 'Contact Resistance: 25 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#20</td><td class="p-4 font-medium text-slate-100">GIS-BAY-06</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">94%</td><td class="p-4 font-semibold text-emerald-500">32 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-06', '94%', '32', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -28°C', 'Contact Resistance: 29 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#21</td><td class="p-4 font-medium text-slate-100">GIS-BAY-07</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">95%</td><td class="p-4 font-semibold text-emerald-500">28 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-07', '95%', '28', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -30°C', 'Contact Resistance: 27 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#22</td><td class="p-4 font-medium text-slate-100">GIS-BAY-08</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">91%</td><td class="p-4 font-semibold text-emerald-500">46 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ใช้งานปกติ)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-08', '91%', '46', 'Normal', 'SF6 Pressure: 5.9 bar\nDew Point: -25°C', 'Contact Resistance: 31 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#23</td><td class="p-4 font-medium text-slate-100">GIS-BAY-10</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">93%</td><td class="p-4 font-semibold text-emerald-500">38 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (สภาพสมบูรณ์)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-10', '93%', '38', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -29°C', 'Contact Resistance: 28 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS"><td class="p-4 font-bold text-emerald-500">#24</td><td class="p-4 font-medium text-slate-100">GIS-BAY-12</td><td class="p-4 text-slate-400">GIS</td><td class="p-4 font-semibold text-emerald-500">96%</td><td class="p-4 font-semibold text-emerald-500">24 (Low)</td><td class="p-4 text-slate-400 text-xs">Normal Operation (ตรวจสอบประจำปีเรียบร้อย)</td><td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td><td class="p-4 text-center"><button onclick="openTestModal('GIS-BAY-12', '96%', '24', 'Normal', 'SF6 Pressure: 6.0 bar\nDew Point: -31°C', 'Contact Resistance: 26 µΩ')" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-semibold shadow transition-all">ผลทดสอบ</button></td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW 2: Lab Test Entry Form (แผ่นกระดาษฟอร์มจดผลทดสอบ) -->
+            <!-- VIEW 2: Lab Test Entry Form -->
             <div id="viewTestEntry" class="space-y-6 hidden">
                 <div class="bg-[#17120f] border border-orange-950 rounded-3xl p-6 shadow-2xl space-y-6">
                     <div class="flex justify-between items-center border-b border-orange-900/40 pb-4">
@@ -213,7 +253,6 @@
                         </button>
                     </div>
 
-                    <!-- แผ่นกระดาษฟอร์มจดผลทดสอบ -->
                     <div class="bg-[#0c0a09] border border-orange-950 p-6 rounded-2xl space-y-5 shadow-inner">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                             <div>
@@ -230,7 +269,6 @@
                             </div>
                         </div>
 
-                        <!-- หมวดที่ 1: ผลวิเคราะห์ก๊าซ (DGA Lab Test) -->
                         <div class="space-y-2 pt-2 border-t border-orange-950">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-orange-400">🧪 หมวดที่ 1: ค่าก๊าซละลายในน้ำมัน (Dissolved Gas Analysis - ppm)</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
@@ -244,7 +282,6 @@
                             </div>
                         </div>
 
-                        <!-- หมวดที่ 2: ผลทดสอบทางไฟฟ้าและกายภาพ (Electrical & Physical Test) -->
                         <div class="space-y-2 pt-2 border-t border-orange-950">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">⚡ หมวดที่ 2: ผลทดสอบทางไฟฟ้าและกายภาพ (Electrical & Physical Tests)</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -258,6 +295,35 @@
             </div>
 
         </main>
+    </div>
+
+    <!-- Test Modal for Individual Row -->
+    <div id="testModal" class="fixed inset-0 bg-[#0c0a09]/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-[#17120f] border border-orange-950 rounded-3xl shadow-2xl max-w-2xl w-full p-6 space-y-4 text-slate-100 font-sans">
+            <div class="flex justify-between items-center border-b border-orange-900/40 pb-3">
+                <h3 class="text-base font-bold flex items-center gap-2"><span>🔬</span> รายงานผลการทดสอบห้องปฏิบัติการและค่าทางไฟฟ้า</h3>
+                <button onclick="closeTestModal()" class="text-slate-400 hover:text-slate-200 font-bold text-xl">&times;</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs bg-[#0c0a09] p-3.5 rounded-2xl border border-orange-950">
+                <p><strong>รหัสอุปกรณ์:</strong> <span id="tAsset" class="text-orange-400 font-bold"></span></p>
+                <p><strong>Health Index:</strong> <span id="tHI" class="font-bold"></span></p>
+                <p><strong>Risk Score (RPN):</strong> <span id="tRPN" class="font-bold"></span></p>
+                <p><strong>สถานะ:</strong> <span id="tStatus" class="font-bold"></span></p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="bg-[#0c0a09]/50 p-4 rounded-2xl border border-orange-950 space-y-1.5">
+                    <strong class="text-orange-400 block font-semibold text-sm">🧪 ผลแล็บค่าก๊าซ (DGA Lab Results):</strong>
+                    <pre id="tDGA" class="bg-[#17120f] p-3 rounded-xl border border-orange-950 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
+                </div>
+                <div class="bg-[#0c0a09]/50 p-4 rounded-2xl border border-orange-950 space-y-1.5">
+                    <strong class="text-amber-400 block font-semibold text-sm">⚡ ค่าทดสอบทางไฟฟ้าและกายภาพ:</strong>
+                    <pre id="tElectrical" class="bg-[#17120f] p-3 rounded-xl border border-orange-950 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
+                </div>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeTestModal()" class="bg-orange-600 hover:bg-orange-500 text-white text-xs px-5 py-2.5 rounded-xl transition-all font-semibold">ปิดหน้าต่าง</button>
+            </div>
+        </div>
     </div>
 
     <!-- Script Control Logic -->
@@ -286,7 +352,7 @@
 
         function submitLabSheet() {
             let assetId = document.getElementById('sheet_id').value;
-            alert(`บันทึกผลการทดสอบของ ${assetId} เรียบร้อยแล้ว ระบบได้ทำการคำนวณและจัดลำดับ PM ใหม่ในตารางหลักแล้ว!`);
+            alert(`บันทึกผลการทดสอบของ ${assetId} เรียบร้อยแล้ว ระบบได้ทำการคำนวณและจัดลำดับ PM ในตารางหลักแล้ว!`);
             switchView('dashboard');
         }
 
@@ -301,6 +367,20 @@
                     row.style.display = 'none';
                 }
             });
+        }
+
+        function openTestModal(asset, hi, rpn, status, dgaText, elecText) {
+            document.getElementById('tAsset').innerText = asset;
+            document.getElementById('tHI').innerText = hi;
+            document.getElementById('tRPN').innerText = rpn;
+            document.getElementById('tStatus').innerText = status;
+            document.getElementById('tDGA').innerText = dgaText;
+            document.getElementById('tElectrical').innerText = elecText;
+            document.getElementById('testModal').classList.remove('hidden');
+        }
+
+        function closeTestModal() {
+            document.getElementById('testModal').classList.add('hidden');
         }
     </script>
 
