@@ -69,7 +69,7 @@
                 </select>
             </div>
             <div class="text-xs text-slate-500">
-                *คลิกปุ่มเพื่อดูผลทดสอบเชิงลึก พร้อมเกณฑ์มาตรฐานและวิเคราะห์สามเหลี่ยม DGA
+                *คลิกปุ่มเพื่อดูผลทดสอบ DGA เชิงลึกและวิเคราะห์สามเหลี่ยมดูกาซ
             </div>
         </div>
 
@@ -105,12 +105,12 @@
                             <td class="p-3.5 text-slate-600">Transformer</td>
                             <td class="p-3.5 font-semibold text-rose-600">58%</td>
                             <td class="p-3.5 font-semibold text-rose-600">280 (High)</td>
-                            <td class="p-3.5 text-slate-600 text-xs">DGA: ก๊าซ Hydrogen & Acetylene สูง (Thermal/Arcing Fault)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">DGA: ก๊าซ Hydrogen & Acetylene สูงมาก (Thermal/Arcing Fault)</td>
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
                             <td class="p-3.5 text-center">
                                 <button onclick="openModal('TRX-01', 'Transformer', '58%', '280', 'Critical', 
-                                    'H2: 1250 ppm (Std < 100)\nC2H2: 85 ppm (Std < 1)\nC2H4: 450 ppm (Std < 50)\nCH4: 320 ppm (Std < 30)\nCO: 600 ppm (Std < 350)', 
-                                    'BDV: 42 kV (Std > 50)\nMoisture: 35 ppm (Std < 25)\nTan Delta: 0.65% (Std < 0.5%)', 
+                                    '• Hydrogen (H2): 1250 ppm [Std < 100] -> Partial Discharge / ความชื้น\n• Methane (CH4): 320 ppm [Std < 30] -> ความร้อนต่ำ\n• Ethane (C2H6): 140 ppm [Std < 20] -> ความร้อนปานกลาง\n• Ethylene (C2H4): 450 ppm [Std < 50] -> ความร้อนสูง (>700°C)\n• Acetylene (C2H2): 85 ppm [Std < 1] -> การอาร์ก/ประกายไฟรุนแรง\n• Carbon Monoxide (CO): 600 ppm [Std < 350] -> กระดาษฉนวนเสื่อมสภาพ\n• Carbon Dioxide (CO2): 3200 ppm [Std < 2500] -> การเสื่อมสภาพฉนวนสะสม', 
+                                    '• BDV (Breakdown Voltage): 42 kV [Std > 50]\n• Moisture Content: 35 ppm [Std < 25]\n• Tan Delta: 0.65% [Std < 0.5%]\n• OLTC Contact Resistance: 75 µΩ [Std < 50 µΩ]', 
                                     'Thermal Fault (T3) & Severe Arcing', 'TRX')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบเชิงลึก</button>
                             </td>
                         </tr>
@@ -125,8 +125,8 @@
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
                             <td class="p-3.5 text-center">
                                 <button onclick="openModal('GIS-BAY-03', 'GIS (Gas-Insulated Switchgear)', '52%', '320', 'Critical', 
-                                    'SF6 Pressure: 5.2 bar [Alarm] (Std: ตาม Nameplate 6.0 bar)\nDew Point: -15°C (Std < -20°C)\nPD Level: 450 pC (Std < 100 pC)', 
-                                    'Contact Resistance: 48 µΩ (Std < 1.2x Initial)\nMechanical Timing: ผิดปกติเล็กน้อย', 
+                                    '• ระบบก๊าซ SF6 ใช้การตรวจสอบความดัน (Pressure/Density) และ UHF Partial Discharge แทน DGA น้ำมัน\n• SF6 Pressure: 5.2 bar [Alarm] (Std: 6.0 bar ตาม Nameplate)\n• Dew Point (ความชื้นก๊าซ): -15°C [Std < -20°C]\n• Partial Discharge (UHF): 450 pC [Std < 100 pC]', 
+                                    '• Contact Resistance: 48 µΩ [Std < 1.2x Initial]\n• Mechanical Timing: ผิดปกติเล็กน้อย', 
                                     'Partial Discharge ภายในถัง / SF6 Leakage Risk', 'GIS')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบเชิงลึก</button>
                             </td>
                         </tr>
@@ -141,8 +141,8 @@
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
                             <td class="p-3.5 text-center">
                                 <button onclick="openModal('TRX-04', 'Transformer', '67%', '190', 'Warning', 
-                                    'H2: 180 ppm (Std < 100)\nC2H4: 95 ppm (Std < 50)\nCH4: 110 ppm (Std < 30)\nCO: 250 ppm (Std < 350)\nCO2: 1500 ppm (Std < 2500)', 
-                                    'BDV: 55 kV (Std > 50)\nMoisture: 22 ppm (Std < 25)\nOLTC Contact Resistance: 85 µΩ (Std < 50 µΩ)', 
+                                    '• Hydrogen (H2): 180 ppm [Std < 100] -> เฝ้าระวังความชื้น\n• Methane (CH4): 110 ppm [Std < 30] -> ความร้อนต่ำ\n• Ethane (C2H6): 45 ppm [Std < 20] -> ความร้อนเริ่มต้น\n• Ethylene (C2H4): 95 ppm [Std < 50] -> ความร้อนปานกลาง\n• Acetylene (C2H2): Not Detected [Std < 1] -> ไม่พบการอาร์ก\n• Carbon Monoxide (CO): 250 ppm [Std < 350] -> ปกติ\n• Carbon Dioxide (CO2): 1500 ppm [Std < 2500] -> ปกติ', 
+                                    '• BDV: 55 kV [Std > 50]\n• Moisture Content: 22 ppm [Std < 25]\n• OLTC Contact Resistance: 85 µΩ [Std < 50 µΩ]', 
                                     'Thermal Fault (T1 - Low Temperature)', 'TRX')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบเชิงลึก</button>
                             </td>
                         </tr>
@@ -157,8 +157,8 @@
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
                             <td class="p-3.5 text-center">
                                 <button onclick="openModal('GIS-BAY-09', 'GIS (Gas-Insulated Switchgear)', '72%', '150', 'Warning', 
-                                    'SF6 Pressure: 6.0 bar [Normal] (Std: 6.0 bar)\nDew Point: -30°C (Std < -20°C)\nPD Level: 85 pC [Warning] (Std < 100 pC)', 
-                                    'Contact Resistance: 32 µΩ (Std < 1.2x Initial)\nMechanical Timing: ปกติ', 
+                                    '• ระบบก๊าซ SF6 ใช้การตรวจสอบความดันและ UHF Partial Discharge\n• SF6 Pressure: 6.0 bar [Normal] (Std: 6.0 bar)\n• Dew Point: -30°C [Std < -20°C]\n• Partial Discharge (UHF): 85 pC [Warning] (Std < 100 pC)', 
+                                    '• Contact Resistance: 32 µΩ [Std < 1.2x Initial]\n• Mechanical Timing: ปกติ', 
                                     'Initial Partial Discharge / Corona Activity', 'GIS')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบเชิงลึก</button>
                             </td>
                         </tr>
@@ -173,8 +173,8 @@
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Normal</span></td>
                             <td class="p-3.5 text-center">
                                 <button onclick="openModal('TRX-02', 'Transformer', '92%', '45', 'Normal', 
-                                    'H2: 15 ppm (Std < 100)\nCH4: 10 ppm (Std < 30)\nC2H2: Not Detected (Std < 1)\nCO: 80 ppm (Std < 350)', 
-                                    'BDV: 70 kV (Std > 50)\nMoisture: 8 ppm (Std < 25)\nTan Delta: 0.30% (Std < 0.5%)', 
+                                    '• Hydrogen (H2): 15 ppm [Std < 100] -> ปกติ\n• Methane (CH4): 10 ppm [Std < 30] -> ปกติ\n• Ethane (C2H6): 5 ppm [Std < 20] -> ปกติ\n• Ethylene (C2H4): 8 ppm [Std < 50] -> ปกติ\n• Acetylene (C2H2): Not Detected [Std < 1] -> ปกติ\n• Carbon Monoxide (CO): 80 ppm [Std < 350] -> ปกติ\n• Carbon Dioxide (CO2): 850 ppm [Std < 2500] -> ปกติ', 
+                                    '• BDV: 70 kV [Std > 50]\n• Moisture Content: 8 ppm [Std < 25]\n• Tan Delta: 0.30% [Std < 0.5%]\n• OLTC Contact Resistance: 35 µΩ [Std < 50 µΩ]', 
                                     'Normal Operation (ไม่มีความผิดปกติ)', 'TRX')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบเชิงลึก</button>
                             </td>
                         </tr>
@@ -184,12 +184,12 @@
         </div>
     </main>
 
-    <!-- Detailed Modal with Detailed Test Parameters & Duval Triangle Graphic -->
+    <!-- Detailed Modal with Complete DGA & Duval Triangle Graphic -->
     <div id="rcmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 space-y-5 border border-slate-100 my-8">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <span>🔬</span> รายงานผลการทดสอบเชิงลึก & วิเคราะห์สามเหลี่ยม DGA
+                    <span>🔬</span> รายงานผลการทดสอบเชิงลึก & วิเคราะห์สามเหลี่ยมดูกาซ (Duval Triangle)
                 </h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
             </div>
@@ -211,11 +211,11 @@
             <!-- Detailed Test Results Box with Standards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-blue-900">🧪 ผลทดสอบห้องปฏิบัติการ (Lab Test)</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-blue-900">🧪 ผลทดสอบก๊าซละลายในน้ำมันทั้งหมด (DGA Lab Test)</h4>
                     <pre id="mDGA" class="text-xs text-slate-800 font-mono bg-white p-2.5 rounded border border-blue-100 whitespace-pre-line leading-relaxed"></pre>
                 </div>
                 <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-900">⚡ ผลทดสอบทางไฟฟ้าและกายภาพ (Field/Electrical Test)</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-900">⚡ ผลทดสอบคุณสมบัติน้ำมันและไฟฟ้า (Electrical Test)</h4>
                     <pre id="mOil" class="text-xs text-slate-800 font-mono bg-white p-2.5 rounded border border-emerald-100 whitespace-pre-line leading-relaxed"></pre>
                 </div>
             </div>
@@ -224,7 +224,7 @@
             <div id="duvalSection" class="bg-slate-900 text-white p-5 rounded-xl space-y-3">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
-                        <span>📐</span> การแสดงผลสามเหลี่ยมดูกาส (IEC Duval Triangle Method Simulation)
+                        <span>📐</span> การแสดงผลสามเหลี่ยมดูกาซ (IEC Duval Triangle Method)
                     </h4>
                     <span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded">Gas Ratio: CH4 / C2H2 / C2H4</span>
                 </div>
@@ -260,7 +260,7 @@
             <!-- GIS Specific Monitoring Section (Hidden if Transformer) -->
             <div id="gisSection" class="bg-slate-900 text-white p-5 rounded-xl space-y-2 hidden">
                 <h4 class="text-xs font-bold uppercase tracking-wider text-blue-400">🛡️ ระบบตรวจสอบสภาวะก๊าซ SF6 & Partial Discharge (GIS Monitoring)</h4>
-                <p class="text-xs text-slate-300">อุปกรณ์ระบบ GIS ใช้ระบบตรวจสอบความดันก๊าซแบบ Real-time และตรวจจับคลื่น UHF เพื่อค้นหาประกายไฟภายในถังปิดผนึก แทนการใช้สามเหลี่ยม DGA</p>
+                <p class="text-xs text-slate-300">อุปกรณ์ระบบ GIS ใช้ระบบตรวจสอบความดันก๊าซแบบ Real-time และตรวจจับคลื่น UHF เพื่อค้นหาประกายไฟภายในถังปิดผนึก แทนการใช้สามเหลี่ยมดูกาซ</p>
                 <div id="gisStatusText" class="bg-slate-800 p-3 rounded text-xs font-mono text-blue-200 border border-slate-700"></div>
             </div>
 
@@ -317,17 +317,17 @@
 
                 if(asset === 'TRX-01') {
                     document.getElementById('duvalCoords').innerHTML = "CH4 = 20% | C2H2 = 45% | C2H4 = 35%";
-                    document.getElementById('duvalResult').innerHTML = "📍 <b>ผลวินิจฉัย:</b> ตกอยู่ในโซน T3 & D1 (เกิดความร้อนสูงสะสมเกิน 700°C ร่วมกับการอาร์กพลังงานต่ำ) -> ต้องเร่งตรวจสอบขดลวดและทำ Overhaul";
+                    document.getElementById('duvalResult').innerHTML = "📍 <b>ผลวินิจฉัยสามเหลี่ยมดูกาซ:</b> ตกอยู่ในโซน T3 & D1 (ความร้อนสูงเกิน 700°C ร่วมกับการอาร์กพลังงานต่ำ) -> ต้องเร่งตรวจสอบขดลวดและทำ Overhaul ด่วน";
                     plotPoint.setAttribute('cx', '100'); plotPoint.setAttribute('cy', '120');
                     plotPointCore.setAttribute('cx', '100'); plotPointCore.setAttribute('cy', '120');
                 } else if(asset === 'TRX-04') {
                     document.getElementById('duvalCoords').innerHTML = "CH4 = 65% | C2H2 = 10% | C2H4 = 25%";
-                    document.getElementById('duvalResult').innerHTML = "📍 <b>ผลวินิจฉัย:</b> ตกอยู่ในโซน T1 (ความร้อนต่ำกว่า 300°C) -> เกี่ยวข้องกับหน้าสัมผัส OLTC ที่มีความต้านทานสูง";
+                    document.getElementById('duvalResult').innerHTML = "📍 <b>ผลวินิจฉัยสามเหลี่ยมดูกาซ:</b> ตกอยู่ในโซน T1 (ความร้อนต่ำกว่า 300°C) -> เกี่ยวข้องกับหน้าสัมผัส OLTC ที่มีความต้านทานสูง";
                     plotPoint.setAttribute('cx', '110'); plotPoint.setAttribute('cy', '60');
                     plotPointCore.setAttribute('cx', '110'); plotPointCore.setAttribute('cy', '60');
                 } else {
                     document.getElementById('duvalCoords').innerHTML = "CH4 = 33% | C2H2 = 33% | C2H4 = 33%";
-                    document.getElementById('duvalResult').innerHTML = "📍 <b>ผลวินิจฉัย:</b> ตกอยู่ในโซนปกติ (Normal Zone) -> สัดส่วนก๊าซอยู่ในเกณฑ์มาตรฐานความปลอดภัย";
+                    document.getElementById('duvalResult').innerHTML = "📍 <b>ผลวินิจฉัยสามเหลี่ยมดูกาซ:</b> ตกอยู่ในโซนปกติ (Normal Zone) -> สัดส่วนก๊าซอยู่ในเกณฑ์มาตรฐานความปลอดภัย";
                     plotPoint.setAttribute('cx', '100'); plotPoint.setAttribute('cy', '100');
                     plotPointCore.setAttribute('cx', '100'); plotPointCore.setAttribute('cy', '100');
                 }
