@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Industrial Theme)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (DGA Detailed Analysis)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -51,13 +51,13 @@
 
     <!-- Navigation Tabs -->
     <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto">
-        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
             <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
-        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
-            <span>แท็บ DGA (6 วิธี & สามเหลี่ยม)</span>
+            <span>วิเคราะห์ DGA แบบละเอียด (6 วิธี & สามเหลี่ยม)</span>
         </button>
     </nav>
 
@@ -65,7 +65,7 @@
     <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
         <!-- TAB 1: PM SCHEDULE -->
-        <section id="tab-pm-schedule" class="space-y-6">
+        <section id="tab-pm-schedule" class="space-y-6 hidden">
             <!-- Summary Statistic Cards -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
@@ -106,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Search & Title Bar -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
@@ -117,7 +116,6 @@
                 </div>
             </div>
 
-            <!-- Table Card -->
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-sm min-w-[700px]">
@@ -133,122 +131,205 @@
                                 <th class="py-3.5 px-4 font-semibold text-center">จัดการ</th>
                             </tr>
                         </thead>
-                        <tbody id="pm-table-body" class="divide-y divide-slate-700/50">
-                            <!-- JS will inject rows -->
-                        </tbody>
+                        <tbody id="pm-table-body" class="divide-y divide-slate-700/50"></tbody>
                     </table>
                 </div>
-
-                <!-- Pagination Footer -->
                 <div class="bg-slate-900/60 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center border-t border-slate-700 gap-4">
                     <span id="pagination-info" class="text-xs text-slate-400">แสดง 1 ถึง 10 จากทั้งหมด 40 รายการ</span>
-                    <div class="flex space-x-1" id="pagination-controls">
-                        <!-- JS will inject pagination buttons -->
-                    </div>
+                    <div class="flex space-x-1" id="pagination-controls"></div>
                 </div>
             </div>
         </section>
 
-        <!-- TAB 2: DGA CALCULATOR (6 METHODS + DUVAL TRIANGLE) -->
-        <section id="tab-dga-calc" class="space-y-6 hidden">
+        <!-- TAB 2: DETAILED DGA CALCULATOR (6 METHODS + TRIANGLE) -->
+        <section id="tab-dga-calc" class="space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลาย (DGA 6 วิธี & สามเหลี่ยมดิววัล)</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อจำลองการวิเคราะห์และแสดงผลภาพสามเหลี่ยมมาตรฐานสากล</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
+                    <p class="text-xs text-slate-400">วิเคราะห์ผลผ่าน 6 วิธีมาตรฐานสากล พร้อมแสดงค่าสัดส่วน อัตราส่วน และคำแนะนำทางวิศวกรรม</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
-                    <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือก:</label>
+                    <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
                     <select id="dga-device-select" onchange="onDgaDeviceChange()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
-                        <!-- Populated by JS -->
                     </select>
                 </div>
             </div>
 
             <!-- Gas Input Values Grid -->
             <div class="bg-slate-800 rounded-xl p-4 sm:p-5 border border-slate-700 shadow-lg">
-                <h3 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซปัจจุบันที่ตรวจวัดได้ (ppm)</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container">
-                    <!-- Dynamic Gas Cards -->
-                </div>
+                <h3 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซละลายปัจจุบันในน้ำมัน (ppm)</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container"></div>
             </div>
 
-            <!-- Duval Triangle Visualizer & Main Methods Layout -->
+            <!-- Detailed 6 Methods Section -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Left: Duval Triangle Canvas Card (4 cols) -->
-                <div class="lg:col-span-5 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col items-center justify-between shadow-lg">
-                    <div class="w-full flex justify-between items-center mb-3">
-                        <h4 class="font-bold text-white text-sm"><i class="fa-solid fa-triangle text-industrial-500 mr-2"></i> Duval Triangle (IEC 60599)</h4>
-                        <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded">Visualizer</span>
+                <!-- Method 1: Duval Triangle (Visualizer + Detail) -->
+                <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                        <div>
+                            <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 1</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Duval Triangle Method (IEC 60599)</h4>
+                        </div>
+                        <span class="text-xs text-slate-400">สัดส่วน CH4 / C2H4 / C2H2</span>
                     </div>
-                    <div class="relative w-full flex justify-center my-2">
-                        <canvas id="duvalCanvas" width="280" height="260" class="bg-slate-900 rounded-lg border border-slate-700 shadow-inner"></canvas>
-                    </div>
-                    <div class="w-full mt-2 bg-slate-900 p-3 rounded-lg border border-slate-700 text-center">
-                        <span class="text-xs text-slate-400">พิกัดโซนความผิดปกติ:</span>
-                        <div id="duval-zone-text" class="text-sm font-bold text-industrial-400 mt-0.5">-</div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-4 bg-slate-900/60 p-4 rounded-xl border border-slate-700">
+                        <div class="relative flex justify-center shrink-0">
+                            <canvas id="duvalCanvas" width="220" height="200" class="bg-slate-900 rounded-lg border border-slate-700 shadow-inner"></canvas>
+                        </div>
+                        <div class="space-y-2 text-xs w-full">
+                            <div class="flex justify-between border-b border-slate-800 pb-1">
+                                <span class="text-slate-400">เปอร์เซ็นต์ CH4:</span>
+                                <span id="duval-p-ch4" class="font-mono font-bold text-slate-200">0%</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1">
+                                <span class="text-slate-400">เปอร์เซ็นต์ C2H4:</span>
+                                <span id="duval-p-c2h4" class="font-mono font-bold text-slate-200">0%</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1">
+                                <span class="text-slate-400">เปอร์เซ็นต์ C2H2:</span>
+                                <span id="duval-p-c2h2" class="font-mono font-bold text-slate-200">0%</span>
+                            </div>
+                            <div class="pt-1">
+                                <span class="text-slate-400 block mb-1">ผลประเมินโซน:</span>
+                                <div id="res-duval-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2 rounded border border-industrial-800">-</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right: Other 5 Methods Grid (7 cols) -->
-                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Method 1 -->
-                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
+                <!-- Method 2: Rogers Ratio Method -->
+                <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-white text-xs sm:text-sm">1. Rogers Ratio Method</h4>
-                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEC</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400 mb-2">วิเคราะห์อัตราส่วนก๊าซ 4 คู่</p>
+                            <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 2</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Rogers Ratio Method (IEC 60599)</h4>
                         </div>
-                        <div id="res-rogers" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
+                        <span class="text-xs text-slate-400">อัตราส่วนก๊าซ 4 คู่</span>
                     </div>
-
-                    <!-- Method 2 -->
-                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-white text-xs sm:text-sm">2. IEC 3-Ratio Method</h4>
-                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEC</span>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">C2H2 / CH4 (Ratio 1):</span>
+                                <span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 mb-2">ประเมินรหัสรหัสก๊าซมาตรฐาน</p>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">CH4 / H2 (Ratio 2):</span>
+                                <span id="rogers-r2" class="font-mono font-bold text-white text-sm">-</span>
+                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">C2H4 / C2H6 (Ratio 3):</span>
+                                <span id="rogers-r3" class="font-mono font-bold text-white text-sm">-</span>
+                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">C2H6 / C2H2 (Ratio 4):</span>
+                                <span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span>
+                            </div>
                         </div>
-                        <div id="res-iec" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
+                        <div>
+                            <span class="text-slate-400 block mb-1">การแปลผลความผิดปกติ:</span>
+                            <div id="res-rogers-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Method 3 -->
-                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
+                <!-- Method 3: IEC 3-Ratio Method -->
+                <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-white text-xs sm:text-sm">3. Doernenburg Ratio</h4>
-                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEEE</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400 mb-2">ตรวจสอบอัตราส่วนเชิงลึก</p>
+                            <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 3</span>
+                            <h4 class="font-bold text-white text-sm mt-1">IEC 3-Ratio Method (IEC Standard)</h4>
                         </div>
-                        <div id="res-doernenburg" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
+                        <span class="text-xs text-slate-400">รหัสอัตราส่วน I1, I2, I5</span>
                     </div>
-
-                    <!-- Method 4 -->
-                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-white text-xs sm:text-sm">4. Key Gas Method</h4>
-                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEEE/IEC</span>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">Ratio i1 (C2H2/CH4)</span>
+                                <span id="iec-i1" class="font-mono font-bold text-white">-</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 mb-2">ระบุชนิดก๊าซเด่นชี้วัดปัญหา</p>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">Ratio i2 (C2H4/C2H6)</span>
+                                <span id="iec-i2" class="font-mono font-bold text-white">-</span>
+                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">Ratio i5 (CH4/H2)</span>
+                                <span id="iec-i5" class="font-mono font-bold text-white">-</span>
+                            </div>
                         </div>
-                        <div id="res-keygas" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
+                        <div>
+                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC & การวินิจฉัย:</span>
+                            <div id="res-iec-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Method 5 -->
-                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between sm:col-span-2">
+                <!-- Method 4: Doernenburg Ratio Method -->
+                <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-white text-xs sm:text-sm">5. TDCG & IEEE Criteria</h4>
-                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEEE C57.104</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400 mb-2">ประเมินผลรวมก๊าซติดไฟได้และระดับความรุนแรง Condition 1-4</p>
+                            <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 4</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Doernenburg Ratio Method (IEEE C57.104)</h4>
                         </div>
-                        <div id="res-tdcg" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
+                        <span class="text-xs text-slate-400">ตรวจสอบความเข้มข้นขั้นต่ำ</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">CH4 / H2:</span>
+                                <span id="doern-r1" class="font-mono font-bold text-white">-</span>
+                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                                <span class="text-slate-400 block text-[10px]">C2H2 / C2H4:</span>
+                                <span id="doern-r2" class="font-mono font-bold text-white">-</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-1">ผลการประเมิน Doernenburg:</span>
+                            <div id="res-doern-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Method 5: Key Gas Method -->
+                <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                        <div>
+                            <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 5</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Key Gas Method (IEEE / IEC Standard)</h4>
+                        </div>
+                        <span class="text-xs text-slate-400">วิเคราะห์ก๊าซเด่นชี้บ่งปัญหา</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
+                        <div class="flex justify-between items-center bg-slate-800 p-3 rounded border border-slate-700">
+                            <span class="text-slate-300">ก๊าซที่มีความเข้มข้นเด่นที่สุด (Key Gas):</span>
+                            <span id="keygas-name" class="font-mono font-bold text-amber-400 text-sm">-</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหาในหม้อแปลง:</span>
+                            <div id="res-keygas-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Method 6: TDCG & IEEE Condition Criteria -->
+                <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                        <div>
+                            <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 6</span>
+                            <h4 class="font-bold text-white text-sm mt-1">TDCG & IEEE Condition Criteria (IEEE C57.104)</h4>
+                        </div>
+                        <span class="text-xs text-slate-400">ผลรวมก๊าซติดไฟได้ (Total Combustible Gas)</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
+                        <div class="flex justify-between items-center bg-slate-800 p-3 rounded border border-slate-700">
+                            <span class="text-slate-300">ปริมาณ TDCG รวมทั้งหมด:</span>
+                            <span id="tdcg-total-val" class="font-mono font-bold text-white text-sm">- ppm</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง (Condition 1 - 4):</span>
+                            <div id="res-tdcg-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -259,7 +340,6 @@
     <!-- DETAILED TEST POPUP MODAL -->
     <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <!-- Modal Header -->
             <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30">
@@ -275,9 +355,7 @@
                 </button>
             </div>
 
-            <!-- Modal Content -->
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
-                <!-- DGA Lab Results Table -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-vial mr-2"></i> ผลวิเคราะห์ก๊าซละลายในน้ำมันและเกณฑ์มาตรฐาน</h4>
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
@@ -290,14 +368,11 @@
                                     <th class="py-2.5 px-3">สถานะ</th>
                                 </tr>
                             </thead>
-                            <tbody id="modal-dga-tbody" class="divide-y divide-slate-700/50">
-                                <!-- JS Injected -->
-                            </tbody>
+                            <tbody id="modal-dga-tbody" class="divide-y divide-slate-700/50"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Electrical Test Results Table -->
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-bolt mr-2"></i> ผลทดสอบทางไฟฟ้าและเกณฑ์มาตรฐาน</h4>
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
@@ -310,15 +385,12 @@
                                     <th class="py-2.5 px-3">ผลสรุป</th>
                                 </tr>
                             </thead>
-                            <tbody id="modal-elec-tbody" class="divide-y divide-slate-700/50">
-                                <!-- JS Injected -->
-                            </tbody>
+                            <tbody id="modal-elec-tbody" class="divide-y divide-slate-700/50"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Modal Footer -->
             <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
                 <button onclick="closeModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-xs sm:text-sm font-medium transition">ปิดหน้าต่าง</button>
             </div>
@@ -334,7 +406,6 @@
     <script>
         const assetsData = [];
         const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
-        
         let statCounts = { normal: 0, warning: 0, critical: 0 };
 
         for (let i = 1; i <= 40; i++) {
@@ -396,7 +467,6 @@
 
         assetsData.sort((a, b) => b.rpn - a.rpn);
 
-        // Update Stat Cards on Load
         document.getElementById('stat-normal').innerText = statCounts.normal;
         document.getElementById('stat-warning').innerText = statCounts.warning;
         document.getElementById('stat-critical').innerText = statCounts.critical;
@@ -422,7 +492,6 @@
         function renderTable() {
             const tbody = document.getElementById('pm-table-body');
             tbody.innerHTML = "";
-
             const start = (currentPage - 1) * rowsPerPage;
             const end = start + rowsPerPage;
             const pageItems = filteredData.slice(start, end);
@@ -552,69 +621,105 @@
                 `;
             });
 
-            runDgaCalculations(asset.gases);
+            runDetailedDgaCalculations(asset.gases);
         }
 
-        function runDgaCalculations(g) {
-            // Rogers
+        function runDetailedDgaCalculations(g) {
+            // --- 1. Duval Triangle Calculation ---
+            let totalTri = g.ch4 + g.c2h4 + g.c2h2;
+            let p_ch4 = totalTri > 0 ? (g.ch4 / totalTri) : 0.33;
+            let p_c2h4 = totalTri > 0 ? (g.c2h4 / totalTri) : 0.33;
+            let p_c2h2 = totalTri > 0 ? (g.c2h2 / totalTri) : 0.34;
+
+            document.getElementById('duval-p-ch4').innerText = (p_ch4 * 100).toFixed(1) + '%';
+            document.getElementById('duval-p-c2h4').innerText = (p_c2h4 * 100).toFixed(1) + '%';
+            document.getElementById('duval-p-c2h2').innerText = (p_c2h2 * 100).toFixed(1) + '%';
+
+            let duvalZone = "Zone S (Normal Thermal Behaviour)";
+            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing)";
+            else if (p_c2h2 > 0.05 && p_c2h4 > 0.20) duvalZone = "Zone D2 (Discharge of Low Energy / Sparking)";
+            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C)";
+            else if (p_c2h4 > 0.20) duvalZone = "Zone T2 (Thermal Fault 300°C - 700°C)";
+            else if (p_ch4 > 0.60) duvalZone = "Zone T1 (Thermal Fault < 300°C)";
+            document.getElementById('res-duval-detail').innerText = duvalZone;
+            drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
+
+            // --- 2. Rogers Ratio Calculation ---
             let r1 = g.c2h2 / g.ch4;
             let r2 = g.ch4 / g.h2;
             let r3 = g.c2h4 / g.c2h6;
-            let rogersRes = "Normal (No fault)";
-            if (r2 > 1.0 && r3 < 1.0) rogersRes = "Low energy discharge (PD)";
-            else if (r1 > 0.1 && r3 > 1.0) rogersRes = "Thermal fault (> 700°C)";
-            else if (g.c2h2 > 35) rogersRes = "Arcing fault";
-            document.getElementById('res-rogers').innerText = rogersRes;
+            let r4 = g.c2h6 / g.c2h2;
 
-            // IEC
-            let iecRes = "Normal Condition (0 0 0)";
-            if (g.c2h2/g.ch4 > 1) iecRes = "Arc discharge";
-            else if (g.c2h4/g.c2h6 > 2) iecRes = "Thermal > 700°C";
-            document.getElementById('res-iec').innerText = iecRes;
+            document.getElementById('rogers-r1').innerText = r1.toFixed(2);
+            document.getElementById('rogers-r2').innerText = r2.toFixed(2);
+            document.getElementById('rogers-r3').innerText = r3.toFixed(2);
+            document.getElementById('rogers-r4').innerText = r4.toFixed(2);
 
-            // Doernenburg
-            let doernRes = "Normal (IEEE Limits)";
-            if (g.ch4/g.h2 > 1.0) doernRes = "Thermal decomposition";
-            document.getElementById('res-doernenburg').innerText = doernRes;
+            let rogersRes = "Normal Operation (No Fault Indicated)";
+            if (r2 > 1.0 && r3 < 1.0 && r4 > 1.0) rogersRes = "Partial Discharge (PD) with low energy density";
+            else if (r1 > 0.1 && r2 > 0.1 && r2 < 1.0 && r3 > 1.0) rogersRes = "Thermal Fault (300°C - 700°C)";
+            else if (r1 > 0.1 && r3 > 1.0) rogersRes = "Thermal Fault (> 700°C)";
+            else if (g.c2h2 > 35) rogersRes = "Arcing (High energy discharge)";
+            document.getElementById('res-rogers-detail').innerText = rogersRes;
 
-            // Key Gas
-            let keyGas = "Hydrogen (H2)";
-            let maxGas = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
-            if (maxGas === g.c2h2) keyGas = "Acetylene (C2H2) -> Arcing";
-            else if (maxGas === g.c2h4) keyGas = "Ethylene (C2H4) -> Overheating";
-            else if (maxGas === g.co) keyGas = "Carbon Monoxide (CO) -> Cellulose";
-            document.getElementById('res-keygas').innerText = keyGas;
+            // --- 3. IEC 3-Ratio Calculation ---
+            let i1 = g.c2h2 / g.ch4;
+            let i2 = g.c2h4 / g.c2h6;
+            let i5 = g.ch4 / g.h2;
 
-            // TDCG
-            let tdcgVal = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
-            let cond = "Condition 1 (Normal)";
-            if (tdcgVal > 1920) cond = "Condition 4 (Excessive)";
-            else if (tdcgVal > 720) cond = "Condition 3 (Significant)";
-            else if (tdcgVal > 460) cond = "Condition 2 (Increasing)";
-            document.getElementById('res-tdcg').innerHTML = `TDCG: <b>${tdcgVal} ppm</b> | <span class="text-industrial-400 font-bold">${cond}</span>`;
+            document.getElementById('iec-i1').innerText = i1.toFixed(2);
+            document.getElementById('iec-i2').innerText = i2.toFixed(2);
+            document.getElementById('iec-i5').innerText = i5.toFixed(2);
 
-            // Duval Triangle Calculation & Drawing
-            drawDuvalTriangle(g.ch4, g.c2h4, g.c2h2);
+            let iecRes = "Normal Condition (Code: 0 0 0)";
+            if (i1 > 1.0) iecRes = "Code [1 0 0] - Discharge of High Energy (Arcing)";
+            else if (i2 > 2.0 && i5 > 1.0) iecRes = "Code [0 2 1] - Thermal Fault > 700°C";
+            else if (i5 > 1.0) iecRes = "Code [0 0 1] - Thermal Fault < 300°C";
+            document.getElementById('res-iec-detail').innerText = iecRes;
+
+            // --- 4. Doernenburg Ratio Calculation ---
+            let d1 = g.ch4 / g.h2;
+            let d2 = g.c2h2 / g.c2h4;
+            document.getElementById('doern-r1').innerText = d1.toFixed(2);
+            document.getElementById('doern-r2').innerText = d2.toFixed(2);
+
+            let doernRes = "Normal (Within IEEE Recommended Limits)";
+            if (d1 > 1.0 && d2 < 0.5) doernRes = "Thermal Decomposition of Oil";
+            else if (d2 > 1.0) doernRes = "Arcing Fault / Sparking Discharge";
+            document.getElementById('res-doern-detail').innerText = doernRes;
+
+            // --- 5. Key Gas Method ---
+            let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
+            let keyName = "Hydrogen (H2)";
+            let keyDesc = "Corona / Partial Discharge in oil";
+            if (maxGasVal === g.c2h2) { keyName = "Acetylene (C2H2)"; keyDesc = "Severe Arcing or High Energy Sparking"; }
+            else if (maxGasVal === g.c2h4) { keyName = "Ethylene (C2H4)"; keyDesc = "Severe Thermal Overheating (> 700°C)"; }
+            else if (maxGasVal === g.co) { keyName = "Carbon Monoxide (CO)"; keyDesc = "Cellulose Insulation Degradation (Paper/Pressboard)"; }
+            else if (maxGasVal === g.ch4) { keyName = "Methane (CH4)"; keyDesc = "Low Temperature Oil Overheating (< 300°C)"; }
+
+            document.getElementById('keygas-name').innerText = keyName;
+            document.getElementById('res-keygas-detail').innerText = keyDesc;
+
+            // --- 6. TDCG & IEEE Condition ---
+            let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
+            document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
+
+            let tdcgCond = "Condition 1 (Normal: TDCG < 720 ppm)";
+            if (tdcg > 1920) tdcgCond = "Condition 4 (Excessive Deterioration - Immediate Action Required)";
+            else if (tdcg > 720) tdcgCond = "Condition 3 (Significant Gassing - Increase Sampling Frequency)";
+            else if (tdcg > 460) tdcgCond = "Condition 2 (Increasing Gassing Rate - Monitor Closely)";
+            document.getElementById('res-tdcg-detail').innerText = tdcgCond;
         }
 
-        // Duval Triangle Canvas Drawer
-        function drawDuvalTriangle(ch4, c2h4, c2h2) {
+        function drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2) {
             const canvas = document.getElementById('duvalCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const total = ch4 + c2h4 + c2h2;
-            let p_ch4 = total > 0 ? (ch4 / total) : 0.33;
-            let p_c2h4 = total > 0 ? (c2h4 / total) : 0.33;
-            let p_c2h2 = total > 0 ? (c2h2 / total) : 0.34;
+            const A = { x: 110, y: 15 };
+            const B = { x: 205, y: 185 };
+            const C = { x: 15, y: 185 };
 
-            // Triangle vertices on canvas (Width=280, Height=260)
-            // A (Top), B (Bottom-Right), C (Bottom-Left)
-            const A = { x: 140, y: 20 };
-            const B = { x: 250, y: 230 };
-            const C = { x: 30, y: 230 };
-
-            // Draw Triangle background & grid zones
             ctx.strokeStyle = '#f97316';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -626,46 +731,32 @@
             ctx.fill();
             ctx.stroke();
 
-            // Zone dividers (Simulated Duval Triangle layout)
             ctx.strokeStyle = '#475569';
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(140, 20); ctx.lineTo(140, 230); // Center divider
-            ctx.moveTo(85, 125); ctx.lineTo(195, 125); // Cross divider
+            ctx.moveTo(110, 15); ctx.lineTo(110, 185);
+            ctx.moveTo(60, 100); ctx.lineTo(160, 100);
             ctx.stroke();
 
-            // Labels
             ctx.fillStyle = '#94a3b8';
-            ctx.font = '10px sans-serif';
-            ctx.fillText('CH4', A.x - 10, A.y - 8);
-            ctx.fillText('C2H4', B.x + 5, B.y + 12);
-            ctx.fillText('C2H2', C.x - 30, C.y + 12);
+            ctx.font = '9px sans-serif';
+            ctx.fillText('CH4', A.x - 10, A.y - 5);
+            ctx.fillText('C2H4', B.x + 5, B.y + 10);
+            ctx.fillText('C2H2', C.x - 25, C.y + 10);
 
-            // Compute point coordinates using barycentric coordinates
-            // p_c2h4 corresponds to vertex A, p_c2h2 to B, p_ch4 to C (Standard Duval 1)
+            // Barycentric mapping (Duval 1: A=C2H4, B=C2H2, C=CH4)
             let px = p_c2h4 * A.x + p_c2h2 * B.x + p_ch4 * C.x;
             let py = p_c2h4 * A.y + p_c2h2 * B.y + p_ch4 * C.y;
 
-            // Draw Point
             ctx.fillStyle = '#ef4444';
             ctx.beginPath();
-            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.arc(px, py, 5, 0, Math.PI * 2);
             ctx.fill();
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
-
-            // Determine Zone text
-            let zone = "Zone S (Normal Thermal)";
-            if (p_c2h2 > 0.2) zone = "Zone D1 (High Energy Discharge / Arcing)";
-            else if (p_c2h4 > 0.5) zone = "Zone T3 (Thermal Fault > 700°C)";
-            else if (p_ch4 > 0.6) zone = "Zone T1 (Thermal Fault < 300°C)";
-            else if (p_c2h4 > 0.3) zone = "Zone T2 (Thermal Fault 300-700°C)";
-
-            document.getElementById('duval-zone-text').innerText = zone;
         }
 
-        // Initial render
         renderTable();
     </script>
 </body>
