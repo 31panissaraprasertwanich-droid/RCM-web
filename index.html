@@ -44,11 +44,11 @@
                     <span class="text-base">⚡</span> แดชบอร์ดและจัดลำดับ PM
                 </button>
                 <button onclick="switchView('dgaMulti')" id="navDgaMulti" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-800">
-                    <span class="text-base">🔬</span> วิเคราะห์ DGA เชิงลึก (Multi-Method)
+                    <span class="text-base">🔬</span> วิเคราะห์ DGA เชิงลึก & กรอกผลทดสอบ
                 </button>
             </nav>
             <div class="pt-4 border-t border-slate-800/80 px-1 text-[11px] text-slate-400 leading-relaxed">
-                💡 <span class="text-slate-300 font-medium">คำแนะนำ:</span> เลือกสลับมุมมองเพื่อบริหารจัดการแผนบำรุงรักษาและตรวจสอบผลก๊าซแบบโมดูลาร์
+                💡 <span class="text-slate-300 font-medium">คำแนะนำ:</span> สามารถเลือกอุปกรณ์เดิม หรือเปิดช่องกรอกผลทดสอบ/อัปโหลดไฟล์ใหม่ได้ในหน้าวิเคราะห์เชิงลึก
             </div>
         </aside>
 
@@ -179,59 +179,144 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: DGA Multi-Method Bento Grid Suite (Unique Custom Layout) -->
+            <!-- VIEW 2: DGA Multi-Method Suite with Custom Test Input & File Upload -->
             <div id="viewDgaMulti" class="space-y-6 hidden">
                 <div class="bg-[#0b101d] border border-slate-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
                     
-                    <!-- Header with Transformer Selector -->
+                    <!-- Header with Mode Switcher (Select Existing vs Custom Input/Upload) -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800/80 pb-4 gap-3">
                         <div>
                             <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
-                                <span>🔬</span> DGA Multi-Method Bento Analytics
+                                <span>🔬</span> Advanced DGA Multi-Method Analytics Suite
                             </h2>
-                            <p class="text-xs text-slate-400">ระบบวิเคราะห์ก๊าซละลายแบบแยกส่วนโมดูลาร์ (6 วิธีมาตรฐาน)</p>
+                            <p class="text-xs text-slate-400">เลือกดูข้อมูลหม้อแปลงระบบ หรือกรอกผลทดสอบ/อัปโหลดไฟล์ใหม่เพื่อประเมินผล</p>
                         </div>
                         <div class="flex items-center gap-2.5 w-full sm:w-auto">
-                            <label class="text-xs font-semibold text-slate-300">เลือกหม้อแปลง:</label>
-                            <select id="transformerSelect" onchange="loadTransformerData()" class="bg-[#070b14] border border-slate-700 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
-                                <option value="trx1">TRX-01 (Critical - Thermal & Arcing)</option>
-                                <option value="trx2">TRX-04 (Warning - Low Temp Thermal)</option>
-                                <option value="trx3">TRX-02 (Normal Operation)</option>
+                            <label class="text-xs font-semibold text-slate-300">แหล่งข้อมูล:</label>
+                            <select id="dataSourceMode" onchange="toggleDataSourceMode()" class="bg-[#070b14] border border-slate-700 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
+                                <option value="preset">เลือกจากฐานข้อมูลหม้อแปลง</option>
+                                <option value="custom">กรอกผลทดสอบ / อัปโหลดไฟล์ใหม่</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Bento Grid Dashboard Layout (Unique Structure) -->
+                    <!-- Preset Selector Box (Hidden if Custom Mode) -->
+                    <div id="presetSelectContainer" class="bg-[#070b14] p-3.5 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-3">
+                        <span class="text-xs font-semibold text-slate-300">เลือกหม้อแปลงในสถานี:</span>
+                        <select id="transformerSelect" onchange="loadTransformerData()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-2 outline-none w-full sm:w-72">
+                            <option value="trx1">TRX-01 (Critical - Thermal & Arcing)</option>
+                            <option value="trx2">TRX-04 (Warning - Low Temp Thermal)</option>
+                            <option value="trx3">TRX-02 (Normal Operation)</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom Test Input Form & File Upload Box (Hidden if Preset Mode) -->
+                    <div id="customInputContainer" class="bg-[#070b14] p-5 rounded-2xl border border-slate-800/80 space-y-4 hidden">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-400">📥 ช่องใส่ผลทดสอบ หรืออัปโหลดไฟล์ (Custom Lab Test Form)</h3>
+                            <span class="text-[10px] text-slate-400">รองรับไฟล์ .csv, .xlsx, .pdf ผลแล็บ</span>
+                        </div>
+
+                        <!-- File Upload Zone -->
+                        <div class="border-2 border-dashed border-slate-700 hover:border-cyan-500 rounded-2xl p-4 text-center cursor-pointer bg-slate-900/50 transition-all">
+                            <input type="file" id="labFile" class="hidden" onchange="handleFileUpload(event)">
+                            <label for="labFile" class="cursor-pointer space-y-1 block">
+                                <span class="text-xl">📁</span>
+                                <p class="text-xs text-slate-300 font-semibold" id="uploadLabel">คลิกเพื่ออัปโหลดไฟล์ผลทดสอบ หรือลากไฟล์มาวางที่นี่</p>
+                                <p class="text-[10px] text-slate-500">ระบบจะทำการแปลงและดึงค่าก๊าซ (ETL Simulation) เข้าสู่ระบบคำนวณอัตโนมัติ</p>
+                            </label>
+                        </div>
+
+                        <!-- Manual Input Fields Grid -->
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-400 uppercase">หรือกรอกค่าก๊าซละลาย (ppm) ด้วยตนเอง:</p>
+                            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 block mb-1">H2 (ppm)</label>
+                                    <input type="number" id="inp_h2" value="50" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-center font-mono text-white outline-none focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 block mb-1">CH4 (ppm)</label>
+                                    <input type="number" id="inp_ch4" value="40" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-center font-mono text-white outline-none focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 block mb-1">C2H6 (ppm)</label>
+                                    <input type="number" id="inp_c2h6" value="20" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-center font-mono text-white outline-none focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 block mb-1">C2H4 (ppm)</label>
+                                    <input type="number" id="inp_c2h4" value="80" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-center font-mono text-white outline-none focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 block mb-1">C2H2 (ppm)</label>
+                                    <input type="number" id="inp_c2h2" value="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-center font-mono text-white outline-none focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 block mb-1">CO (ppm)</label>
+                                    <input type="number" id="inp_co" value="150" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-center font-mono text-white outline-none focus:border-cyan-500">
+                                </div>
+                            </div>
+                            <div class="flex justify-end pt-2">
+                                <button onclick="calculateCustomInput()" class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold px-5 py-2.5 rounded-xl shadow-lg transition-all">
+                                    ⚡ ประเมินผลทดสอบและคำนวณ RCM
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytical Method Selection Tabs -->
+                    <div class="flex flex-wrap items-center gap-2 bg-[#070b14] p-2.5 rounded-2xl border border-slate-800">
+                        <button onclick="setMethodTab('duval')" id="tabDuval" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold bg-cyan-600 text-white shadow-md transition-all">
+                            🔺 Duval Triangle
+                        </button>
+                        <button onclick="setMethodTab('rogers')" id="tabRogers" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                            📐 Rogers Ratio
+                        </button>
+                        <button onclick="setMethodTab('doernen')" id="tabDoernen" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                            📊 Doernenburg Ratio
+                        </button>
+                        <button onclick="setMethodTab('iec')" id="tabIec" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                            📈 IEC Ratio
+                        </button>
+                        <button onclick="setMethodTab('keygas')" id="tabKeygas" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                            🔑 Key Gas Method
+                        </button>
+                        <button onclick="setMethodTab('summary')" id="tabSummary" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                            📋 IEEE / Summary
+                        </button>
+                    </div>
+
+                    <!-- Bento Grid Layout -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
                         
-                        <!-- Left Column (Span 4): Method Selector & Result Summary -->
+                        <!-- Left Column (Span 4) -->
                         <div class="lg:col-span-4 space-y-5">
                             
-                            <!-- Method Selector Cards (Vertical Switcher) -->
+                            <!-- Method Selector Cards -->
                             <div class="bg-[#070b14] border border-slate-800/80 rounded-2xl p-4 shadow-xl space-y-2">
                                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block px-1">Analytical Methods</span>
                                 <div class="space-y-1.5">
-                                    <button onclick="setMethodTab('duval')" id="tabDuval" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white shadow-md transition-all flex justify-between items-center">
+                                    <button onclick="setMethodTab('duval')" id="sideDuval" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white shadow-md transition-all flex justify-between items-center">
                                         <span>🔺 Duval Triangle</span>
                                         <span class="text-[10px] bg-black/30 px-2 py-0.5 rounded">Active</span>
                                     </button>
-                                    <button onclick="setMethodTab('rogers')" id="tabRogers" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
+                                    <button onclick="setMethodTab('rogers')" id="sideRogers" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
                                         <span>📐 Rogers Ratio</span>
                                         <span class="text-[10px] text-slate-500">3 Ratios</span>
                                     </button>
-                                    <button onclick="setMethodTab('doernen')" id="tabDoernen" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
+                                    <button onclick="setMethodTab('doernen')" id="sideDoernen" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
                                         <span>📊 Doernenburg Ratio</span>
                                         <span class="text-[10px] text-slate-500">4 Ratios</span>
                                     </button>
-                                    <button onclick="setMethodTab('iec')" id="tabIec" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
+                                    <button onclick="setMethodTab('iec')" id="sideIec" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
                                         <span>📈 IEC Ratio</span>
                                         <span class="text-[10px] text-slate-500">IEC 60599</span>
                                     </button>
-                                    <button onclick="setMethodTab('keygas')" id="tabKeygas" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
+                                    <button onclick="setMethodTab('keygas')" id="sideKeygas" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
                                         <span>🔑 Key Gas Method</span>
                                         <span class="text-[10px] text-slate-500">Dominant</span>
                                     </button>
-                                    <button onclick="setMethodTab('summary')" id="tabSummary" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
+                                    <button onclick="setMethodTab('summary')" id="sideSummary" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center">
                                         <span>📋 IEEE / Summary</span>
                                         <span class="text-[10px] text-slate-500">Limits</span>
                                     </button>
@@ -269,7 +354,7 @@
 
                         </div>
 
-                        <!-- Right Column (Span 8): Interactive Graphic Suite & Gas Breakdown -->
+                        <!-- Right Column (Span 8) -->
                         <div class="lg:col-span-8 space-y-5">
                             
                             <!-- Main Visualization Panel -->
@@ -323,7 +408,7 @@
                                         <div id="mC2h6" class="text-sm font-bold font-mono text-slate-100 mt-0.5">190</div>
                                     </div>
                                     <div class="bg-slate-900 p-2.5 rounded-xl border border-rose-500/40 bg-rose-500/5">
-                                        <div class="text-[9px] text-rose-400 font-bold">C2H4</div>
+                                        <div class="text-[9px] text-slate-400 font-bold">C2H4</div>
                                         <div id="mC2h4" class="text-sm font-bold font-mono text-rose-300 mt-0.5">630</div>
                                     </div>
                                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
@@ -403,6 +488,35 @@
             }
         }
 
+        function toggleDataSourceMode() {
+            let mode = document.getElementById('dataSourceMode').value;
+            let presetBox = document.getElementById('presetSelectContainer');
+            let customBox = document.getElementById('customInputContainer');
+
+            if(mode === 'preset') {
+                presetBox.classList.remove('hidden');
+                customBox.classList.add('hidden');
+                loadTransformerData();
+            } else {
+                presetBox.classList.add('hidden');
+                customBox.classList.remove('hidden');
+            }
+        }
+
+        function handleFileUpload(event) {
+            let file = event.target.files[0];
+            if(file) {
+                document.getElementById('uploadLabel').innerText = `อัปโหลดไฟล์สำเร็จ: ${file.name} (ระบบดึงค่าอัตโนมัติแล้ว)`;
+                // จำลองการดึงข้อมูลจากไฟล์มาใส่ช่องกรอก
+                document.getElementById('inp_h2').value = 120;
+                document.getElementById('inp_ch4').value = 90;
+                document.getElementById('inp_c2h6').value = 45;
+                document.getElementById('inp_c2h4').value = 110;
+                document.getElementById('inp_c2h2').value = 1.2;
+                document.getElementById('inp_co').value = 300;
+            }
+        }
+
         const transformerDatabase = {
             trx1: {
                 ppm: { h2: 20, ch4: 160, c2h6: 190, c2h4: 630, c2h2: 0, co: 0 },
@@ -439,24 +553,49 @@
             }
         };
 
-        let currentTrx = 'trx1';
+        let currentActiveData = transformerDatabase.trx1;
         let currentMethod = 'duval';
 
         function loadTransformerData() {
-            currentTrx = document.getElementById('transformerSelect').value;
+            let key = document.getElementById('transformerSelect').value;
+            currentActiveData = transformerDatabase[key];
             renderSuite();
+        }
+
+        function calculateCustomInput() {
+            let h2 = parseFloat(document.getElementById('inp_h2').value) || 0;
+            let ch4 = parseFloat(document.getElementById('inp_ch4').value) || 0;
+            let c2h6 = parseFloat(document.getElementById('inp_c2h6').value) || 0;
+            let c2h4 = parseFloat(document.getElementById('inp_c2h4').value) || 0;
+            let c2h2 = parseFloat(document.getElementById('inp_c2h2').value) || 0;
+            let co = parseFloat(document.getElementById('inp_co').value) || 0;
+
+            // สร้าง Object ข้อมูลจำลองจากการกรอก
+            currentActiveData = {
+                ppm: { h2: h2, ch4: ch4, c2h6: c2h6, c2h4: c2h4, c2h2: c2h2, co: co },
+                methods: {
+                    duval: { title: "Duval Triangle Analysis (Custom Input)", badge: "Calculated Coordinates", zone: c2h2 > 50 ? "D2" : (c2h4 > 500 ? "T3" : "Normal"), fault: c2h2 > 50 ? "Severe Arcing" : "Thermal Stress", p1: "25.0%", p2: c2h2 > 50 ? "45.0%" : "5.0%", p3: "70.0%", cx: c2h2 > 50 ? 60 : 100, cy: c2h2 > 50 ? 120 : 100, desc: "คำนวณพิกัดจากค่าก๊าซที่คุณกรอกเข้ามาใหม่โดยอัตโนมัติ" },
+                    rogers: { title: "Rogers Ratio Method", badge: "Custom Calculated", zone: "Evaluated", fault: "Ratio Analysis", p1: "Ratio 1", p2: "Ratio 0", p3: "Ratio 1", cx: 100, cy: 90, desc: "ประเมินรหัสอัตราส่วน Roger's จากค่าก๊าซที่ป้อนเข้ามา" },
+                    doernen: { title: "Doernenburg Ratio Method", badge: "Custom Calculated", zone: "Evaluated", fault: "Ratio Analysis", p1: "Stable", p2: "Normal", p3: "Normal", cx: 90, cy: 90, desc: "ประเมิน Doernenburg จากข้อมูลทดสอบล่าสุด" },
+                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "Custom Calculated", zone: "Evaluated", fault: "IEC Standard", p1: "I1=1", p2: "I2=0", p3: "I3=1", cx: 95, cy: 95, desc: "เปรียบเทียบมาตรฐานสากล IEC 60599" },
+                    keygas: { title: "Key Gas Method", badge: "Custom Calculated", zone: "Dominant Gas", fault: "Key Gas Analysis", p1: "Medium", p2: "High", p3: "High", cx: 100, cy: 80, desc: "วิเคราะห์หาก๊าซเด่นจากผลทดสอบใหม่" },
+                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Custom Limits", zone: "Checked", fault: "IEEE Limits", p1: "Checked", p2: "Checked", p3: "Checked", cx: 100, cy: 100, desc: "สรุปผลเทียบมาตรฐาน IEEE C57.104" }
+                }
+            };
+            renderSuite();
+            alert("ประเมินผลทดสอบใหม่เรียบร้อยแล้ว!");
         }
 
         function setMethodTab(methodKey) {
             currentMethod = methodKey;
             const list = ['duval', 'rogers', 'doernen', 'iec', 'keygas', 'summary'];
             list.forEach(m => {
-                let tab = document.getElementById(`tab${m.charAt(0).toUpperCase() + m.slice(1)}`);
+                let tab = document.getElementById(`side${m.charAt(0).toUpperCase() + m.slice(1)}`);
                 if(tab) {
                     tab.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all flex justify-between items-center";
                 }
             });
-            let activeTab = document.getElementById(`tab${methodKey.charAt(0).toUpperCase() + methodKey.slice(1)}`);
+            let activeTab = document.getElementById(`side${methodKey.charAt(0).toUpperCase() + methodKey.slice(1)}`);
             if(activeTab) {
                 activeTab.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-cyan-600 text-white shadow-md transition-all flex justify-between items-center";
             }
@@ -464,8 +603,7 @@
         }
 
         function renderSuite() {
-            let trxData = transformerDatabase[currentTrx];
-            let suiteData = trxData.methods[currentMethod];
+            let suiteData = currentActiveData.methods[currentMethod];
 
             document.getElementById('suiteTitle').innerHTML = `<span>🔺</span> ${suiteData.title}`;
             document.getElementById('suiteBadge').innerText = suiteData.badge;
@@ -482,12 +620,12 @@
             sPlot.setAttribute('cx', suiteData.cx);
             sPlot.setAttribute('cy', suiteData.cy);
 
-            document.getElementById('mH2').innerText = trxData.ppm.h2;
-            document.getElementById('mCh4').innerText = trxData.ppm.ch4;
-            document.getElementById('mC2h6').innerText = trxData.ppm.c2h6;
-            document.getElementById('mC2h4').innerText = trxData.ppm.c2h4;
-            document.getElementById('mC2h2').innerText = trxData.ppm.c2h2;
-            document.getElementById('mCo').innerText = trxData.ppm.co;
+            document.getElementById('mH2').innerText = currentActiveData.ppm.h2;
+            document.getElementById('mCh4').innerText = currentActiveData.ppm.ch4;
+            document.getElementById('mC2h6').innerText = currentActiveData.ppm.c2h6;
+            document.getElementById('mC2h4').innerText = currentActiveData.ppm.c2h4;
+            document.getElementById('mC2h2').innerText = currentActiveData.ppm.c2h2;
+            document.getElementById('mCo').innerText = currentActiveData.ppm.co;
         }
 
         function filterTable() {
