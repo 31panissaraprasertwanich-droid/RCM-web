@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (เรียงตาม RPN)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Industrial Theme)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,17 +32,17 @@
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="bg-industrial-dark border-b border-industrial-700/50 px-6 py-4 flex justify-between items-center shadow-lg">
+    <header class="bg-industrial-dark border-b border-industrial-700/50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg">
         <div class="flex items-center space-x-3">
             <div class="bg-industrial-600 p-2.5 rounded-lg text-white shadow-md shadow-industrial-600/30">
                 <i class="fa-solid fa-industry text-xl"></i>
             </div>
             <div>
-                <h1 class="text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงไฟฟ้าและ GIS (จัดเรียงตามค่า RPN)</p>
+                <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (40 อุปกรณ์)</p>
             </div>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4 self-end sm:self-center">
             <span class="px-3 py-1 bg-industrial-900/80 border border-industrial-700 text-industrial-400 text-xs rounded-full font-medium">
                 <i class="fa-solid fa-circle text-emerald-500 text-[10px] mr-1 animate-pulse"></i> ระบบพร้อมใช้งาน
             </span>
@@ -50,56 +50,97 @@
     </header>
 
     <!-- Navigation Tabs -->
-    <nav class="bg-slate-800/80 border-b border-slate-700 px-6 flex space-x-4">
-        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-5 border-b-2 font-medium text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2">
+    <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto">
+        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
-            <span>ตารางการเข้าทำ PM (เรียงตาม RPN)</span>
+            <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
-        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
-            <span>แท็บคำนวณ DGA (6 วิธีมาตรฐาน)</span>
+            <span>แท็บ DGA (6 วิธี & สามเหลี่ยม)</span>
         </button>
     </nav>
 
     <!-- Main Container -->
-    <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
+    <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
         <!-- TAB 1: PM SCHEDULE -->
         <section id="tab-pm-schedule" class="space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
-                <div>
-                    <h2 class="text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule - RPN Sorted)</h2>
-                    <p class="text-xs text-slate-400">เรียงลำดับอุปกรณ์ 40 ตัวตามค่าความเสี่ยง RPN (สูงไปต่ำ) หน้าละ 10 อุปกรณ์</p>
+            <!-- Summary Statistic Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">อุปกรณ์ทั้งหมด</p>
+                        <h3 id="stat-total" class="text-2xl font-bold text-white mt-1">40</h3>
+                    </div>
+                    <div class="bg-blue-500/10 text-blue-400 p-3 rounded-lg border border-blue-500/20">
+                        <i class="fa-solid fa-server text-lg"></i>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3 w-full md:w-auto">
-                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ชื่ออุปกรณ์..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full md:w-64">
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">ปกติ (Normal)</p>
+                        <h3 id="stat-normal" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
+                    </div>
+                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-lg border border-emerald-500/20">
+                        <i class="fa-solid fa-circle-check text-lg"></i>
+                    </div>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">เฝ้าระวัง (Warning)</p>
+                        <h3 id="stat-warning" class="text-2xl font-bold text-amber-400 mt-1">0</h3>
+                    </div>
+                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-lg border border-amber-500/20">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">วิกฤต (Critical)</p>
+                        <h3 id="stat-critical" class="text-2xl font-bold text-rose-400 mt-1">0</h3>
+                    </div>
+                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-lg border border-rose-500/20">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search & Title Bar -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                <div>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
+                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปต่ำ (หน้าละ 10 รายการ)</p>
+                </div>
+                <div class="w-full sm:w-auto">
+                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ตำแหน่ง..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
                 </div>
             </div>
 
             <!-- Table Card -->
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
+                    <table class="w-full text-left border-collapse text-sm min-w-[700px]">
                         <thead>
                             <tr class="bg-slate-900/70 text-slate-400 uppercase text-xs tracking-wider border-b border-slate-700">
                                 <th class="py-3.5 px-4 font-semibold">รหัสอุปกรณ์</th>
                                 <th class="py-3.5 px-4 font-semibold">ประเภท</th>
                                 <th class="py-3.5 px-4 font-semibold">ตำแหน่ง</th>
                                 <th class="py-3.5 px-4 font-semibold">Health Index</th>
-                                <th class="py-3.5 px-4 font-semibold text-industrial-400">ค่า RPN (ความเสี่ยง)</th>
+                                <th class="py-3.5 px-4 font-semibold text-industrial-400">ค่า RPN</th>
                                 <th class="py-3.5 px-4 font-semibold">PM รอบถัดไป</th>
-                                <th class="py-3.5 px-4 font-semibold">สถานะความเสี่ยง</th>
-                                <th class="py-3.5 px-4 font-semibold text-center">การจัดการ</th>
+                                <th class="py-3.5 px-4 font-semibold">สถานะ</th>
+                                <th class="py-3.5 px-4 font-semibold text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="pm-table-body" class="divide-y divide-slate-700/50">
-                            <!-- JS will inject rows here -->
+                            <!-- JS will inject rows -->
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination Footer -->
-                <div class="bg-slate-900/60 px-6 py-4 flex flex-col md:flex-row justify-between items-center border-t border-slate-700 gap-4">
+                <div class="bg-slate-900/60 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center border-t border-slate-700 gap-4">
                     <span id="pagination-info" class="text-xs text-slate-400">แสดง 1 ถึง 10 จากทั้งหมด 40 รายการ</span>
                     <div class="flex space-x-1" id="pagination-controls">
                         <!-- JS will inject pagination buttons -->
@@ -108,101 +149,107 @@
             </div>
         </section>
 
-        <!-- TAB 2: DGA CALCULATOR (6 METHODS) -->
+        <!-- TAB 2: DGA CALCULATOR (6 METHODS + DUVAL TRIANGLE) -->
         <section id="tab-dga-calc" class="space-y-6 hidden">
-            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายในน้ำมันหม้อแปลงและอุปกรณ์ (DGA 6 วิธี)</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดึงค่าก๊าซจริงมาประมวลผลผ่านวิธีมาตรฐานสากล (สูตรอ่านง่าย ชัดเจน)</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลาย (DGA 6 วิธี & สามเหลี่ยมดิววัล)</h2>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อจำลองการวิเคราะห์และแสดงผลภาพสามเหลี่ยมมาตรฐานสากล</p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <label class="text-sm font-medium text-slate-300">เลือกอุปกรณ์:</label>
-                    <select id="dga-device-select" onchange="onDgaDeviceChange()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือก:</label>
+                    <select id="dga-device-select" onchange="onDgaDeviceChange()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
                         <!-- Populated by JS -->
                     </select>
                 </div>
             </div>
 
-            <!-- Gas Input Display Card -->
-            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg">
-                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซปัจจุบันที่วิเคราะห์ได้ (ppm)</h3>
+            <!-- Gas Input Values Grid -->
+            <div class="bg-slate-800 rounded-xl p-4 sm:p-5 border border-slate-700 shadow-lg">
+                <h3 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซปัจจุบันที่ตรวจวัดได้ (ppm)</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container">
-                    <!-- Dynamic Gas Displays -->
+                    <!-- Dynamic Gas Cards -->
                 </div>
             </div>
 
-            <!-- 6 Methods Output Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Method 1 -->
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-white text-sm">1. Rogers Ratio Method</h4>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC 60599</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mb-4">วิเคราะห์อัตราส่วนก๊าซ 4 ตัว (C2H2/CH4, CH4/H2, C2H4/C2H6, C2H6/C2H2)</p>
+            <!-- Duval Triangle Visualizer & Main Methods Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Duval Triangle Canvas Card (4 cols) -->
+                <div class="lg:col-span-5 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col items-center justify-between shadow-lg">
+                    <div class="w-full flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-white text-sm"><i class="fa-solid fa-triangle text-industrial-500 mr-2"></i> Duval Triangle (IEC 60599)</h4>
+                        <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded">Visualizer</span>
                     </div>
-                    <div id="res-rogers" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                    <div class="relative w-full flex justify-center my-2">
+                        <canvas id="duvalCanvas" width="280" height="260" class="bg-slate-900 rounded-lg border border-slate-700 shadow-inner"></canvas>
+                    </div>
+                    <div class="w-full mt-2 bg-slate-900 p-3 rounded-lg border border-slate-700 text-center">
+                        <span class="text-xs text-slate-400">พิกัดโซนความผิดปกติ:</span>
+                        <div id="duval-zone-text" class="text-sm font-bold text-industrial-400 mt-0.5">-</div>
+                    </div>
                 </div>
 
-                <!-- Method 2 -->
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-white text-sm">2. Duval Triangle Method</h4>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC 60599</span>
+                <!-- Right: Other 5 Methods Grid (7 cols) -->
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Method 1 -->
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-white text-xs sm:text-sm">1. Rogers Ratio Method</h4>
+                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEC</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mb-2">วิเคราะห์อัตราส่วนก๊าซ 4 คู่</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">สามเหลี่ยมเปอร์เซ็นต์ก๊าซ (CH4, C2H4, C2H2) หาจุดความผิดปกติ</p>
+                        <div id="res-rogers" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
                     </div>
-                    <div id="res-duval" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
-                </div>
 
-                <!-- Method 3 -->
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-white text-sm">3. IEC 3-Ratio Method</h4>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC Standard</span>
+                    <!-- Method 2 -->
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-white text-xs sm:text-sm">2. IEC 3-Ratio Method</h4>
+                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEC</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mb-2">ประเมินรหัสรหัสก๊าซมาตรฐาน</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">ใช้รหัสอัตราส่วนประเมินความผิดปกติหลักตามมาตรฐาน IEC</p>
+                        <div id="res-iec" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
                     </div>
-                    <div id="res-iec" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
-                </div>
 
-                <!-- Method 4 -->
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-white text-sm">4. Doernenburg Ratio Method</h4>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEEE Std C57.104</span>
+                    <!-- Method 3 -->
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-white text-xs sm:text-sm">3. Doernenburg Ratio</h4>
+                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEEE</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mb-2">ตรวจสอบอัตราส่วนเชิงลึก</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">วิเคราะห์อัตราส่วนก๊าซ 4 คู่ พร้อมเกณฑ์ความเข้มข้นขั้นต่ำ</p>
+                        <div id="res-doernenburg" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
                     </div>
-                    <div id="res-doernenburg" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
-                </div>
 
-                <!-- Method 5 -->
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-white text-sm">5. Key Gas Method</h4>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEEE / IEC</span>
+                    <!-- Method 4 -->
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-white text-xs sm:text-sm">4. Key Gas Method</h4>
+                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEEE/IEC</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mb-2">ระบุชนิดก๊าซเด่นชี้วัดปัญหา</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">ระบุชนิดความผิดปกติจากก๊าซเด่นที่เป็นตัวบ่งชี้หลัก</p>
+                        <div id="res-keygas" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
                     </div>
-                    <div id="res-keygas" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
-                </div>
 
-                <!-- Method 6 -->
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-white text-sm">6. TDCG & IEEE Criteria</h4>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEEE C57.104 Condition</span>
+                    <!-- Method 5 -->
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col justify-between sm:col-span-2">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-white text-xs sm:text-sm">5. TDCG & IEEE Criteria</h4>
+                                <span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">IEEE C57.104</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mb-2">ประเมินผลรวมก๊าซติดไฟได้และระดับความรุนแรง Condition 1-4</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">ประเมินผลรวมก๊าซติดไฟได้ (TDCG) และระดับความรุนแรง Condition 1-4</p>
+                        <div id="res-tdcg" class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 text-xs font-medium text-industrial-400">-</div>
                     </div>
-                    <div id="res-tdcg" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
                 </div>
             </div>
         </section>
@@ -210,16 +257,16 @@
     </main>
 
     <!-- DETAILED TEST POPUP MODAL -->
-    <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <!-- Modal Header -->
-            <div class="bg-slate-900 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+            <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30">
                         <i class="fa-solid fa-file-waveform"></i>
                     </div>
                     <div>
-                        <h3 id="modal-title" class="font-bold text-white text-base">ผลทดสอบเชิงลึก (Detailed Test Results)</h3>
+                        <h3 id="modal-title" class="font-bold text-white text-sm sm:text-base">ผลทดสอบเชิงลึก</h3>
                         <p id="modal-subtitle" class="text-xs text-slate-400">อุปกรณ์: -</p>
                     </div>
                 </div>
@@ -229,22 +276,22 @@
             </div>
 
             <!-- Modal Content -->
-            <div class="p-6 overflow-y-auto space-y-6 flex-1">
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
                 <!-- DGA Lab Results Table -->
                 <div>
-                    <h4 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-vial mr-2"></i> ผลวิเคราะห์ก๊าซละลายในน้ำมัน (DGA Lab Results & Standards Criteria)</h4>
-                    <div class="border border-slate-700 rounded-xl overflow-hidden">
-                        <table class="w-full text-left text-xs">
+                    <h4 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-vial mr-2"></i> ผลวิเคราะห์ก๊าซละลายในน้ำมันและเกณฑ์มาตรฐาน</h4>
+                    <div class="border border-slate-700 rounded-xl overflow-x-auto">
+                        <table class="w-full text-left text-xs min-w-[500px]">
                             <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
                                 <tr>
-                                    <th class="py-2.5 px-4">ชนิดก๊าซ</th>
-                                    <th class="py-2.5 px-4">ค่าที่ตรวจวัดได้ (ppm)</th>
-                                    <th class="py-2.5 px-4">มาตรฐานอ้างอิง (IEEE / IEC Limit)</th>
-                                    <th class="py-2.5 px-4">สถานะประเมิน</th>
+                                    <th class="py-2.5 px-3">ชนิดก๊าซ</th>
+                                    <th class="py-2.5 px-3">ค่าตรวจวัด (ppm)</th>
+                                    <th class="py-2.5 px-3">มาตรฐานอ้างอิง (Limit)</th>
+                                    <th class="py-2.5 px-3">สถานะ</th>
                                 </tr>
                             </thead>
                             <tbody id="modal-dga-tbody" class="divide-y divide-slate-700/50">
-                                <!-- Populated by JS -->
+                                <!-- JS Injected -->
                             </tbody>
                         </table>
                     </div>
@@ -252,19 +299,19 @@
 
                 <!-- Electrical Test Results Table -->
                 <div>
-                    <h4 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-bolt mr-2"></i> ผลทดสอบทางไฟฟ้า (Electrical Test Results & Standards Criteria)</h4>
-                    <div class="border border-slate-700 rounded-xl overflow-hidden">
-                        <table class="w-full text-left text-xs">
+                    <h4 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-bolt mr-2"></i> ผลทดสอบทางไฟฟ้าและเกณฑ์มาตรฐาน</h4>
+                    <div class="border border-slate-700 rounded-xl overflow-x-auto">
+                        <table class="w-full text-left text-xs min-w-[500px]">
                             <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
                                 <tr>
-                                    <th class="py-2.5 px-4">หัวข้อการทดสอบ</th>
-                                    <th class="py-2.5 px-4">ค่าที่วัดได้</th>
-                                    <th class="py-2.5 px-4">เกณฑ์มาตรฐาน (Standards Criteria)</th>
-                                    <th class="py-2.5 px-4">ผลสรุป</th>
+                                    <th class="py-2.5 px-3">หัวข้อทดสอบ</th>
+                                    <th class="py-2.5 px-3">ค่าที่วัดได้</th>
+                                    <th class="py-2.5 px-3">เกณฑ์มาตรฐาน (Criteria)</th>
+                                    <th class="py-2.5 px-3">ผลสรุป</th>
                                 </tr>
                             </thead>
                             <tbody id="modal-elec-tbody" class="divide-y divide-slate-700/50">
-                                <!-- Populated by JS -->
+                                <!-- JS Injected -->
                             </tbody>
                         </table>
                     </div>
@@ -272,8 +319,8 @@
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-slate-900/80 px-6 py-3 border-t border-slate-700 flex justify-end">
-                <button onclick="closeModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition">ปิดหน้าต่าง</button>
+            <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-xs sm:text-sm font-medium transition">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
@@ -285,164 +332,93 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Generate Mock Data for 40 Assets with status-aligned test data & RPN
         const assetsData = [];
         const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
         
+        let statCounts = { normal: 0, warning: 0, critical: 0 };
+
         for (let i = 1; i <= 40; i++) {
             const isTransformer = i <= 25;
             const type = isTransformer ? "Transformer" : "GIS";
             const prefix = isTransformer ? "TR" : "GIS";
             const code = `${prefix}-${String(i).padStart(2, '0')}`;
             
-            // Generate health index such that we have a mix of Critical, Warning, Normal
             let healthIndex, status, statusClass, rpn;
             if (i <= 6) {
-                // Critical
-                healthIndex = (Math.random() * 14 + 60).toFixed(1); // 60-74
+                healthIndex = (Math.random() * 14 + 60).toFixed(1);
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-                rpn = Math.floor(Math.random() * 200 + 800); // 800 - 1000
+                rpn = Math.floor(Math.random() * 200 + 800);
+                statCounts.critical++;
             } else if (i <= 18) {
-                // Warning
-                healthIndex = (Math.random() * 10 + 75).toFixed(1); // 75-84
+                healthIndex = (Math.random() * 10 + 75).toFixed(1);
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-                rpn = Math.floor(Math.random() * 300 + 500); // 500 - 799
+                rpn = Math.floor(Math.random() * 300 + 500);
+                statCounts.warning++;
             } else {
-                // Normal
-                healthIndex = (Math.random() * 15 + 85).toFixed(1); // 85-100
+                healthIndex = (Math.random() * 15 + 85).toFixed(1);
                 status = "Normal";
                 statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                rpn = Math.floor(Math.random() * 400 + 100); // 100 - 499
+                rpn = Math.floor(Math.random() * 400 + 100);
+                statCounts.normal++;
             }
 
-            // Generate gases according to status severity
             let gases;
             if (status === "Critical") {
-                gases = {
-                    h2: Math.floor(Math.random() * 200 + 150),
-                    ch4: Math.floor(Math.random() * 150 + 130),
-                    c2h2: Math.floor(Math.random() * 80 + 40),
-                    c2h4: Math.floor(Math.random() * 150 + 100),
-                    c2h6: Math.floor(Math.random() * 100 + 80),
-                    co: Math.floor(Math.random() * 600 + 400),
-                    co2: Math.floor(Math.random() * 3000 + 2500)
-                };
+                gases = { h2: 180, ch4: 160, c2h2: 95, c2h4: 140, c2h6: 90, co: 500, co2: 2800 };
             } else if (status === "Warning") {
-                gases = {
-                    h2: Math.floor(Math.random() * 80 + 60),
-                    ch4: Math.floor(Math.random() * 60 + 60),
-                    c2h2: Math.floor(Math.random() * 25 + 15),
-                    c2h4: Math.floor(Math.random() * 50 + 40),
-                    c2h6: Math.floor(Math.random() * 40 + 35),
-                    co: Math.floor(Math.random() * 250 + 200),
-                    co2: Math.floor(Math.random() * 1500 + 1500)
-                };
+                gases = { h2: 75, ch4: 65, c2h2: 20, c2h4: 45, c2h6: 35, co: 220, co2: 1600 };
             } else {
-                gases = {
-                    h2: Math.floor(Math.random() * 40 + 10),
-                    ch4: Math.floor(Math.random() * 30 + 5),
-                    c2h2: Math.floor(Math.random() * 5),
-                    c2h4: Math.floor(Math.random() * 20 + 5),
-                    c2h6: Math.floor(Math.random() * 20 + 5),
-                    co: Math.floor(Math.random() * 150 + 50),
-                    co2: Math.floor(Math.random() * 1000 + 400)
-                };
+                gases = { h2: 25, ch4: 15, c2h2: 2, c2h4: 10, c2h6: 12, co: 80, co2: 600 };
             }
 
-            // Electrical tests aligned with status
             let electrical = isTransformer ? [
-                { 
-                    name: "Insulation Resistance (HV-LV)", 
-                    value: status === "Critical" ? "420 MΩ" : status === "Warning" ? "880 MΩ" : "5,420 MΩ", 
-                    criteria: "> 1,000 MΩ at 20°C", 
-                    pass: status === "Normal" 
-                },
-                { 
-                    name: "Tan Delta (Dissipation Factor)", 
-                    value: status === "Critical" ? "0.85 %" : status === "Warning" ? "0.58 %" : "0.35 %", 
-                    criteria: "< 0.5% at 20°C", 
-                    pass: status !== "Critical" 
-                },
-                { 
-                    name: "Winding Resistance (HV)", 
-                    value: status === "Critical" ? "0.512 Ω (Diff > 3%)" : "0.452 Ω", 
-                    criteria: "Diff < 2% from factory", 
-                    pass: status !== "Critical" 
-                },
-                { 
-                    name: "Turns Ratio Error", 
-                    value: "0.05 %", 
-                    criteria: "Within ± 0.5%", 
-                    pass: true 
-                }
+                { name: "Insulation Resistance (HV-LV)", value: status === "Critical" ? "420 MΩ" : status === "Warning" ? "880 MΩ" : "5,420 MΩ", criteria: "> 1,000 MΩ", pass: status === "Normal" },
+                { name: "Tan Delta (Dissipation Factor)", value: status === "Critical" ? "0.85 %" : status === "Warning" ? "0.58 %" : "0.35 %", criteria: "< 0.5%", pass: status !== "Critical" },
+                { name: "Winding Resistance (HV)", value: status === "Critical" ? "0.512 Ω" : "0.452 Ω", criteria: "Diff < 2%", pass: status !== "Critical" },
+                { name: "Turns Ratio Error", value: "0.05 %", criteria: "Within ± 0.5%", pass: true }
             ] : [
-                { 
-                    name: "Contact Resistance (Main Bus)", 
-                    value: status === "Critical" ? "85 µΩ" : status === "Warning" ? "58 µΩ" : "32 µΩ", 
-                    criteria: "< 50 µΩ", 
-                    pass: status === "Normal" 
-                },
-                { 
-                    name: "SF6 Gas Pressure", 
-                    value: status === "Critical" ? "0.48 MPa" : status === "Warning" ? "0.53 MPa" : "0.62 MPa", 
-                    criteria: "> 0.55 MPa at 20°C", 
-                    pass: status !== "Critical" 
-                },
-                { 
-                    name: "SF6 Moisture Content", 
-                    value: status === "Critical" ? "210 ppmV" : status === "Warning" ? "160 ppmV" : "110 ppmV", 
-                    criteria: "< 150 ppmV", 
-                    pass: status === "Normal" 
-                },
-                { 
-                    name: "Operating Time (Trip/Close)", 
-                    value: status === "Critical" ? "52 ms" : "38 ms", 
-                    criteria: "< 45 ms", 
-                    pass: status !== "Critical" 
-                }
+                { name: "Contact Resistance (Main Bus)", value: status === "Critical" ? "85 µΩ" : status === "Warning" ? "58 µΩ" : "32 µΩ", criteria: "< 50 µΩ", pass: status === "Normal" },
+                { name: "SF6 Gas Pressure", value: status === "Critical" ? "0.48 MPa" : status === "Warning" ? "0.53 MPa" : "0.62 MPa", criteria: "> 0.55 MPa", pass: status !== "Critical" },
+                { name: "SF6 Moisture Content", value: status === "Critical" ? "210 ppmV" : "110 ppmV", criteria: "< 150 ppmV", pass: status === "Normal" },
+                { name: "Operating Time (Trip/Close)", value: status === "Critical" ? "52 ms" : "38 ms", criteria: "< 45 ms", pass: status !== "Critical" }
             ];
 
             assetsData.push({
-                id: code,
-                type: type,
-                location: locations[Math.floor(Math.random() * locations.length)],
-                healthIndex: parseFloat(healthIndex),
-                rpn: rpn,
+                id: code, type: type, location: locations[Math.floor(Math.random() * locations.length)],
+                healthIndex: parseFloat(healthIndex), rpn: rpn,
                 lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
-                status: status,
-                statusClass: statusClass,
-                gases: gases,
-                electrical: electrical
+                status: status, statusClass: statusClass, gases: gases, electrical: electrical
             });
         }
 
-        // Sort assets by RPN descending (Highest risk first)
         assetsData.sort((a, b) => b.rpn - a.rpn);
 
-        // Pagination State
+        // Update Stat Cards on Load
+        document.getElementById('stat-normal').innerText = statCounts.normal;
+        document.getElementById('stat-warning').innerText = statCounts.warning;
+        document.getElementById('stat-critical').innerText = statCounts.critical;
+
         let currentPage = 1;
         const rowsPerPage = 10;
         let filteredData = [...assetsData];
 
-        // Switch Tabs
         function switchTab(tabId) {
             document.getElementById('tab-pm-schedule').classList.add('hidden');
             document.getElementById('tab-dga-calc').classList.add('hidden');
-            document.getElementById('tab-btn-pm-schedule').className = "py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2";
-            document.getElementById('tab-btn-dga-calc').className = "py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2";
+            document.getElementById('tab-btn-pm-schedule').className = "py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap";
+            document.getElementById('tab-btn-dga-calc').className = "py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap";
 
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabId}`).className = "py-3 px-5 border-b-2 font-medium text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2";
+            document.getElementById(`tab-btn-${tabId}`).className = "py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap";
 
             if (tabId === 'dga-calc') {
                 initDgaDropdown();
             }
         }
 
-        // Render PM Table with Pagination
         function renderTable() {
             const tbody = document.getElementById('pm-table-body');
             tbody.innerHTML = "";
@@ -461,16 +437,14 @@
                 tr.className = "hover:bg-slate-700/30 transition-colors";
                 tr.innerHTML = `
                     <td class="py-3 px-4 font-semibold text-white">${item.id}</td>
-                    <td class="py-3 px-4"><span class="px-2.5 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">${item.type}</span></td>
-                    <td class="py-3 px-4 text-slate-300">${item.location}</td>
-                    <td class="py-3 px-4">
-                        <span class="font-bold ${item.healthIndex < 75 ? 'text-rose-400' : item.healthIndex < 85 ? 'text-amber-400' : 'text-emerald-400'}">${item.healthIndex}%</span>
-                    </td>
+                    <td class="py-3 px-4"><span class="px-2 py-0.5 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">${item.type}</span></td>
+                    <td class="py-3 px-4 text-slate-300 text-xs">${item.location}</td>
+                    <td class="py-3 px-4"><span class="font-bold ${item.healthIndex < 75 ? 'text-rose-400' : item.healthIndex < 85 ? 'text-amber-400' : 'text-emerald-400'}">${item.healthIndex}%</span></td>
                     <td class="py-3 px-4 font-mono font-bold text-industrial-400">${item.rpn}</td>
-                    <td class="py-3 px-4 text-slate-200 font-medium">${item.nextPm}</td>
-                    <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium border ${item.statusClass}">${item.status}</span></td>
+                    <td class="py-3 px-4 text-slate-200 text-xs">${item.nextPm}</td>
+                    <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${item.statusClass}">${item.status}</span></td>
                     <td class="py-3 px-4 text-center">
-                        <button onclick="openModal('${item.id}')" class="bg-industrial-600 hover:bg-industrial-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium shadow transition flex items-center space-x-1 mx-auto">
+                        <button onclick="openModal('${item.id}')" class="bg-industrial-600 hover:bg-industrial-700 text-white px-2.5 py-1 rounded text-xs font-medium transition inline-flex items-center space-x-1">
                             <i class="fa-solid fa-eye"></i>
                             <span>ผลทดสอบ</span>
                         </button>
@@ -491,11 +465,8 @@
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
                 btn.innerText = i;
-                btn.className = `px-3 py-1 rounded-lg text-xs font-medium transition ${currentPage === i ? 'bg-industrial-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'}`;
-                btn.onclick = () => {
-                    currentPage = i;
-                    renderTable();
-                };
+                btn.className = `px-2.5 py-1 rounded text-xs font-medium transition ${currentPage === i ? 'bg-industrial-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'}`;
+                btn.onclick = () => { currentPage = i; renderTable(); };
                 container.appendChild(btn);
             }
         }
@@ -507,7 +478,6 @@
             renderTable();
         }
 
-        // Modal Handling
         function openModal(id) {
             const asset = assetsData.find(a => a.id === id);
             if (!asset) return;
@@ -515,7 +485,6 @@
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
             document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
-            // DGA Table Rows
             const dgaTbody = document.getElementById('modal-dga-tbody');
             dgaTbody.innerHTML = "";
             const limits = { h2: 100, ch4: 120, c2h2: 35, c2h4: 50, c2h6: 65, co: 350, co2: 2500 };
@@ -526,24 +495,23 @@
                 const isPass = val <= limit;
                 dgaTbody.innerHTML += `
                     <tr class="hover:bg-slate-700/20">
-                        <td class="py-2 px-4 uppercase font-bold text-slate-300">${gas}</td>
-                        <td class="py-2 px-4 font-mono ${isPass ? 'text-slate-200' : 'text-rose-400 font-bold'}">${val} ppm</td>
-                        <td class="py-2 px-4 text-slate-400">สูงสุดไม่เกิน ${limit} ppm (IEC/IEEE Limit)</td>
-                        <td class="py-2 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold ${isPass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${isPass ? 'Normal' : 'Exceeded'}</span></td>
+                        <td class="py-2 px-3 uppercase font-bold text-slate-300">${gas}</td>
+                        <td class="py-2 px-3 font-mono ${isPass ? 'text-slate-200' : 'text-rose-400 font-bold'}">${val} ppm</td>
+                        <td class="py-2 px-3 text-slate-400">สูงสุด ${limit} ppm</td>
+                        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded text-[9px] font-semibold ${isPass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${isPass ? 'Normal' : 'Exceeded'}</span></td>
                     </tr>
                 `;
             });
 
-            // Electrical Table Rows
             const elecTbody = document.getElementById('modal-elec-tbody');
             elecTbody.innerHTML = "";
             asset.electrical.forEach(test => {
                 elecTbody.innerHTML += `
                     <tr class="hover:bg-slate-700/20">
-                        <td class="py-2 px-4 font-semibold text-slate-300">${test.name}</td>
-                        <td class="py-2 px-4 font-mono text-slate-200">${test.value}</td>
-                        <td class="py-2 px-4 text-slate-400">${test.criteria}</td>
-                        <td class="py-2 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold ${test.pass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${test.pass ? 'Pass' : 'Failed'}</span></td>
+                        <td class="py-2 px-3 font-semibold text-slate-300">${test.name}</td>
+                        <td class="py-2 px-3 font-mono text-slate-200">${test.value}</td>
+                        <td class="py-2 px-3 text-slate-400">${test.criteria}</td>
+                        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded text-[9px] font-semibold ${test.pass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${test.pass ? 'Pass' : 'Failed'}</span></td>
                     </tr>
                 `;
             });
@@ -555,14 +523,13 @@
             document.getElementById('test-modal').classList.add('hidden');
         }
 
-        // DGA Tab Logic & Calculations (6 Methods)
         function initDgaDropdown() {
             const select = document.getElementById('dga-device-select');
             if (select.children.length === 0) {
                 assetsData.forEach(asset => {
                     const opt = document.createElement('option');
                     opt.value = asset.id;
-                    opt.innerText = `${asset.id} (${asset.type}) - RPN: ${asset.rpn}`;
+                    opt.innerText = `${asset.id} (${asset.type}) - RPN:${asset.rpn}`;
                     select.appendChild(opt);
                 });
             }
@@ -574,77 +541,131 @@
             const asset = assetsData.find(a => a.id === selectedId);
             if (!asset) return;
 
-            // Render Gas Cards
             const container = document.getElementById('gas-values-container');
             container.innerHTML = "";
             Object.keys(asset.gases).forEach(gas => {
                 container.innerHTML += `
                     <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-700">
-                        <div class="text-[10px] text-slate-400 uppercase font-bold">${gas}</div>
-                        <div class="text-base font-mono font-bold text-white mt-1">${asset.gases[gas]} <span class="text-[10px] font-normal text-slate-400">ppm</span></div>
+                        <div class="text-[9px] text-slate-400 uppercase font-bold">${gas}</div>
+                        <div class="text-sm sm:text-base font-mono font-bold text-white mt-1">${asset.gases[gas]} <span class="text-[9px] font-normal text-slate-400">ppm</span></div>
                     </div>
                 `;
             });
 
-            // Perform 6 Calculations
             runDgaCalculations(asset.gases);
         }
 
         function runDgaCalculations(g) {
-            // 1. Rogers Ratio Method
+            // Rogers
             let r1 = g.c2h2 / g.ch4;
             let r2 = g.ch4 / g.h2;
             let r3 = g.c2h4 / g.c2h6;
-            let rogersRes = "Normal (No significant fault)";
+            let rogersRes = "Normal (No fault)";
             if (r2 > 1.0 && r3 < 1.0) rogersRes = "Low energy discharge (PD)";
             else if (r1 > 0.1 && r3 > 1.0) rogersRes = "Thermal fault (> 700°C)";
-            else if (r2 > 0.1 && r2 < 1.0 && r3 > 1.0) rogersRes = "Thermal fault (300-700°C)";
-            else if (g.c2h2 > 35) rogersRes = "Arcing (High energy discharge)";
-            document.getElementById('res-rogers').innerHTML = `<span class="text-xs text-slate-300">ผลลัพธ์:</span> <span class="text-white font-bold">${rogersRes}</span>`;
+            else if (g.c2h2 > 35) rogersRes = "Arcing fault";
+            document.getElementById('res-rogers').innerText = rogersRes;
 
-            // 2. Duval Triangle Method
-            let totalTri = g.ch4 + g.c2h4 + g.c2h2;
-            let p_ch4 = totalTri > 0 ? (g.ch4 / totalTri) * 100 : 33;
-            let p_c2h4 = totalTri > 0 ? (g.c2h4 / totalTri) * 100 : 33;
-            let p_c2h2 = totalTri > 0 ? (g.c2h2 / totalTri) * 100 : 34;
-            let duvalRes = "Zone S (Normal Thermal)";
-            if (p_c2h2 > 20) duvalRes = "Zone D1 (High Energy Discharge)";
-            else if (p_c2h4 > 50) duvalRes = "Zone T3 (Thermal Fault > 700°C)";
-            else if (p_ch4 > 70) duvalRes = "Zone T1 (Thermal Fault < 300°C)";
-            document.getElementById('res-duval').innerHTML = `<span class="text-xs text-slate-300">พิกัดสามเหลี่ยม:</span> <span class="text-white font-bold">${duvalRes}</span>`;
+            // IEC
+            let iecRes = "Normal Condition (0 0 0)";
+            if (g.c2h2/g.ch4 > 1) iecRes = "Arc discharge";
+            else if (g.c2h4/g.c2h6 > 2) iecRes = "Thermal > 700°C";
+            document.getElementById('res-iec').innerText = iecRes;
 
-            // 3. IEC 3-Ratio Method
-            let iecRes = "Normal Condition (Code 0 0 0)";
-            if (g.c2h2/g.ch4 > 1) iecRes = "Discharge of high energy (Arc)";
-            else if (g.c2h4/g.c2h6 > 2) iecRes = "Thermal fault > 700°C";
-            else if (g.ch4/g.h2 > 1) iecRes = "Thermal fault < 300°C";
-            document.getElementById('res-iec').innerHTML = `<span class="text-xs text-slate-300">รหัส IEC:</span> <span class="text-white font-bold">${iecRes}</span>`;
+            // Doernenburg
+            let doernRes = "Normal (IEEE Limits)";
+            if (g.ch4/g.h2 > 1.0) doernRes = "Thermal decomposition";
+            document.getElementById('res-doernenburg').innerText = doernRes;
 
-            // 4. Doernenburg Ratio Method
-            let doernRes = "Normal (Within IEEE Limits)";
-            if (g.ch4/g.h2 > 1.0 && g.c2h2/g.c2h4 < 0.5) doernRes = "Thermal decomposition of oil";
-            else if (g.c2h2/g.ch4 > 0.1) doernRes = "Discharge / Sparking fault";
-            document.getElementById('res-doernenburg').innerHTML = `<span class="text-xs text-slate-300">ผลประเมิน:</span> <span class="text-white font-bold">${doernRes}</span>`;
-
-            // 5. Key Gas Method
+            // Key Gas
             let keyGas = "Hydrogen (H2)";
             let maxGas = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
             if (maxGas === g.c2h2) keyGas = "Acetylene (C2H2) -> Arcing";
-            else if (maxGas === g.c2h4) keyGas = "Ethylene (C2H4) -> Overheating (>700°C)";
-            else if (maxGas === g.co) keyGas = "Carbon Monoxide (CO) -> Cellulose breakdown";
-            else if (maxGas === g.ch4) keyGas = "Methane (CH4) -> Low temp oil overheating";
-            document.getElementById('res-keygas').innerHTML = `<span class="text-xs text-slate-300">ก๊าซเด่น (Key Gas):</span> <span class="text-white font-bold">${keyGas}</span>`;
+            else if (maxGas === g.c2h4) keyGas = "Ethylene (C2H4) -> Overheating";
+            else if (maxGas === g.co) keyGas = "Carbon Monoxide (CO) -> Cellulose";
+            document.getElementById('res-keygas').innerText = keyGas;
 
-            // 6. TDCG & IEEE Criteria
+            // TDCG
             let tdcgVal = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             let cond = "Condition 1 (Normal)";
-            if (tdcgVal > 1920) cond = "Condition 4 (Excessive deterioration)";
-            else if (tdcgVal > 720) cond = "Condition 3 (Significant gassing)";
-            else if (tdcgVal > 460) cond = "Condition 2 (Increasing gassing rate)";
-            document.getElementById('res-tdcg').innerHTML = `<span class="text-xs text-slate-300">TDCG Total: <b>${tdcgVal} ppm</b> | </span> <span class="text-industrial-400 font-bold">${cond}</span>`;
+            if (tdcgVal > 1920) cond = "Condition 4 (Excessive)";
+            else if (tdcgVal > 720) cond = "Condition 3 (Significant)";
+            else if (tdcgVal > 460) cond = "Condition 2 (Increasing)";
+            document.getElementById('res-tdcg').innerHTML = `TDCG: <b>${tdcgVal} ppm</b> | <span class="text-industrial-400 font-bold">${cond}</span>`;
+
+            // Duval Triangle Calculation & Drawing
+            drawDuvalTriangle(g.ch4, g.c2h4, g.c2h2);
         }
 
-        // Initial Load
+        // Duval Triangle Canvas Drawer
+        function drawDuvalTriangle(ch4, c2h4, c2h2) {
+            const canvas = document.getElementById('duvalCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const total = ch4 + c2h4 + c2h2;
+            let p_ch4 = total > 0 ? (ch4 / total) : 0.33;
+            let p_c2h4 = total > 0 ? (c2h4 / total) : 0.33;
+            let p_c2h2 = total > 0 ? (c2h2 / total) : 0.34;
+
+            // Triangle vertices on canvas (Width=280, Height=260)
+            // A (Top), B (Bottom-Right), C (Bottom-Left)
+            const A = { x: 140, y: 20 };
+            const B = { x: 250, y: 230 };
+            const C = { x: 30, y: 230 };
+
+            // Draw Triangle background & grid zones
+            ctx.strokeStyle = '#f97316';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(A.x, A.y);
+            ctx.lineTo(B.x, B.y);
+            ctx.lineTo(C.x, C.y);
+            ctx.closePath();
+            ctx.fillStyle = '#0f172a';
+            ctx.fill();
+            ctx.stroke();
+
+            // Zone dividers (Simulated Duval Triangle layout)
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(140, 20); ctx.lineTo(140, 230); // Center divider
+            ctx.moveTo(85, 125); ctx.lineTo(195, 125); // Cross divider
+            ctx.stroke();
+
+            // Labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px sans-serif';
+            ctx.fillText('CH4', A.x - 10, A.y - 8);
+            ctx.fillText('C2H4', B.x + 5, B.y + 12);
+            ctx.fillText('C2H2', C.x - 30, C.y + 12);
+
+            // Compute point coordinates using barycentric coordinates
+            // p_c2h4 corresponds to vertex A, p_c2h2 to B, p_ch4 to C (Standard Duval 1)
+            let px = p_c2h4 * A.x + p_c2h2 * B.x + p_ch4 * C.x;
+            let py = p_c2h4 * A.y + p_c2h2 * B.y + p_ch4 * C.y;
+
+            // Draw Point
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Determine Zone text
+            let zone = "Zone S (Normal Thermal)";
+            if (p_c2h2 > 0.2) zone = "Zone D1 (High Energy Discharge / Arcing)";
+            else if (p_c2h4 > 0.5) zone = "Zone T3 (Thermal Fault > 700°C)";
+            else if (p_ch4 > 0.6) zone = "Zone T1 (Thermal Fault < 300°C)";
+            else if (p_c2h4 > 0.3) zone = "Zone T2 (Thermal Fault 300-700°C)";
+
+            document.getElementById('duval-zone-text').innerText = zone;
+        }
+
+        // Initial render
         renderTable();
     </script>
 </body>
