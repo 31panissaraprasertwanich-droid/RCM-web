@@ -25,7 +25,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    <span class="w-2 h-2 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span> ระบบออนไลน์ (ETL Connected)
+                    <span class="w-2 h-2 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span> ระบบเชื่อมต่อข้อมูลการทดสอบออนไลน์
                 </span>
             </div>
         </div>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <!-- Interactive Control Panel / Filters -->
+        <!-- Filter Panel -->
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center space-x-2 w-full md:w-auto">
                 <span class="text-sm font-medium text-slate-700">กรองตามประเภทอุปกรณ์:</span>
@@ -69,16 +69,16 @@
                 </select>
             </div>
             <div class="text-xs text-slate-500">
-                *ข้อมูลจัดลำดับอัตโนมัติด้วยเกณฑ์ Health Index และค่าความเสี่ยง RPN ตามมาตรฐาน RCM
+                *คลิกปุ่ม "ผลทดสอบ & สามเหลี่ยม DGA" เพื่อดูค่าพารามิเตอร์การทดสอบเชิงลึก
             </div>
         </div>
 
-        <!-- PM Prioritization Table Section -->
+        <!-- PM Prioritization Table -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
                     <h2 class="text-base font-bold text-slate-900">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (PM Prioritization Matrix)</h2>
-                    <p class="text-xs text-slate-500">แสดงลำดับความเร่งด่วนในการเข้าตรวจสอบและซ่อมบำรุงตามสภาพ (Condition-Based Maintenance)</p>
+                    <p class="text-xs text-slate-500">แสดงลำดับความเร่งด่วน ผลการทดสอบ และค่าความเสี่ยง RPN</p>
                 </div>
                 <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-200">เรียงตามความเสี่ยงสูงสุด</span>
             </div>
@@ -87,70 +87,70 @@
                 <table class="w-full text-left border-collapse" id="pmTable">
                     <thead>
                         <tr class="bg-slate-50 text-slate-600 text-xs uppercase font-semibold border-b border-slate-200">
-                            <th class="p-3.5">ลำดับ PM</th>
-                            <th class="p-3.5">รหัสอุปกรณ์ (Asset ID)</th>
+                            <th class="p-3.5">ลำดับ</th>
+                            <th class="p-3.5">รหัสอุปกรณ์</th>
                             <th class="p-3.5">ประเภท</th>
-                            <th class="p-3.5">ดัชนีสุขภาพ (HI)</th>
-                            <th class="p-3.5">ค่าความเสี่ยง (RPN)</th>
-                            <th class="p-3.5">สาเหตุความผิดปกติหลัก (Failure Mode)</th>
+                            <th class="p-3.5">Health Index (HI)</th>
+                            <th class="p-3.5">RPN Score</th>
+                            <th class="p-3.5">ผลทดสอบเด่น / โหมดความเสียหาย</th>
                             <th class="p-3.5">สถานะ</th>
-                            <th class="p-3.5 text-center">จัดการ/ดูรายละเอียด</th>
+                            <th class="p-3.5 text-center">ดูผลทดสอบเชิงลึก</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 text-sm">
-                        <!-- Row 1 -->
-                        <tr class="hover:bg-slate-50 transition-colors" data-type="GIS">
-                            <td class="p-3.5 font-bold text-rose-600">#01</td>
-                            <td class="p-3.5 font-medium text-slate-900">GIS-BAY-03</td>
-                            <td class="p-3.5 text-slate-600">GIS</td>
-                            <td class="p-3.5 font-semibold text-rose-600">52%</td>
-                            <td class="p-3.5 font-semibold text-rose-600">320 (High)</td>
-                            <td class="p-3.5 text-slate-600 text-xs">SF6 Gas Pressure ต่ำกว่าเกณฑ์เตือน / Leakage risk</td>
-                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
-                            <td class="p-3.5 text-center">
-                                <button onclick="openModal('GIS-BAY-03', '52%', '320', 'SF6 Pressure ต่ำ และพบความผิดปกติของค่า Dew Point')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
-                            </td>
-                        </tr>
-                        <!-- Row 2 -->
+                        <!-- TRX-01 -->
                         <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
-                            <td class="p-3.5 font-bold text-rose-600">#02</td>
+                            <td class="p-3.5 font-bold text-rose-600">#01</td>
                             <td class="p-3.5 font-medium text-slate-900">TRX-01</td>
                             <td class="p-3.5 text-slate-600">Transformer</td>
                             <td class="p-3.5 font-semibold text-rose-600">58%</td>
                             <td class="p-3.5 font-semibold text-rose-600">280 (High)</td>
-                            <td class="p-3.5 text-slate-600 text-xs">DGA: ก๊าซ Hydrogen ($H_2$) สูงผิดปกติ / Thermal Fault</td>
+                            <td class="p-3.5 text-slate-600 text-xs">DGA: ก๊าซ Hydrogen & Acetylene สูง (Thermal/Arcing Fault)</td>
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
                             <td class="p-3.5 text-center">
-                                <button onclick="openModal('TRX-01', '58%', '280', 'พบก๊าซ Hydrogen และ Acetylene สูงในน้ำมันฉนวน')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                                <button onclick="openModal('TRX-01', 'Transformer', '58%', '280', 'Critical', 'H2: 1250 ppm, C2H2: 85 ppm, C2H4: 450 ppm, CH4: 320 ppm, CO: 600 ppm', 'BDV: 42 kV, Moisture: 35 ppm, Tan Delta: 0.65%', 'Thermal Fault (T3) & Severe Arcing', 'ดูวิเคราะห์สามเหลี่ยม DGA (Duval Triangle)')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ & สามเหลี่ยม DGA</button>
                             </td>
                         </tr>
-                        <!-- Row 3 -->
+                        <!-- GIS-BAY-03 -->
+                        <tr class="hover:bg-slate-50 transition-colors" data-type="GIS">
+                            <td class="p-3.5 font-bold text-rose-600">#02</td>
+                            <td class="p-3.5 font-medium text-slate-900">GIS-BAY-03</td>
+                            <td class="p-3.5 text-slate-600">GIS</td>
+                            <td class="p-3.5 font-semibold text-rose-600">52%</td>
+                            <td class="p-3.5 font-semibold text-rose-600">320 (High)</td>
+                            <td class="p-3.5 text-slate-600 text-xs">SF6 Pressure ต่ำกว่าเกณฑ์ และตรวจพบ Partial Discharge สูง</td>
+                            <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
+                            <td class="p-3.5 text-center">
+                                <button onclick="openModal('GIS-BAY-03', 'GIS (Gas-Insulated Switchgear)', '52%', '320', 'Critical', 'N/A (ระบบก๊าซ SF6)', 'SF6 Pressure: 5.2 bar (Alarm), Dew Point: -15°C, PD Level: 450 pC (UHF Method), Contact Resistance: 48 µΩ', 'Partial Discharge ภายในถัง / SF6 Leakage Risk', 'ระบบตรวจสอบก๊าซ & PD Monitoring')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ & สามเหลี่ยม DGA</button>
+                            </td>
+                        </tr>
+                        <!-- TRX-04 -->
                         <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
                             <td class="p-3.5 font-bold text-amber-600">#03</td>
                             <td class="p-3.5 font-medium text-slate-900">TRX-04</td>
                             <td class="p-3.5 text-slate-600">Transformer</td>
                             <td class="p-3.5 font-semibold text-amber-600">67%</td>
                             <td class="p-3.5 font-semibold text-amber-600">190 (Med)</td>
-                            <td class="p-3.5 text-slate-600 text-xs">OLTC Contact Resistance สูงกว่าค่ามาตรฐาน</td>
+                            <td class="p-3.5 text-slate-600 text-xs">OLTC Contact Resistance สูง และพบค่าน้ำมันเริ่มเสื่อม</td>
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
                             <td class="p-3.5 text-center">
-                                <button onclick="openModal('TRX-04', '67%', '190', 'ค่าความต้านทานหน้าสัมผัสเครื่องเปลี่ยนแทปสูง')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                                <button onclick="openModal('TRX-04', 'Transformer', '67%', '190', 'Warning', 'H2: 180 ppm, C2H4: 95 ppm, CH4: 110 ppm, CO: 250 ppm, CO2: 1500 ppm', 'BDV: 55 kV, Moisture: 22 ppm, OLTC Contact Resistance: 85 µΩ', 'Thermal Fault (T1 - Low Temperature)', 'ดูวิเคราะห์สามเหลี่ยม DGA (Duval Triangle)')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ & สามเหลี่ยม DGA</button>
                             </td>
                         </tr>
-                        <!-- Row 4 -->
+                        <!-- GIS-BAY-09 -->
                         <tr class="hover:bg-slate-50 transition-colors" data-type="GIS">
                             <td class="p-3.5 font-bold text-amber-600">#04</td>
                             <td class="p-3.5 font-medium text-slate-900">GIS-BAY-09</td>
                             <td class="p-3.5 text-slate-600">GIS</td>
                             <td class="p-3.5 font-semibold text-amber-600">72%</td>
                             <td class="p-3.5 font-semibold text-amber-600">150 (Med)</td>
-                            <td class="p-3.5 text-slate-600 text-xs">Partial Discharge (UHF) เริ่มตรวจพบสัญญาณอ่อนๆ</td>
+                            <td class="p-3.5 text-slate-600 text-xs">ตรวจพบสัญญาณ Partial Discharge เริ่มต้น (UHF Method)</td>
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
                             <td class="p-3.5 text-center">
-                                <button onclick="openModal('GIS-BAY-09', '72%', '150', 'ตรวจพบสัญญาณ Partial Discharge ด้วยวิธี UHF')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                                <button onclick="openModal('GIS-BAY-09', 'GIS (Gas-Insulated Switchgear)', '72%', '150', 'Warning', 'N/A (ระบบก๊าซ SF6)', 'SF6 Pressure: 6.0 bar (Normal), Dew Point: -30°C, PD Level: 85 pC (UHF Method), Contact Resistance: 32 µΩ', 'Initial Partial Discharge / Corona Activity', 'ระบบตรวจสอบก๊าซ & PD Monitoring')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ & สามเหลี่ยม DGA</button>
                             </td>
                         </tr>
-                        <!-- Row 5 -->
+                        <!-- TRX-02 -->
                         <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
                             <td class="p-3.5 font-bold text-emerald-600">#05</td>
                             <td class="p-3.5 font-medium text-slate-900">TRX-02</td>
@@ -160,7 +160,7 @@
                             <td class="p-3.5 text-slate-600 text-xs">Normal Operation / สภาพสมบูรณ์ตามรอบปี</td>
                             <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Normal</span></td>
                             <td class="p-3.5 text-center">
-                                <button onclick="openModal('TRX-02', '92%', '45', 'อุปกรณ์ทำงานปกติ บำรุงรักษาตามวาระประจำปี')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">วิเคราะห์ FMEA</button>
+                                <button onclick="openModal('TRX-02', 'Transformer', '92%', '45', 'Normal', 'H2: 15 ppm, CH4: 10 ppm, C2H2: Not Detected, CO: 80 ppm', 'BDV: 70 kV, Moisture: 8 ppm, Tan Delta: 0.30%', 'Normal Operation (ไม่มีความผิดปกติ)', 'ดูวิเคราะห์สามเหลี่ยม DGA (Duval Triangle)')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ & สามเหลี่ยม DGA</button>
                             </td>
                         </tr>
                     </tbody>
@@ -169,31 +169,58 @@
         </div>
     </main>
 
-    <!-- Interactive Detail Modal -->
-    <div id="rcmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 border border-slate-100">
+    <!-- Detailed Modal with DGA & Test Parameters -->
+    <div id="rcmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-5 border border-slate-100 my-8">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <span>🔍</span> รายละเอียดวิเคราะห์ RCM & FMEA
+                    <span>🔬</span> ผลการทดสอบเชิงลึก & การวิเคราะห์ RCM
                 </h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
             </div>
-            <div class="space-y-3 text-sm text-slate-600">
-                <p><strong>รหัสอุปกรณ์:</strong> <span id="modalAsset" class="text-blue-600 font-semibold"></span></p>
-                <p><strong>ดัชนีสุขภาพ (Health Index):</strong> <span id="modalHI" class="font-semibold"></span></p>
-                <p><strong>ค่าความเสี่ยง (RPN Score):</strong> <span id="modalRPN" class="font-semibold"></span></p>
-                <p><strong>ผลการวิเคราะห์ข้อผิดพลาดเชิงวิศวกรรม:</strong> <span id="modalDesc" class="text-slate-800"></span></p>
-                <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 text-xs text-blue-900 mt-2">
-                    <strong>ข้อเสนอแนะเชิงกลยุทธ์ RCM:</strong> แนะนำให้ปรับเปลี่ยนแผน PM เป็นแบบ Condition-Based Maintenance (CBM) โดยเร่งตรวจสอบเฉพาะจุดและวางแผนแก้ไขก่อนครบกำหนดรอบปี
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-700">
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5">
+                    <p><strong>รหัสอุปกรณ์:</strong> <span id="mAsset" class="text-blue-600 font-bold"></span></p>
+                    <p><strong>ประเภท:</strong> <span id="mType"></span></p>
+                    <p><strong>Health Index (HI):</strong> <span id="mHI" class="font-bold"></span></p>
+                    <p><strong>Risk Priority (RPN):</strong> <span id="mRPN" class="font-bold"></span></p>
+                </div>
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5">
+                    <p><strong>สถานะความเสี่ยง:</strong> <span id="mStatus" class="font-bold px-2 py-0.5 rounded text-xs"></span></p>
+                    <p><strong>โหมดความเสียหายหลัก:</strong> <span id="mFault" class="text-rose-600 font-medium"></span></p>
+                    <p><strong>เครื่องมือวิเคราะห์:</strong> <span id="mTool" class="text-indigo-600 font-medium"></span></p>
                 </div>
             </div>
+
+            <!-- Test Results Box -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">ผลการทดสอบพารามิเตอร์ทางห้องปฏิบัติการและหน้างาน</h4>
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2 text-xs md:text-sm">
+                    <p><strong>1. ผลวิเคราะห์ก๊าซละลายในน้ำมัน (DGA / Gas Parameters):</strong><br><span id="mDGA" class="text-slate-900 font-mono bg-white px-2 py-1 rounded block mt-1 border border-blue-100"></span></p>
+                    <p><strong>2. ผลทดสอบคุณสมบัติน้ำมันหรือระบบฉนวน (Oil / Insulation Tests):</strong><br><span id="mOil" class="text-slate-900 font-mono bg-white px-2 py-1 rounded block mt-1 border border-blue-100"></span></p>
+                </div>
+            </div>
+
+            <!-- Duval Triangle Simulation Box -->
+            <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-blue-400">📊 ระบบวิเคราะห์สามเหลี่ยมดูกาส (IEC Duval Triangle Method)</h4>
+                    <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded">AI / Standard Model</span>
+                </div>
+                <p class="text-xs text-slate-300">ประเมินสัดส่วนก๊าซเปรียบเทียบ ($CH_4, C_2H_2, C_2H_4$) บนพิกัดสามเหลี่ยมมาตรฐานสากล IEC เพื่อชี้พิกัดความผิดปกติภายในหม้อแปลง:</p>
+                <div class="bg-slate-800 p-3 rounded-lg text-center border border-slate-700">
+                    <span id="duvalResult" class="text-sm font-semibold text-amber-300">กำลังประมวลผลพิกัด Duval Triangle...</span>
+                </div>
+            </div>
+
             <div class="flex justify-end pt-2">
-                <button onclick="closeModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900">ปิดหน้าต่าง</button>
+                <button onclick="closeModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900 shadow-sm">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript for Interactivity -->
+    <!-- JavaScript -->
     <script>
         function filterTable() {
             let filter = document.getElementById('assetFilter').value;
@@ -209,11 +236,39 @@
             });
         }
 
-        function openModal(asset, hi, rpn, desc) {
-            document.getElementById('modalAsset').innerText = asset;
-            document.getElementById('modalHI').innerText = hi;
-            document.getElementById('modalRPN').innerText = rpn;
-            document.getElementById('modalDesc').innerText = desc;
+        function openModal(asset, type, hi, rpn, status, dga, oil, fault, tool) {
+            document.getElementById('mAsset').innerText = asset;
+            document.getElementById('mType').innerText = type;
+            document.getElementById('mHI').innerText = hi;
+            document.getElementById('mRPN').innerText = rpn;
+            
+            let statusBadge = document.getElementById('mStatus');
+            statusBadge.innerText = status;
+            if(status === 'Critical') {
+                statusBadge.className = 'font-bold px-2 py-0.5 rounded text-xs bg-rose-100 text-rose-800';
+            } else if(status === 'Warning') {
+                statusBadge.className = 'font-bold px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800';
+            } else {
+                statusBadge.className = 'font-bold px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800';
+            }
+
+            document.getElementById('mDGA').innerText = dga;
+            document.getElementById('mOil').innerText = oil;
+            document.getElementById('mFault').innerText = fault;
+            document.getElementById('mTool').innerText = tool;
+
+            // Duval Triangle Simulation Text Logic
+            let duvalBox = document.getElementById('duvalResult');
+            if(asset === 'TRX-01') {
+                duvalBox.innerHTML = "📍 พิกัดตกอยู่ในโซน: <b>T3 (Thermal Fault > 700°C)</b> ร่วมกับโซน <b>D1 (Low Energy Discharge)</b> -> คำแนะนำ: เร่งทำ Overhaul และตรวจสอบขดลวดด่วน";
+            } else if(asset === 'TRX-04') {
+                duvalBox.innerHTML = "📍 พิกัดตกอยู่ในโซน: <b>T1 (Low Temperature Thermal Fault < 300°C)</b> -> คำแนะนำ: ตรวจสอบความต้านทานหน้าสัมผัส OLTC";
+            } else if(asset === 'TRX-02') {
+                duvalBox.innerHTML = "📍 พิกัดตกอยู่ในโซน: <b>Normal Zone (จุดศูนย์กลางสามเหลี่ยมปกติ)</b> -> คำแนะนำ: สภาพสมบูรณ์ บำรุงรักษาตามวาระ";
+            } else {
+                duvalBox.innerHTML = "📍 อุปกรณ์ประเภท GIS: ใช้ระบบตรวจสอบความดัน SF6 และ UHF Partial Discharge แทนสามเหลี่ยม DGA";
+            }
+
             document.getElementById('rcmModal').classList.remove('hidden');
         }
 
