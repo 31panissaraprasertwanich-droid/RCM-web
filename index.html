@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substation RCM & Lab Test Entry Suite</title>
+    <title>Substation RCM & Maintenance Prioritization Dashboard</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,21 +11,21 @@
         body { font-family: 'Sarabun', sans-serif; }
     </style>
 </head>
-<body class="bg-[#070b14] text-slate-100 min-h-screen">
+<body class="bg-[#0c0a09] text-slate-100 min-h-screen">
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-[#0b101d] border-b border-slate-800/80 shadow-2xl sticky top-0 z-50">
+    <!-- Top Navigation Bar (Theme สีส้มอุตสาหกรรม) -->
+    <header class="bg-[#17120f] border-b border-orange-900/40 shadow-2xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-tr from-cyan-600 to-blue-600 p-2.5 rounded-2xl text-white font-black text-xs shadow-lg shadow-cyan-500/20">RCM HUB</div>
+                <div class="bg-gradient-to-tr from-orange-600 to-amber-600 p-2.5 rounded-2xl text-white font-black text-xs shadow-lg shadow-orange-600/25">RCM HUB</div>
                 <div>
-                    <h1 class="text-sm md:text-base font-bold tracking-wide">Substation Asset Health & RCM Intelligence</h1>
+                    <h1 class="text-sm md:text-base font-bold tracking-wide">Substation Asset Health & PM Prioritization</h1>
                     <p class="text-[11px] text-slate-400">ระบบสนับสนุนการตัดสินใจบำรุงรักษาอุปกรณ์สถานีไฟฟ้า (Transformer & GIS)</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm">
-                    <span class="w-2 h-2 mr-2 bg-cyan-400 rounded-full animate-ping"></span> Live Substation Connection
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-sm">
+                    <span class="w-2 h-2 mr-2 bg-orange-500 rounded-full animate-ping"></span> Live Substation Connection
                 </span>
             </div>
         </div>
@@ -34,102 +34,163 @@
     <!-- Main Layout Container -->
     <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-        <!-- Left Sidebar Navigation (แยกเมนูชัดเจน) -->
-        <aside class="lg:col-span-1 bg-[#0b101d] p-4 rounded-3xl border border-slate-800/80 space-y-3 h-fit sticky top-20 shadow-2xl">
-            <div class="border-b border-slate-800/80 pb-3 px-1">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">System Navigation</h2>
+        <!-- Left Sidebar Navigation -->
+        <aside class="lg:col-span-1 bg-[#17120f] p-4 rounded-3xl border border-orange-950 space-y-3 h-fit sticky top-20 shadow-2xl">
+            <div class="border-b border-orange-900/40 pb-3 px-1">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400">System Navigation</h2>
             </div>
             <nav class="space-y-2">
-                <button onclick="switchView('dashboard')" id="navDashboard" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-cyan-600 to-blue-600 text-white flex items-center gap-3 shadow-lg shadow-cyan-600/20">
+                <button onclick="switchView('dashboard')" id="navDashboard" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-orange-600 to-amber-600 text-white flex items-center gap-3 shadow-lg shadow-orange-600/25">
                     <span class="text-base">⚡</span> แดชบอร์ดและจัดลำดับ PM
                 </button>
-                <button onclick="switchView('dgaMulti')" id="navDgaMulti" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-800">
-                    <span class="text-base">🔬</span> วิเคราะห์ DGA เชิงลึก (Multi-Method)
-                </button>
-                <button onclick="switchView('testEntry')" id="navTestEntry" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-800">
+                <button onclick="switchView('testEntry')" id="navTestEntry" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-[#1c1613] text-slate-300 hover:bg-[#231b17] flex items-center gap-3 border border-orange-950">
                     <span class="text-base">📝</span> บันทึก/กรอกผลทดสอบ (Lab Sheet)
                 </button>
             </nav>
-            <div class="pt-4 border-t border-slate-800/80 px-1 text-[11px] text-slate-400 leading-relaxed">
-                💡 <span class="text-slate-300 font-medium">คำแนะนำ:</span> ใช้หน้า "บันทึก/กรอกผลทดสอบ" เพื่อจดบันทึกผลแล็บและค่าทางไฟฟ้าลงในฟอร์มแบบแผนเดียวกัน
+            <div class="pt-4 border-t border-orange-900/40 px-1 text-[11px] text-slate-400 leading-relaxed">
+                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> ตารางหลักจะแสดงอุปกรณ์ทุกตัวเรียงตามลำดับความเร่งด่วนในการเข้าทำ PM โดยอัตโนมัติ
             </div>
         </aside>
 
         <!-- Right Dynamic Content Area -->
         <main class="lg:col-span-3 space-y-6">
 
-            <!-- VIEW 1: Dashboard & PM Prioritization Matrix -->
+            <!-- VIEW 1: Dashboard & Full PM Prioritization Table -->
             <div id="viewDashboard" class="space-y-6">
                 <!-- KPI Metric Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-[#0b101d] p-5 rounded-3xl border border-slate-800/80 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">อุปกรณ์วิกฤตทั้งหมด</p>
+                    <div class="bg-[#17120f] p-5 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">อุปกรณ์ทั้งหมดในระบบ</p>
                         <h3 class="text-3xl font-extrabold text-slate-100 mt-2">24 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
-                    <div class="bg-[#0b101d] p-5 rounded-3xl border border-slate-800/80 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-amber-400">ต้องเฝ้าระวัง (Warning)</p>
+                    <div class="bg-[#17120f] p-5 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-amber-500">ต้องเฝ้าระวัง (Warning)</p>
                         <h3 class="text-3xl font-extrabold text-amber-400 mt-2">6 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
-                    <div class="bg-[#0b101d] p-5 rounded-3xl border border-slate-800/80 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-rose-400">วิกฤต/เร่งด่วน (Critical)</p>
-                        <h3 class="text-3xl font-extrabold text-rose-400 mt-2">2 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
+                    <div class="bg-[#17120f] p-5 rounded-3xl border border-orange-950 shadow-xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-rose-500">วิกฤต/เร่งด่วน (Critical)</p>
+                        <h3 class="text-3xl font-extrabold text-rose-500 mt-2">2 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
                 </div>
 
                 <!-- Filter Header Bar -->
-                <div class="bg-[#0b101d] p-4 rounded-3xl border border-slate-800/80 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+                <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 flex flex-wrap items-center justify-between gap-4 shadow-xl">
                     <div class="flex items-center space-x-3 w-full md:w-auto">
                         <span class="text-sm font-medium text-slate-300">กรองประเภทอุปกรณ์:</span>
-                        <select id="assetFilter" onchange="filterTable()" class="bg-[#070b14] border border-slate-700 text-slate-200 text-sm rounded-2xl focus:ring-cyan-500 block p-2.5 px-4 outline-none">
+                        <select id="assetFilter" onchange="filterTable()" class="bg-[#0c0a09] border border-orange-900/50 text-slate-200 text-sm rounded-2xl focus:ring-orange-500 block p-2.5 px-4 outline-none">
                             <option value="ALL">ทั้งหมด (All Assets)</option>
                             <option value="TRX">หม้อแปลงไฟฟ้า (Power Transformer)</option>
                             <option value="GIS">ชุดสวิตช์เกียร์ก๊าซ (GIS)</option>
                         </select>
                     </div>
-                    <div class="text-xs text-slate-400">
-                        *จัดลำดับตามดัชนีสุขภาพ (Health Index) และค่าความเสี่ยง RPN
+                    <div class="text-xs text-orange-400/80 font-medium">
+                        *เรียงลำดับอุปกรณ์ทั้งหมดตามความเร่งด่วนในการเข้าทำ PM (Risk-Based Prioritization)
                     </div>
                 </div>
 
-                <!-- Main PM Table -->
-                <div class="bg-[#0b101d] rounded-3xl border border-slate-800/80 overflow-hidden shadow-2xl">
-                    <div class="p-5 border-b border-slate-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <!-- Main PM Table (แสดงอุปกรณ์ทุกตัว เรียงตามลำดับ PM) -->
+                <div class="bg-[#17120f] rounded-3xl border border-orange-950 overflow-hidden shadow-2xl">
+                    <div class="p-5 border-b border-orange-900/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
-                            <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (PM Prioritization Matrix)</h2>
-                            <p class="text-xs text-slate-400">ประเมินความเร่งด่วนตามหลักการ Reliability-Centered Maintenance (RCM)</p>
+                            <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (Full PM Prioritization Matrix)</h2>
+                            <p class="text-xs text-slate-400">แสดงอุปกรณ์ทุกตัวในระบบ เรียงลำดับจากความเสี่ยงสูงสุดไปจนถึงสถานะปกติ</p>
                         </div>
-                        <span class="text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold px-3.5 py-1.5 rounded-full">Risk-Based Sorting</span>
+                        <span class="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/20 font-semibold px-3.5 py-1.5 rounded-full">PM Schedule Sorted</span>
                     </div>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse" id="pmTable">
                             <thead>
-                                <tr class="bg-[#070b14]/60 text-slate-400 text-xs uppercase font-semibold border-b border-slate-800/80">
-                                    <th class="p-4">ลำดับ</th>
+                                <tr class="bg-[#0c0a09]/60 text-slate-400 text-xs uppercase font-semibold border-b border-orange-900/40">
+                                    <th class="p-4">ลำดับ PM</th>
                                     <th class="p-4">รหัสอุปกรณ์</th>
                                     <th class="p-4">ประเภท</th>
                                     <th class="p-4">Health Index</th>
                                     <th class="p-4">RPN Score</th>
-                                    <th class="p-4">โหมดความเสียหายหลัก</th>
+                                    <th class="p-4">โหมดความเสียหาย / รายละเอียด</th>
                                     <th class="p-4">สถานะ</th>
-                                    <th class="p-4 text-center">ผลทดสอบ</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-800/40 text-sm text-slate-300">
-                                <tr class="hover:bg-slate-800/20 transition-colors" data-type="TRX">
+                            <tbody class="divide-y divide-orange-950/40 text-sm text-slate-300">
+                                <!-- PM #01 (Critical) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
                                     <td class="p-4 font-bold text-rose-500">#01</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-03</td>
+                                    <td class="p-4 text-slate-400">GIS</td>
+                                    <td class="p-4 font-semibold text-rose-500">52%</td>
+                                    <td class="p-4 font-semibold text-rose-500">320 (High)</td>
+                                    <td class="p-4 text-slate-400 text-xs">SF6 Pressure ต่ำกว่าเกณฑ์เตือน / UHF PD สูง</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">Critical</span></td>
+                                </tr>
+                                <!-- PM #02 (Critical) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-rose-500">#02</td>
                                     <td class="p-4 font-medium text-slate-100">TRX-01</td>
                                     <td class="p-4 text-slate-400">Transformer</td>
                                     <td class="p-4 font-semibold text-rose-500">58%</td>
                                     <td class="p-4 font-semibold text-rose-500">280 (High)</td>
-                                    <td class="p-4 text-slate-400 text-xs">Thermal Fault (T3) & Severe Arcing</td>
+                                    <td class="p-4 text-slate-400 text-xs">DGA: ก๊าซ Hydrogen & Acetylene สูง (Thermal/Arcing)</td>
                                     <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">Critical</span></td>
-                                    <td class="p-4 text-center">
-                                        <button onclick="openTestModal('TRX-01', '58%', '280', 'Critical', 
-                                            'Hydrogen (H2): 1250 ppm (Std < 100)\nMethane (CH4): 320 ppm (Std < 30)\nAcetylene (C2H2): 85 ppm (Std < 1)\nEthylene (C2H4): 450 ppm (Std < 50)\nEthane (C2H6): 120 ppm (Std < 20)\nCarbon Monoxide (CO): 600 ppm (Std < 350)\nCarbon Dioxide (CO2): 3200 ppm (Std < 2500)', 
-                                            'BDV: 42 kV (Std > 50)\nMoisture: 35 ppm (Std < 25)\nTan Delta: 0.65% (Std < 0.5%)')" 
-                                            class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs px-4 py-2 rounded-xl font-semibold shadow-lg shadow-cyan-600/20 transition-all">ผลทดสอบ</button>
-                                    </td>
+                                </tr>
+                                <!-- PM #03 (Warning) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-amber-500">#03</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-04</td>
+                                    <td class="p-4 text-slate-400">Transformer</td>
+                                    <td class="p-4 font-semibold text-amber-500">67%</td>
+                                    <td class="p-4 font-semibold text-amber-500">190 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">OLTC Contact Resistance สูง / Thermal T1</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                </tr>
+                                <!-- PM #04 (Warning) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
+                                    <td class="p-4 font-bold text-amber-500">#04</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-09</td>
+                                    <td class="p-4 text-slate-400">GIS</td>
+                                    <td class="p-4 font-semibold text-amber-500">72%</td>
+                                    <td class="p-4 font-semibold text-amber-500">150 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">ตรวจพบสัญญาณ Partial Discharge เริ่มต้น (UHF Method)</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                </tr>
+                                <!-- PM #05 (Warning) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-amber-500">#05</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-05</td>
+                                    <td class="p-4 text-slate-400">Transformer</td>
+                                    <td class="p-4 font-semibold text-amber-500">74%</td>
+                                    <td class="p-4 font-semibold text-amber-500">140 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">ความเป็นฉนวนเริ่มลดลง / ตรวจสอบรอบปี</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                </tr>
+                                <!-- PM #06 (Normal) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-emerald-500">#06</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-02</td>
+                                    <td class="p-4 text-slate-400">Transformer</td>
+                                    <td class="p-4 font-semibold text-emerald-500">92%</td>
+                                    <td class="p-4 font-semibold text-emerald-500">45 (Low)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (บำรุงรักษาตามวาระปกติ)</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
+                                </tr>
+                                <!-- PM #07 (Normal) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
+                                    <td class="p-4 font-bold text-emerald-500">#07</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-01</td>
+                                    <td class="p-4 text-slate-400">GIS</td>
+                                    <td class="p-4 font-semibold text-emerald-500">95%</td>
+                                    <td class="p-4 font-semibold text-emerald-500">30 (Low)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (ความดัน SF6 สมบูรณ์)</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
+                                </tr>
+                                <!-- PM #08 (Normal) -->
+                                <tr class="hover:bg-orange-950/10 transition-colors" data-type="GIS">
+                                    <td class="p-4 font-bold text-emerald-500">#08</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-02</td>
+                                    <td class="p-4 text-slate-400">GIS</td>
+                                    <td class="p-4 font-semibold text-emerald-500">98%</td>
+                                    <td class="p-4 font-semibold text-emerald-500">20 (Low)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (ตรวจสอบประจำปีเรียบร้อย)</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -137,105 +198,59 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: DGA Multi-Method Advanced Suite -->
-            <div id="viewDgaMulti" class="space-y-6 hidden">
-                <div class="bg-[#0b101d] border border-slate-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
-                    <div class="flex justify-between items-center border-b border-slate-800/80 pb-4">
-                        <div>
-                            <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
-                                <span>🔬</span> Advanced DGA Multi-Method Suite
-                            </h2>
-                            <p class="text-xs text-slate-400">วิเคราะห์ผลการทดสอบเชิงลึกด้วยมาตรฐาน DGA ทั้ง 6 วิธี</p>
-                        </div>
-                    </div>
-
-                    <!-- Analytical Method Selection Tabs -->
-                    <div class="flex flex-wrap items-center gap-2 bg-[#070b14] p-2.5 rounded-2xl border border-slate-800">
-                        <button onclick="setMethodTab('duval')" id="tabDuval" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold bg-cyan-600 text-white shadow-md transition-all">🔺 Duval Triangle</button>
-                        <button onclick="setMethodTab('rogers')" id="tabRogers" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">📐 Rogers Ratio</button>
-                        <button onclick="setMethodTab('doernen')" id="tabDoernen" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">📊 Doernenburg</button>
-                        <button onclick="setMethodTab('iec')" id="tabIec" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">📈 IEC Ratio</button>
-                        <button onclick="setMethodTab('keygas')" id="tabKeygas" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">🔑 Key Gas</button>
-                        <button onclick="setMethodTab('summary')" id="tabSummary" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-900 transition-all">📋 IEEE Summary</button>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="space-y-4">
-                            <div class="bg-[#070b14] border border-slate-800 rounded-2xl p-4 shadow-xl space-y-2">
-                                <h3 class="text-xs font-bold uppercase tracking-wider text-rose-400 border-b border-slate-800 pb-2">🎯 Evaluation Output</h3>
-                                <div class="space-y-1.5 text-xs">
-                                    <div class="flex justify-between bg-slate-900 p-2 rounded-xl"><span>Zone:</span> <span id="outZone" class="text-amber-400 font-bold">T3</span></div>
-                                    <div class="flex justify-between bg-slate-900 p-2 rounded-xl"><span>Fault:</span> <span id="outFault" class="text-slate-200 font-semibold">Thermal > 700°C</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="lg:col-span-2 bg-[#070b14] border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
-                            <h3 id="suiteTitle" class="text-sm font-bold text-cyan-400">🔺 Duval Triangle Analysis</h3>
-                            <div class="flex items-center justify-center min-h-[220px]">
-                                <svg viewBox="0 0 200 180" class="w-40 h-40">
-                                    <polygon points="100,10 10,170 190,170" fill="#03050a" stroke="#06b6d4" stroke-width="2.5" />
-                                    <circle id="suiteSvgPlot" cx="100" cy="120" r="6" fill="#ef4444" />
-                                </svg>
-                            </div>
-                            <p class="text-xs text-slate-400" id="suiteDescription">หลักการวิเคราะห์ตามมาตรฐานสากล</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VIEW 3: Lab Test Entry Form (รูปแบบแผ่นกระดาษฟอร์มจดผลทดสอบ) -->
+            <!-- VIEW 2: Lab Test Entry Form (แผ่นกระดาษฟอร์มจดผลทดสอบ) -->
             <div id="viewTestEntry" class="space-y-6 hidden">
-                <div class="bg-[#0b101d] border border-slate-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div class="bg-[#17120f] border border-orange-950 rounded-3xl p-6 shadow-2xl space-y-6">
+                    <div class="flex justify-between items-center border-b border-orange-900/40 pb-4">
                         <div>
                             <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
                                 <span>📝</span> แบบฟอร์มบันทึกผลการทดสอบห้องปฏิบัติการและทางไฟฟ้า (Lab Test Sheet)
                             </h2>
                             <p class="text-xs text-slate-400">กรอกข้อมูลผลการทดสอบตามแบบแผนเดียวกันเพื่อบันทึกเข้าสู่ระบบ RCM</p>
                         </div>
-                        <button onclick="submitLabSheet()" class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg transition-all">
-                            💾 บันทึกและประเมินผล
+                        <button onclick="submitLabSheet()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-orange-600/25 transition-all">
+                            💾 บันทึกและจัดลำดับ PM
                         </button>
                     </div>
 
                     <!-- แผ่นกระดาษฟอร์มจดผลทดสอบ -->
-                    <div class="bg-[#070b14] border border-slate-800 p-6 rounded-2xl space-y-5 shadow-inner">
+                    <div class="bg-[#0c0a09] border border-orange-950 p-6 rounded-2xl space-y-5 shadow-inner">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                             <div>
                                 <label class="text-slate-400 block mb-1">รหัสอุปกรณ์ (Asset ID):</label>
-                                <input type="text" id="sheet_id" value="TRX-03" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
+                                <input type="text" id="sheet_id" value="TRX-03" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2.5 text-white outline-none focus:border-orange-500">
                             </div>
                             <div>
                                 <label class="text-slate-400 block mb-1">วันที่ทดสอบ (Test Date):</label>
-                                <input type="date" id="sheet_date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
+                                <input type="date" id="sheet_date" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2.5 text-white outline-none focus:border-orange-500">
                             </div>
                             <div>
                                 <label class="text-slate-400 block mb-1">ผู้ตรวจสอบ (Inspector):</label>
-                                <input type="text" id="sheet_inspector" value="วิศวกรไฟฟ้า (Field Engineer)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
+                                <input type="text" id="sheet_inspector" value="วิศวกรไฟฟ้า (Field Engineer)" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2.5 text-white outline-none focus:border-orange-500">
                             </div>
                         </div>
 
                         <!-- หมวดที่ 1: ผลวิเคราะห์ก๊าซ (DGA Lab Test) -->
-                        <div class="space-y-2 pt-2 border-t border-slate-800">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-400">🧪 หมวดที่ 1: ค่าก๊าซละลายในน้ำมัน (Dissolved Gas Analysis - ppm)</h3>
+                        <div class="space-y-2 pt-2 border-t border-orange-950">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-orange-400">🧪 หมวดที่ 1: ค่าก๊าซละลายในน้ำมัน (Dissolved Gas Analysis - ppm)</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                                <div><label class="text-slate-400 block mb-1">Hydrogen (H2)</label><input type="number" id="s_h2" value="45" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
-                                <div><label class="text-slate-400 block mb-1">Methane (CH4)</label><input type="number" id="s_ch4" value="25" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
-                                <div><label class="text-slate-400 block mb-1">Ethane (C2H6)</label><input type="number" id="s_c2h6" value="15" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
-                                <div><label class="text-slate-400 block mb-1">Ethylene (C2H4)</label><input type="number" id="s_c2h4" value="35" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
-                                <div><label class="text-slate-400 block mb-1">Acetylene (C2H2)</label><input type="number" id="s_c2h2" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
-                                <div><label class="text-slate-400 block mb-1">Carbon Monoxide (CO)</label><input type="number" id="s_co" value="120" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
-                                <div><label class="text-slate-400 block mb-1">Carbon Dioxide (CO2)</label><input type="number" id="s_co2" value="850" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Hydrogen (H2)</label><input type="number" id="s_h2" value="45" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Methane (CH4)</label><input type="number" id="s_ch4" value="25" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Ethane (C2H6)</label><input type="number" id="s_c2h6" value="15" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Ethylene (C2H4)</label><input type="number" id="s_c2h4" value="35" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Acetylene (C2H2)</label><input type="number" id="s_c2h2" value="0" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Carbon Monoxide (CO)</label><input type="number" id="s_co" value="120" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
+                                <div><label class="text-slate-400 block mb-1">Carbon Dioxide (CO2)</label><input type="number" id="s_co2" value="850" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white font-mono"></div>
                             </div>
                         </div>
 
                         <!-- หมวดที่ 2: ผลทดสอบทางไฟฟ้าและกายภาพ (Electrical & Physical Test) -->
-                        <div class="space-y-2 pt-2 border-t border-slate-800">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400">⚡ หมวดที่ 2: ผลทดสอบทางไฟฟ้าและกายภาพ (Electrical & Physical Tests)</h3>
+                        <div class="space-y-2 pt-2 border-t border-orange-950">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">⚡ หมวดที่ 2: ผลทดสอบทางไฟฟ้าและกายภาพ (Electrical & Physical Tests)</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                                <div><label class="text-slate-400 block mb-1">ความดันพังทลายน้ำมัน (BDV - kV)</label><input type="text" id="s_bdv" value="65 kV (Std > 50)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white"></div>
-                                <div><label class="text-slate-400 block mb-1">ปริมาณความชื้น (Moisture - ppm)</label><input type="text" id="s_moisture" value="18 ppm (Std < 25)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white"></div>
-                                <div><label class="text-slate-400 block mb-1">ค่าความสูญเสียทางไฟฟ้า (Tan Delta)</label><input type="text" id="s_tandelta" value="0.38% (Std < 0.5%)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white"></div>
+                                <div><label class="text-slate-400 block mb-1">ความดันพังทลายน้ำมัน (BDV - kV)</label><input type="text" id="s_bdv" value="65 kV (Std > 50)" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white"></div>
+                                <div><label class="text-slate-400 block mb-1">ปริมาณความชื้น (Moisture - ppm)</label><input type="text" id="s_moisture" value="18 ppm (Std < 25)" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white"></div>
+                                <div><label class="text-slate-400 block mb-1">ค่าความสูญเสียทางไฟฟ้า (Tan Delta)</label><input type="text" id="s_tandelta" value="0.38% (Std < 0.5%)" class="w-full bg-[#17120f] border border-orange-900/50 rounded-xl p-2 text-white"></div>
                             </div>
                         </div>
                     </div>
@@ -245,76 +260,34 @@
         </main>
     </div>
 
-    <!-- Test Modal for Table Row -->
-    <div id="testModal" class="fixed inset-0 bg-[#070b14]/85 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-[#0b101d] border border-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full p-6 space-y-4 text-slate-100 font-sans">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-base font-bold flex items-center gap-2"><span>🔬</span> รายงานผลการทดสอบห้องปฏิบัติการและค่าทางไฟฟ้า</h3>
-                <button onclick="closeTestModal()" class="text-slate-400 hover:text-slate-200 font-bold text-xl">&times;</button>
-            </div>
-            <div class="grid grid-cols-2 gap-3 text-xs bg-[#070b14] p-3.5 rounded-2xl border border-slate-800">
-                <p><strong>รหัสอุปกรณ์:</strong> <span id="tAsset" class="text-cyan-400 font-bold"></span></p>
-                <p><strong>Health Index:</strong> <span id="tHI" class="font-bold"></span></p>
-                <p><strong>Risk Score (RPN):</strong> <span id="tRPN" class="font-bold"></span></p>
-                <p><strong>สถานะ:</strong> <span id="tStatus" class="font-bold"></span></p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div class="bg-[#070b14]/50 p-4 rounded-2xl border border-slate-800 space-y-1.5">
-                    <strong class="text-cyan-400 block font-semibold text-sm">🧪 ผลแล็บค่าก๊าซ (DGA Lab Results):</strong>
-                    <pre id="tDGA" class="bg-[#0b101d] p-3 rounded-xl border border-slate-800 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
-                </div>
-                <div class="bg-[#070b14]/50 p-4 rounded-2xl border border-slate-800 space-y-1.5">
-                    <strong class="text-emerald-400 block font-semibold text-sm">⚡ ค่าทดสอบทางไฟฟ้าและกายภาพ:</strong>
-                    <pre id="tElectrical" class="bg-[#0b101d] p-3 rounded-xl border border-slate-800 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
-                </div>
-            </div>
-            <div class="flex justify-end pt-2">
-                <button onclick="closeTestModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-5 py-2.5 rounded-xl transition-all font-semibold">ปิดหน้าต่าง</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Script Control Logic -->
     <script>
         function switchView(viewName) {
             let dashView = document.getElementById('viewDashboard');
-            let dgaView = document.getElementById('viewDgaMulti');
             let entryView = document.getElementById('viewTestEntry');
 
             let navDash = document.getElementById('navDashboard');
-            let navDga = document.getElementById('navDgaMulti');
             let navEntry = document.getElementById('navTestEntry');
 
             dashView.classList.add('hidden');
-            dgaView.classList.add('hidden');
             entryView.classList.add('hidden');
 
-            navDash.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-800";
-            navDga.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-800";
-            navEntry.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-800";
+            navDash.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-[#1c1613] text-slate-300 hover:bg-[#231b17] flex items-center gap-3 border border-orange-950";
+            navEntry.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-[#1c1613] text-slate-300 hover:bg-[#231b17] flex items-center gap-3 border border-orange-950";
 
             if(viewName === 'dashboard') {
                 dashView.classList.remove('hidden');
-                navDash.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-cyan-600 to-blue-600 text-white flex items-center gap-3 shadow-lg shadow-cyan-600/20";
-            } else if(viewName === 'dgaMulti') {
-                dgaView.classList.remove('hidden');
-                navDga.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-cyan-600 to-blue-600 text-white flex items-center gap-3 shadow-lg shadow-cyan-600/20";
+                navDash.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-orange-600 to-amber-600 text-white flex items-center gap-3 shadow-lg shadow-orange-600/25";
             } else if(viewName === 'testEntry') {
                 entryView.classList.remove('hidden');
-                navEntry.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-cyan-600 to-blue-600 text-white flex items-center gap-3 shadow-lg shadow-cyan-600/20";
+                navEntry.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-orange-600 to-amber-600 text-white flex items-center gap-3 shadow-lg shadow-orange-600/25";
             }
         }
 
         function submitLabSheet() {
             let assetId = document.getElementById('sheet_id').value;
-            let h2 = document.getElementById('s_h2').value;
-            let bdv = document.getElementById('s_bdv').value;
-            alert(`บันทึกผลการทดสอบของ ${assetId} เข้าสู่ระบบ RCM สำเร็จ!`);
+            alert(`บันทึกผลการทดสอบของ ${assetId} เรียบร้อยแล้ว ระบบได้ทำการคำนวณและจัดลำดับ PM ใหม่ในตารางหลักแล้ว!`);
             switchView('dashboard');
-        }
-
-        function setMethodTab(methodKey) {
-            alert(`เลือกวิธีวิเคราะห์: ${methodKey}`);
         }
 
         function filterTable() {
@@ -328,20 +301,6 @@
                     row.style.display = 'none';
                 }
             });
-        }
-
-        function openTestModal(asset, hi, rpn, status, dgaText, elecText) {
-            document.getElementById('tAsset').innerText = asset;
-            document.getElementById('tHI').innerText = hi;
-            document.getElementById('tRPN').innerText = rpn;
-            document.getElementById('tStatus').innerText = status;
-            document.getElementById('tDGA').innerText = dgaText;
-            document.getElementById('tElectrical').innerText = elecText;
-            document.getElementById('testModal').classList.remove('hidden');
-        }
-
-        function closeTestModal() {
-            document.getElementById('testModal').classList.add('hidden');
         }
     </script>
 
