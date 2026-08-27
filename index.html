@@ -51,7 +51,7 @@
                 </button>
             </nav>
             <div class="pt-4 border-t border-orange-900/40 px-1 text-[11px] text-slate-400 leading-relaxed">
-                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> ในแท็บ DGA สามารถเลือกดรอปดาวน์ดูผลวิเคราะห์รายตัว พร้อมแสดงกราฟิกสามเหลี่ยมและก๊าซครบ 7 ตัว
+                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> เลือกแท็บ DGA ด้านบนเพื่อดูการคำนวณครบทุกวิธี (Duval, Rogers, IEC, Doernenburg, Key Gas, Summary) อย่างสัมพันธ์กัน
             </div>
         </aside>
 
@@ -95,8 +95,8 @@
                                     <th class="p-4">ลำดับ PM</th>
                                     <th class="p-4">รหัสอุปกรณ์</th>
                                     <th class="p-4">ประเภท</th>
-                                    <th class="p-4">Health Index</th>
-                                    <th class="p-4">RPN Score</th>
+                                    <th class="p-4">HEALTH INDEX</th>
+                                    <th class="p-4">RPN SCORE</th>
                                     <th class="p-4">โหมดความเสียหาย / รายละเอียด</th>
                                     <th class="p-4">สถานะ</th>
                                     <th class="p-4 text-center">ผลทดสอบเชิงลึก</th>
@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: Advanced 6 DGA Analysis Methods Suite (มีดรอปดาวน์เลือกตัวอุปกรณ์ & สามเหลี่ยม) -->
+            <!-- VIEW 2: Advanced 6 DGA Analysis Methods Suite (เชื่อมโยงทุกวิธีสมบูรณ์) -->
             <div id="viewDgaMethods" class="space-y-6 hidden">
                 <div class="bg-[#17120f] border border-orange-950 rounded-3xl p-6 shadow-2xl space-y-6">
                     
@@ -121,45 +121,45 @@
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-orange-900/40 pb-4 gap-3">
                         <div>
                             <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
-                                <span>🔬</span> การคำนวณและวิเคราะห์ DGA ทั้ง 6 วิธี (รายตัวอุปกรณ์)
+                                <span>🔬</span> ระบบคำนวณและวิเคราะห์ DGA ทั้ง 6 วิธี (Multi-Method Suite)
                             </h2>
-                            <p class="text-xs text-slate-400">เลือกอุปกรณ์จากดรอปดาวน์ด้านข้างเพื่อตรวจสอบผลการคำนวณและสามเหลี่ยมวิเคราะห์[cite: 1]</p>
+                            <p class="text-xs text-slate-400">เลือกอุปกรณ์และสลับแท็บวิธีวิเคราะห์เพื่อตรวจสอบค่าคำนวณ เกณฑ์มาตรฐาน และผลการวินิจฉัย</p>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <label class="text-xs font-semibold text-slate-300">เลือกอุปกรณ์:</label>
                             <select id="dgaSuiteSelect" onchange="renderDgaSuite()" class="bg-[#0c0a09] border border-orange-900/50 text-slate-200 text-xs rounded-xl p-2.5 outline-none">
                                 <option value="trx1">TRX-01 (Critical - Thermal & Arcing)</option>
-                                <option value="trx2">TRX-04 (Warning - Low Temp Thermal)</option>
-                                <option value="trx3">TRX-02 (Normal Operation)</option>
+                                <option value="trx4">TRX-04 (Warning - Low Temp Thermal)</option>
+                                <option value="trx2">TRX-02 (Normal Operation)</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Method Sub-Tabs -->
+                    <!-- Method Sub-Tabs ครบทุกวิธี -->
                     <div class="flex flex-wrap items-center gap-2 bg-[#0c0a09] p-2.5 rounded-2xl border border-orange-950">
-                        <button onclick="setDgaSubTab('duval')" id="subTabDuval" class="px-4 py-2 rounded-xl text-xs font-semibold bg-orange-600 text-white shadow transition-all">🔺 Duval Triangle</button>
-                        <button onclick="setDgaSubTab('rogers')" id="subTabRogers" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📐 Rogers Ratio</button>
-                        <button onclick="setDgaSubTab('iec')" id="subTabIec" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📈 IEC Ratio</button>
-                        <button onclick="setDgaSubTab('doernen')" id="subTabDoernen" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📊 Doernenburg Ratio</button>
-                        <button onclick="setDgaSubTab('keygas')" id="subTabKeygas" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">🔑 Key Gas Method</button>
-                        <button onclick="setDgaSubTab('summary')" id="subTabSummary" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📋 IEEE / Summary</button>
+                        <button onclick="setDgaSubTab('duval')" id="subTabDuval" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-orange-600 text-white shadow transition-all">🔺 Duval Triangle</button>
+                        <button onclick="setDgaSubTab('rogers')" id="subTabRogers" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📐 Rogers Ratio</button>
+                        <button onclick="setDgaSubTab('iec')" id="subTabIec" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📈 IEC Ratio</button>
+                        <button onclick="setDgaSubTab('doernen')" id="subTabDoernen" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📊 Doernenburg Ratio</button>
+                        <button onclick="setDgaSubTab('keygas')" id="subTabKeygas" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">🔑 Key Gas Method</button>
+                        <button onclick="setDgaSubTab('summary')" id="subTabSummary" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📋 IEEE / Summary</button>
                     </div>
 
                     <!-- Dynamic Content Panel -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         
-                        <!-- Left Panel: Calculation & Values Table -->
+                        <!-- Left Panel: Calculation Table & Diagnosis -->
                         <div class="bg-[#0c0a09] border border-orange-950 rounded-2xl p-5 space-y-4 shadow-xl">
                             <h3 id="dgaPanelTitle" class="text-sm font-bold text-orange-400 flex items-center gap-2 border-b border-orange-900/40 pb-2">
-                                <span>📐</span> Method Calculation Suite
+                                <span>📐</span> Calculation Suite
                             </h3>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-xs">
                                     <thead>
                                         <tr class="text-slate-400 border-b border-orange-900/40">
-                                            <th class="p-2.5">Parameter</th>
+                                            <th class="p-2.5">Parameter / Ratio</th>
                                             <th class="p-2.5">Formula / Gas</th>
-                                            <th class="p-2.5">Value (ppm / %)</th>
+                                            <th class="p-2.5">Value</th>
                                             <th class="p-2.5">Code / Status</th>
                                         </tr>
                                     </thead>
@@ -171,38 +171,23 @@
 
                             <div class="bg-[#17120f] p-3.5 rounded-xl border border-orange-950 space-y-1.5 text-xs font-sans">
                                 <strong class="text-orange-400 block font-bold">🎯 Diagnosis Result:</strong>
-                                <p class="text-slate-300">Identifier / Code: <span id="diagCode" class="font-mono font-bold text-amber-400">021</span></p>
-                                <p class="text-slate-300">Fault Classification: <span id="diagFault" class="font-bold text-rose-400">Thermal Overheating / Arcing</span></p>
+                                <p class="text-slate-300">Identifier / Code: <span id="diagCode" class="font-mono font-bold text-amber-400"></span></p>
+                                <p class="text-slate-300">Fault Classification: <span id="diagFault" class="font-bold text-rose-400"></span></p>
                             </div>
                         </div>
 
-                        <!-- Right Panel: Duval Triangle Graphic or Reference Code Table -->
-                        <div class="bg-[#0c0a09] border border-orange-950 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between" id="rightPanelContainer">
+                        <!-- Right Panel: Dynamic Graphics / Reference Table -->
+                        <div class="bg-[#0c0a09] border border-orange-950 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between">
                             <div>
-                                <h3 id="refTableTitle" class="text-sm font-bold text-amber-400 flex items-center gap-2 border-b border-orange-900/40 pb-2">
-                                    <span>🔺 Duval Triangle Graphic Simulation</span>
+                                <h3 id="refPanelTitle" class="text-sm font-bold text-amber-400 flex items-center gap-2 border-b border-orange-900/40 pb-2">
+                                    <span>🔺 Graphic / Reference Table</span>
                                 </h3>
-                                <div id="rightPanelContent" class="flex items-center justify-center py-4">
-                                    <!-- SVG Triangle -->
-                                    <div class="relative w-full max-w-xs flex flex-col items-center">
-                                        <svg viewBox="0 0 200 180" class="w-44 h-44 drop-shadow-2xl">
-                                            <polygon points="100,10 10,170 190,170" fill="#120e0c" stroke="#f97316" stroke-width="2.5" />
-                                            <line x1="100" y1="10" x2="100" y2="170" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
-                                            <line x1="10" y1="170" x2="140" y2="90" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
-                                            <line x1="190" y1="170" x2="70" y2="90" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
-                                            <text x="94" y="25" fill="#fdba74" font-size="9" font-weight="bold">CH4</text>
-                                            <text x="15" y="185" fill="#fdba74" font-size="9" font-weight="bold">C2H2</text>
-                                            <text x="165" y="185" fill="#fdba74" font-size="9" font-weight="bold">C2H4</text>
-                                            <circle id="duvalPlotCircle" cx="100" cy="110" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" class="animate-pulse" />
-                                        </svg>
-                                        <div class="mt-2 bg-[#17120f] border border-orange-950 px-3 py-1 rounded-xl text-[10px] font-mono text-amber-400 font-semibold" id="duvalCoordsLabel">
-                                            CH4: 20.3% | C2H2: 0.0% | C2H4: 79.7%
-                                        </div>
-                                    </div>
+                                <div id="refPanelContent" class="py-4">
+                                    <!-- Dynamic Content inserted by JS -->
                                 </div>
                             </div>
                             <div class="p-3 bg-[#17120f] rounded-xl border border-orange-950 text-xs text-slate-400 leading-relaxed font-sans" id="dgaMethodDesc">
-                                <strong>คำอธิบายมาตรฐาน:</strong> Duval Triangle แปลงสัดส่วนก๊าซติดไฟ 3 ตัวเป็นร้อยละ 100 แล้วพล็อตบนพิกัดสามเหลี่ยมเพื่อจำแนกโซนความเสียหาย[cite: 1]
+                                <strong>คำอธิบายมาตรฐาน:</strong> รายละเอียดวิธีการคำนวณและเกณฑ์มาตรฐานตามหลักการวิศวกรรมสากล
                             </div>
                         </div>
 
@@ -277,7 +262,7 @@
                 <button onclick="closeTestModal()" class="text-slate-400 hover:text-slate-200 font-bold text-xl">&times;</button>
             </div>
             <div class="grid grid-cols-2 gap-3 text-xs bg-[#0c0a09] p-3.5 rounded-2xl border border-orange-950">
-                <p><strong>รหัสอุปกรณ์:</span></strong> <span id="tAsset" class="text-orange-400 font-bold"></span></p>
+                <p><strong>รหัสอุปกรณ์:</strong> <span id="tAsset" class="text-orange-400 font-bold"></span></p>
                 <p><strong>Health Index:</strong> <span id="tHI" class="font-bold"></span></p>
                 <p><strong>Risk Score (RPN):</strong> <span id="tRPN" class="font-bold"></span></p>
                 <p><strong>สถานะ:</strong> <span id="tStatus" class="font-bold"></span></p>
@@ -298,11 +283,9 @@
         </div>
     </div>
 
-    <!-- Script Control Logic (35 Units & 7 Gases & 6 DGA Methods) -->
+    <!-- Script Control Logic (35 Units & 7 Gases & 6 DGA Methods Complete Suite) -->
     <script>
         const allUnits = [];
-        // สร้างข้อมูล 35 ตัวพร้อมค่าก๊าซครบ 7 ตัว ($H_2, CH_4, C_2H_6, C_2H_4, C_2H_2, CO, CO_2$)
-        allUnits.push({ id: 'GIS-BAY-03', type: 'GIS', hi: '52%', rpn: '320 (High)', desc: 'SF6 Pressure ต่ำกว่าเกณฑ์เตือน / UHF PD สูง', status: 'Critical', dga: 'SF6 Pressure: 5.2 bar [Alarm] (Std: 6.0 bar)\nDew Point: -15°C (Std < -20°C)\nPD Level: 450 pC (Std < 100 pC)', elec: 'Contact Resistance: 48 µΩ (Std < 1.2x Initial)' });
         allUnits.push({ 
             id: 'TRX-01', type: 'TRX', hi: '58%', rpn: '280 (High)', desc: 'DGA: ก๊าซ Hydrogen & Acetylene สูง (Thermal/Arcing)', status: 'Critical', 
             dga: 'Hydrogen (H2): 1250 ppm (Std < 100)\nMethane (CH4): 320 ppm (Std < 30)\nEthane (C2H6): 120 ppm (Std < 20)\nEthylene (C2H4): 450 ppm (Std < 50)\nAcetylene (C2H2): 85 ppm (Std < 1)\nCarbon Monoxide (CO): 600 ppm (Std < 350)\nCarbon Dioxide (CO2): 3200 ppm (Std < 2500)', 
@@ -314,7 +297,7 @@
             elec: 'OLTC Contact Resistance: 85 µΩ (Std < 50)\nBDV: 55 kV (Std > 50)' 
         });
 
-        for(let i = 4; i <= 35; i++) {
+        for(let i = 3; i <= 35; i++) {
             let isTrx = i % 2 === 0;
             let code = isTrx ? `TRX-${i < 10 ? '0'+i : i}` : `GIS-BAY-${i < 10 ? '0'+i : i}`;
             allUnits.push({
@@ -379,75 +362,185 @@
 
         window.onload = function() { renderTable(); setDgaSubTab('duval'); };
 
-        // DGA Methods Data with dropdown simulation
-        const dgaTransformerData = {
+        // DGA Multi-Method Database with Dropdown Selector
+        const dgaDatabase = {
             trx1: {
                 name: "TRX-01 (Critical - Thermal & Arcing)",
-                duval: {
-                    title: "Duval Triangle Method",
-                    table: `<tr><td class="p-2.5">%CH4</td><td class="p-2.5">Methane Ratio</td><td class="p-2.5 text-amber-400 font-bold">20.3%</td><td class="p-2.5">T3</td></tr>
-                            <tr><td class="p-2.5">%C2H2</td><td class="p-2.5">Acetylene Ratio</td><td class="p-2.5 text-slate-400 font-bold">0.0%</td><td class="p-2.5">-</td></tr>
-                            <tr><td class="p-2.5">%C2H4</td><td class="p-2.5">Ethylene Ratio</td><td class="p-2.5 text-rose-400 font-bold">79.7%</td><td class="p-2.5">T3</td></tr>`,
-                    code: "Zone T3 & D1",
-                    fault: "Thermal > 700°C / Severe Arcing",
-                    cx: 100, cy: 120, coords: "CH4: 20.3% | C2H2: 0.0% | C2H4: 79.7%",
-                    desc: "Duval Triangle แปลงสัดส่วนก๊าซเป็นร้อยละ 100 พล็อตลงพิกัดสามเหลี่ยม ชี้ความผิดปกติโซน T3 และ D1[cite: 1]"
-                },
-                rogers: {
-                    title: "Rogers Ratio Method",
-                    table: `<tr><td class="p-2.5">R1</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-amber-400 font-bold">0.256</td><td class="p-2.5">1</td></tr>
-                            <tr><td class="p-2.5">R2</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-rose-400 font-bold">0.188</td><td class="p-2.5">1</td></tr>
-                            <tr><td class="p-2.5">R3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">3.750</td><td class="p-2.5">0</td></tr>`,
-                    code: "[1,1,0]",
-                    fault: "Thermal Fault > 700°C",
-                    cx: 110, cy: 90, coords: "R1=1 | R2=1 | R3=0",
-                    desc: "Rogers Ratio คำนวณอัตราส่วน 3 ชุด แปลงเป็นรหัส [1,1,0] บ่งชี้ความร้อนสูงในน้ำมัน[cite: 1]"
+                methods: {
+                    duval: {
+                        title: "Duval Triangle Method",
+                        table: `<tr><td class="p-2.5">%CH4</td><td class="p-2.5">Methane Ratio</td><td class="p-2.5 text-amber-400 font-bold">20.3%</td><td class="p-2.5">T3</td></tr>
+                                <tr><td class="p-2.5">%C2H2</td><td class="p-2.5">Acetylene Ratio</td><td class="p-2.5 text-slate-400 font-bold">0.0%</td><td class="p-2.5">-</td></tr>
+                                <tr><td class="p-2.5">%C2H4</td><td class="p-2.5">Ethylene Ratio</td><td class="p-2.5 text-rose-400 font-bold">79.7%</td><td class="p-2.5">T3</td></tr>`,
+                        code: "Zone T3 & D1", fault: "Thermal > 700°C / Severe Arcing",
+                        isGraphic: true, cx: 100, cy: 120, coords: "CH4: 20.3% | C2H2: 0.0% | C2H4: 79.7%",
+                        desc: "Duval Triangle แปลงสัดส่วนก๊าซเป็นร้อยละ 100 พล็อตลงพิกัดสามเหลี่ยม ชี้ความผิดปกติโซน T3 และ D1[cite: 1]"
+                    },
+                    rogers: {
+                        title: "Rogers Ratio Method",
+                        table: `<tr><td class="p-2.5">R1</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-amber-400 font-bold">0.256</td><td class="p-2.5">1</td></tr>
+                                <tr><td class="p-2.5">R2</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-rose-400 font-bold">0.188</td><td class="p-2.5">1</td></tr>
+                                <tr><td class="p-2.5">R3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">3.750</td><td class="p-2.5">0</td></tr>`,
+                        code: "[1,1,0]", fault: "Thermal Fault > 700°C",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">&gt;1</td><td class="p-2">&lt;0.1</td><td class="p-2">1-3</td><td class="p-2 text-amber-400">Thermal &lt;200C</td></tr>
+                                <tr><td class="p-2">&gt;1</td><td class="p-2">&lt;0.1</td><td class="p-2">&gt;3</td><td class="p-2 text-rose-500 font-bold">Thermal &gt;700C</td></tr>`,
+                        desc: "Rogers Ratio คำนวณอัตราส่วนก๊าซ 3 ชุด แปลงเป็นรหัส [1,1,0] บ่งชี้ความร้อนสูงในน้ำมัน[cite: 1]"
+                    },
+                    iec: {
+                        title: "IEC 60599 Ratio Method",
+                        table: `<tr><td class="p-2.5">I1</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-rose-400 font-bold">0.188</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">I2</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-amber-400 font-bold">0.256</td><td class="p-2.5">1</td></tr>
+                                <tr><td class="p-2.5">I3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">3.750</td><td class="p-2.5">2</td></tr>`,
+                        code: "012", fault: "Thermal Fault > 700°C",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">0</td><td class="p-2">2</td><td class="p-2">2</td><td class="p-2 text-rose-500 font-bold">Thermal &gt;700C</td></tr>`,
+                        desc: "IEC Ratio Method พัฒนาต่อยอดจาก Roger's ปรับช่วงขอบเขตอัตราส่วนให้สอดคล้องกับมาตรฐานสากล IEC 60599[cite: 1]"
+                    },
+                    doernen: {
+                        title: "Doernenburg Ratio Method",
+                        table: `<tr><td class="p-2.5">CH4/H2</td><td class="p-2.5">Ratio 1</td><td class="p-2.5 text-amber-400 font-bold">0.256</td><td class="p-2.5">Pass</td></tr>
+                                <tr><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5">Ratio 2</td><td class="p-2.5 text-rose-400 font-bold">0.188</td><td class="p-2.5">Fault</td></tr>`,
+                        code: "Active Fault", fault: "Severe Thermal / Arcing",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2" colspan="4">ใช้ก๊าซ 5 ชนิดคำนวณอัตราส่วน 4 ชุด ตรวจสอบความผิดปกติ[cite: 1]</td></tr>`,
+                        desc: "Doernenburg Method ตรวจสอบเงื่อนไขปริมาณก๊าซขั้นต่ำก่อนคำนวณสัดส่วน 4 ชุด[cite: 1]"
+                    },
+                    keygas: {
+                        title: "Key Gas Method (IEEE C57.104)",
+                        table: `<tr><td class="p-2.5">H2</td><td class="p-2.5">1250 ppm</td><td class="p-2.5 text-rose-500 font-bold">Lv3</td><td class="p-2.5">Action</td></tr>
+                                <tr><td class="p-2.5">C2H2</td><td class="p-2.5">85 ppm</td><td class="p-2.5 text-rose-500 font-bold">Lv3</td><td class="p-2.5">Action</td></tr>
+                                <tr><td class="p-2.5">C2H4</td><td class="p-2.5">450 ppm</td><td class="p-2.5 text-rose-500 font-bold">Lv3</td><td class="p-2.5">Action</td></tr>`,
+                        code: "Level 3 Action", fault: "High Energy Arcing & Thermal",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">Thermal &gt;700C</td><td class="p-2" colspan="3">C2H4, C2H2</td></tr>`,
+                        desc: "Key Gas Method วิเคราะห์หาก๊าซเด่น (Dominant Key Gas) ที่มีปริมาณสูงเกินเกณฑ์[cite: 1]"
+                    },
+                    summary: {
+                        title: "IEEE C57.104 Summary & TDCG",
+                        table: `<tr><td class="p-2.5">TDCG</td><td class="p-2.5">Total Gas</td><td class="p-2.5 text-rose-500 font-bold">2155 ppm</td><td class="p-2.5">Level 4</td></tr>`,
+                        code: "CRITICAL", fault: "Immediate Inspection Required",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2" colspan="4">สรุปภาพรวมความรุนแรงสะสมของก๊าซ TDCG ตามมาตรฐาน IEEE[cite: 1]</td></tr>`,
+                        desc: "สรุปผลการประเมินความเสี่ยงภาพรวมทั้งหมด พร้อมข้อเสนอแนะเชิงกลยุทธ์ RCM[cite: 1]"
+                    }
+                }
+            },
+            trx4: {
+                name: "TRX-04 (Warning - Low Temp Thermal)",
+                methods: {
+                    duval: {
+                        title: "Duval Triangle Method",
+                        table: `<tr><td class="p-2.5">%CH4</td><td class="p-2.5">Methane Ratio</td><td class="p-2.5 text-amber-400 font-bold">65.0%</td><td class="p-2.5">T1</td></tr>
+                                <tr><td class="p-2.5">%C2H2</td><td class="p-2.5">Acetylene Ratio</td><td class="p-2.5 text-slate-400 font-bold">1.0%</td><td class="p-2.5">-</td></tr>
+                                <tr><td class="p-2.5">%C2H4</td><td class="p-2.5">Ethylene Ratio</td><td class="p-2.5 text-rose-400 font-bold">34.0%</td><td class="p-2.5">T1</td></tr>`,
+                        code: "Zone T1", fault: "Low Temp Thermal < 300°C",
+                        isGraphic: true, cx: 110, cy: 60, coords: "CH4: 65% | C2H2: 1% | C2H4: 34%",
+                        desc: "Duval Triangle ชี้พิกัดโซน T1 ความร้อนสะสมต่ำกว่า 300°C[cite: 1]"
+                    },
+                    rogers: {
+                        title: "Rogers Ratio Method",
+                        table: `<tr><td class="p-2.5">R1</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-amber-400 font-bold">0.611</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">R2</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-rose-400 font-bold">0.005</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">R3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">2.714</td><td class="p-2.5">1</td></tr>`,
+                        code: "[0,0,1]", fault: "Low Temp Thermal",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">&gt;1</td><td class="p-2">&lt;0.1</td><td class="p-2">1-3</td><td class="p-2 text-amber-400">Thermal &lt;200C</td></tr>`,
+                        desc: "Rogers Ratio ชี้รหัส [0,0,1] ความร้อนสะสมต่ำผิดปกติ[cite: 1]"
+                    },
+                    iec: {
+                        title: "IEC 60599 Ratio Method",
+                        table: `<tr><td class="p-2.5">I1</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-rose-400 font-bold">0.005</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">I2</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-amber-400 font-bold">0.611</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">I3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">2.714</td><td class="p-2.5">1</td></tr>`,
+                        code: "001", fault: "Thermal < 300°C",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">0</td><td class="p-2">0</td><td class="p-2">1</td><td class="p-2 text-amber-400">Thermal &lt;300C</td></tr>`,
+                        desc: "IEC Ratio Method ระบุโซน T1 ความร้อนต่ำ[cite: 1]"
+                    },
+                    doernen: {
+                        title: "Doernenburg Ratio Method",
+                        table: `<tr><td class="p-2.5">CH4/H2</td><td class="p-2.5">Ratio 1</td><td class="p-2.5 text-amber-400 font-bold">0.611</td><td class="p-2.5">Pass</td></tr>`,
+                        code: "Moderate", fault: "Low Temp Thermal",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2" colspan="4">อัตราส่วนอยู่ในเกณฑ์เฝ้าระวัง[cite: 1]</td></tr>`,
+                        desc: "Doernenburg ตรวจสอบอัตราส่วนอยู่ในเกณฑ์เฝ้าระวัง[cite: 1]"
+                    },
+                    keygas: {
+                        title: "Key Gas Method (IEEE C57.104)",
+                        table: `<tr><td class="p-2.5">H2</td><td class="p-2.5">180 ppm</td><td class="p-2.5 text-amber-400 font-bold">Lv1</td><td class="p-2.5">Monitor</td></tr>
+                                <tr><td class="p-2.5">C2H4</td><td class="p-2.5">95 ppm</td><td class="p-2.5 text-amber-400 font-bold">Lv1</td><td class="p-2.5">Monitor</td></tr>`,
+                        code: "Level 1 Monitor", fault: "Low Temp Heating",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">Thermal &lt;300C</td><td class="p-2" colspan="3">CH4, C2H6</td></tr>`,
+                        desc: "Key Gas พบ Ethylene เริ่มสะสมตัวบ่งบอกความร้อนจุดเชื่อมต่อ[cite: 1]"
+                    },
+                    summary: {
+                        title: "IEEE C57.104 Summary & TDCG",
+                        table: `<tr><td class="p-2.5">TDCG</td><td class="p-2.5">Total Gas</td><td class="p-2.5 text-amber-400 font-bold">635 ppm</td><td class="p-2.5">Level 2</td></tr>`,
+                        code: "WARNING", fault: "Progressive Thermal Trend",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2" colspan="4">สรุปภาพรวมอยู่ในระดับต้องเฝ้าระวัง[cite: 1]</td></tr>`,
+                        desc: "สรุปผลมาตรฐาน IEEE อยู่ในระดับต้องเฝ้าระวัง (Warning)[cite: 1]"
+                    }
                 }
             },
             trx2: {
-                name: "TRX-04 (Warning - Low Temp Thermal)",
-                duval: {
-                    title: "Duval Triangle Method",
-                    table: `<tr><td class="p-2.5">%CH4</td><td class="p-2.5">Methane Ratio</td><td class="p-2.5 text-amber-400 font-bold">65.0%</td><td class="p-2.5">T1</td></tr>
-                            <tr><td class="p-2.5">%C2H2</td><td class="p-2.5">Acetylene Ratio</td><td class="p-2.5 text-slate-400 font-bold">1.0%</td><td class="p-2.5">-</td></tr>
-                            <tr><td class="p-2.5">%C2H4</td><td class="p-2.5">Ethylene Ratio</td><td class="p-2.5 text-rose-400 font-bold">34.0%</td><td class="p-2.5">T1</td></tr>`,
-                    code: "Zone T1",
-                    fault: "Low Temp Thermal < 300°C",
-                    cx: 110, cy: 60, coords: "CH4: 65% | C2H2: 1% | C2H4: 34%",
-                    desc: "Duval Triangle ชี้พิกัดโซน T1 ความร้อนสะสมต่ำกว่า 300°C[cite: 1]"
-                },
-                rogers: {
-                    title: "Rogers Ratio Method",
-                    table: `<tr><td class="p-2.5">R1</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-amber-400 font-bold">0.611</td><td class="p-2.5">0</td></tr>
-                            <tr><td class="p-2.5">R2</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-rose-400 font-bold">0.005</td><td class="p-2.5">0</td></tr>
-                            <tr><td class="p-2.5">R3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">2.714</td><td class="p-2.5">1</td></tr>`,
-                    code: "[0,0,1]",
-                    fault: "Low Temperature Thermal Fault",
-                    cx: 115, cy: 65, coords: "R1=0 | R2=0 | R3=1",
-                    desc: "Rogers Ratio ชี้รหัส [0,0,1] ความร้อนสะสมต่ำผิดปกติ[cite: 1]"
-                }
-            },
-            trx3: {
                 name: "TRX-02 (Normal Operation)",
-                duval: {
-                    title: "Duval Triangle Method",
-                    table: `<tr><td class="p-2.5">%CH4</td><td class="p-2.5">Methane Ratio</td><td class="p-2.5 text-amber-400 font-bold">33.3%</td><td class="p-2.5">Normal</td></tr>
-                            <tr><td class="p-2.5">%C2H2</td><td class="p-2.5">Acetylene Ratio</td><td class="p-2.5 text-slate-400 font-bold">0.0%</td><td class="p-2.5">-</td></tr>
-                            <tr><td class="p-2.5">%C2H4</td><td class="p-2.5">Ethylene Ratio</td><td class="p-2.5 text-emerald-400 font-bold">66.7%</td><td class="p-2.5">Normal</td></tr>`,
-                    code: "Normal Zone",
-                    fault: "Safe Operation",
-                    cx: 100, cy: 100, coords: "CH4: 33.3% | C2H2: 0% | C2H4: 66.7%",
-                    desc: "พิกัดตกอยู่ในโซนปกติ สมบูรณ์ตามรอบปี[cite: 1]"
-                },
-                rogers: {
-                    title: "Rogers Ratio Method",
-                    table: `<tr><td class="p-2.5">R1</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-emerald-400 font-bold">0.666</td><td class="p-2.5">0</td></tr>
-                            <tr><td class="p-2.5">R2</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-emerald-400 font-bold">0.000</td><td class="p-2.5">0</td></tr>
-                            <tr><td class="p-2.5">R3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">0.500</td><td class="p-2.5">0</td></tr>`,
-                    code: "[0,0,0]",
-                    fault: "Normal Operation",
-                    cx: 100, cy: 100, coords: "R1=0 | R2=0 | R3=0",
-                    desc: "Rogers Ratio แสดงรหัส [0,0,0] ปกติสมบูรณ์[cite: 1]"
+                methods: {
+                    duval: {
+                        title: "Duval Triangle Method",
+                        table: `<tr><td class="p-2.5">%CH4</td><td class="p-2.5">Methane Ratio</td><td class="p-2.5 text-amber-400 font-bold">33.3%</td><td class="p-2.5">Normal</td></tr>
+                                <tr><td class="p-2.5">%C2H2</td><td class="p-2.5">Acetylene Ratio</td><td class="p-2.5 text-slate-400 font-bold">0.0%</td><td class="p-2.5">-</td></tr>
+                                <tr><td class="p-2.5">%C2H4</td><td class="p-2.5">Ethylene Ratio</td><td class="p-2.5 text-emerald-400 font-bold">66.7%</td><td class="p-2.5">Normal</td></tr>`,
+                        code: "Normal Zone", fault: "Safe Operation",
+                        isGraphic: true, cx: 100, cy: 100, coords: "CH4: 33.3% | C2H2: 0% | C2H4: 66.7%",
+                        desc: "พิกัดตกอยู่ในโซนปกติ สมบูรณ์ตามรอบปี[cite: 1]"
+                    },
+                    rogers: {
+                        title: "Rogers Ratio Method",
+                        table: `<tr><td class="p-2.5">R1</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-emerald-400 font-bold">0.666</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">R2</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-emerald-400 font-bold">0.000</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">R3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">0.500</td><td class="p-2.5">0</td></tr>`,
+                        code: "[0,0,0]", fault: "Normal Operation",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">&lt;0.1</td><td class="p-2">&lt;0.1</td><td class="p-2">&lt;1</td><td class="p-2 text-emerald-400">Normal</td></tr>`,
+                        desc: "Rogers Ratio แสดงรหัส [0,0,0] ปกติสมบูรณ์[cite: 1]"
+                    },
+                    iec: {
+                        title: "IEC 60599 Ratio Method",
+                        table: `<tr><td class="p-2.5">I1</td><td class="p-2.5">C2H2/C2H4</td><td class="p-2.5 text-emerald-400 font-bold">0.000</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">I2</td><td class="p-2.5">CH4/H2</td><td class="p-2.5 text-emerald-400 font-bold">0.666</td><td class="p-2.5">0</td></tr>
+                                <tr><td class="p-2.5">I3</td><td class="p-2.5">C2H4/C2H6</td><td class="p-2.5 text-emerald-400 font-bold">0.500</td><td class="p-2.5">0</td></tr>`,
+                        code: "000", fault: "Normal Operation",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">0</td><td class="p-2">0</td><td class="p-2">0</td><td class="p-2 text-emerald-400">Normal</td></tr>`,
+                        desc: "IEC Ratio อยู่ในเกณฑ์มาตรฐานปกติ[cite: 1]"
+                    },
+                    doernen: {
+                        title: "Doernenburg Ratio Method",
+                        table: `<tr><td class="p-2.5">CH4/H2</td><td class="p-2.5">Ratio 1</td><td class="p-2.5 text-emerald-400 font-bold">0.666</td><td class="p-2.5">Pass</td></tr>`,
+                        code: "Normal", fault: "No Fault",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2" colspan="4">อัตราส่วนผ่านเกณฑ์มาตรฐานปกติ[cite: 1]</td></tr>`,
+                        desc: "Doernenburg ยืนยันสภาวะปกติทุกอัตราส่วน[cite: 1]"
+                    },
+                    keygas: {
+                        title: "Key Gas Method (IEEE C57.104)",
+                        table: `<tr><td class="p-2.5">H2</td><td class="p-2.5">15 ppm</td><td class="p-2.5 text-emerald-400 font-bold">Lv0</td><td class="p-2.5">Normal</td></tr>`,
+                        code: "Level 0 Normal", fault: "No Fault Detected",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2">Normal</td><td class="p-2" colspan="3">None detected above limits</td></tr>`,
+                        desc: "Key Gas ไม่พบก๊าซใดเกินเกณฑ์มาตรฐาน[cite: 1]"
+                    },
+                    summary: {
+                        title: "IEEE C57.104 Summary & TDCG",
+                        table: `<tr><td class="p-2.5">TDCG</td><td class="p-2.5">Total Gas</td><td class="p-2.5 text-emerald-400 font-bold">104 ppm</td><td class="p-2.5">Level 1</td></tr>`,
+                        code: "NORMAL", fault: "Safe Operation",
+                        isGraphic: false,
+                        ref: `<tr><td class="p-2" colspan="4">สรุปภาพรวมผ่านเกณฑ์ความปลอดภัย[cite: 1]</td></tr>`,
+                        desc: "สรุปผลมาตรฐาน IEEE ผ่านเกณฑ์ความปลอดภัยทั้งหมด[cite: 1]"
+                    }
                 }
             }
         };
@@ -460,17 +553,16 @@
             const tabs = ['duval', 'rogers', 'iec', 'doernen', 'keygas', 'summary'];
             tabs.forEach(t => {
                 let btn = document.getElementById(`subTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                if(btn) btn.className = "px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all";
+                if(btn) btn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all";
             });
             let activeBtn = document.getElementById(`subTab${key.charAt(0).toUpperCase() + key.slice(1)}`);
-            if(activeBtn) activeBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-orange-600 text-white shadow transition-all";
+            if(activeBtn) activeBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold bg-orange-600 text-white shadow transition-all";
         }
 
         function renderDgaSuite() {
             let assetKey = document.getElementById('dgaSuiteSelect').value;
-            let assetObj = dgaTransformerData[assetKey];
-            // ถ้าเลือก tab ที่ไม่ใช่ duval หรือ rogers ให้ fallback ไป duval เพื่อความสมบูรณ์
-            let methodData = assetObj[currentDgaSub] || assetObj['duval'];
+            let assetObj = dgaDatabase[assetKey];
+            let methodData = assetObj.methods[currentDgaSub];
 
             document.getElementById('dgaPanelTitle').innerHTML = `<span>📐</span> ${methodData.title} (${assetObj.name})`;
             document.getElementById('dgaRatioBody').innerHTML = methodData.table;
@@ -478,10 +570,46 @@
             document.getElementById('diagFault').innerText = methodData.fault;
             document.getElementById('dgaMethodDesc').innerHTML = `<strong>คำอธิบายมาตรฐาน:</strong> ${methodData.desc}`;
 
-            let plot = document.getElementById('duvalPlotCircle');
-            plot.setAttribute('cx', methodData.cx);
-            plot.setAttribute('cy', methodData.cy);
-            document.getElementById('duvalCoordsLabel').innerText = methodData.coords;
+            let rightPanelTitle = document.getElementById('refPanelTitle');
+            let rightPanelContent = document.getElementById('refPanelContent');
+
+            if(methodData.isGraphic) {
+                rightPanelTitle.innerHTML = `<span>🔺 Duval Triangle Graphic Simulation</span>`;
+                rightPanelContent.innerHTML = `
+                    <div class="relative w-full max-w-xs flex flex-col items-center">
+                        <svg viewBox="0 0 200 180" class="w-44 h-44 drop-shadow-2xl">
+                            <polygon points="100,10 10,170 190,170" fill="#120e0c" stroke="#f97316" stroke-width="2.5" />
+                            <line x1="100" y1="10" x2="100" y2="170" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
+                            <line x1="10" y1="170" x2="140" y2="90" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
+                            <line x1="190" y1="170" x2="70" y2="90" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
+                            <text x="94" y="25" fill="#fdba74" font-size="9" font-weight="bold">CH4</text>
+                            <text x="15" y="185" fill="#fdba74" font-size="9" font-weight="bold">C2H2</text>
+                            <text x="165" y="185" fill="#fdba74" font-size="9" font-weight="bold">C2H4</text>
+                            <circle cx="${methodData.cx}" cy="${methodData.cy}" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" class="animate-pulse" />
+                        </svg>
+                        <div class="mt-2 bg-[#17120f] border border-orange-950 px-3 py-1 rounded-xl text-[10px] font-mono text-amber-400 font-semibold">
+                            ${methodData.coords}
+                        </div>
+                    </div>
+                `;
+            } else {
+                rightPanelTitle.innerHTML = `<span>📚 Reference Code Table & Criteria</span>`;
+                rightPanelContent.innerHTML = `
+                    <div class="overflow-x-auto max-h-[260px] overflow-y-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-orange-900/40">
+                                    <th class="p-2">Code / Ref</th>
+                                    <th class="p-2" colspan="3">Fault Indication & Criteria</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-orange-950/40 text-slate-300 font-mono text-[11px]">
+                                ${methodData.ref}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
         }
 
         function switchView(viewName) {
