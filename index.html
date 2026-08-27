@@ -34,57 +34,56 @@
     <!-- Main Container Layout with Left Sidebar -->
     <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-        <!-- Left Sidebar: Detailed Test Panel (ผลทดสอบเชิงลึกด้านซ้าย) -->
+        <!-- Left Sidebar: 6 DGA Analysis Methods Panel -->
         <aside class="lg:col-span-1 bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4 h-fit sticky top-20">
             <div class="border-b pb-3">
                 <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <span>🔬</span> ผลทดสอบเชิงลึก (Detailed Tests)
+                    <span>📊</span> ผล 6 DGA Analysis Methods
                 </h2>
-                <p class="text-[11px] text-slate-500 mt-0.5">เลือกอุปกรณ์เพื่อดูผลทดสอบ DGA 6 วิธีและค่าพารามิเตอร์</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ DGA ทั้ง 6 วิธี</p>
             </div>
 
-            <!-- Asset Selector for Sidebar -->
+            <!-- Dropdown Selector for 6 DGA Methods -->
             <div class="space-y-2">
-                <label class="text-xs font-semibold text-slate-700">เลือกอุปกรณ์ (Select Asset):</label>
-                <select id="sidebarAssetSelect" onchange="updateSidebarDetails()" class="bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
-                    <option value="TRX-01">TRX-01 (Transformer - Critical)</option>
-                    <option value="TRX-04">TRX-04 (Transformer - Warning)</option>
-                    <option value="GIS-03">GIS-BAY-03 (GIS - Critical)</option>
-                    <option value="TRX-02">TRX-02 (Transformer - Normal)</option>
+                <label class="text-xs font-semibold text-slate-700">เลือกอุปกรณ์:</label>
+                <select id="dgaAssetSelect" onchange="updateDgaSidebar()" class="bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                    <option value="TRX-01">TRX-01 (Critical - Thermal & Arcing)</option>
+                    <option value="TRX-04">TRX-04 (Warning - Low Temp Thermal)</option>
+                    <option value="TRX-05">TRX-05 (Warning - Partial Discharge)</option>
+                    <option value="TRX-02">TRX-02 (Normal Operation)</option>
                 </select>
             </div>
 
-            <!-- Sidebar Content Container -->
-            <div class="space-y-3 text-xs">
-                <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 space-y-1">
-                    <p class="font-bold text-blue-900" id="sbAssetName">TRX-01</p>
-                    <p class="text-slate-600">Health Index: <span id="sbHI" class="font-bold text-rose-600">58%</span></p>
-                    <p class="text-slate-600">Risk Score: <span id="sbRPN" class="font-bold text-rose-600">280 (High)</span></p>
+            <!-- 6 Methods Details Container -->
+            <div class="space-y-2.5 text-xs">
+                <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100 flex justify-between items-center">
+                    <span class="font-bold text-blue-900" id="dgaSbName">TRX-01</span>
+                    <span class="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded">6 Methods</span>
                 </div>
 
-                <!-- Lab Test Results -->
-                <div class="space-y-1">
-                    <span class="font-bold text-slate-700 block">🧪 DGA Lab Results:</span>
-                    <pre id="sbDGA" class="bg-slate-50 p-2 rounded border border-slate-200 font-mono text-[10px] whitespace-pre-line leading-relaxed"></pre>
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <b class="text-blue-700 block text-[11px]">1. IEEE Method:</b>
+                    <span id="mIEEE" class="text-slate-700 font-sans text-[11px]"></span>
                 </div>
-
-                <!-- Electrical Test Results -->
-                <div class="space-y-1">
-                    <span class="font-bold text-slate-700 block">⚡ Electrical & Physical:</span>
-                    <pre id="sbOil" class="bg-slate-50 p-2 rounded border border-slate-200 font-mono text-[10px] whitespace-pre-line leading-relaxed"></pre>
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <b class="text-blue-700 block text-[11px]">2. Roger’s Ratio Method:</b>
+                    <span id="mRogers" class="text-slate-700 font-sans text-[11px]"></span>
                 </div>
-
-                <!-- 6 DGA Methods Summary -->
-                <div class="space-y-1.5 pt-2 border-t">
-                    <span class="font-bold text-slate-700 block">📊 6 DGA Analysis Methods:</span>
-                    <div class="space-y-1 text-[10px]">
-                        <div class="bg-slate-50 p-1.5 rounded border"><b>1. IEEE:</b> <span id="sbIEEE"></span></div>
-                        <div class="bg-slate-50 p-1.5 rounded border"><b>2. Roger's:</b> <span id="sbRogers"></span></div>
-                        <div class="bg-slate-50 p-1.5 rounded border"><b>3. Doernenburg:</b> <span id="sbDoer"></span></div>
-                        <div class="bg-slate-50 p-1.5 rounded border"><b>4. Key Gas:</b> <span id="sbKeyGas"></span></div>
-                        <div class="bg-slate-50 p-1.5 rounded border"><b>5. IEC Method:</b> <span id="sbIEC"></span></div>
-                        <div class="bg-slate-50 p-1.5 rounded border"><b>6. Duval Triangle:</b> <span id="sbDuval"></span></div>
-                    </div>
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <b class="text-blue-700 block text-[11px]">3. Doernenburg Ratio Method:</b>
+                    <span id="mDoer" class="text-slate-700 font-sans text-[11px]"></span>
+                </div>
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <b class="text-blue-700 block text-[11px]">4. Key Gas Method:</b>
+                    <span id="mKeyGas" class="text-slate-700 font-sans text-[11px]"></span>
+                </div>
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <b class="text-blue-700 block text-[11px]">5. IEC Method:</b>
+                    <span id="mIEC" class="text-slate-700 font-sans text-[11px]"></span>
+                </div>
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <b class="text-blue-700 block text-[11px]">6. Duval Triangle Method:</b>
+                    <span id="mDuval" class="text-slate-700 font-sans text-[11px]"></span>
                 </div>
             </div>
         </aside>
@@ -119,7 +118,7 @@
                     </select>
                 </div>
                 <div class="text-xs text-slate-500">
-                    *คลิกปุ่มดูข้อมูลในตารางเพื่อดูสรุปผลคร่าวๆ
+                    *คลิกปุ่ม "ผลทดสอบ" ในตารางเพื่อดูผลแล็บและค่าทางไฟฟ้า
                 </div>
             </div>
 
@@ -128,7 +127,7 @@
                 <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <div>
                         <h2 class="text-base font-bold text-slate-900">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (PM Prioritization Matrix)</h2>
-                        <p class="text-xs text-slate-500">แสดงลำดับความเร่งด่วน ผลการทดสอบคร่าวๆ และค่าความเสี่ยง RPN</p>
+                        <p class="text-xs text-slate-500">แสดงลำดับความเร่งด่วน ผลทดสอบเบื้องต้น และค่าความเสี่ยง RPN</p>
                     </div>
                     <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-200">เรียงตามความเสี่ยงสูงสุด</span>
                 </div>
@@ -142,9 +141,9 @@
                                 <th class="p-3.5">ประเภท</th>
                                 <th class="p-3.5">Health Index</th>
                                 <th class="p-3.5">RPN Score</th>
-                                <th class="p-3.5">ผลทดสอบคร่าวๆ / โหมดความเสียหาย</th>
+                                <th class="p-3.5">โหมดความเสียหายหลัก</th>
                                 <th class="p-3.5">สถานะ</th>
-                                <th class="p-3.5 text-center">ดูสรุปคร่าวๆ</th>
+                                <th class="p-3.5 text-center">ผลทดสอบ</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 text-sm">
@@ -155,10 +154,13 @@
                                 <td class="p-3.5 text-slate-600">Transformer</td>
                                 <td class="p-3.5 font-semibold text-rose-600">58%</td>
                                 <td class="p-3.5 font-semibold text-rose-600">280 (High)</td>
-                                <td class="p-3.5 text-slate-600 text-xs">H2 สูงมาก (1250 ppm) / Thermal Fault (T3)</td>
+                                <td class="p-3.5 text-slate-600 text-xs">Thermal Fault (T3) & Severe Arcing</td>
                                 <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
                                 <td class="p-3.5 text-center">
-                                    <button onclick="openBriefModal('TRX-01', '58%', '280', 'Critical', 'H2 1250 ppm, C2H2 85 ppm (Thermal Fault T3 & Arcing)')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ดูข้อมูลคร่าวๆ</button>
+                                    <button onclick="openTestModal('TRX-01', '58%', '280', 'Critical', 
+                                        'Hydrogen (H2): 1250 ppm (Std < 100)\nMethane (CH4): 320 ppm (Std < 30)\nAcetylene (C2H2): 85 ppm (Std < 1)\nEthylene (C2H4): 450 ppm (Std < 50)\nEthane (C2H6): 120 ppm (Std < 20)\nCarbon Monoxide (CO): 600 ppm (Std < 350)\nCarbon Dioxide (CO2): 3200 ppm (Std < 2500)', 
+                                        'BDV: 42 kV (Std > 50)\nMoisture: 35 ppm (Std < 25)\nTan Delta: 0.65% (Std < 0.5%)')" 
+                                        class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ</button>
                                 </td>
                             </tr>
                             <!-- GIS-BAY-03 -->
@@ -168,10 +170,13 @@
                                 <td class="p-3.5 text-slate-600">GIS</td>
                                 <td class="p-3.5 font-semibold text-rose-600">52%</td>
                                 <td class="p-3.5 font-semibold text-rose-600">320 (High)</td>
-                                <td class="p-3.5 text-slate-600 text-xs">SF6 Pressure ต่ำ (5.2 bar) / UHF PD สูง (450 pC)</td>
+                                <td class="p-3.5 text-slate-600 text-xs">Partial Discharge & SF6 Pressure Low</td>
                                 <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-100 text-rose-800 font-semibold">Critical</span></td>
                                 <td class="p-3.5 text-center">
-                                    <button onclick="openBriefModal('GIS-BAY-03', '52%', '320', 'Critical', 'SF6 Pressure Alarm & High UHF Partial Discharge')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ดูข้อมูลคร่าวๆ</button>
+                                    <button onclick="openTestModal('GIS-BAY-03', '52%', '320', 'Critical', 
+                                        'N/A (ระบบก๊าซ SF6 ใช้เซนเซอร์ตรวจจับความดันและ UHF PD แทนน้ำมัน DGA)', 
+                                        'SF6 Pressure: 5.2 bar [Alarm] (Std: 6.0 bar)\nDew Point: -15°C (Std < -20°C)\nPD Level: 450 pC (Std < 100 pC)\nContact Resistance: 48 µΩ')" 
+                                        class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ</button>
                                 </td>
                             </tr>
                             <!-- TRX-04 -->
@@ -181,23 +186,29 @@
                                 <td class="p-3.5 text-slate-600">Transformer</td>
                                 <td class="p-3.5 font-semibold text-amber-600">67%</td>
                                 <td class="p-3.5 font-semibold text-amber-600">190 (Med)</td>
-                                <td class="p-3.5 text-slate-600 text-xs">OLTC Contact Resistance สูง (85 µΩ) / Thermal T1</td>
+                                <td class="p-3.5 text-slate-600 text-xs">Thermal Fault (T1 - Low Temperature)</td>
                                 <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
                                 <td class="p-3.5 text-center">
-                                    <button onclick="openBriefModal('TRX-04', '67%', '190', 'Warning', 'OLTC Contact Resistance high & Thermal Fault T1')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ดูข้อมูลคร่าวๆ</button>
+                                    <button onclick="openTestModal('TRX-04', '67%', '190', 'Warning', 
+                                        'Hydrogen (H2): 180 ppm (Std < 100)\nMethane (CH4): 110 ppm (Std < 30)\nAcetylene (C2H2): 0.5 ppm (Std < 1)\nEthylene (C2H4): 95 ppm (Std < 50)\nEthane (C2H6): 35 ppm (Std < 20)\nCarbon Monoxide (CO): 250 ppm (Std < 350)\nCarbon Dioxide (CO2): 1500 ppm (Std < 2500)', 
+                                        'BDV: 55 kV (Std > 50)\nMoisture: 22 ppm (Std < 25)\nOLTC Contact Resistance: 85 µΩ (Std < 50 µΩ)')" 
+                                        class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ</button>
                                 </td>
                             </tr>
-                            <!-- GIS-BAY-09 -->
-                            <tr class="hover:bg-slate-50 transition-colors" data-type="GIS">
+                            <!-- TRX-05 -->
+                            <tr class="hover:bg-slate-50 transition-colors" data-type="TRX">
                                 <td class="p-3.5 font-bold text-amber-600">#04</td>
-                                <td class="p-3.5 font-medium text-slate-900">GIS-BAY-09</td>
-                                <td class="p-3.5 text-slate-600">GIS</td>
-                                <td class="p-3.5 font-semibold text-amber-600">72%</td>
-                                <td class="p-3.5 font-semibold text-amber-600">150 (Med)</td>
-                                <td class="p-3.5 text-slate-600 text-xs">ตรวจพบ UHF PD เริ่มต้น (85 pC) / Pressure ปกติ</td>
+                                <td class="p-3.5 font-medium text-slate-900">TRX-05</td>
+                                <td class="p-3.5 text-slate-600">Transformer</td>
+                                <td class="p-3.5 font-semibold text-amber-600">74%</td>
+                                <td class="p-3.5 font-semibold text-amber-600">140 (Med)</td>
+                                <td class="p-3.5 text-slate-600 text-xs">Partial Discharge (PD) in Insulation</td>
                                 <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-800 font-semibold">Warning</span></td>
                                 <td class="p-3.5 text-center">
-                                    <button onclick="openBriefModal('GIS-BAY-09', '72%', '150', 'Warning', 'Initial Partial Discharge detected via UHF')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ดูข้อมูลคร่าวๆ</button>
+                                    <button onclick="openTestModal('TRX-05', '74%', '140', 'Warning', 
+                                        'Hydrogen (H2): 210 ppm (Std < 100)\nMethane (CH4): 45 ppm (Std < 30)\nAcetylene (C2H2): 2.1 ppm (Std < 1)\nEthylene (C2H4): 30 ppm (Std < 50)\nEthane (C2H6): 15 ppm (Std < 20)\nCarbon Monoxide (CO): 120 ppm (Std < 350)\nCarbon Dioxide (CO2): 1100 ppm (Std < 2500)', 
+                                        'BDV: 60 kV (Std > 50)\nMoisture: 18 ppm (Std < 25)\nTan Delta: 0.45% (Std < 0.5%)')" 
+                                        class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ</button>
                                 </td>
                             </tr>
                             <!-- TRX-02 -->
@@ -207,10 +218,13 @@
                                 <td class="p-3.5 text-slate-600">Transformer</td>
                                 <td class="p-3.5 font-semibold text-emerald-600">92%</td>
                                 <td class="p-3.5 font-semibold text-emerald-600">45 (Low)</td>
-                                <td class="p-3.5 text-slate-600 text-xs">Normal Operation / สภาพสมบูรณ์ตามรอบปี</td>
+                                <td class="p-3.5 text-slate-600 text-xs">Normal Operation (สมบูรณ์ตามรอบปี)</td>
                                 <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Normal</span></td>
                                 <td class="p-3.5 text-center">
-                                    <button onclick="openBriefModal('TRX-02', '92%', '45', 'Normal', 'All parameters within standard safety limits')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ดูข้อมูลคร่าวๆ</button>
+                                    <button onclick="openTestModal('TRX-02', '92%', '45', 'Normal', 
+                                        'Hydrogen (H2): 15 ppm (Std < 100)\nMethane (CH4): 10 ppm (Std < 30)\nAcetylene (C2H2): Not Detected (Std < 1)\nEthylene (C2H4): 12 ppm (Std < 50)\nEthane (C2H6): 5 ppm (Std < 20)\nCarbon Monoxide (CO): 80 ppm (Std < 350)\nCarbon Dioxide (CO2): 900 ppm (Std < 2500)', 
+                                        'BDV: 70 kV (Std > 50)\nMoisture: 8 ppm (Std < 25)\nTan Delta: 0.30% (Std < 0.5%)')" 
+                                        class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-700 shadow-sm">ผลทดสอบ</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -220,106 +234,98 @@
         </main>
     </div>
 
-    <!-- Concise Brief Modal (สำหรับกดดูคร่าวๆ จากในตาราง) -->
-    <div id="briefModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-100">
+    <!-- Test Modal (แสดงผลแล็บและค่าทางไฟฟ้าเมื่อกดปุ่มในตาราง ด้วยฟอนต์สะอาดตา อ่านง่าย) -->
+    <div id="testModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4 border border-slate-100 font-sans">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <span>📌</span> สรุปผลการทดสอบคร่าวๆ (Brief Summary)
+                    <span>🔬</span> ผลการทดสอบห้องปฏิบัติการและค่าทางไฟฟ้า (Test Results)
                 </h3>
-                <button onclick="closeBriefModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
+                <button onclick="closeTestModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
             </div>
-            <div class="space-y-2 text-sm text-slate-600">
-                <p><strong>รหัสอุปกรณ์:</strong> <span id="bAsset" class="text-blue-600 font-bold"></span></p>
-                <p><strong>Health Index:</strong> <span id="bHI" class="font-bold"></span></p>
-                <p><strong>Risk Score (RPN):</strong> <span id="bRPN" class="font-bold"></span></p>
-                <p><strong>สถานะ:</strong> <span id="bStatus" class="font-bold"></span></p>
-                <p><strong>ผลทดสอบสรุป:</strong> <span id="bDesc" class="text-slate-800 font-medium block mt-1 bg-slate-50 p-2.5 rounded border"></span></p>
+            
+            <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-lg border">
+                <p><strong>รหัสอุปกรณ์:</strong> <span id="tAsset" class="text-blue-600 font-bold"></span></p>
+                <p><strong>Health Index:</strong> <span id="tHI" class="font-bold"></span></p>
+                <p><strong>Risk Score (RPN):</strong> <span id="tRPN" class="font-bold"></span></p>
+                <p><strong>สถานะ:</strong> <span id="tStatus" class="font-bold"></span></p>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="bg-blue-50/40 p-3.5 rounded-xl border border-blue-100 space-y-1.5">
+                    <strong class="text-blue-900 block font-semibold">🧪 ผลแล็บค่าก๊าซ (DGA Lab Results):</strong>
+                    <pre id="tDGA" class="bg-white p-2 rounded border border-blue-100 font-mono text-[11px] text-slate-700 whitespace-pre-line leading-relaxed"></pre>
+                </div>
+                <div class="bg-emerald-50/40 p-3.5 rounded-xl border border-emerald-100 space-y-1.5">
+                    <strong class="text-emerald-900 block font-semibold">⚡ ค่าทดสอบทางไฟฟ้าและกายภาพ:</strong>
+                    <pre id="tElectrical" class="bg-white p-2 rounded border border-emerald-100 font-mono text-[11px] text-slate-700 whitespace-pre-line leading-relaxed"></pre>
+                </div>
+            </div>
+
             <div class="flex justify-end pt-2">
-                <button onclick="closeBriefModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900">ปิดหน้าต่าง</button>
+                <button onclick="closeTestModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        // Database for Sidebar Detailed Test Results
-        const assetData = {
+        // Database for 6 DGA Analysis Methods (Left Sidebar)
+        const dgaMethodsData = {
             "TRX-01": {
                 name: "TRX-01 (Transformer - Critical)",
-                hi: "58%",
-                rpn: "280 (High)",
-                dga: "Hydrogen (H2): 1250 ppm (Std < 100)\nMethane (CH4): 320 ppm (Std < 30)\nAcetylene (C2H2): 85 ppm (Std < 1)\nEthylene (C2H4): 450 ppm (Std < 50)\nEthane (C2H6): 120 ppm (Std < 20)\nCarbon Monoxide (CO): 600 ppm (Std < 350)\nCarbon Dioxide (CO2): 3200 ppm (Std < 2500)",
-                oil: "BDV: 42 kV (Std > 50)\nMoisture: 35 ppm (Std < 25)\nTan Delta: 0.65% (Std < 0.5%)",
-                ieee: "Exceeded Limits (Abnormal Gas)",
-                rogers: "Ratio Code: 1,1,0 -> Thermal > 700°C",
-                doer: "Ratio Code: Outside normal limits",
+                ieee: "Exceeded Limits (High gas generation rate)",
+                rogers: "Ratio Code: 1,1,0 -> Thermal Fault > 700°C",
+                doer: "Ratio Code: Exceeds threshold (Fault detected)",
                 keyGas: "Acetylene (C2H2) & Hydrogen (H2)",
                 iec: "IEC Code: T3 / D1 (High Temp & Arcing)",
-                duval: "Zone: T3 & D1 (Thermal & Arcing)"
+                duval: "Zone: T3 & D1 (Thermal & Severe Arcing)"
             },
             "TRX-04": {
                 name: "TRX-04 (Transformer - Warning)",
-                hi: "67%",
-                rpn: "190 (Med)",
-                dga: "Hydrogen (H2): 180 ppm (Std < 100)\nMethane (CH4): 110 ppm (Std < 30)\nAcetylene (C2H2): 0.5 ppm (Std < 1)\nEthylene (C2H4): 95 ppm (Std < 50)\nEthane (C2H6): 35 ppm (Std < 20)\nCarbon Monoxide (CO): 250 ppm (Std < 350)\nCarbon Dioxide (CO2): 1500 ppm (Std < 2500)",
-                oil: "BDV: 55 kV (Std > 50)\nMoisture: 22 ppm (Std < 25)\nOLTC Contact Resistance: 85 µΩ (Std < 50 µΩ)",
-                ieee: "Moderate Warning (Thermal Trend)",
-                rogers: "Ratio Code: 0,0,1 -> Thermal < 300°C",
-                doer: "Ratio Code: Normal to Moderate",
+                ieee: "Moderate Warning (Thermal trend observed)",
+                rogers: "Ratio Code: 0,0,1 -> Thermal Fault < 300°C",
+                doer: "Ratio Code: Normal to Moderate level",
                 keyGas: "Ethylene (C2H4) & Methane (CH4)",
-                iec: "IEC Code: T1 (Low Temp Thermal)",
+                iec: "IEC Code: T1 (Low Temp Thermal Fault)",
                 duval: "Zone: T1 (Low Temperature Thermal)"
             },
-            "GIS-03": {
-                name: "GIS-BAY-03 (GIS - Critical)",
-                hi: "52%",
-                rpn: "320 (High)",
-                dga: "N/A (SF6 Gas System - Pressure & UHF Sensors Used)",
-                oil: "SF6 Pressure: 5.2 bar [Alarm] (Std: 6.0 bar)\nDew Point: -15°C (Std < -20°C)\nPD Level: 450 pC (Std < 100 pC)\nContact Resistance: 48 µΩ",
-                ieee: "N/A (GIS Monitoring System)",
-                rogers: "N/A",
-                doer: "N/A",
-                keyGas: "N/A",
-                iec: "IEC 62271-203 Compliance Alert",
-                duval: "N/A (Uses UHF Partial Discharge)"
+            "TRX-05": {
+                name: "TRX-05 (Transformer - Warning)",
+                ieee: "Warning: Low energy electrical discharge",
+                rogers: "Ratio Code: 0,1,0 -> Discharge in oil/paper",
+                doer: "Ratio Code: Moderate discharge indicator",
+                keyGas: "Hydrogen (H2) & Acetylene (C2H2)",
+                iec: "IEC Code: PD (Partial Discharge)",
+                duval: "Zone: D1 (Low Energy Discharge / PD)"
             },
             "TRX-02": {
                 name: "TRX-02 (Transformer - Normal)",
-                hi: "92%",
-                rpn: "45 (Low)",
-                dga: "Hydrogen (H2): 15 ppm (Std < 100)\nMethane (CH4): 10 ppm (Std < 30)\nAcetylene (C2H2): Not Detected (Std < 1)\nEthylene (C2H4): 12 ppm (Std < 50)\nEthane (C2H6): 5 ppm (Std < 20)\nCarbon Monoxide (CO): 80 ppm (Std < 350)\nCarbon Dioxide (CO2): 900 ppm (Std < 2500)",
-                oil: "BDV: 70 kV (Std > 50)\nMoisture: 8 ppm (Std < 25)\nTan Delta: 0.30% (Std < 0.5%)",
-                ieee: "Normal (Within Limits)",
+                ieee: "Normal (Within acceptable limits)",
                 rogers: "Ratio Code: 0,0,0 -> Normal Operation",
                 doer: "Ratio Code: Normal",
                 keyGas: "None detected above limits",
-                iec: "IEC Code: Normal",
+                iec: "IEC Code: Normal Operation",
                 duval: "Zone: Normal Zone"
             }
         };
 
-        function updateSidebarDetails() {
-            let key = document.getElementById('sidebarAssetSelect').value;
-            let data = assetData[key];
+        function updateDgaSidebar() {
+            let key = document.getElementById('dgaAssetSelect').value;
+            let data = dgaMethodsData[key];
             
-            document.getElementById('sbAssetName').innerText = data.name;
-            document.getElementById('sbHI').innerText = data.hi;
-            document.getElementById('sbRPN').innerText = data.rpn;
-            document.getElementById('sbDGA').innerText = data.dga;
-            document.getElementById('sbOil').innerText = data.oil;
-            document.getElementById('sbIEEE').innerText = data.ieee;
-            document.getElementById('sbRogers').innerText = data.rogers;
-            document.getElementById('sbDoer').innerText = data.doer;
-            document.getElementById('sbKeyGas').innerText = data.keyGas;
-            document.getElementById('sbIEC').innerText = data.iec;
-            document.getElementById('sbDuval').innerText = data.duval;
+            document.getElementById('dgaSbName').innerText = data.name;
+            document.getElementById('mIEEE').innerText = data.ieee;
+            document.getElementById('mRogers').innerText = data.rogers;
+            document.getElementById('mDoer').innerText = data.doer;
+            document.getElementById('mKeyGas').innerText = data.keyGas;
+            document.getElementById('mIEC').innerText = data.iec;
+            document.getElementById('mDuval').innerText = data.duval;
         }
 
-        // Initialize sidebar on load
+        // Initialize left sidebar on page load
         window.onload = function() {
-            updateSidebarDetails();
+            updateDgaSidebar();
         };
 
         function filterTable() {
@@ -336,17 +342,18 @@
             });
         }
 
-        function openBriefModal(asset, hi, rpn, status, desc) {
-            document.getElementById('bAsset').innerText = asset;
-            document.getElementById('bHI').innerText = hi;
-            document.getElementById('bRPN').innerText = rpn;
-            document.getElementById('bStatus').innerText = status;
-            document.getElementById('bDesc').innerText = desc;
-            document.getElementById('briefModal').classList.remove('hidden');
+        function openTestModal(asset, hi, rpn, status, dgaText, elecText) {
+            document.getElementById('tAsset').innerText = asset;
+            document.getElementById('tHI').innerText = hi;
+            document.getElementById('tRPN').innerText = rpn;
+            document.getElementById('tStatus').innerText = status;
+            document.getElementById('tDGA').innerText = dgaText;
+            document.getElementById('tElectrical').innerText = elecText;
+            document.getElementById('testModal').classList.remove('hidden');
         }
 
-        function closeBriefModal() {
-            document.getElementById('briefModal').classList.add('hidden');
+        function closeTestModal() {
+            document.getElementById('testModal').classList.add('hidden');
         }
     </script>
 
