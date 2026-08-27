@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substation RCM & Advanced DGA Analytics Suite</title>
+    <title>Substation RCM & 40-Units Advanced DGA Suite</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,8 +19,8 @@
             <div class="flex items-center space-x-3">
                 <div class="bg-gradient-to-tr from-orange-600 to-amber-600 p-2.5 rounded-2xl text-white font-black text-xs shadow-lg shadow-orange-600/25">RCM HUB</div>
                 <div>
-                    <h1 class="text-sm md:text-base font-bold tracking-wide">Substation Asset Health & 35-Units PM Matrix</h1>
-                    <p class="text-[11px] text-slate-400">ระบบสนับสนุนการตัดสินใจบำรุงรักษาอุปกรณ์สถานีไฟฟ้า (Transformer & GIS)</p>
+                    <h1 class="text-sm md:text-base font-bold tracking-wide">Substation Asset Health & 40-Units PM Matrix</h1>
+                    <p class="text-[11px] text-slate-400">ระบบสนับสนุนการตัดสินใจบำรุงรักษาอุปกรณ์สถานีไฟฟ้า (Transformer & GIS - 40 ยูนิต)</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -41,7 +41,7 @@
             </div>
             <nav class="space-y-2">
                 <button onclick="switchView('dashboard')" id="navDashboard" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-orange-600 to-amber-600 text-white flex items-center gap-3 shadow-lg shadow-orange-600/25">
-                    <span class="text-base">⚡</span> แดชบอร์ดและจัดลำดับ PM (35 ยูนิต)
+                    <span class="text-base">⚡</span> แดชบอร์ดและจัดลำดับ PM (40 ยูนิต)
                 </button>
                 <button onclick="switchView('dgaMethods')" id="navDgaMethods" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-[#1c1613] text-slate-300 hover:bg-[#231b17] flex items-center gap-3 border border-orange-950">
                     <span class="text-base">🔬</span> การคำนวณ DGA ทั้ง 6 วิธี
@@ -51,27 +51,28 @@
                 </button>
             </nav>
             <div class="pt-4 border-t border-orange-900/40 px-1 text-[11px] text-slate-400 leading-relaxed">
-                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> เลือกแท็บ DGA ด้านบนเพื่อดูการคำนวณครบทุกวิธี (Duval, Rogers, IEC, Doernenburg, Key Gas, Summary) อย่างสัมพันธ์กัน
+                🧡 <span class="text-orange-300 font-medium">คำแนะนำ:</span> ระบบจัดการอุปกรณ์ Transformer และ GIS รวม 40 ยูนิต พร้อมตารางจัดลำดับ PM และระบบคำนวณ DGA ครบถ้วน
             </div>
         </aside>
 
         <!-- Right Dynamic Content Area -->
         <main class="lg:col-span-3 space-y-6">
 
-            <!-- VIEW 1: Dashboard & 35-Units PM Table -->
+            <!-- VIEW 1: Dashboard & 40-Units PM Table -->
             <div id="viewDashboard" class="space-y-6">
+                <!-- KPI Metric Cards (40 Units Total) -->
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
                         <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">อุปกรณ์ทั้งหมด</p>
-                        <h3 class="text-2xl font-extrabold text-slate-100 mt-1">35 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
+                        <h3 class="text-2xl font-extrabold text-slate-100 mt-1">40 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
                     <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
                         <p class="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">สถานะปกติ (Normal)</p>
-                        <h3 class="text-2xl font-extrabold text-emerald-400 mt-1">22 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
+                        <h3 class="text-2xl font-extrabold text-emerald-400 mt-1">26 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
                     <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
                         <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-400">ต้องเฝ้าระวัง (Warning)</p>
-                        <h3 class="text-2xl font-extrabold text-amber-400 mt-1">9 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
+                        <h3 class="text-2xl font-extrabold text-amber-400 mt-1">10 <span class="text-xs font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
                     <div class="bg-[#17120f] p-4 rounded-3xl border border-orange-950 shadow-xl">
                         <p class="text-[11px] font-semibold uppercase tracking-wider text-rose-400">วิกฤต (Critical)</p>
@@ -82,8 +83,8 @@
                 <div class="bg-[#17120f] rounded-3xl border border-orange-950 overflow-hidden shadow-2xl">
                     <div class="p-5 border-b border-orange-900/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
-                            <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (35 Units PM Matrix)</h2>
-                            <p class="text-xs text-slate-400">แสดงผลอุปกรณ์ 35 ตัว เรียงตามลำดับความเร่งด่วน PM</p>
+                            <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (40 Units PM Matrix)</h2>
+                            <p class="text-xs text-slate-400">แสดงผลอุปกรณ์ Transformer และ GIS รวม 40 ตัว เรียงตามลำดับความเร่งด่วน PM</p>
                         </div>
                         <div class="flex items-center gap-1.5" id="paginationTop"></div>
                     </div>
@@ -107,13 +108,13 @@
                     </div>
 
                     <div class="p-4 border-t border-orange-900/40 flex justify-between items-center bg-[#120e0c]">
-                        <span id="pageInfo" class="text-xs text-slate-400">แสดงหน้า 1 จาก 4 (ทั้งหมด 35 ยูนิต)</span>
+                        <span id="pageInfo" class="text-xs text-slate-400">แสดงหน้า 1 จาก 4 (ทั้งหมด 40 ยูนิต)</span>
                         <div class="flex items-center gap-2" id="paginationBottom"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW 2: Advanced 6 DGA Analysis Methods Suite (เชื่อมโยงทุกวิธีสมบูรณ์) -->
+            <!-- VIEW 2: Advanced 6 DGA Analysis Methods Suite -->
             <div id="viewDgaMethods" class="space-y-6 hidden">
                 <div class="bg-[#17120f] border border-orange-950 rounded-3xl p-6 shadow-2xl space-y-6">
                     
@@ -123,7 +124,7 @@
                             <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
                                 <span>🔬</span> ระบบคำนวณและวิเคราะห์ DGA ทั้ง 6 วิธี (Multi-Method Suite)
                             </h2>
-                            <p class="text-xs text-slate-400">เลือกอุปกรณ์และสลับแท็บวิธีวิเคราะห์เพื่อตรวจสอบค่าคำนวณ เกณฑ์มาตรฐาน และผลการวินิจฉัย</p>
+                            <p class="text-xs text-slate-400">เลือกอุปกรณ์และสลับแท็บวิธีวิเคราะห์เพื่อตรวจสอบค่าคำนวณ เกณฑ์มาตรฐาน และผลการวินิจฉัย[cite: 1]</p>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <label class="text-xs font-semibold text-slate-300">เลือกอุปกรณ์:</label>
@@ -135,7 +136,7 @@
                         </div>
                     </div>
 
-                    <!-- Method Sub-Tabs ครบทุกวิธี -->
+                    <!-- Method Sub-Tabs -->
                     <div class="flex flex-wrap items-center gap-2 bg-[#0c0a09] p-2.5 rounded-2xl border border-orange-950">
                         <button onclick="setDgaSubTab('duval')" id="subTabDuval" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-orange-600 text-white shadow transition-all">🔺 Duval Triangle</button>
                         <button onclick="setDgaSubTab('rogers')" id="subTabRogers" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#17120f] transition-all">📐 Rogers Ratio</button>
@@ -187,7 +188,7 @@
                                 </div>
                             </div>
                             <div class="p-3 bg-[#17120f] rounded-xl border border-orange-950 text-xs text-slate-400 leading-relaxed font-sans" id="dgaMethodDesc">
-                                <strong>คำอธิบายมาตรฐาน:</strong> รายละเอียดวิธีการคำนวณและเกณฑ์มาตรฐานตามหลักการวิศวกรรมสากล
+                                <strong>คำอธิบายมาตรฐาน:</strong> รายละเอียดวิธีการคำนวณและเกณฑ์มาตรฐานตามหลักการวิศวกรรมสากล[cite: 1]
                             </div>
                         </div>
 
@@ -283,9 +284,11 @@
         </div>
     </div>
 
-    <!-- Script Control Logic (35 Units & 7 Gases & 6 DGA Methods Complete Suite) -->
+    <!-- Script Control Logic (40 Units Total & Complete DGA Suite) -->
     <script>
         const allUnits = [];
+        // สร้างข้อมูลอุปกรณ์รวม 40 ตัว (Transformer & GIS)
+        allUnits.push({ id: 'GIS-BAY-03', type: 'GIS', hi: '52%', rpn: '320 (High)', desc: 'SF6 Pressure ต่ำกว่าเกณฑ์เตือน / UHF PD สูง', status: 'Critical', dga: 'SF6 Pressure: 5.2 bar [Alarm] (Std: 6.0 bar)\nDew Point: -15°C (Std < -20°C)\nPD Level: 450 pC (Std < 100 pC)', elec: 'Contact Resistance: 48 µΩ (Std < 1.2x Initial)' });
         allUnits.push({ 
             id: 'TRX-01', type: 'TRX', hi: '58%', rpn: '280 (High)', desc: 'DGA: ก๊าซ Hydrogen & Acetylene สูง (Thermal/Arcing)', status: 'Critical', 
             dga: 'Hydrogen (H2): 1250 ppm (Std < 100)\nMethane (CH4): 320 ppm (Std < 30)\nEthane (C2H6): 120 ppm (Std < 20)\nEthylene (C2H4): 450 ppm (Std < 50)\nAcetylene (C2H2): 85 ppm (Std < 1)\nCarbon Monoxide (CO): 600 ppm (Std < 350)\nCarbon Dioxide (CO2): 3200 ppm (Std < 2500)', 
@@ -297,16 +300,18 @@
             elec: 'OLTC Contact Resistance: 85 µΩ (Std < 50)\nBDV: 55 kV (Std > 50)' 
         });
 
-        for(let i = 3; i <= 35; i++) {
+        // เติมให้ครบ 40 ยูนิต
+        for(let i = 4; i <= 40; i++) {
             let isTrx = i % 2 === 0;
             let code = isTrx ? `TRX-${i < 10 ? '0'+i : i}` : `GIS-BAY-${i < 10 ? '0'+i : i}`;
+            let st = i <= 13 ? 'Warning' : 'Normal';
             allUnits.push({
                 id: code,
                 type: isTrx ? 'TRX' : 'GIS',
-                hi: `${90 + (i % 9)}%`,
-                rpn: `${20 + (i % 30)} (Low)`,
-                desc: 'Normal Operation (สภาพสมบูรณ์ตามรอบปี)',
-                status: 'Normal',
+                hi: st === 'Warning' ? `${70 + (i % 8)}%` : `${90 + (i % 9)}%`,
+                rpn: st === 'Warning' ? `${110 + (i % 30)} (Med)` : `${20 + (i % 30)} (Low)`,
+                desc: st === 'Warning' ? 'เฝ้าระวังพารามิเตอร์เริ่มสูงขึ้น' : 'Normal Operation (สภาพสมบูรณ์ตามรอบปี)',
+                status: st,
                 dga: 'Hydrogen (H2): 15 ppm (Std < 100)\nMethane (CH4): 10 ppm (Std < 30)\nEthane (C2H6): 5 ppm (Std < 20)\nEthylene (C2H4): 12 ppm (Std < 50)\nAcetylene (C2H2): Not Detected (Std < 1)\nCarbon Monoxide (CO): 80 ppm (Std < 350)\nCarbon Dioxide (CO2): 900 ppm (Std < 2500)',
                 elec: 'BDV: 70 kV (Std > 50)\nMoisture: 8 ppm (Std < 25)\nTan Delta: 0.30% (Std < 0.5%)'
             });
@@ -362,7 +367,7 @@
 
         window.onload = function() { renderTable(); setDgaSubTab('duval'); };
 
-        // DGA Multi-Method Database with Dropdown Selector
+        // DGA 6 Methods Database with Dropdown Selector
         const dgaDatabase = {
             trx1: {
                 name: "TRX-01 (Critical - Thermal & Arcing)",
@@ -576,7 +581,7 @@
             if(methodData.isGraphic) {
                 rightPanelTitle.innerHTML = `<span>🔺 Duval Triangle Graphic Simulation</span>`;
                 rightPanelContent.innerHTML = `
-                    <div class="relative w-full max-w-xs flex flex-col items-center">
+                    <div class="relative w-full max-w-xs flex flex-col items-center py-2">
                         <svg viewBox="0 0 200 180" class="w-44 h-44 drop-shadow-2xl">
                             <polygon points="100,10 10,170 190,170" fill="#120e0c" stroke="#f97316" stroke-width="2.5" />
                             <line x1="100" y1="10" x2="100" y2="170" stroke="#451a03" stroke-dasharray="4" stroke-width="1" />
@@ -644,7 +649,7 @@
 
         function submitLabSheet() {
             let assetId = document.getElementById('sheet_id').value;
-            alert(`บันทึกผลการทดสอบของ ${assetId} เรียบร้อยแล้ว ระบบได้คำนวณและจัดลำดับ PM ในตาราง 35 ยูนิตแล้ว!`);
+            alert(`บันทึกผลการทดสอบของ ${assetId} เรียบร้อยแล้ว ระบบได้คำนวณและจัดลำดับ PM ในตาราง 40 ยูนิตแล้ว!`);
             switchView('dashboard');
         }
 
