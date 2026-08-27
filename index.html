@@ -197,7 +197,7 @@
                         </div>
                     </div>
 
-                    <!-- 6 Cards Grid with Formulas & Calculations -->
+                    <!-- 6 Cards Grid with Clean Formulas & Calculations -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
                         
                         <!-- Method 1 -->
@@ -206,7 +206,7 @@
                                 <span class="font-bold text-blue-700 text-sm">1. IEEE Method (Std. C57.104)</span>
                                 <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">Concentration Limits</span>
                             </div>
-                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> ประเมินจากปริมาณความเข้มข้นของก๊าซแต่ละตัวเทียบกับค่ามาตรฐาน (Typical Concentration Values) และคำนวณอัตราการ generating rate ต่อวัน</p>
+                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> ประเมินจากปริมาณความเข้มข้นของก๊าซแต่ละตัวเทียบกับค่ามาตรฐาน (Typical Concentration Values) และคำนวณอัตราการเกิดก๊าซ (Generating Rate) ต่อวัน</p>
                             <div class="bg-white p-2.5 rounded border font-mono text-[11px] text-slate-800">
                                 <strong>ผลการประเมิน:</strong> <span id="wIEEE" class="text-blue-900 font-semibold"></span>
                             </div>
@@ -218,7 +218,7 @@
                                 <span class="font-bold text-blue-700 text-sm">2. Roger’s Ratio Method</span>
                                 <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">Ratio Code</span>
                             </div>
-                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> คำนวณหาอัตราส่วนก๊าซ 3 อัตราส่วน ได้แก่ $C_2H_2/C_2H_4$, $CH_4/H_2$, และ $C_2H_4/C_2H_6$ แล้วนำมาแปลงเป็นรหัสโค้ด (Ratio Codes: 0, 1, 2)</p>
+                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> คำนวณอัตราส่วนก๊าซ 3 ชุด ได้แก่ C2H2 / C2H4, CH4 / H2 และ C2H4 / C2H6 แล้วนำมาแปลงค่าเป็นรหัสโค้ด (Ratio Codes: 0, 1, 2) เพื่อเทียบตารางวินิจฉัย</p>
                             <div class="bg-white p-2.5 rounded border font-mono text-[11px] text-slate-800">
                                 <strong>ผลการประเมิน:</strong> <span id="wRogers" class="text-blue-900 font-semibold"></span>
                             </div>
@@ -230,7 +230,7 @@
                                 <span class="font-bold text-blue-700 text-sm">3. Doernenburg Ratio Method</span>
                                 <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">4 Gas Ratios</span>
                             </div>
-                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> ใช้ก๊าซ 5 ชนิดมาคำนวณอัตราส่วน 4 ชุด เช่น $CH_4/H_2$, $C_2H_2/C_2H_4$, $C_2H_2/CH_4$, และ $C_2H_6/C_2H_2$ เพื่อจำแนกประเภทความผิดปกติ</p>
+                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> ใช้ก๊าซ 5 ชนิดคำนวณอัตราส่วน 4 ชุด ได้แก่ CH4 / H2, C2H2 / C2H4, C2H2 / CH4 และ C2H6 / C2H2 เพื่อจำแนกประเภทความผิดปกติภายในหม้อแปลง</p>
                             <div class="bg-white p-2.5 rounded border font-mono text-[11px] text-slate-800">
                                 <strong>ผลการประเมิน:</strong> <span id="wDoer" class="text-blue-900 font-semibold"></span>
                             </div>
@@ -242,7 +242,7 @@
                                 <span class="font-bold text-blue-700 text-sm">4. Key Gas Method</span>
                                 <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">Dominant Gas</span>
                             </div>
-                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> วิเคราะห์หาว่าก๊าซชนิดใดที่มีปริมาณสัดส่วนสูงที่สุด (Dominant Key Gas) ซึ่งก๊าซแต่ละตัวจะสัมพันธ์กับจุดกำเนิดความเสียหายเฉพาะตัว</p>
+                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> วิเคราะห์หาว่าก๊าซชนิดใดที่มีปริมาณสัดส่วนสูงเด่นชัดที่สุด (Dominant Key Gas) ซึ่งก๊าซแต่ละตัวจะชี้เป้าจุดกำเนิดความเสียหายเฉพาะ เช่น Acetylene ชี้การอาร์ก</p>
                             <div class="bg-white p-2.5 rounded border font-mono text-[11px] text-slate-800">
                                 <strong>ผลการประเมิน:</strong> <span id="wKeyGas" class="text-blue-900 font-semibold"></span>
                             </div>
@@ -254,7 +254,7 @@
                                 <span class="font-bold text-blue-700 text-sm">5. IEC Method (IEC 60599)</span>
                                 <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">IEC Ratio Codes</span>
                             </div>
-                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> พัฒนาต่อยอดจาก Roger's โดยปรับช่วงขอบเขตอัตราส่วนก๊าซให้สากลยิ่งขึ้น ได้แก่ $I_1 (C_2H_2/C_2H_4)$, $I_2 (CH_4/H_2)$, และ $I_3 (C_2H_4/C_2H_6)$</p>
+                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> พัฒนาต่อยอดจาก Roger's โดยปรับช่วงขอบเขตอัตราส่วนก๊าซ 3 ตัว ได้แก่ I1 (C2H2 / C2H4), I2 (CH4 / H2) และ I3 (C2H4 / C2H6) ให้มีความแม่นยำตามมาตรฐานสากล</p>
                             <div class="bg-white p-2.5 rounded border font-mono text-[11px] text-slate-800">
                                 <strong>ผลการประเมิน:</strong> <span id="wIEC" class="text-blue-900 font-semibold"></span>
                             </div>
@@ -266,7 +266,7 @@
                                 <span class="font-bold text-blue-700 text-sm">6. Duval Triangle Method</span>
                                 <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">Percentage Coordinates</span>
                             </div>
-                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> แปลงค่าปริมาณก๊าซ $CH_4$, $C_2H_2$, และ $C_2H_4$ ให้เป็นค่าเปอร์เซ็นต์รวม 100% แล้วนำไปพล็อตลงบนพิกัดสามเหลี่ยมเพื่อชี้โซนความเสียหาย</p>
+                            <p class="text-slate-600"><strong>หลักการคำนวณ:</strong> แปลงค่าปริมาณก๊าซ CH4, C2H2 และ C2H4 ให้เป็นค่าเปอร์เซ็นต์รวม 100% แล้วนำไปพล็อตลงบนพิกัดสามเหลี่ยมเพื่อชี้โซนความเสียหาย (เช่น โซน T3 หรือ D1)</p>
                             <div class="bg-white p-2.5 rounded border font-mono text-[11px] text-slate-800">
                                 <strong>ผลการประเมิน:</strong> <span id="wDuval" class="text-blue-900 font-semibold"></span>
                             </div>
@@ -279,7 +279,7 @@
         </main>
     </div>
 
-    <!-- Test Modal (หน้าต่างผลทดสอบสะอาดตากับฟอนต์อ่านง่าย เมื่อกดจากตาราง) -->
+    <!-- Test Modal (หน้าต่างผลทดสอบฟอนต์สะอาดตา อ่านง่าย เมื่อกดจากตาราง) -->
     <div id="testModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4 border border-slate-100 font-sans">
             <div class="flex justify-between items-center border-b pb-3">
@@ -289,14 +289,14 @@
                 <button onclick="closeTestModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl">&times;</button>
             </div>
             
-            <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-lg border">
+            <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-lg border font-sans">
                 <p><strong>รหัสอุปกรณ์:</strong> <span id="tAsset" class="text-blue-600 font-bold"></span></p>
                 <p><strong>Health Index:</strong> <span id="tHI" class="font-bold"></span></p>
                 <p><strong>Risk Score (RPN):</strong> <span id="tRPN" class="font-bold"></span></p>
                 <p><strong>สถานะ:</strong> <span id="tStatus" class="font-bold"></span></p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
                 <div class="bg-blue-50/40 p-3.5 rounded-xl border border-blue-100 space-y-1.5">
                     <strong class="text-blue-900 block font-semibold text-sm">🧪 ผลแล็บค่าก๊าซ (DGA Lab Results):</strong>
                     <pre id="tDGA" class="bg-white p-2.5 rounded border border-blue-100 font-mono text-[11px] text-slate-700 whitespace-pre-line leading-relaxed"></pre>
@@ -308,14 +308,13 @@
             </div>
 
             <div class="flex justify-end pt-2">
-                <button onclick="closeTestModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900">ปิดหน้าต่าง</button>
+                <button onclick="closeTestModal()" class="bg-slate-800 text-white text-xs px-4 py-2 rounded-lg hover:bg-slate-900 font-sans">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        // Switch between Dashboard view and Wide DGA Methods view
         function switchView(viewName) {
             let dashView = document.getElementById('viewDashboard');
             let dgaView = document.getElementById('viewDgaMethods');
@@ -336,7 +335,6 @@
             }
         }
 
-        // Database for Wide DGA Methods View
         const wideDgaData = {
             "TRX-01": {
                 ieee: "Exceeded Limits: Hydrogen (1250 ppm) & Acetylene (85 ppm) exceed typical IEEE thresholds significantly.",
