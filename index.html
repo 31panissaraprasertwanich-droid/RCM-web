@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (40 อุปกรณ์)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (เรียงตาม RPN)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <h1 class="text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงไฟฟ้าและ GIS (40 อุปกรณ์)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงไฟฟ้าและ GIS (จัดเรียงตามค่า RPN)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4">
@@ -53,7 +53,7 @@
     <nav class="bg-slate-800/80 border-b border-slate-700 px-6 flex space-x-4">
         <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-5 border-b-2 font-medium text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2">
             <i class="fa-solid fa-calendar-days"></i>
-            <span>ตารางการเข้าทำ PM (40 อุปกรณ์)</span>
+            <span>ตารางการเข้าทำ PM (เรียงตาม RPN)</span>
         </button>
         <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2">
             <i class="fa-solid fa-calculator"></i>
@@ -68,8 +68,8 @@
         <section id="tab-pm-schedule" class="space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                 <div>
-                    <h2 class="text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
-                    <p class="text-xs text-slate-400">แสดงผลข้อมูลอุปกรณ์ทั้งหมด 40 ตัว จัดหน้าละ 10 อุปกรณ์</p>
+                    <h2 class="text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule - RPN Sorted)</h2>
+                    <p class="text-xs text-slate-400">เรียงลำดับอุปกรณ์ 40 ตัวตามค่าความเสี่ยง RPN (สูงไปต่ำ) หน้าละ 10 อุปกรณ์</p>
                 </div>
                 <div class="flex items-center space-x-3 w-full md:w-auto">
                     <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ชื่ออุปกรณ์..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full md:w-64">
@@ -84,9 +84,9 @@
                             <tr class="bg-slate-900/70 text-slate-400 uppercase text-xs tracking-wider border-b border-slate-700">
                                 <th class="py-3.5 px-4 font-semibold">รหัสอุปกรณ์</th>
                                 <th class="py-3.5 px-4 font-semibold">ประเภท</th>
-                                <th class="py-3.5 px-4 font-semibold">พิกัด/ตำแหน่ง</th>
+                                <th class="py-3.5 px-4 font-semibold">ตำแหน่ง</th>
                                 <th class="py-3.5 px-4 font-semibold">Health Index</th>
-                                <th class="py-3.5 px-4 font-semibold">PM ล่าสุด</th>
+                                <th class="py-3.5 px-4 font-semibold text-industrial-400">ค่า RPN (ความเสี่ยง)</th>
                                 <th class="py-3.5 px-4 font-semibold">PM รอบถัดไป</th>
                                 <th class="py-3.5 px-4 font-semibold">สถานะความเสี่ยง</th>
                                 <th class="py-3.5 px-4 font-semibold text-center">การจัดการ</th>
@@ -113,7 +113,7 @@
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 class="text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายในน้ำมันหม้อแปลงและอุปกรณ์ (DGA 6 วิธี)</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดึงค่าก๊าซจริงมาประมวลผลผ่านวิธีมาตรฐานสากล</p>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดึงค่าก๊าซจริงมาประมวลผลผ่านวิธีมาตรฐานสากล (สูตรอ่านง่าย ชัดเจน)</p>
                 </div>
                 <div class="flex items-center space-x-2">
                     <label class="text-sm font-medium text-slate-300">เลือกอุปกรณ์:</label>
@@ -127,7 +127,7 @@
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg">
                 <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซปัจจุบันที่วิเคราะห์ได้ (ppm)</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container">
-                    <!-- Dynamic Gas Inputs/Displays -->
+                    <!-- Dynamic Gas Displays -->
                 </div>
             </div>
 
@@ -140,7 +140,7 @@
                             <h4 class="font-bold text-white text-sm">1. Rogers Ratio Method</h4>
                             <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC 60599</span>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">วิเคราะห์อัตราส่วนก๊าซ 4 ตัว ($C_2H_2/CH_4, CH_4/H_2, C_2H_4/C_2H_6, C_2H_6/C_2H_2$)</p>
+                        <p class="text-xs text-slate-400 mb-4">วิเคราะห์อัตราส่วนก๊าซ 4 ตัว (C2H2/CH4, CH4/H2, C2H4/C2H6, C2H6/C2H2)</p>
                     </div>
                     <div id="res-rogers" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
                 </div>
@@ -152,7 +152,7 @@
                             <h4 class="font-bold text-white text-sm">2. Duval Triangle Method</h4>
                             <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC 60599</span>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">สามเหลี่ยมเปอร์เซ็นต์ก๊าซ $CH_4, C_2H_4, C_2H_2$ หาจุดความผิดปกติ</p>
+                        <p class="text-xs text-slate-400 mb-4">สามเหลี่ยมเปอร์เซ็นต์ก๊าซ (CH4, C2H4, C2H2) หาจุดความผิดปกติ</p>
                     </div>
                     <div id="res-duval" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
                 </div>
@@ -164,7 +164,7 @@
                             <h4 class="font-bold text-white text-sm">3. IEC 3-Ratio Method</h4>
                             <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC Standard</span>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">ใช้รหัสอัตราส่วน $I_1, I_2, I_5$ ประเมินความผิดปกติหลัก</p>
+                        <p class="text-xs text-slate-400 mb-4">ใช้รหัสอัตราส่วนประเมินความผิดปกติหลักตามมาตรฐาน IEC</p>
                     </div>
                     <div id="res-iec" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
                 </div>
@@ -228,7 +228,7 @@
                 </button>
             </div>
 
-            <!-- Modal Content (Scrollable) -->
+            <!-- Modal Content -->
             <div class="p-6 overflow-y-auto space-y-6 flex-1">
                 <!-- DGA Lab Results Table -->
                 <div>
@@ -285,7 +285,7 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Generate Mock Data for 40 Assets (25 Transformers, 15 GIS units)
+        // Generate Mock Data for 40 Assets with status-aligned test data & RPN
         const assetsData = [];
         const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
         
@@ -294,51 +294,133 @@
             const type = isTransformer ? "Transformer" : "GIS";
             const prefix = isTransformer ? "TR" : "GIS";
             const code = `${prefix}-${String(i).padStart(2, '0')}`;
-            const healthIndex = (Math.random() * 40 + 60).toFixed(1); // 60.0 - 100.0
             
-            let status = "Normal";
-            let statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-            if (healthIndex < 75) {
+            // Generate health index such that we have a mix of Critical, Warning, Normal
+            let healthIndex, status, statusClass, rpn;
+            if (i <= 6) {
+                // Critical
+                healthIndex = (Math.random() * 14 + 60).toFixed(1); // 60-74
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-            } else if (healthIndex < 85) {
+                rpn = Math.floor(Math.random() * 200 + 800); // 800 - 1000
+            } else if (i <= 18) {
+                // Warning
+                healthIndex = (Math.random() * 10 + 75).toFixed(1); // 75-84
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+                rpn = Math.floor(Math.random() * 300 + 500); // 500 - 799
+            } else {
+                // Normal
+                healthIndex = (Math.random() * 15 + 85).toFixed(1); // 85-100
+                status = "Normal";
+                statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+                rpn = Math.floor(Math.random() * 400 + 100); // 100 - 499
             }
+
+            // Generate gases according to status severity
+            let gases;
+            if (status === "Critical") {
+                gases = {
+                    h2: Math.floor(Math.random() * 200 + 150),
+                    ch4: Math.floor(Math.random() * 150 + 130),
+                    c2h2: Math.floor(Math.random() * 80 + 40),
+                    c2h4: Math.floor(Math.random() * 150 + 100),
+                    c2h6: Math.floor(Math.random() * 100 + 80),
+                    co: Math.floor(Math.random() * 600 + 400),
+                    co2: Math.floor(Math.random() * 3000 + 2500)
+                };
+            } else if (status === "Warning") {
+                gases = {
+                    h2: Math.floor(Math.random() * 80 + 60),
+                    ch4: Math.floor(Math.random() * 60 + 60),
+                    c2h2: Math.floor(Math.random() * 25 + 15),
+                    c2h4: Math.floor(Math.random() * 50 + 40),
+                    c2h6: Math.floor(Math.random() * 40 + 35),
+                    co: Math.floor(Math.random() * 250 + 200),
+                    co2: Math.floor(Math.random() * 1500 + 1500)
+                };
+            } else {
+                gases = {
+                    h2: Math.floor(Math.random() * 40 + 10),
+                    ch4: Math.floor(Math.random() * 30 + 5),
+                    c2h2: Math.floor(Math.random() * 5),
+                    c2h4: Math.floor(Math.random() * 20 + 5),
+                    c2h6: Math.floor(Math.random() * 20 + 5),
+                    co: Math.floor(Math.random() * 150 + 50),
+                    co2: Math.floor(Math.random() * 1000 + 400)
+                };
+            }
+
+            // Electrical tests aligned with status
+            let electrical = isTransformer ? [
+                { 
+                    name: "Insulation Resistance (HV-LV)", 
+                    value: status === "Critical" ? "420 MΩ" : status === "Warning" ? "880 MΩ" : "5,420 MΩ", 
+                    criteria: "> 1,000 MΩ at 20°C", 
+                    pass: status === "Normal" 
+                },
+                { 
+                    name: "Tan Delta (Dissipation Factor)", 
+                    value: status === "Critical" ? "0.85 %" : status === "Warning" ? "0.58 %" : "0.35 %", 
+                    criteria: "< 0.5% at 20°C", 
+                    pass: status !== "Critical" 
+                },
+                { 
+                    name: "Winding Resistance (HV)", 
+                    value: status === "Critical" ? "0.512 Ω (Diff > 3%)" : "0.452 Ω", 
+                    criteria: "Diff < 2% from factory", 
+                    pass: status !== "Critical" 
+                },
+                { 
+                    name: "Turns Ratio Error", 
+                    value: "0.05 %", 
+                    criteria: "Within ± 0.5%", 
+                    pass: true 
+                }
+            ] : [
+                { 
+                    name: "Contact Resistance (Main Bus)", 
+                    value: status === "Critical" ? "85 µΩ" : status === "Warning" ? "58 µΩ" : "32 µΩ", 
+                    criteria: "< 50 µΩ", 
+                    pass: status === "Normal" 
+                },
+                { 
+                    name: "SF6 Gas Pressure", 
+                    value: status === "Critical" ? "0.48 MPa" : status === "Warning" ? "0.53 MPa" : "0.62 MPa", 
+                    criteria: "> 0.55 MPa at 20°C", 
+                    pass: status !== "Critical" 
+                },
+                { 
+                    name: "SF6 Moisture Content", 
+                    value: status === "Critical" ? "210 ppmV" : status === "Warning" ? "160 ppmV" : "110 ppmV", 
+                    criteria: "< 150 ppmV", 
+                    pass: status === "Normal" 
+                },
+                { 
+                    name: "Operating Time (Trip/Close)", 
+                    value: status === "Critical" ? "52 ms" : "38 ms", 
+                    criteria: "< 45 ms", 
+                    pass: status !== "Critical" 
+                }
+            ];
 
             assetsData.push({
                 id: code,
                 type: type,
                 location: locations[Math.floor(Math.random() * locations.length)],
                 healthIndex: parseFloat(healthIndex),
+                rpn: rpn,
                 lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
                 status: status,
                 statusClass: statusClass,
-                // DGA Gases
-                gases: {
-                    h2: Math.floor(Math.random() * 80 + 10),
-                    ch4: Math.floor(Math.random() * 50 + 5),
-                    c2h2: Math.floor(Math.random() * 15),
-                    c2h4: Math.floor(Math.random() * 40 + 5),
-                    c2h6: Math.floor(Math.random() * 30 + 5),
-                    co: Math.floor(Math.random() * 300 + 50),
-                    co2: Math.floor(Math.random() * 2000 + 400)
-                },
-                // Electrical Tests
-                electrical: isTransformer ? [
-                    { name: "Insulation Resistance (HV-LV)", value: "5,420 MΩ", criteria: "> 1,000 MΩ at 20°C", pass: true },
-                    { name: "Tan Delta (Dissipation Factor)", value: "0.35 %", criteria: "< 0.5% at 20°C", pass: true },
-                    { name: "Winding Resistance (HV)", value: "0.452 Ω", criteria: "Diff < 2% from factory", pass: true },
-                    { name: "Turns Ratio Error", value: "0.05 %", criteria: "Within ± 0.5%", pass: true }
-                ] : [
-                    { name: "Contact Resistance (Main Bus)", value: "35 µΩ", criteria: "< 50 µΩ", pass: true },
-                    { name: "SF6 Gas Pressure", value: "0.62 MPa", criteria: "> 0.55 MPa at 20°C", pass: true },
-                    { name: "SF6 Moisture Content", value: "125 ppmV", criteria: "< 150 ppmV", pass: true },
-                    { name: "Operating Time (Trip/Close)", value: "38 ms", criteria: "< 45 ms", pass: true }
-                ]
+                gases: gases,
+                electrical: electrical
             });
         }
+
+        // Sort assets by RPN descending (Highest risk first)
+        assetsData.sort((a, b) => b.rpn - a.rpn);
 
         // Pagination State
         let currentPage = 1;
@@ -382,11 +464,9 @@
                     <td class="py-3 px-4"><span class="px-2.5 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">${item.type}</span></td>
                     <td class="py-3 px-4 text-slate-300">${item.location}</td>
                     <td class="py-3 px-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="font-bold ${item.healthIndex < 75 ? 'text-rose-400' : item.healthIndex < 85 ? 'text-amber-400' : 'text-emerald-400'}">${item.healthIndex}%</span>
-                        </div>
+                        <span class="font-bold ${item.healthIndex < 75 ? 'text-rose-400' : item.healthIndex < 85 ? 'text-amber-400' : 'text-emerald-400'}">${item.healthIndex}%</span>
                     </td>
-                    <td class="py-3 px-4 text-slate-400">${item.lastPm}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-industrial-400">${item.rpn}</td>
                     <td class="py-3 px-4 text-slate-200 font-medium">${item.nextPm}</td>
                     <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium border ${item.statusClass}">${item.status}</span></td>
                     <td class="py-3 px-4 text-center">
@@ -399,7 +479,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Update Pagination Info & Controls
             document.getElementById('pagination-info').innerText = `แสดง ${start + 1} ถึง ${Math.min(end, filteredData.length)} จากทั้งหมด ${filteredData.length} รายการ`;
             renderPaginationControls();
         }
@@ -434,7 +513,7 @@
             if (!asset) return;
 
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
-            document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}%`;
+            document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
             // DGA Table Rows
             const dgaTbody = document.getElementById('modal-dga-tbody');
@@ -464,7 +543,7 @@
                         <td class="py-2 px-4 font-semibold text-slate-300">${test.name}</td>
                         <td class="py-2 px-4 font-mono text-slate-200">${test.value}</td>
                         <td class="py-2 px-4 text-slate-400">${test.criteria}</td>
-                        <td class="py-2 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Pass</span></td>
+                        <td class="py-2 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold ${test.pass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${test.pass ? 'Pass' : 'Failed'}</span></td>
                     </tr>
                 `;
             });
@@ -483,7 +562,7 @@
                 assetsData.forEach(asset => {
                     const opt = document.createElement('option');
                     opt.value = asset.id;
-                    opt.innerText = `${asset.id} (${asset.type})`;
+                    opt.innerText = `${asset.id} (${asset.type}) - RPN: ${asset.rpn}`;
                     select.appendChild(opt);
                 });
             }
@@ -512,18 +591,18 @@
         }
 
         function runDgaCalculations(g) {
-            // 1. Rogers Ratio
+            // 1. Rogers Ratio Method
             let r1 = g.c2h2 / g.ch4;
             let r2 = g.ch4 / g.h2;
             let r3 = g.c2h4 / g.c2h6;
-            let r4 = g.c2h6 / g.c2h2;
             let rogersRes = "Normal (No significant fault)";
             if (r2 > 1.0 && r3 < 1.0) rogersRes = "Low energy discharge (PD)";
             else if (r1 > 0.1 && r3 > 1.0) rogersRes = "Thermal fault (> 700°C)";
             else if (r2 > 0.1 && r2 < 1.0 && r3 > 1.0) rogersRes = "Thermal fault (300-700°C)";
+            else if (g.c2h2 > 35) rogersRes = "Arcing (High energy discharge)";
             document.getElementById('res-rogers').innerHTML = `<span class="text-xs text-slate-300">ผลลัพธ์:</span> <span class="text-white font-bold">${rogersRes}</span>`;
 
-            // 2. Duval Triangle
+            // 2. Duval Triangle Method
             let totalTri = g.ch4 + g.c2h4 + g.c2h2;
             let p_ch4 = totalTri > 0 ? (g.ch4 / totalTri) * 100 : 33;
             let p_c2h4 = totalTri > 0 ? (g.c2h4 / totalTri) * 100 : 33;
@@ -534,15 +613,17 @@
             else if (p_ch4 > 70) duvalRes = "Zone T1 (Thermal Fault < 300°C)";
             document.getElementById('res-duval').innerHTML = `<span class="text-xs text-slate-300">พิกัดสามเหลี่ยม:</span> <span class="text-white font-bold">${duvalRes}</span>`;
 
-            // 3. IEC 3-Ratio
+            // 3. IEC 3-Ratio Method
             let iecRes = "Normal Condition (Code 0 0 0)";
             if (g.c2h2/g.ch4 > 1) iecRes = "Discharge of high energy (Arc)";
             else if (g.c2h4/g.c2h6 > 2) iecRes = "Thermal fault > 700°C";
+            else if (g.ch4/g.h2 > 1) iecRes = "Thermal fault < 300°C";
             document.getElementById('res-iec').innerHTML = `<span class="text-xs text-slate-300">รหัส IEC:</span> <span class="text-white font-bold">${iecRes}</span>`;
 
-            // 4. Doernenburg Ratio
+            // 4. Doernenburg Ratio Method
             let doernRes = "Normal (Within IEEE Limits)";
-            if (g.ch4/g.h2 > 1.0 && g.c2h2/g.c2h4 < 0.5) doernRes = "Thermal decomposition";
+            if (g.ch4/g.h2 > 1.0 && g.c2h2/g.c2h4 < 0.5) doernRes = "Thermal decomposition of oil";
+            else if (g.c2h2/g.ch4 > 0.1) doernRes = "Discharge / Sparking fault";
             document.getElementById('res-doernenburg').innerHTML = `<span class="text-xs text-slate-300">ผลประเมิน:</span> <span class="text-white font-bold">${doernRes}</span>`;
 
             // 5. Key Gas Method
@@ -550,10 +631,11 @@
             let maxGas = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
             if (maxGas === g.c2h2) keyGas = "Acetylene (C2H2) -> Arcing";
             else if (maxGas === g.c2h4) keyGas = "Ethylene (C2H4) -> Overheating (>700°C)";
-            else if (maxGas === g.co) keyGas = "Carbon Monoxide (CO) -> Cellulose insulation breakdown";
+            else if (maxGas === g.co) keyGas = "Carbon Monoxide (CO) -> Cellulose breakdown";
+            else if (maxGas === g.ch4) keyGas = "Methane (CH4) -> Low temp oil overheating";
             document.getElementById('res-keygas').innerHTML = `<span class="text-xs text-slate-300">ก๊าซเด่น (Key Gas):</span> <span class="text-white font-bold">${keyGas}</span>`;
 
-            // 6. TDCG
+            // 6. TDCG & IEEE Criteria
             let tdcgVal = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             let cond = "Condition 1 (Normal)";
             if (tdcgVal > 1920) cond = "Condition 4 (Excessive deterioration)";
