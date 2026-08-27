@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCM Dashboard - หม้อแปลงและ GIS (40 อุปกรณ์)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        industrial: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                            dark: '#1e1b18'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-industrial-dark border-b border-industrial-700/50 px-6 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="bg-industrial-600 p-2.5 rounded-lg text-white shadow-md shadow-industrial-600/30">
+                <i class="fa-solid fa-industry text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงไฟฟ้าและ GIS (40 อุปกรณ์)</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="px-3 py-1 bg-industrial-900/80 border border-industrial-700 text-industrial-400 text-xs rounded-full font-medium">
+                <i class="fa-solid fa-circle text-emerald-500 text-[10px] mr-1 animate-pulse"></i> ระบบพร้อมใช้งาน
+            </span>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-slate-800/80 border-b border-slate-700 px-6 flex space-x-4">
+        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-5 border-b-2 font-medium text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>ตารางการเข้าทำ PM (40 อุปกรณ์)</span>
+        </button>
+        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+            <i class="fa-solid fa-calculator"></i>
+            <span>แท็บคำนวณ DGA (6 วิธีมาตรฐาน)</span>
+        </button>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
+
+        <!-- TAB 1: PM SCHEDULE -->
+        <section id="tab-pm-schedule" class="space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                <div>
+                    <h2 class="text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
+                    <p class="text-xs text-slate-400">แสดงผลข้อมูลอุปกรณ์ทั้งหมด 40 ตัว จัดหน้าละ 10 อุปกรณ์</p>
+                </div>
+                <div class="flex items-center space-x-3 w-full md:w-auto">
+                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ชื่ออุปกรณ์..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full md:w-64">
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-900/70 text-slate-400 uppercase text-xs tracking-wider border-b border-slate-700">
+                                <th class="py-3.5 px-4 font-semibold">รหัสอุปกรณ์</th>
+                                <th class="py-3.5 px-4 font-semibold">ประเภท</th>
+                                <th class="py-3.5 px-4 font-semibold">พิกัด/ตำแหน่ง</th>
+                                <th class="py-3.5 px-4 font-semibold">Health Index</th>
+                                <th class="py-3.5 px-4 font-semibold">PM ล่าสุด</th>
+                                <th class="py-3.5 px-4 font-semibold">PM รอบถัดไป</th>
+                                <th class="py-3.5 px-4 font-semibold">สถานะความเสี่ยง</th>
+                                <th class="py-3.5 px-4 font-semibold text-center">การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pm-table-body" class="divide-y divide-slate-700/50">
+                            <!-- JS will inject rows here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="bg-slate-900/60 px-6 py-4 flex flex-col md:flex-row justify-between items-center border-t border-slate-700 gap-4">
+                    <span id="pagination-info" class="text-xs text-slate-400">แสดง 1 ถึง 10 จากทั้งหมด 40 รายการ</span>
+                    <div class="flex space-x-1" id="pagination-controls">
+                        <!-- JS will inject pagination buttons -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: DGA CALCULATOR (6 METHODS) -->
+        <section id="tab-dga-calc" class="space-y-6 hidden">
+            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายในน้ำมันหม้อแปลงและอุปกรณ์ (DGA 6 วิธี)</h2>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดึงค่าก๊าซจริงมาประมวลผลผ่านวิธีมาตรฐานสากล</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label class="text-sm font-medium text-slate-300">เลือกอุปกรณ์:</label>
+                    <select id="dga-device-select" onchange="onDgaDeviceChange()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Gas Input Display Card -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg">
+                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซปัจจุบันที่วิเคราะห์ได้ (ppm)</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container">
+                    <!-- Dynamic Gas Inputs/Displays -->
+                </div>
+            </div>
+
+            <!-- 6 Methods Output Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Method 1 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">1. Rogers Ratio Method</h4>
+                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC 60599</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">วิเคราะห์อัตราส่วนก๊าซ 4 ตัว ($C_2H_2/CH_4, CH_4/H_2, C_2H_4/C_2H_6, C_2H_6/C_2H_2$)</p>
+                    </div>
+                    <div id="res-rogers" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                </div>
+
+                <!-- Method 2 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">2. Duval Triangle Method</h4>
+                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC 60599</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">สามเหลี่ยมเปอร์เซ็นต์ก๊าซ $CH_4, C_2H_4, C_2H_2$ หาจุดความผิดปกติ</p>
+                    </div>
+                    <div id="res-duval" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                </div>
+
+                <!-- Method 3 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">3. IEC 3-Ratio Method</h4>
+                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEC Standard</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">ใช้รหัสอัตราส่วน $I_1, I_2, I_5$ ประเมินความผิดปกติหลัก</p>
+                    </div>
+                    <div id="res-iec" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                </div>
+
+                <!-- Method 4 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">4. Doernenburg Ratio Method</h4>
+                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEEE Std C57.104</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">วิเคราะห์อัตราส่วนก๊าซ 4 คู่ พร้อมเกณฑ์ความเข้มข้นขั้นต่ำ</p>
+                    </div>
+                    <div id="res-doernenburg" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                </div>
+
+                <!-- Method 5 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">5. Key Gas Method</h4>
+                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEEE / IEC</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">ระบุชนิดความผิดปกติจากก๊าซเด่นที่เป็นตัวบ่งชี้หลัก</p>
+                    </div>
+                    <div id="res-keygas" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                </div>
+
+                <!-- Method 6 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">6. TDCG & IEEE Criteria</h4>
+                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">IEEE C57.104 Condition</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">ประเมินผลรวมก๊าซติดไฟได้ (TDCG) และระดับความรุนแรง Condition 1-4</p>
+                    </div>
+                    <div id="res-tdcg" class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-sm font-medium text-industrial-400">รอเลือกอุปกรณ์...</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- DETAILED TEST POPUP MODAL -->
+    <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <!-- Modal Header -->
+            <div class="bg-slate-900 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30">
+                        <i class="fa-solid fa-file-waveform"></i>
+                    </div>
+                    <div>
+                        <h3 id="modal-title" class="font-bold text-white text-base">ผลทดสอบเชิงลึก (Detailed Test Results)</h3>
+                        <p id="modal-subtitle" class="text-xs text-slate-400">อุปกรณ์: -</p>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-6 flex-1">
+                <!-- DGA Lab Results Table -->
+                <div>
+                    <h4 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-vial mr-2"></i> ผลวิเคราะห์ก๊าซละลายในน้ำมัน (DGA Lab Results & Standards Criteria)</h4>
+                    <div class="border border-slate-700 rounded-xl overflow-hidden">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
+                                <tr>
+                                    <th class="py-2.5 px-4">ชนิดก๊าซ</th>
+                                    <th class="py-2.5 px-4">ค่าที่ตรวจวัดได้ (ppm)</th>
+                                    <th class="py-2.5 px-4">มาตรฐานอ้างอิง (IEEE / IEC Limit)</th>
+                                    <th class="py-2.5 px-4">สถานะประเมิน</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-dga-tbody" class="divide-y divide-slate-700/50">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Electrical Test Results Table -->
+                <div>
+                    <h4 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-bolt mr-2"></i> ผลทดสอบทางไฟฟ้า (Electrical Test Results & Standards Criteria)</h4>
+                    <div class="border border-slate-700 rounded-xl overflow-hidden">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
+                                <tr>
+                                    <th class="py-2.5 px-4">หัวข้อการทดสอบ</th>
+                                    <th class="py-2.5 px-4">ค่าที่วัดได้</th>
+                                    <th class="py-2.5 px-4">เกณฑ์มาตรฐาน (Standards Criteria)</th>
+                                    <th class="py-2.5 px-4">ผลสรุป</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-elec-tbody" class="divide-y divide-slate-700/50">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-900/80 px-6 py-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-industrial-dark border-t border-slate-800 text-center py-4 text-xs text-slate-500">
+        RCM Industrial Asset Management &copy; 2026 | Transformers & GIS Monitoring Module
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Generate Mock Data for 40 Assets (25 Transformers, 15 GIS units)
+        const assetsData = [];
+        const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
+        
+        for (let i = 1; i <= 40; i++) {
+            const isTransformer = i <= 25;
+            const type = isTransformer ? "Transformer" : "GIS";
+            const prefix = isTransformer ? "TR" : "GIS";
+            const code = `${prefix}-${String(i).padStart(2, '0')}`;
+            const healthIndex = (Math.random() * 40 + 60).toFixed(1); // 60.0 - 100.0
+            
+            let status = "Normal";
+            let statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+            if (healthIndex < 75) {
+                status = "Critical";
+                statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
+            } else if (healthIndex < 85) {
+                status = "Warning";
+                statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+            }
+
+            assetsData.push({
+                id: code,
+                type: type,
+                location: locations[Math.floor(Math.random() * locations.length)],
+                healthIndex: parseFloat(healthIndex),
+                lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
+                nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
+                status: status,
+                statusClass: statusClass,
+                // DGA Gases
+                gases: {
+                    h2: Math.floor(Math.random() * 80 + 10),
+                    ch4: Math.floor(Math.random() * 50 + 5),
+                    c2h2: Math.floor(Math.random() * 15),
+                    c2h4: Math.floor(Math.random() * 40 + 5),
+                    c2h6: Math.floor(Math.random() * 30 + 5),
+                    co: Math.floor(Math.random() * 300 + 50),
+                    co2: Math.floor(Math.random() * 2000 + 400)
+                },
+                // Electrical Tests
+                electrical: isTransformer ? [
+                    { name: "Insulation Resistance (HV-LV)", value: "5,420 MΩ", criteria: "> 1,000 MΩ at 20°C", pass: true },
+                    { name: "Tan Delta (Dissipation Factor)", value: "0.35 %", criteria: "< 0.5% at 20°C", pass: true },
+                    { name: "Winding Resistance (HV)", value: "0.452 Ω", criteria: "Diff < 2% from factory", pass: true },
+                    { name: "Turns Ratio Error", value: "0.05 %", criteria: "Within ± 0.5%", pass: true }
+                ] : [
+                    { name: "Contact Resistance (Main Bus)", value: "35 µΩ", criteria: "< 50 µΩ", pass: true },
+                    { name: "SF6 Gas Pressure", value: "0.62 MPa", criteria: "> 0.55 MPa at 20°C", pass: true },
+                    { name: "SF6 Moisture Content", value: "125 ppmV", criteria: "< 150 ppmV", pass: true },
+                    { name: "Operating Time (Trip/Close)", value: "38 ms", criteria: "< 45 ms", pass: true }
+                ]
+            });
+        }
+
+        // Pagination State
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let filteredData = [...assetsData];
+
+        // Switch Tabs
+        function switchTab(tabId) {
+            document.getElementById('tab-pm-schedule').classList.add('hidden');
+            document.getElementById('tab-dga-calc').classList.add('hidden');
+            document.getElementById('tab-btn-pm-schedule').className = "py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2";
+            document.getElementById('tab-btn-dga-calc').className = "py-3 px-5 border-b-2 font-medium text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2";
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabId}`).className = "py-3 px-5 border-b-2 font-medium text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2";
+
+            if (tabId === 'dga-calc') {
+                initDgaDropdown();
+            }
+        }
+
+        // Render PM Table with Pagination
+        function renderTable() {
+            const tbody = document.getElementById('pm-table-body');
+            tbody.innerHTML = "";
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageItems = filteredData.slice(start, end);
+
+            if (pageItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">ไม่พบข้อมูลอุปกรณ์</td></tr>`;
+                return;
+            }
+
+            pageItems.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-700/30 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-semibold text-white">${item.id}</td>
+                    <td class="py-3 px-4"><span class="px-2.5 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">${item.type}</span></td>
+                    <td class="py-3 px-4 text-slate-300">${item.location}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold ${item.healthIndex < 75 ? 'text-rose-400' : item.healthIndex < 85 ? 'text-amber-400' : 'text-emerald-400'}">${item.healthIndex}%</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-slate-400">${item.lastPm}</td>
+                    <td class="py-3 px-4 text-slate-200 font-medium">${item.nextPm}</td>
+                    <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium border ${item.statusClass}">${item.status}</span></td>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="openModal('${item.id}')" class="bg-industrial-600 hover:bg-industrial-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium shadow transition flex items-center space-x-1 mx-auto">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>ผลทดสอบ</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update Pagination Info & Controls
+            document.getElementById('pagination-info').innerText = `แสดง ${start + 1} ถึง ${Math.min(end, filteredData.length)} จากทั้งหมด ${filteredData.length} รายการ`;
+            renderPaginationControls();
+        }
+
+        function renderPaginationControls() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            const container = document.getElementById('pagination-controls');
+            container.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `px-3 py-1 rounded-lg text-xs font-medium transition ${currentPage === i ? 'bg-industrial-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'}`;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        function filterTable() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            filteredData = assetsData.filter(item => item.id.toLowerCase().includes(query) || item.location.toLowerCase().includes(query));
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Modal Handling
+        function openModal(id) {
+            const asset = assetsData.find(a => a.id === id);
+            if (!asset) return;
+
+            document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
+            document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}%`;
+
+            // DGA Table Rows
+            const dgaTbody = document.getElementById('modal-dga-tbody');
+            dgaTbody.innerHTML = "";
+            const limits = { h2: 100, ch4: 120, c2h2: 35, c2h4: 50, c2h6: 65, co: 350, co2: 2500 };
+            
+            Object.keys(asset.gases).forEach(gas => {
+                const val = asset.gases[gas];
+                const limit = limits[gas];
+                const isPass = val <= limit;
+                dgaTbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/20">
+                        <td class="py-2 px-4 uppercase font-bold text-slate-300">${gas}</td>
+                        <td class="py-2 px-4 font-mono ${isPass ? 'text-slate-200' : 'text-rose-400 font-bold'}">${val} ppm</td>
+                        <td class="py-2 px-4 text-slate-400">สูงสุดไม่เกิน ${limit} ppm (IEC/IEEE Limit)</td>
+                        <td class="py-2 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold ${isPass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${isPass ? 'Normal' : 'Exceeded'}</span></td>
+                    </tr>
+                `;
+            });
+
+            // Electrical Table Rows
+            const elecTbody = document.getElementById('modal-elec-tbody');
+            elecTbody.innerHTML = "";
+            asset.electrical.forEach(test => {
+                elecTbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/20">
+                        <td class="py-2 px-4 font-semibold text-slate-300">${test.name}</td>
+                        <td class="py-2 px-4 font-mono text-slate-200">${test.value}</td>
+                        <td class="py-2 px-4 text-slate-400">${test.criteria}</td>
+                        <td class="py-2 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Pass</span></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('test-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('test-modal').classList.add('hidden');
+        }
+
+        // DGA Tab Logic & Calculations (6 Methods)
+        function initDgaDropdown() {
+            const select = document.getElementById('dga-device-select');
+            if (select.children.length === 0) {
+                assetsData.forEach(asset => {
+                    const opt = document.createElement('option');
+                    opt.value = asset.id;
+                    opt.innerText = `${asset.id} (${asset.type})`;
+                    select.appendChild(opt);
+                });
+            }
+            onDgaDeviceChange();
+        }
+
+        function onDgaDeviceChange() {
+            const selectedId = document.getElementById('dga-device-select').value;
+            const asset = assetsData.find(a => a.id === selectedId);
+            if (!asset) return;
+
+            // Render Gas Cards
+            const container = document.getElementById('gas-values-container');
+            container.innerHTML = "";
+            Object.keys(asset.gases).forEach(gas => {
+                container.innerHTML += `
+                    <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-700">
+                        <div class="text-[10px] text-slate-400 uppercase font-bold">${gas}</div>
+                        <div class="text-base font-mono font-bold text-white mt-1">${asset.gases[gas]} <span class="text-[10px] font-normal text-slate-400">ppm</span></div>
+                    </div>
+                `;
+            });
+
+            // Perform 6 Calculations
+            runDgaCalculations(asset.gases);
+        }
+
+        function runDgaCalculations(g) {
+            // 1. Rogers Ratio
+            let r1 = g.c2h2 / g.ch4;
+            let r2 = g.ch4 / g.h2;
+            let r3 = g.c2h4 / g.c2h6;
+            let r4 = g.c2h6 / g.c2h2;
+            let rogersRes = "Normal (No significant fault)";
+            if (r2 > 1.0 && r3 < 1.0) rogersRes = "Low energy discharge (PD)";
+            else if (r1 > 0.1 && r3 > 1.0) rogersRes = "Thermal fault (> 700°C)";
+            else if (r2 > 0.1 && r2 < 1.0 && r3 > 1.0) rogersRes = "Thermal fault (300-700°C)";
+            document.getElementById('res-rogers').innerHTML = `<span class="text-xs text-slate-300">ผลลัพธ์:</span> <span class="text-white font-bold">${rogersRes}</span>`;
+
+            // 2. Duval Triangle
+            let totalTri = g.ch4 + g.c2h4 + g.c2h2;
+            let p_ch4 = totalTri > 0 ? (g.ch4 / totalTri) * 100 : 33;
+            let p_c2h4 = totalTri > 0 ? (g.c2h4 / totalTri) * 100 : 33;
+            let p_c2h2 = totalTri > 0 ? (g.c2h2 / totalTri) * 100 : 34;
+            let duvalRes = "Zone S (Normal Thermal)";
+            if (p_c2h2 > 20) duvalRes = "Zone D1 (High Energy Discharge)";
+            else if (p_c2h4 > 50) duvalRes = "Zone T3 (Thermal Fault > 700°C)";
+            else if (p_ch4 > 70) duvalRes = "Zone T1 (Thermal Fault < 300°C)";
+            document.getElementById('res-duval').innerHTML = `<span class="text-xs text-slate-300">พิกัดสามเหลี่ยม:</span> <span class="text-white font-bold">${duvalRes}</span>`;
+
+            // 3. IEC 3-Ratio
+            let iecRes = "Normal Condition (Code 0 0 0)";
+            if (g.c2h2/g.ch4 > 1) iecRes = "Discharge of high energy (Arc)";
+            else if (g.c2h4/g.c2h6 > 2) iecRes = "Thermal fault > 700°C";
+            document.getElementById('res-iec').innerHTML = `<span class="text-xs text-slate-300">รหัส IEC:</span> <span class="text-white font-bold">${iecRes}</span>`;
+
+            // 4. Doernenburg Ratio
+            let doernRes = "Normal (Within IEEE Limits)";
+            if (g.ch4/g.h2 > 1.0 && g.c2h2/g.c2h4 < 0.5) doernRes = "Thermal decomposition";
+            document.getElementById('res-doernenburg').innerHTML = `<span class="text-xs text-slate-300">ผลประเมิน:</span> <span class="text-white font-bold">${doernRes}</span>`;
+
+            // 5. Key Gas Method
+            let keyGas = "Hydrogen (H2)";
+            let maxGas = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
+            if (maxGas === g.c2h2) keyGas = "Acetylene (C2H2) -> Arcing";
+            else if (maxGas === g.c2h4) keyGas = "Ethylene (C2H4) -> Overheating (>700°C)";
+            else if (maxGas === g.co) keyGas = "Carbon Monoxide (CO) -> Cellulose insulation breakdown";
+            document.getElementById('res-keygas').innerHTML = `<span class="text-xs text-slate-300">ก๊าซเด่น (Key Gas):</span> <span class="text-white font-bold">${keyGas}</span>`;
+
+            // 6. TDCG
+            let tdcgVal = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
+            let cond = "Condition 1 (Normal)";
+            if (tdcgVal > 1920) cond = "Condition 4 (Excessive deterioration)";
+            else if (tdcgVal > 720) cond = "Condition 3 (Significant gassing)";
+            else if (tdcgVal > 460) cond = "Condition 2 (Increasing gassing rate)";
+            document.getElementById('res-tdcg').innerHTML = `<span class="text-xs text-slate-300">TDCG Total: <b>${tdcgVal} ppm</b> | </span> <span class="text-industrial-400 font-bold">${cond}</span>`;
+        }
+
+        // Initial Load
+        renderTable();
+    </script>
+</body>
+</html>
