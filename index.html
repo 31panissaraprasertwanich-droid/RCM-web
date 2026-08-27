@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substation RCM Decision Support Dashboard</title>
+    <title>Substation RCM & Advanced DGA Analytics Suite</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,166 +11,169 @@
         body { font-family: 'Sarabun', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
+<body class="bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-950 text-slate-100 min-h-screen">
 
-    <!-- Top Header -->
-    <header class="bg-slate-900 border-b border-slate-800 text-white shadow-lg sticky top-0 z-50">
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-2xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 p-2 rounded-lg text-white font-bold text-xs">RCM</div>
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-2.5 rounded-xl text-white font-black text-xs shadow-lg shadow-blue-500/20">RCM PRO</div>
                 <div>
-                    <h1 class="text-base md:text-lg font-bold">Substation Maintenance Decision Support Dashboard</h1>
-                    <p class="text-xs text-slate-400">ระบบสนับสนุนการตัดสินใจบำรุงรักษาตามแนวคิด RCM (Transformer & GIS)</p>
+                    <h1 class="text-base md:text-lg font-bold tracking-wide">Substation Asset Health & RCM Intelligence</h1>
+                    <p class="text-xs text-slate-400">ระบบอัจฉริยะสนับสนุนการตัดสินใจบำรุงรักษาอุปกรณ์สถานีไฟฟ้า (Transformer & GIS)</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    <span class="w-2 h-2 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span> ระบบเชื่อมต่อข้อมูลการทดสอบออนไลน์
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm">
+                    <span class="w-2 h-2 mr-2 bg-emerald-500 rounded-full animate-ping"></span> Live Substation Connection
                 </span>
             </div>
         </div>
     </header>
 
-    <!-- Main Container Layout with Left Sidebar Navigation -->
+    <!-- Main Layout Container -->
     <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-        <!-- Left Sidebar Navigation Tabs -->
-        <aside class="lg:col-span-1 bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3 h-fit sticky top-20 shadow-xl">
-            <div class="border-b border-slate-800 pb-3">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">เมนูหลักระบบ (Navigation)</h2>
+        <!-- Left Sidebar Navigation -->
+        <aside class="lg:col-span-1 bg-slate-900/60 backdrop-blur-md p-4 rounded-3xl border border-slate-800/80 space-y-3 h-fit sticky top-20 shadow-2xl">
+            <div class="border-b border-slate-800 pb-3 px-1">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Control Panel</h2>
             </div>
             <nav class="space-y-2">
-                <button onclick="switchView('dashboard')" id="navDashboard" class="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-blue-600 text-white flex items-center gap-2.5 shadow-md">
-                    <span>📊</span> แดชบอร์ดและตารางจัดลำดับ PM
+                <button onclick="switchView('dashboard')" id="navDashboard" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center gap-3 shadow-lg shadow-blue-600/20">
+                    <span class="text-base">⚡</span> แดชบอร์ดและจัดลำดับ PM
                 </button>
-                <button onclick="switchView('dgaMulti')" id="navDgaMulti" class="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-slate-800/60 text-slate-300 hover:bg-slate-800 flex items-center gap-2.5 border border-slate-800">
-                    <span>🔬</span> DGA Multi-Method Analysis
+                <button onclick="switchView('dgaMulti')" id="navDgaMulti" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-800/40 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-700/50">
+                    <span class="text-base">🔬</span> วิเคราะห์ DGA เชิงลึก (Multi-Method)
                 </button>
             </nav>
-            <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-                * เลือกเมนูด้านบนเพื่อสลับดูภาพรวม PM หรือเจาะลึกวิเคราะห์ DGA หลายวิธีแบบพรีเมียม
+            <div class="pt-4 border-t border-slate-800/80 px-1 text-[11px] text-slate-400 leading-relaxed">
+                💡 <span class="text-slate-300 font-medium">คำแนะนำ:</span> ใช้สลับมุมมองเพื่อบริหารจัดการแผนบำรุงรักษาเชิงป้องกันและเจาะลึกผลวิเคราะห์ก๊าซ
             </div>
         </aside>
 
-        <!-- Right Main Content Area (Dynamic Views) -->
+        <!-- Right Dynamic Content Area -->
         <main class="lg:col-span-3 space-y-6">
 
-            <!-- VIEW 1: Dashboard & PM Table -->
+            <!-- VIEW 1: Dashboard & PM Prioritization Matrix -->
             <div id="viewDashboard" class="space-y-6">
-                <!-- Summary KPI Cards -->
+                <!-- KPI Metric Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-900/50 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden">
+                        <div class="absolute right-3 top-3 text-slate-800 text-3xl font-black opacity-40">24</div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">อุปกรณ์วิกฤตทั้งหมด</p>
-                        <h3 class="text-3xl font-bold text-slate-100 mt-2">24 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
+                        <h3 class="text-3xl font-extrabold text-slate-100 mt-2">24 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
-                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-amber-500">ต้องเฝ้าระวัง (Warning)</p>
-                        <h3 class="text-3xl font-bold text-amber-500 mt-2">6 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
+                    <div class="bg-gradient-to-br from-slate-900 to-amber-950/20 p-5 rounded-3xl border border-amber-900/30 shadow-xl relative overflow-hidden">
+                        <div class="absolute right-3 top-3 text-amber-900 text-3xl font-black opacity-30">06</div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-amber-400">ต้องเฝ้าระวัง (Warning)</p>
+                        <h3 class="text-3xl font-extrabold text-amber-400 mt-2">6 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
-                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-rose-500">วิกฤต/เร่งด่วน (Critical)</p>
-                        <h3 class="text-3xl font-bold text-rose-500 mt-2">2 <span class="text-sm font-normal text-slate-500">ยูนิต</span></h3>
+                    <div class="bg-gradient-to-br from-slate-900 to-rose-950/20 p-5 rounded-3xl border border-rose-900/30 shadow-xl relative overflow-hidden">
+                        <div class="absolute right-3 top-3 text-rose-900 text-3xl font-black opacity-30">02</div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-rose-400">วิกฤต/เร่งด่วน (Critical)</p>
+                        <h3 class="text-3xl font-extrabold text-rose-400 mt-2">2 <span class="text-sm font-normal text-slate-400">ยูนิต</span></h3>
                     </div>
                 </div>
 
-                <!-- Filter Panel -->
-                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-4 shadow-xl">
-                    <div class="flex items-center space-x-2 w-full md:w-auto">
-                        <span class="text-sm font-medium text-slate-300">กรองตามประเภทอุปกรณ์:</span>
-                        <select id="assetFilter" onchange="filterTable()" class="bg-slate-950 border border-slate-700 text-slate-200 text-sm rounded-xl focus:ring-blue-500 block p-2">
+                <!-- Filter Header Bar -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-3xl border border-slate-800 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <span class="text-sm font-medium text-slate-300">กรองประเภทอุปกรณ์:</span>
+                        <select id="assetFilter" onchange="filterTable()" class="bg-slate-950 border border-slate-700 text-slate-200 text-sm rounded-2xl focus:ring-blue-500 block p-2.5 px-4 outline-none">
                             <option value="ALL">ทั้งหมด (All Assets)</option>
                             <option value="TRX">หม้อแปลงไฟฟ้า (Power Transformer)</option>
                             <option value="GIS">ชุดสวิตช์เกียร์ก๊าซ (GIS)</option>
                         </select>
                     </div>
                     <div class="text-xs text-slate-400">
-                        *คลิกปุ่ม "ผลทดสอบ" ในตารางเพื่อดูข้อมูลเบื้องต้น
+                        *จัดลำดับตามดัชนีสุขภาพ (Health Index) และค่าความเสี่ยง RPN
                     </div>
                 </div>
 
-                <!-- PM Prioritization Table -->
-                <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
+                <!-- Main PM Table -->
+                <div class="bg-slate-900/80 backdrop-blur-md rounded-3xl border border-slate-800 overflow-hidden shadow-2xl">
                     <div class="p-5 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
                             <h2 class="text-base font-bold text-slate-100">ตารางจัดลำดับการเข้าทำแผนบำรุงรักษา (PM Prioritization Matrix)</h2>
-                            <p class="text-xs text-slate-400">แสดงลำดับความเร่งด่วน ผลทดสอบเบื้องต้น และค่าความเสี่ยง RPN</p>
+                            <p class="text-xs text-slate-400">ประเมินความเร่งด่วนตามหลักการ Reliability-Centered Maintenance (RCM)</p>
                         </div>
-                        <span class="text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold px-3 py-1 rounded-full">เรียงตามความเสี่ยงสูงสุด</span>
+                        <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-semibold px-3.5 py-1.5 rounded-full">Risk-Based Sorting</span>
                     </div>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse" id="pmTable">
                             <thead>
                                 <tr class="bg-slate-950/60 text-slate-400 text-xs uppercase font-semibold border-b border-slate-800">
-                                    <th class="p-3.5">ลำดับ</th>
-                                    <th class="p-3.5">รหัสอุปกรณ์</th>
-                                    <th class="p-3.5">ประเภท</th>
-                                    <th class="p-3.5">Health Index</th>
-                                    <th class="p-3.5">RPN Score</th>
-                                    <th class="p-3.5">โหมดความเสียหายหลัก</th>
-                                    <th class="p-3.5">สถานะ</th>
-                                    <th class="p-3.5 text-center">ผลทดสอบ</th>
+                                    <th class="p-4">ลำดับ</th>
+                                    <th class="p-4">รหัสอุปกรณ์</th>
+                                    <th class="p-4">ประเภท</th>
+                                    <th class="p-4">Health Index</th>
+                                    <th class="p-4">RPN Score</th>
+                                    <th class="p-4">โหมดความเสียหายหลัก</th>
+                                    <th class="p-4">สถานะ</th>
+                                    <th class="p-4 text-center">ผลทดสอบ</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-800/60 text-sm text-slate-300">
-                                <tr class="hover:bg-slate-800/40 transition-colors" data-type="TRX">
-                                    <td class="p-3.5 font-bold text-rose-500">#01</td>
-                                    <td class="p-3.5 font-medium text-slate-100">TRX-01</td>
-                                    <td class="p-3.5 text-slate-400">Transformer</td>
-                                    <td class="p-3.5 font-semibold text-rose-500">58%</td>
-                                    <td class="p-3.5 font-semibold text-rose-500">280 (High)</td>
-                                    <td class="p-3.5 text-slate-400 text-xs">Thermal Fault (T3) & Severe Arcing</td>
-                                    <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 font-semibold">Critical</span></td>
-                                    <td class="p-3.5 text-center">
+                            <tbody class="divide-y divide-slate-800/50 text-sm text-slate-300">
+                                <tr class="hover:bg-slate-800/30 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-rose-500">#01</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-01</td>
+                                    <td class="p-4 text-slate-400">Transformer</td>
+                                    <td class="p-4 font-semibold text-rose-500">58%</td>
+                                    <td class="p-4 font-semibold text-rose-500">280 (High)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Thermal Fault (T3) & Severe Arcing</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">Critical</span></td>
+                                    <td class="p-4 text-center">
                                         <button onclick="openTestModal('TRX-01', '58%', '280', 'Critical', 
                                             'Hydrogen (H2): 1250 ppm (Std < 100)\nMethane (CH4): 320 ppm (Std < 30)\nAcetylene (C2H2): 85 ppm (Std < 1)\nEthylene (C2H4): 450 ppm (Std < 50)\nEthane (C2H6): 120 ppm (Std < 20)\nCarbon Monoxide (CO): 600 ppm (Std < 350)\nCarbon Dioxide (CO2): 3200 ppm (Std < 2500)', 
                                             'BDV: 42 kV (Std > 50)\nMoisture: 35 ppm (Std < 25)\nTan Delta: 0.65% (Std < 0.5%)')" 
-                                            class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-xl hover:bg-blue-500 shadow-md">ผลทดสอบ</button>
+                                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition-all">ผลทดสอบ</button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-800/40 transition-colors" data-type="GIS">
-                                    <td class="p-3.5 font-bold text-rose-500">#02</td>
-                                    <td class="p-3.5 font-medium text-slate-100">GIS-BAY-03</td>
-                                    <td class="p-3.5 text-slate-400">GIS</td>
-                                    <td class="p-3.5 font-semibold text-rose-500">52%</td>
-                                    <td class="p-3.5 font-semibold text-rose-500">320 (High)</td>
-                                    <td class="p-3.5 text-slate-400 text-xs">Partial Discharge & SF6 Pressure Low</td>
-                                    <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 font-semibold">Critical</span></td>
-                                    <td class="p-3.5 text-center">
+                                <tr class="hover:bg-slate-800/30 transition-colors" data-type="GIS">
+                                    <td class="p-4 font-bold text-rose-500">#02</td>
+                                    <td class="p-4 font-medium text-slate-100">GIS-BAY-03</td>
+                                    <td class="p-4 text-slate-400">GIS</td>
+                                    <td class="p-4 font-semibold text-rose-500">52%</td>
+                                    <td class="p-4 font-semibold text-rose-500">320 (High)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Partial Discharge & SF6 Pressure Low</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">Critical</span></td>
+                                    <td class="p-4 text-center">
                                         <button onclick="openTestModal('GIS-BAY-03', '52%', '320', 'Critical', 
                                             'N/A (ระบบก๊าซ SF6 ใช้เซนเซอร์ตรวจจับความดันและ UHF PD แทนน้ำมัน DGA)', 
                                             'SF6 Pressure: 5.2 bar [Alarm] (Std: 6.0 bar)\nDew Point: -15°C (Std < -20°C)\nPD Level: 450 pC (Std < 100 pC)\nContact Resistance: 48 µΩ')" 
-                                            class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-xl hover:bg-blue-500 shadow-md">ผลทดสอบ</button>
+                                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition-all">ผลทดสอบ</button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-800/40 transition-colors" data-type="TRX">
-                                    <td class="p-3.5 font-bold text-amber-500">#03</td>
-                                    <td class="p-3.5 font-medium text-slate-100">TRX-04</td>
-                                    <td class="p-3.5 text-slate-400">Transformer</td>
-                                    <td class="p-3.5 font-semibold text-amber-500">67%</td>
-                                    <td class="p-3.5 font-semibold text-amber-500">190 (Med)</td>
-                                    <td class="p-3.5 text-slate-400 text-xs">Thermal Fault (T1 - Low Temperature)</td>
-                                    <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-semibold">Warning</span></td>
-                                    <td class="p-3.5 text-center">
+                                <tr class="hover:bg-slate-800/30 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-amber-500">#03</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-04</td>
+                                    <td class="p-4 text-slate-400">Transformer</td>
+                                    <td class="p-4 font-semibold text-amber-500">67%</td>
+                                    <td class="p-4 font-semibold text-amber-500">190 (Med)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Thermal Fault (T1 - Low Temperature)</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Warning</span></td>
+                                    <td class="p-4 text-center">
                                         <button onclick="openTestModal('TRX-04', '67%', '190', 'Warning', 
                                             'Hydrogen (H2): 180 ppm (Std < 100)\nMethane (CH4): 110 ppm (Std < 30)\nAcetylene (C2H2): 0.5 ppm (Std < 1)\nEthylene (C2H4): 95 ppm (Std < 50)\nEthane (C2H6): 35 ppm (Std < 20)\nCarbon Monoxide (CO): 250 ppm (Std < 350)\nCarbon Dioxide (CO2): 1500 ppm (Std < 2500)', 
                                             'BDV: 55 kV (Std > 50)\nMoisture: 22 ppm (Std < 25)\nOLTC Contact Resistance: 85 µΩ (Std < 50 µΩ)')" 
-                                            class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-xl hover:bg-blue-500 shadow-md">ผลทดสอบ</button>
+                                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition-all">ผลทดสอบ</button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-800/40 transition-colors" data-type="TRX">
-                                    <td class="p-3.5 font-bold text-emerald-500">#04</td>
-                                    <td class="p-3.5 font-medium text-slate-100">TRX-02</td>
-                                    <td class="p-3.5 text-slate-400">Transformer</td>
-                                    <td class="p-3.5 font-semibold text-emerald-500">92%</td>
-                                    <td class="p-3.5 font-semibold text-emerald-500">45 (Low)</td>
-                                    <td class="p-3.5 text-slate-400 text-xs">Normal Operation (สมบูรณ์ตามรอบปี)</td>
-                                    <td class="p-3.5"><span class="px-2.5 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold">Normal</span></td>
-                                    <td class="p-3.5 text-center">
+                                <tr class="hover:bg-slate-800/30 transition-colors" data-type="TRX">
+                                    <td class="p-4 font-bold text-emerald-500">#04</td>
+                                    <td class="p-4 font-medium text-slate-100">TRX-02</td>
+                                    <td class="p-4 text-slate-400">Transformer</td>
+                                    <td class="p-4 font-semibold text-emerald-500">92%</td>
+                                    <td class="p-4 font-semibold text-emerald-500">45 (Low)</td>
+                                    <td class="p-4 text-slate-400 text-xs">Normal Operation (สมบูรณ์ตามรอบปี)</td>
+                                    <td class="p-4"><span class="px-3 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">Normal</span></td>
+                                    <td class="p-4 text-center">
                                         <button onclick="openTestModal('TRX-02', '92%', '45', 'Normal', 
                                             'Hydrogen (H2): 15 ppm (Std < 100)\nMethane (CH4): 10 ppm (Std < 30)\nAcetylene (C2H2): Not Detected (Std < 1)\nEthylene (C2H4): 12 ppm (Std < 50)\nEthane (C2H6): 5 ppm (Std < 20)\nCarbon Monoxide (CO): 80 ppm (Std < 350)\nCarbon Dioxide (CO2): 900 ppm (Std < 2500)', 
                                             'BDV: 70 kV (Std > 50)\nMoisture: 8 ppm (Std < 25)\nTan Delta: 0.30% (Std < 0.5%)')" 
-                                            class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-xl hover:bg-blue-500 shadow-md">ผลทดสอบ</button>
+                                            class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition-all">ผลทดสอบ</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -179,146 +182,148 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: DGA Multi-Method Analysis (Full-Screen Dark Theme View) -->
+            <!-- VIEW 2: DGA Multi-Method Advanced Suite (Custom Dark Theme UI) -->
             <div id="viewDgaMulti" class="space-y-6 hidden">
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6">
+                <div class="bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
                     
-                    <!-- Case Selection Bar -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <button onclick="setCase('case1')" id="btnCase1" class="p-3 rounded-xl border border-blue-500 bg-blue-600/20 text-blue-400 font-semibold text-xs md:text-sm text-center transition-all shadow-lg">
-                            Case 1<br><span class="text-[11px] font-normal text-slate-300">Overheated Oil (T3)</span>
-                        </button>
-                        <button onclick="setCase('case2')" id="btnCase2" class="p-3 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all">
-                            Case 2<br><span class="text-[11px] font-normal text-slate-400">Cellulose Insulation</span>
-                        </button>
-                        <button onclick="setCase('case3')" id="btnCase3" class="p-3 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all">
-                            Case 3<br><span class="text-[11px] font-normal text-slate-400">Corona / Partial Discharge</span>
-                        </button>
-                        <button onclick="setCase('case4')" id="btnCase4" class="p-3 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all">
-                            Case 4<br><span class="text-[11px] font-normal text-slate-400">Severe Arcing</span>
-                        </button>
+                    <!-- Scenario / Case Selector Chips -->
+                    <div class="space-y-2">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">เลือกกรณีศึกษาอุปกรณ์ (Diagnostic Scenarios):</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <button onclick="setScenario('scene1')" id="btnScene1" class="p-3.5 rounded-2xl border border-blue-500/80 bg-blue-600/15 text-blue-300 font-semibold text-xs md:text-sm text-center transition-all shadow-lg">
+                                Scenario 1<br><span class="text-[11px] font-normal text-slate-300">Overheated Oil (T3)</span>
+                            </button>
+                            <button onclick="setScenario('scene2')" id="btnScene2" class="p-3.5 rounded-2xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all">
+                                Scenario 2<br><span class="text-[11px] font-normal text-slate-400">Cellulose Degradation</span>
+                            </button>
+                            <button onclick="setScenario('scene3')" id="btnScene3" class="p-3.5 rounded-2xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all">
+                                Scenario 3<br><span class="text-[11px] font-normal text-slate-400">Corona / Discharge</span>
+                            </button>
+                            <button onclick="setScenario('scene4')" id="btnScene4" class="p-3.5 rounded-2xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all">
+                                Scenario 4<br><span class="text-[11px] font-normal text-slate-400">Severe Arcing Fault</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Method Navigation Bar -->
-                    <div class="flex flex-wrap items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-800">
-                        <button onclick="setMethod('duval')" id="tabDuval" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold bg-blue-600 text-white shadow transition-all">
+                    <!-- Analytical Method Switching Tabs -->
+                    <div class="flex flex-wrap items-center gap-2 bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
+                        <button onclick="setMethodTab('duval')" id="tabDuval" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold bg-blue-600 text-white shadow-md transition-all">
                             🔺 Duval Triangle
                         </button>
-                        <button onclick="setMethod('rogers')" id="tabRogers" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                        <button onclick="setMethodTab('rogers')" id="tabRogers" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                             📐 Rogers Ratio
                         </button>
-                        <button onclick="setMethod('doernen')" id="tabDoernen" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                        <button onclick="setMethodTab('doernen')" id="tabDoernen" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                             📊 Doernenburg Ratio
                         </button>
-                        <button onclick="setMethod('iec')" id="tabIec" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                        <button onclick="setMethodTab('iec')" id="tabIec" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                             📈 IEC Ratio
                         </button>
-                        <button onclick="setMethod('keygas')" id="tabKeygas" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                        <button onclick="setMethodTab('keygas')" id="tabKeygas" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                             🔑 Key Gas Method
                         </button>
-                        <button onclick="setMethod('summary')" id="tabSummary" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                        <button onclick="setMethodTab('summary')" id="tabSummary" class="px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                             📋 IEEE / Summary
                         </button>
                     </div>
 
-                    <!-- Main Content Split Grid inside View 2 -->
+                    <!-- Dual Panel Visualization Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         
-                        <!-- Left 2 Columns: Visual Graphic / Analysis View -->
-                        <div class="lg:col-span-2 bg-slate-950/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xl">
+                        <!-- Left Panel: Graphic & Method Explanation -->
+                        <div class="lg:col-span-2 bg-slate-950/80 border border-slate-800/80 rounded-3xl p-6 flex flex-col justify-between shadow-2xl relative">
                             <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
-                                <h3 id="viewTitle" class="text-sm font-bold text-blue-400 flex items-center gap-2">
-                                    <span>🔺</span> Duval Triangle (IEEE C57.104)
+                                <h3 id="suiteTitle" class="text-sm font-bold text-blue-400 flex items-center gap-2">
+                                    <span>🔺</span> Duval Triangle Analysis (IEEE C57.104)
                                 </h3>
-                                <span id="viewBadge" class="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2.5 py-1 rounded-md font-mono">Percentage Coordinates</span>
+                                <span id="suiteBadge" class="text-[10px] bg-blue-500/15 text-blue-300 border border-blue-500/25 px-3 py-1 rounded-full font-mono">Percentage Coordinates</span>
                             </div>
 
-                            <!-- Dynamic Visual Area -->
-                            <div id="visualContainer" class="flex items-center justify-center min-h-[350px] p-2">
+                            <!-- Graphic Representation Area -->
+                            <div class="flex items-center justify-center min-h-[320px] p-2">
                                 <div class="relative w-full max-w-sm flex flex-col items-center">
-                                    <svg viewBox="0 0 200 180" class="w-60 h-60 drop-shadow-2xl">
-                                        <polygon points="100,10 10,170 190,170" fill="#0f172a" stroke="#3b82f6" stroke-width="3" />
-                                        <line x1="100" y1="10" x2="100" y2="170" stroke="#334155" stroke-dasharray="4" stroke-width="1.5" />
-                                        <line x1="10" y1="170" x2="140" y2="90" stroke="#334155" stroke-dasharray="4" stroke-width="1.5" />
-                                        <line x1="190" y1="170" x2="70" y2="90" stroke="#334155" stroke-dasharray="4" stroke-width="1.5" />
+                                    <svg viewBox="0 0 200 180" class="w-56 h-56 drop-shadow-2xl">
+                                        <polygon points="100,10 10,170 190,170" fill="#090d16" stroke="#3b82f6" stroke-width="3" />
+                                        <line x1="100" y1="10" x2="100" y2="170" stroke="#1e293b" stroke-dasharray="4" stroke-width="1.5" />
+                                        <line x1="10" y1="170" x2="140" y2="90" stroke="#1e293b" stroke-dasharray="4" stroke-width="1.5" />
+                                        <line x1="190" y1="170" x2="70" y2="90" stroke="#1e293b" stroke-dasharray="4" stroke-width="1.5" />
                                         <text x="94" y="25" fill="#93c5fd" font-size="9" font-weight="bold">CH4</text>
                                         <text x="15" y="185" fill="#93c5fd" font-size="9" font-weight="bold">C2H2</text>
                                         <text x="165" y="185" fill="#93c5fd" font-size="9" font-weight="bold">C2H4</text>
-                                        <!-- Plot Point Marker -->
-                                        <circle id="svgPlot" cx="100" cy="120" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2" class="animate-pulse" />
+                                        <circle id="suiteSvgPlot" cx="100" cy="120" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2" class="animate-pulse" />
                                     </svg>
-                                    <div class="absolute bottom-1 bg-slate-900 border border-slate-700 p-2 rounded-xl text-[11px] font-mono shadow-md text-center">
-                                        <span id="svgCoordsText" class="text-amber-400 font-semibold">CH4: 20.3% | C2H2: 0.0% | C2H4: 79.7%</span>
+                                    <div class="absolute bottom-1 bg-slate-900 border border-slate-700 p-2.5 rounded-2xl text-[11px] font-mono shadow-xl text-center">
+                                        <span id="suiteCoordsText" class="text-amber-400 font-semibold">CH4: 20.3% | C2H2: 0.0% | C2H4: 79.7%</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400" id="methodDescription">
-                                <strong>คำอธิบายวิธี:</strong> Duval Triangle แปลงสัดส่วนก๊าซติดไฟ 3 ตัว ได้แก่ CH4, C2H2 และ C2H4 เป็นร้อยละ 100 แล้วพล็อตบนพิกัดสามเหลี่ยมเพื่อจำแนกโซนความเสียหาย
+                            <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 leading-relaxed" id="suiteDescription">
+                                <strong>หลักการและวิธีวิเคราะห์:</strong> Duval Triangle แปลงสัดส่วนก๊าซติดไฟ 3 ชนิดเป็นร้อยละ เพื่อระบุพิกัดโซนความผิดปกติของหม้อแปลงไฟฟ้าได้อย่างแม่นยำ
                             </div>
                         </div>
 
-                        <!-- Right 1 Column: Plot Coordinates & Gas Values (ppm) Grid -->
+                        <!-- Right Panel: Diagnostics Metadata & Gas PPM Monitor -->
                         <div class="space-y-4">
                             
-                            <!-- Plot Coordinates Metadata Card -->
-                            <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-2.5">
-                                <h3 class="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5 border-b border-slate-800 pb-2">
-                                    <span>📍</span> Plot Coordinates & Diagnosis
+                            <!-- Diagnostic Outcome Box -->
+                            <div class="bg-slate-950/80 border border-slate-800/80 rounded-3xl p-5 shadow-2xl space-y-3">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-2 border-b border-slate-800 pb-2">
+                                    <span>🎯</span> Diagnostic Output
                                 </h3>
-                                <div class="space-y-1.5 text-xs">
-                                    <div class="flex justify-between items-center bg-slate-900 p-2 rounded-xl border border-slate-800">
-                                        <span class="text-slate-400">Zone / Code:</span>
-                                        <span id="resZone" class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold">T3</span>
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                        <span class="text-slate-400">Evaluated Zone:</span>
+                                        <span id="outZone" class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-0.5 rounded-lg font-bold">T3</span>
                                     </div>
-                                    <div class="flex justify-between items-center bg-slate-900 p-2 rounded-xl border border-slate-800">
-                                        <span class="text-slate-400">Fault Type:</span>
-                                        <span id="resFault" class="text-slate-200 font-semibold">Thermal > 700°C</span>
+                                    <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                        <span class="text-slate-400">Fault Classification:</span>
+                                        <span id="outFault" class="text-slate-200 font-semibold">Thermal > 700°C</span>
                                     </div>
-                                    <div class="flex justify-between items-center bg-slate-900 p-2 rounded-xl border border-slate-800">
-                                        <span class="text-slate-400">%CH4:</span>
-                                        <span id="resPctCh4" class="font-mono text-slate-300">20.3%</span>
+                                    <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                        <span class="text-slate-400">Ratio %CH4:</span>
+                                        <span id="outP1" class="font-mono text-slate-300">20.3%</span>
                                     </div>
-                                    <div class="flex justify-between items-center bg-slate-900 p-2 rounded-xl border border-slate-800">
-                                        <span class="text-slate-400">%C2H2:</span>
-                                        <span id="resPctC2h2" class="font-mono text-slate-300">0.0%</span>
+                                    <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                        <span class="text-slate-400">Ratio %C2H2:</span>
+                                        <span id="outP2" class="font-mono text-slate-300">0.0%</span>
                                     </div>
-                                    <div class="flex justify-between items-center bg-slate-900 p-2 rounded-xl border border-slate-800">
-                                        <span class="text-slate-400">%C2H4:</span>
-                                        <span id="resPctC2h4" class="font-mono text-slate-300">79.7%</span>
+                                    <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                        <span class="text-slate-400">Ratio %C2H4:</span>
+                                        <span id="outP3" class="font-mono text-slate-300">79.7%</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Gas Values (ppm) Grid Cards -->
-                            <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-2.5">
-                                <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5 border-b border-slate-800 pb-2">
-                                    <span>⚡</span> Gas Values (ppm)
+                            <!-- Gas Concentration Matrix (ppm) -->
+                            <div class="bg-slate-950/80 border border-slate-800/80 rounded-3xl p-5 shadow-2xl space-y-3">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2 border-b border-slate-800 pb-2">
+                                    <span>🧪</span> Dissolved Gas Matrix (ppm)
                                 </h3>
-                                <div class="grid grid-cols-2 gap-2 text-center">
-                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                        <div class="text-[10px] text-slate-400 font-bold">H2</div>
-                                        <div id="ppmH2" class="text-base font-bold font-mono text-slate-100">20</div>
+                                <div class="grid grid-cols-2 gap-2.5 text-center">
+                                    <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800">
+                                        <div class="text-[10px] text-slate-400 font-bold">Hydrogen (H2)</div>
+                                        <div id="mH2" class="text-base font-bold font-mono text-slate-100 mt-0.5">20</div>
                                     </div>
-                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-amber-500/60 bg-amber-500/5">
-                                        <div class="text-[10px] text-amber-400 font-bold">CH4</div>
-                                        <div id="ppmCh4" class="text-base font-bold font-mono text-amber-300">160</div>
+                                    <div class="bg-slate-900 p-3 rounded-2xl border border-amber-500/40 bg-amber-500/5">
+                                        <div class="text-[10px] text-amber-400 font-bold">Methane (CH4)</div>
+                                        <div id="mCh4" class="text-base font-bold font-mono text-amber-300 mt-0.5">160</div>
                                     </div>
-                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                        <div class="text-[10px] text-slate-400 font-bold">C2H6</div>
-                                        <div id="ppmC2h6" class="text-base font-bold font-mono text-slate-100">190</div>
+                                    <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800">
+                                        <div class="text-[10px] text-slate-400 font-bold">Ethane (C2H6)</div>
+                                        <div id="mC2h6" class="text-base font-bold font-mono text-slate-100 mt-0.5">190</div>
                                     </div>
-                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-rose-500/60 bg-rose-500/5">
-                                        <div class="text-[10px] text-rose-400 font-bold">C2H4</div>
-                                        <div id="ppmC2h4" class="text-base font-bold font-mono text-rose-300">630</div>
+                                    <div class="bg-slate-900 p-3 rounded-2xl border border-rose-500/40 bg-rose-500/5">
+                                        <div class="text-[10px] text-rose-400 font-bold">Ethylene (C2H4)</div>
+                                        <div id="mC2h4" class="text-base font-bold font-mono text-rose-300 mt-0.5">630</div>
                                     </div>
-                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                        <div class="text-[10px] text-slate-400 font-bold">C2H2</div>
-                                        <div id="ppmC2h2" class="text-base font-bold font-mono text-slate-100">0</div>
+                                    <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800">
+                                        <div class="text-[10px] text-slate-400 font-bold">Acetylene (C2H2)</div>
+                                        <div id="mC2h2" class="text-base font-bold font-mono text-slate-100 mt-0.5">0</div>
                                     </div>
-                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                        <div class="text-[10px] text-slate-400 font-bold">CO</div>
-                                        <div id="ppmCo" class="text-base font-bold font-mono text-slate-100">0</div>
+                                    <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800">
+                                        <div class="text-[10px] text-slate-400 font-bold">Carbon Monoxide</div>
+                                        <div id="mCo" class="text-base font-bold font-mono text-slate-100 mt-0.5">0</div>
                                     </div>
                                 </div>
                             </div>
@@ -333,17 +338,17 @@
         </main>
     </div>
 
-    <!-- Test Modal for standard table click -->
-    <div id="testModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4 text-slate-100 font-sans">
+    <!-- Test Modal for Table Row -->
+    <div id="testModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full p-6 space-y-4 text-slate-100 font-sans">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 class="text-base font-bold flex items-center gap-2">
-                    <span>🔬</span> ผลการทดสอบห้องปฏิบัติการและค่าทางไฟฟ้า (Test Results)
+                    <span>🔬</span> รายงานผลการทดสอบห้องปฏิบัติการและค่าทางไฟฟ้า
                 </h3>
                 <button onclick="closeTestModal()" class="text-slate-400 hover:text-slate-200 font-bold text-xl">&times;</button>
             </div>
             
-            <div class="grid grid-cols-2 gap-3 text-xs bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <div class="grid grid-cols-2 gap-3 text-xs bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
                 <p><strong>รหัสอุปกรณ์:</strong> <span id="tAsset" class="text-blue-400 font-bold"></span></p>
                 <p><strong>Health Index:</strong> <span id="tHI" class="font-bold"></span></p>
                 <p><strong>Risk Score (RPN):</strong> <span id="tRPN" class="font-bold"></span></p>
@@ -351,23 +356,23 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div class="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+                <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800 space-y-1.5">
                     <strong class="text-blue-400 block font-semibold text-sm">🧪 ผลแล็บค่าก๊าซ (DGA Lab Results):</strong>
-                    <pre id="tDGA" class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
+                    <pre id="tDGA" class="bg-slate-900 p-3 rounded-xl border border-slate-800 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
                 </div>
-                <div class="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+                <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800 space-y-1.5">
                     <strong class="text-emerald-400 block font-semibold text-sm">⚡ ค่าทดสอบทางไฟฟ้าและกายภาพ:</strong>
-                    <pre id="tElectrical" class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
+                    <pre id="tElectrical" class="bg-slate-900 p-3 rounded-xl border border-slate-800 font-mono text-[11px] text-slate-300 whitespace-pre-line leading-relaxed"></pre>
                 </div>
             </div>
 
             <div class="flex justify-end pt-2">
-                <button onclick="closeTestModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-4 py-2 rounded-xl transition-all">ปิดหน้าต่าง</button>
+                <button onclick="closeTestModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-5 py-2.5 rounded-xl transition-all font-semibold">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Control Logic -->
+    <!-- Script Control Logic -->
     <script>
         function switchView(viewName) {
             let dashView = document.getElementById('viewDashboard');
@@ -378,128 +383,123 @@
             if(viewName === 'dashboard') {
                 dashView.classList.remove('hidden');
                 dgaView.classList.add('hidden');
-                navDash.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-blue-600 text-white flex items-center gap-2.5 shadow-md";
-                navDga.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-slate-800/60 text-slate-300 hover:bg-slate-800 flex items-center gap-2.5 border border-slate-800";
+                navDash.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center gap-3 shadow-lg shadow-blue-600/20";
+                navDga.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-800/40 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-700/50";
             } else {
                 dashView.classList.add('hidden');
                 dgaView.classList.remove('hidden');
-                navDga.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-blue-600 text-white flex items-center gap-2.5 shadow-md";
-                navDash.className = "w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-slate-800/60 text-slate-300 hover:bg-slate-800 flex items-center gap-2.5 border border-slate-800";
-                setCase('case1');
+                navDga.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center gap-3 shadow-lg shadow-blue-600/20";
+                navDash.className = "w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold transition-all bg-slate-800/40 text-slate-300 hover:bg-slate-800 flex items-center gap-3 border border-slate-700/50";
+                setScenario('scene1');
             }
         }
 
-        // Database for Multi-Method Analysis Cases
-        const database = {
-            case1: {
-                name: "Overheated Oil (T3)",
+        const scenarioDatabase = {
+            scene1: {
                 ppm: { h2: 20, ch4: 160, c2h6: 190, c2h4: 630, c2h2: 0, co: 0 },
-                methods: {
-                    duval: { title: "Duval Triangle (IEEE C57.104)", badge: "Percentage Coordinates", zone: "T3", fault: "Thermal > 700°C", ch4: "20.3%", c2h2: "0.0%", c2h4: "79.7%", cx: 100, cy: 120, desc: "Duval Triangle แปลงสัดส่วนก๊าซ CH4, C2H2 และ C2H4 เป็นร้อยละเพื่อพล็อตพิกัดความเสียหายโซน T3 (ความร้อนสูงกว่า 700°เซนเซียส)" },
-                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [1,1,0]", zone: "Code 110", fault: "Thermal Fault > 700°C", ch4: "Ratio 1", c2h2: "Ratio 1", c2h4: "Ratio 0", cx: 110, cy: 90, desc: "Rogers Ratio วิเคราะห์จากอัตราส่วนก๊าซ 3 ชุด ได้ผลลัพธ์รหัส [1,1,0] ชี้ชัดถึงความผิดปกติประเภทความร้อนสูงในน้ำมัน" },
-                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Fault Detected", fault: "Thermal Overheating", ch4: "CH4/H2 > 1", c2h2: "C2H2/C2H4 < 1", c2h4: "Normal", cx: 90, cy: 90, desc: "Doernenburg Method ใช้สัดส่วนก๊าซ 4 ชุดตรวจสอบความผิดปกติ ยืนยันสภาวะความร้อนสูงผิดปกติ (Thermal Overheating)" },
-                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "T3", fault: "Thermal Fault > 700°C", ch4: "I1=0", c2h2: "I2=1", c2h4: "I3=2", cx: 100, cy: 110, desc: "IEC Ratio มาตรฐานสากลเทียบรหัสอัตราส่วน I1, I2, I3 ชี้พิกัดความร้อนรุนแรงในหม้อแปลง" },
-                    keygas: { title: "Key Gas Method", badge: "Dominant Gas: Ethylene", zone: "Ethylene (C2H4)", fault: "Thermal Fault in Oil", ch4: "High", c2h2: "Low", c2h4: "Dominant", cx: 120, cy: 80, desc: "Key Gas Method พบก๊าซ Ethylene (C2H4) สูงเด่นชัดที่สุด ซึ่งเป็นก๊าซบ่งชี้หลักของความร้อนสูงในน้ำมันฉนวน" },
-                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Concentration Limits", zone: "Exceeded", fault: "High Thermal Stress", ch4: "Exceeded", c2h2: "Normal", c2h4: "Exceeded", cx: 100, cy: 100, desc: "สรุปภาพรวมตามมาตรฐาน IEEE C57.104 พบความเข้มข้นของก๊าซ Ethylene และ Methane เกินขีดจำกัดมาตรฐาน" }
+                suite: {
+                    duval: { title: "Duval Triangle Analysis (IEEE C57.104)", badge: "Percentage Coordinates", zone: "T3", fault: "Thermal > 700°C", p1: "20.3%", p2: "0.0%", p3: "79.7%", cx: 100, cy: 120, desc: "Duval Triangle แปลงสัดส่วนก๊าซ CH4, C2H2 และ C2H4 เป็นร้อยละเพื่อพล็อตพิกัดความเสียหายโซน T3 (ความร้อนสูงกว่า 700°C)" },
+                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [1,1,0]", zone: "Code 110", fault: "Thermal Fault > 700°C", p1: "Ratio 1", p2: "Ratio 1", p3: "Ratio 0", cx: 110, cy: 90, desc: "Rogers Ratio วิเคราะห์จากอัตราส่วนก๊าซ 3 ชุด ได้รหัส [1,1,0] ชี้ความผิดปกติประเภทความร้อนสูงในน้ำมันฉนวน" },
+                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Fault Active", fault: "Thermal Overheating", p1: "CH4/H2 > 1", p2: "C2H2/C2H4 < 1", p3: "Normal", cx: 90, cy: 90, desc: "Doernenburg ใช้สัดส่วนก๊าซ 4 ชุดตรวจสอบความผิดปกติ ยืนยันสภาวะความร้อนสูงผิดปกติ (Thermal Overheating)" },
+                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "T3", fault: "Thermal Fault > 700°C", p1: "I1=0", p2: "I2=1", p3: "I3=2", cx: 100, cy: 110, desc: "IEC Ratio มาตรฐานสากลเทียบรหัสอัตราส่วน I1, I2, I3 ชี้พิกัดความร้อนรุนแรงในหม้อแปลง" },
+                    keygas: { title: "Key Gas Method", badge: "Dominant: Ethylene", zone: "Ethylene (C2H4)", fault: "Thermal Fault in Oil", p1: "High", p2: "Low", p3: "Dominant", cx: 120, cy: 80, desc: "Key Gas พบก๊าซ Ethylene (C2H4) สูงเด่นชัด ซึ่งเป็นก๊าซบ่งชี้หลักของความร้อนสูงในน้ำมัน" },
+                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Concentration Limits", zone: "Exceeded", fault: "High Thermal Stress", p1: "Exceeded", p2: "Normal", p3: "Exceeded", cx: 100, cy: 100, desc: "สรุปภาพรวมตามมาตรฐาน IEEE C57.104 พบความเข้มข้นของก๊าซ Ethylene และ Methane เกินขีดจำกัด" }
                 }
             },
-            case2: {
-                name: "Cellulose Insulation",
+            scene2: {
                 ppm: { h2: 120, ch4: 80, c2h6: 40, c2h4: 50, c2h2: 5, co: 1800 },
-                methods: {
-                    duval: { title: "Duval Triangle (Cellulose)", badge: "Cellulose Degradation", zone: "CE", fault: "Paper Degradation", ch4: "45.0%", c2h2: "5.0%", c2h4: "50.0%", cx: 80, cy: 60, desc: "Duval Triangle สำหรับวิเคราะห์การเสื่อมสภาพของกระดาษฉนวน Cellulose ภายในหม้อแปลง" },
-                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [0,1,1]", zone: "Code 011", fault: "Low Temp Thermal / Paper", ch4: "Ratio 0", c2h2: "Ratio 1", c2h4: "Ratio 1", cx: 85, cy: 70, desc: "Rogers Ratio ชี้ภาวะความร้อนต่ำที่ส่งผลกระทบต่อฉนวนกระดาษ (Cellulose Insulation)" },
-                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Cellulose Fault", fault: "Paper Overheating", ch4: "CO High", c2h2: "Normal", c2h4: "Normal", cx: 90, cy: 90, desc: "Doernenburg ตรวจพบค่า CO และ CO2 สูงร่วมด้วย บ่งบอกการเสื่อมของฉนวนกระดาษ" },
-                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "S", fault: "Cellulose Overheating", ch4: "I1=0", c2h2: "I2=1", c2h4: "I3=1", cx: 80, cy: 80, desc: "IEC Ratio จำแนกความผิดปกติว่าเกิดจากการเสื่อมสลายของกระดาษฉนวน" },
-                    keygas: { title: "Key Gas Method", badge: "Dominant Gas: CO & CO2", zone: "Carbon Oxides", fault: "Cellulose Decomposition", ch4: "Medium", c2h2: "Low", c2h4: "Medium", cx: 90, cy: 70, desc: "Key Gas พบ Carbon Monoxide (CO) และ CO2 เด่นชัด บ่งชี้การเสื่อมของเนื้อกระดาษ" },
-                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Cellulose Warning", zone: "Warning", fault: "Paper Aging / Thermal", ch4: "Normal", c2h2: "Normal", c2h4: "Normal", cx: 85, cy: 85, desc: "สรุปผลมาตรฐาน IEEE พบสัญญาณเตือนภัยจากการสลายตัวของกระดาษฉนวนภายใน" }
+                suite: {
+                    duval: { title: "Duval Triangle (Cellulose Degradation)", badge: "Cellulose Triangle", zone: "CE", fault: "Paper Decomposition", p1: "45.0%", p2: "5.0%", p3: "50.0%", cx: 80, cy: 60, desc: "Duval Triangle สำหรับวิเคราะห์การเสื่อมสภาพของกระดาษฉนวน Cellulose ภายในหม้อแปลง" },
+                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [0,1,1]", zone: "Code 011", fault: "Low Temp Thermal / Paper", p1: "Ratio 0", p2: "Ratio 1", p3: "Ratio 1", cx: 85, cy: 70, desc: "Rogers Ratio ชี้ภาวะความร้อนต่ำที่ส่งผลกระทบต่อฉนวนกระดาษ (Cellulose Insulation)" },
+                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Cellulose Fault", fault: "Paper Overheating", p1: "CO High", p2: "Normal", p3: "Normal", cx: 90, cy: 90, desc: "Doernenburg ตรวจพบค่า CO และ CO2 สูงร่วมด้วย บ่งบอกการเสื่อมของฉนวนกระดาษ" },
+                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "S", fault: "Cellulose Overheating", p1: "I1=0", p2: "I2=1", p3: "I3=1", cx: 80, cy: 80, desc: "IEC Ratio จำแนกความผิดปกติว่าเกิดจากการเสื่อมสลายของกระดาษฉนวน" },
+                    keygas: { title: "Key Gas Method", badge: "Dominant: CO & CO2", zone: "Carbon Oxides", fault: "Cellulose Decomposition", p1: "Medium", p2: "Low", p3: "Medium", cx: 90, cy: 70, desc: "Key Gas พบ Carbon Monoxide (CO) และ CO2 เด่นชัด บ่งชี้การเสื่อมของเนื้อกระดาษ" },
+                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Cellulose Warning", zone: "Warning", fault: "Paper Aging / Thermal", p1: "Normal", p2: "Normal", p3: "Normal", cx: 85, cy: 85, desc: "สรุปผลมาตรฐาน IEEE พบสัญญาณเตือนภัยจากการสลายตัวของกระดาษฉนวนภายใน" }
                 }
             },
-            case3: {
-                name: "Corona / Partial Discharge",
+            scene3: {
                 ppm: { h2: 450, ch4: 30, c2h6: 10, c2h4: 5, c2h2: 2, co: 50 },
-                methods: {
-                    duval: { title: "Duval Triangle (PD)", badge: "Partial Discharge Zone", zone: "PD", fault: "Partial Discharge", ch4: "10.0%", c2h2: "20.0%", c2h4: "70.0%", cx: 100, cy: 30, desc: "Duval Triangle ชี้พิกัดตกอยู่ในโซน PD (Partial Discharge หรือคายประจุบางส่วน)" },
-                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [0,0,0]", zone: "Code 000", fault: "Corona / PD", ch4: "Ratio 0", c2h2: "Ratio 0", c2h4: "Ratio 0", cx: 100, cy: 40, desc: "Rogers Ratio แสดงรหัส [0,0,0] แต่เมื่อวิเคราะห์ร่วมกับก๊าซ Hydrogen สูงจะชี้ภาวะ Corona" },
-                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Corona Discharge", fault: "Electrical Discharge", ch4: "H2 High", c2h2: "Low", c2h4: "Low", cx: 100, cy: 50, desc: "Doernenburg ตรวจพบก๊าซ Hydrogen (H2) สะสมสูง บ่งบอกการเกิดประจุไฟฟ้าในช่องว่าง" },
-                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "PD", fault: "Partial Discharges", ch4: "I1=0", c2h2: "I2=0", c2h4: "I3=0", cx: 95, cy: 35, desc: "IEC Ratio ระบุความผิดปกติประเภท Partial Discharge (PD)" },
-                    keygas: { title: "Key Gas Method", badge: "Dominant Gas: Hydrogen", zone: "Hydrogen (H2)", fault: "Corona / Ionization", ch4: "Low", c2h2: "Low", c2h4: "Low", cx: 100, cy: 30, desc: "Key Gas พบก๊าซ Hydrogen สูงเด่นชัด เป็นก๊าซหลักของปรากฏการณ์ Corona Discharge" },
-                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Hydrogen Alert", zone: "PD Alert", fault: "Ionization / Corona", ch4: "Normal", c2h2: "Normal", c2h4: "Normal", cx: 100, cy: 40, desc: "สรุปมาตรฐาน IEEE เตือนระดับ Hydrogen สูงเกินเกณฑ์ บ่งชี้การเกิดประจุบางส่วน" }
+                suite: {
+                    duval: { title: "Duval Triangle (Partial Discharge)", badge: "PD Zone", zone: "PD", fault: "Partial Discharge", p1: "10.0%", p2: "20.0%", p3: "70.0%", cx: 100, cy: 30, desc: "Duval Triangle ชี้พิกัดตกอยู่ในโซน PD (Partial Discharge หรือคายประจุบางส่วน)" },
+                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [0,0,0]", zone: "Code 000", fault: "Corona / PD", p1: "Ratio 0", p2: "Ratio 0", p3: "Ratio 0", cx: 100, cy: 40, desc: "Rogers Ratio แสดงรหัส [0,0,0] แต่เมื่อวิเคราะห์ร่วมกับก๊าซ Hydrogen สูงจะชี้ภาวะ Corona" },
+                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Corona Discharge", fault: "Electrical Discharge", p1: "H2 High", p2: "Low", p3: "Low", cx: 100, cy: 50, desc: "Doernenburg ตรวจพบก๊าซ Hydrogen (H2) สะสมสูง บ่งบอกการเกิดประจุไฟฟ้าในช่องว่าง" },
+                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "PD", fault: "Partial Discharges", p1: "I1=0", p2: "I2=0", p3: "I3=0", cx: 95, cy: 35, desc: "IEC Ratio ระบุความผิดปกติประเภท Partial Discharge (PD)" },
+                    keygas: { title: "Key Gas Method", badge: "Dominant: Hydrogen", zone: "Hydrogen (H2)", fault: "Corona / Ionization", p1: "Low", p2: "Low", p3: "Low", cx: 100, cy: 30, desc: "Key Gas พบก๊าซ Hydrogen สูงเด่นชัด เป็นก๊าซหลักของปรากฏการณ์ Corona Discharge" },
+                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "Hydrogen Alert", zone: "PD Alert", fault: "Ionization / Corona", p1: "Normal", p2: "Normal", p3: "Normal", cx: 100, cy: 40, desc: "สรุปมาตรฐาน IEEE เตือนระดับ Hydrogen สูงเกินเกณฑ์ บ่งชี้การเกิดประจุบางส่วน" }
                 }
             },
-            case4: {
-                name: "Severe Arcing",
+            scene4: {
                 ppm: { h2: 850, ch4: 120, c2h6: 50, c2h4: 300, c2h2: 650, co: 100 },
-                methods: {
-                    duval: { title: "Duval Triangle (Arcing D2/D1)", badge: "Severe Arcing Zone", zone: "D2", fault: "High Energy Arcing", ch4: "15.0%", c2h2: "60.0%", c2h4: "25.0%", cx: 60, cy: 120, desc: "Duval Triangle พิกัดตกในโซน D2 (High Energy Arcing หรือการอาร์กพลังงานสูงรุนแรง)" },
-                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [1,0,2]", zone: "Code 102", fault: "Arcing / Flashover", ch4: "Ratio 1", c2h2: "Ratio 0", c2h4: "Ratio 2", cx: 50, cy: 110, desc: "Rogers Ratio ชี้รหัสการเกิดประกายไฟอาร์กแรงสูงภายในหม้อแปลง (Arcing)" },
-                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Arcing Fault", fault: "Severe Electrical Fault", ch4: "C2H2 High", c2h2: "High", c2h4: "High", cx: 55, cy: 115, desc: "Doernenburg ยืนยันความผิดปกติทางไฟฟ้าขั้นรุนแรง (Severe Arcing / Sparking)" },
-                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "D2", fault: "High Energy Arcing", ch4: "I1=2", c2h2: "I2=0", c2h4: "I3=1", cx: 60, cy: 120, desc: "IEC Ratio จำแนกประเภทความผิดปกติเป็น Arcing พลังงานสูง (Zone D2)" },
-                    keygas: { title: "Key Gas Method", badge: "Dominant Gas: Acetylene", zone: "Acetylene (C2H2)", fault: "Severe Arcing", ch4: "Medium", c2h2: "Very High", c2h4: "High", cx: 60, cy: 130, desc: "Key Gas พบก๊าซ Acetylene (C2H2) สูงสูงสุด ซึ่งเป็นเครื่องหมายเตือนภัยอันตรายของการอาร์ก" },
-                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "CRITICAL ALERT", zone: "CRITICAL", fault: "Severe Arcing Risk", ch4: "High", c2h2: "Critical", c2h4: "High", cx: 60, cy: 120, desc: "สรุปมาตรฐาน IEEE สั่งการด่วนที่สุด: ตรวจพบ Acetylene สูงอันตราย เสี่ยงเกิดระเบิด" }
+                suite: {
+                    duval: { title: "Duval Triangle (Severe Arcing)", badge: "Arcing Zone D2", zone: "D2", fault: "High Energy Arcing", p1: "15.0%", p2: "60.0%", p3: "25.0%", cx: 60, cy: 120, desc: "Duval Triangle พิกัดตกในโซน D2 (High Energy Arcing หรือการอาร์กพลังงานสูงรุนแรง)" },
+                    rogers: { title: "Rogers Ratio Method", badge: "Ratio Code [1,0,2]", zone: "Code 102", fault: "Arcing / Flashover", p1: "Ratio 1", p2: "Ratio 0", p3: "Ratio 2", cx: 50, cy: 110, desc: "Rogers Ratio ชี้รหัสการเกิดประกายไฟอาร์กแรงสูงภายในหม้อแปลง (Arcing)" },
+                    doernen: { title: "Doernenburg Ratio Method", badge: "4 Gas Ratios", zone: "Arcing Fault", fault: "Severe Electrical Fault", p1: "C2H2 High", p2: "High", p3: "High", cx: 55, cy: 115, desc: "Doernenburg ยืนยันความผิดปกติทางไฟฟ้าขั้นรุนแรง (Severe Arcing / Sparking)" },
+                    iec: { title: "IEC Ratio Method (IEC 60599)", badge: "IEC Ratio Codes", zone: "D2", fault: "High Energy Arcing", p1: "I1=2", p2: "I2=0", p3: "I3=1", cx: 60, cy: 120, desc: "IEC Ratio จำแนกประเภทความผิดปกติเป็น Arcing พลังงานสูง (Zone D2)" },
+                    keygas: { title: "Key Gas Method", badge: "Dominant: Acetylene", zone: "Acetylene (C2H2)", fault: "Severe Arcing", p1: "Medium", p2: "Very High", p3: "High", cx: 60, cy: 130, desc: "Key Gas พบก๊าซ Acetylene (C2H2) สูงสูงสุด ซึ่งเป็นเครื่องหมายเตือนภัยอันตรายของการอาร์ก" },
+                    summary: { title: "IEEE C57.104 Summary & Limits", badge: "CRITICAL ALERT", zone: "CRITICAL", fault: "Severe Arcing Risk", p1: "High", p2: "Critical", p3: "High", cx: 60, cy: 120, desc: "สรุปมาตรฐาน IEEE สั่งการด่วนที่สุด: ตรวจพบ Acetylene สูงอันตราย เสี่ยงเกิดระเบิด" }
                 }
             }
         };
 
-        let currentCase = 'case1';
-        let currentMethod = 'duval';
+        let activeScene = 'scene1';
+        let activeMethod = 'duval';
 
-        function setCase(caseKey) {
-            currentCase = caseKey;
+        function setScenario(sceneKey) {
+            activeScene = sceneKey;
             for(let i=1; i<=4; i++) {
-                let btn = document.getElementById(`btnCase${i}`);
+                let btn = document.getElementById(`btnScene${i}`);
                 if(btn) {
-                    btn.className = "p-3 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all";
+                    btn.className = "p-3.5 rounded-2xl border border-slate-800 bg-slate-950 text-slate-400 font-semibold text-xs md:text-sm text-center hover:border-slate-700 transition-all";
                 }
             }
-            let activeBtn = document.getElementById(`btnCase${caseKey.replace('case','')}`);
+            let activeBtn = document.getElementById(`btnScene${sceneKey.replace('scene','')}`);
             if(activeBtn) {
-                activeBtn.className = "p-3 rounded-xl border border-blue-500 bg-blue-600/20 text-blue-400 font-semibold text-xs md:text-sm text-center transition-all shadow-lg";
+                activeBtn.className = "p-3.5 rounded-2xl border border-blue-500/80 bg-blue-600/15 text-blue-300 font-semibold text-xs md:text-sm text-center transition-all shadow-lg";
             }
-            updateDisplay();
+            refreshSuite();
         }
 
-        function setMethod(methodKey) {
-            currentMethod = methodKey;
-            const methods = ['duval', 'rogers', 'doernen', 'iec', 'keygas', 'summary'];
-            methods.forEach(m => {
+        function setMethodTab(methodKey) {
+            activeMethod = methodKey;
+            const list = ['duval', 'rogers', 'doernen', 'iec', 'keygas', 'summary'];
+            list.forEach(m => {
                 let tab = document.getElementById(`tab${m.charAt(0).toUpperCase() + m.slice(1)}`);
                 if(tab) {
-                    tab.className = "px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all";
+                    tab.className = "px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-all";
                 }
             });
             let activeTab = document.getElementById(`tab${methodKey.charAt(0).toUpperCase() + methodKey.slice(1)}`);
             if(activeTab) {
-                activeTab.className = "px-4 py-2 rounded-lg text-xs md:text-sm font-semibold bg-blue-600 text-white shadow transition-all";
+                activeTab.className = "px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold bg-blue-600 text-white shadow-md transition-all";
             }
-            updateDisplay();
+            refreshSuite();
         }
 
-        function updateDisplay() {
-            let data = database[currentCase];
-            let mData = data.methods[currentMethod];
+        function refreshSuite() {
+            let scData = scenarioDatabase[activeScene];
+            let suiteData = scData.suite[activeMethod];
 
-            document.getElementById('viewTitle').innerHTML = `<span>🔺</span> ${mData.title}`;
-            document.getElementById('viewBadge').innerText = mData.badge;
-            document.getElementById('methodDescription').innerHTML = `<strong>คำอธิบายวิธี:</strong> ${mData.desc}`;
+            document.getElementById('suiteTitle').innerHTML = `<span>🔺</span> ${suiteData.title}`;
+            document.getElementById('suiteBadge').innerText = suiteData.badge;
+            document.getElementById('suiteDescription').innerHTML = `<strong>หลักการและวิธีวิเคราะห์:</strong> ${suiteData.desc}`;
 
-            document.getElementById('resZone').innerText = mData.zone;
-            document.getElementById('resFault').innerText = mData.fault;
-            document.getElementById('resPctCh4').innerText = mData.ch4;
-            document.getElementById('resPctC2h2').innerText = mData.c2h2;
-            document.getElementById('resPctC2h4').innerText = mData.c2h4;
+            document.getElementById('outZone').innerText = suiteData.zone;
+            document.getElementById('outFault').innerText = suiteData.fault;
+            document.getElementById('outP1').innerText = suiteData.p1;
+            document.getElementById('outP2').innerText = suiteData.p2;
+            document.getElementById('outP3').innerText = suiteData.p3;
 
-            document.getElementById('svgCoordsText').innerText = `CH4: ${mData.ch4} | C2H2: ${mData.c2h2} | C2H4: ${mData.c2h4}`;
-            let svgPlot = document.getElementById('svgPlot');
-            svgPlot.setAttribute('cx', mData.cx);
-            svgPlot.setAttribute('cy', mData.cy);
+            document.getElementById('suiteCoordsText').innerText = `P1: ${suiteData.p1} | P2: ${suiteData.p2} | P3: ${suiteData.p3}`;
+            let sPlot = document.getElementById('suiteSvgPlot');
+            sPlot.setAttribute('cx', suiteData.cx);
+            sPlot.setAttribute('cy', suiteData.cy);
 
-            document.getElementById('ppmH2').innerText = data.ppm.h2;
-            document.getElementById('ppmCh4').innerText = data.ppm.ch4;
-            document.getElementById('ppmC2h6').innerText = data.ppm.c2h6;
-            document.getElementById('ppmC2h4').innerText = data.ppm.c2h4;
-            document.getElementById('ppmC2h2').innerText = data.ppm.c2h2;
-            document.getElementById('ppmCo').innerText = data.ppm.co;
+            document.getElementById('mH2').innerText = scData.ppm.h2;
+            document.getElementById('mCh4').innerText = scData.ppm.ch4;
+            document.getElementById('mC2h6').innerText = scData.ppm.c2h6;
+            document.getElementById('mC2h4').innerText = scData.ppm.c2h4;
+            document.getElementById('mC2h2').innerText = scData.ppm.c2h2;
+            document.getElementById('mCo').innerText = scData.ppm.co;
         }
 
         function filterTable() {
