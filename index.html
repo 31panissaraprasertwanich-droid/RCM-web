@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Clean & Classic Layout)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Professional RCM System)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,18 +28,25 @@
     </script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media print {
+            body { background: white !important; color: black !important; }
+            header, nav, footer, button, .no-print { display: none !important; }
+            .print-container { background: white !important; color: black !important; border: none !important; box-shadow: none !important; }
+        }
+    </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="bg-industrial-dark border-b border-industrial-700/50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg">
+    <header class="bg-industrial-dark border-b border-industrial-700/50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg no-print">
         <div class="flex items-center space-x-3">
             <div class="bg-industrial-600 p-2.5 rounded-lg text-white shadow-md shadow-industrial-600/30">
                 <i class="fa-solid fa-industry text-xl"></i>
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (40 อุปกรณ์)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4 self-end sm:self-center">
@@ -50,14 +57,14 @@
     </header>
 
     <!-- Navigation Tabs -->
-    <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto">
+    <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto no-print">
         <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
             <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
-            <i class="fa-solid fa-microchip"></i>
-            <span>วิเคราะห์รายอุปกรณ์ & กรอกผลทดสอบใหม่</span>
+            <i class="fa-solid fa-file-pen"></i>
+            <span>บันทึกผลทดสอบ & จัดการไฟล์</span>
         </button>
         <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
@@ -72,44 +79,43 @@
     <!-- Main Container -->
     <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
+        <!-- GLOBAL EXPORT HUB BAR -->
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 no-print">
+            <div class="flex items-center space-x-2 text-xs text-industrial-300">
+                <i class="fa-solid fa-cloud-arrow-down text-base text-industrial-500"></i>
+                <span><b>ศูนย์ส่งออกข้อมูล (Export Hub):</b> เลือกรูปแบบไฟล์ที่ต้องการดาวน์โหลดรายงานระบบ</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <button onclick="downloadExcelCsv()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
+                    <i class="fa-solid fa-file-excel"></i><span>ดาวน์โหลด Excel/CSV</span>
+                </button>
+                <button onclick="printNativePdf()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
+                    <i class="fa-solid fa-file-pdf"></i><span>บันทึกเป็น PDF</span>
+                </button>
+                <button onclick="downloadJsonData()" class="bg-slate-700 hover:bg-slate-600 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
+                    <i class="fa-solid fa-code"></i><span>สำรองข้อมูล JSON</span>
+                </button>
+            </div>
+        </div>
+
         <!-- TAB 1: PM SCHEDULE -->
         <div id="tab-pm-schedule" class="tab-content space-y-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">อุปกรณ์ทั้งหมด</p>
-                        <h3 id="stat-total" class="text-2xl font-bold text-white mt-1">40</h3>
-                    </div>
-                    <div class="bg-blue-500/10 text-blue-400 p-3 rounded-lg border border-blue-500/20">
-                        <i class="fa-solid fa-server text-lg"></i>
-                    </div>
+                    <div><p class="text-xs text-slate-400 font-medium">อุปกรณ์ทั้งหมด</p><h3 id="stat-total" class="text-2xl font-bold text-white mt-1">40</h3></div>
+                    <div class="bg-blue-500/10 text-blue-400 p-3 rounded-lg border border-blue-500/20"><i class="fa-solid fa-server text-lg"></i></div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">ปกติ (Normal)</p>
-                        <h3 id="stat-normal" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
-                    </div>
-                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-lg border border-emerald-500/20">
-                        <i class="fa-solid fa-circle-check text-lg"></i>
-                    </div>
+                    <div><p class="text-xs text-slate-400 font-medium">ปกติ (Normal)</p><h3 id="stat-normal" class="text-2xl font-bold text-emerald-400 mt-1">0</h3></div>
+                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-circle-check text-lg"></i></div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">เฝ้าระวัง (Warning)</p>
-                        <h3 id="stat-warning" class="text-2xl font-bold text-amber-400 mt-1">0</h3>
-                    </div>
-                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-lg border border-amber-500/20">
-                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                    </div>
+                    <div><p class="text-xs text-slate-400 font-medium">เฝ้าระวัง (Warning)</p><h3 id="stat-warning" class="text-2xl font-bold text-amber-400 mt-1">0</h3></div>
+                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-lg border border-amber-500/20"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">วิกฤต (Critical)</p>
-                        <h3 id="stat-critical" class="text-2xl font-bold text-rose-400 mt-1">0</h3>
-                    </div>
-                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-lg border border-rose-500/20">
-                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                    </div>
+                    <div><p class="text-xs text-slate-400 font-medium">วิกฤต (Critical)</p><h3 id="stat-critical" class="text-2xl font-bold text-rose-400 mt-1">0</h3></div>
+                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-lg border border-rose-500/20"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                 </div>
             </div>
 
@@ -148,12 +154,12 @@
             </div>
         </div>
 
-        <!-- TAB 2: INDIVIDUAL DEVICE ANALYSIS -->
+        <!-- TAB 2: PRO DATA ENTRY -->
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">วิเคราะห์ผลและกรอกผลทดสอบรอบใหม่รายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ดรอปดาวน์เรียงลำดับตามรหัสอุปกรณ์อย่างถูกต้อง</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ</h2>
+                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมตรวจสอบไฟล์รายงานแล็บและรูปถ่ายความเสียหายย้อนหลังได้ทันที</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -163,20 +169,29 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์</h3>
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์ปัจจุบัน</h3>
                     <div class="space-y-3 text-xs">
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ตำแหน่ง:</span><span id="ana-loc" class="text-slate-200">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
-                        <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะความเสี่ยง:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
+                        <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-700 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-paperclip mr-1 text-industrial-400"></i> หลักฐานแนบ:</span>
+                            <button onclick="simulateSampleAttachment()" class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded hover:bg-industrial-800 transition">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> จำลองไฟล์ตัวอย่าง
+                            </button>
+                        </div>
+                        <div id="attached-files-container" class="space-y-1.5 text-xs"><span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span></div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-3 shadow-lg flex flex-col justify-between">
                     <div>
-                        <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-brain mr-2"></i> ผลการวิเคราะห์และเหตุผลเชิงวิศวกรรม</h3>
+                        <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรม</h3>
                         <p id="ana-rationale" class="text-xs text-slate-300 leading-relaxed bg-slate-900/80 p-4 rounded-xl border border-slate-700">-</p>
                     </div>
                     <div class="pt-3 border-t border-slate-700 text-xs text-slate-400 flex justify-between">
@@ -186,21 +201,53 @@
                 </div>
             </div>
 
-            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg space-y-4">
-                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> กรอกผลทดสอบและผลแล็บ DGA รอบใหม่</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-xs">
-                    <div><label class="block text-slate-400 mb-1">H2 (ppm)</label><input type="number" id="new-h2" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">CH4 (ppm)</label><input type="number" id="new-ch4" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">C2H2 (ppm)</label><input type="number" id="new-c2h2" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">C2H4 (ppm)</label><input type="number" id="new-c2h4" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">C2H6 (ppm)</label><input type="number" id="new-c2h6" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">CO (ppm)</label><input type="number" id="new-co" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">CO2 (ppm)</label><input type="number" id="new-co2" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
+                <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
+                    <button onclick="openStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 border border-industrial-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-bold shadow transition flex items-center space-x-2">
+                        <i class="fa-solid fa-shield-halved"></i><span>ดูมาตรฐาน FMEA & RCM Compliant</span>
+                    </button>
                 </div>
-                <div class="flex justify-end pt-3">
-                    <button onclick="submitNewTestData()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-2">
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        <span>บันทึกผลทดสอบใหม่ & ประเมินผล RPN อัตโนมัติ</span>
+
+                <div>
+                    <h4 class="text-xs font-bold text-white mb-2 uppercase text-slate-300"><i class="fa-solid fa-vial mr-1"></i> ค่าผลแล็บก๊าซละลาย (DGA Lab Results ในหน่วย ppm)</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-xs">
+                        <div><label class="block text-slate-400 mb-1">H2 (ppm)</label><input type="number" id="new-h2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">CH4 (ppm)</label><input type="number" id="new-ch4" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">C2H2 (ppm)</label><input type="number" id="new-c2h2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">C2H4 (ppm)</label><input type="number" id="new-c2h4" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">C2H6 (ppm)</label><input type="number" id="new-c2h6" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">CO (ppm)</label><input type="number" id="new-co" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">CO2 (ppm)</label><input type="number" id="new-co2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> ประเมินคะแนน FMEA & RPN</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+                        <div><label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label><input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full"></div>
+                        <div><label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label><input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full"></div>
+                        <div><label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label><input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full"></div>
+                        <div><label class="block text-slate-400 mb-1">ค่า RPN รวม (S × O × D):</label><input type="number" id="new-rpn" class="bg-slate-800 border border-industrial-500 rounded p-2 text-industrial-400 font-mono font-bold w-full" readonly></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                        <label class="block font-bold text-slate-300"><i class="fa-solid fa-file-pdf mr-1 text-rose-400"></i> แนบไฟล์เอกสารผลตรวจจากห้องแล็บ (PDF / Excel):</label>
+                        <input type="file" id="lab-file-upload" accept=".pdf,.xlsx,.xls,.doc" class="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-industrial-600 file:text-white hover:file:bg-industrial-700 cursor-pointer">
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                        <label class="block font-bold text-slate-300"><i class="fa-solid fa-image mr-1 text-emerald-400"></i> แนบรูปถ่ายสภาพความเสียหาย / จุดตรวจวัด (Image):</label>
+                        <input type="file" id="damage-photo-upload" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-industrial-600 file:text-white hover:file:bg-industrial-700 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button onclick="submitNewTestData()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-6 py-2.5 rounded-lg text-xs font-bold transition shadow-lg flex items-center space-x-2">
+                        <i class="fa-solid fa-floppy-disk"></i><span>บันทึกผลทดสอบ แนบไฟล์ & อัปเดตระบบทันที</span>
                     </button>
                 </div>
             </div>
@@ -211,7 +258,7 @@
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ดรอปดาวน์กรองรหัสอุปกรณ์เรียงตามลำดับถูกต้อง</p>
+                    <p class="text-xs text-slate-400">ตรวจสอบโหมดความเสียหายและคะแนน RPN อัปเดตตามผลทดสอบล่าสุด</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-xs text-slate-300 whitespace-nowrap">กรองตามอุปกรณ์:</label>
@@ -251,8 +298,8 @@
         <div id="tab-dga-calc" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ DGA ผ่าน 6 วิธีที่มีค่าเฉพาะตัวไม่ซ้ำกัน</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก พร้อมคำอธิบายความหมาย</h2>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ผ่าน 6 วิธี พร้อมคำแปลความหมายทางวิศวกรรมไฟฟ้า</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -284,8 +331,8 @@
                             <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">C2H4:</span><span id="duval-p-c2h4" class="font-mono font-bold text-slate-200">0%</span></div>
                             <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">C2H2:</span><span id="duval-p-c2h2" class="font-mono font-bold text-slate-200">0%</span></div>
                             <div class="pt-1">
-                                <span class="text-slate-400 block mb-1">ผลประเมินโซน:</span>
-                                <div id="res-duval-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2 rounded border border-industrial-800">-</div>
+                                <span class="text-slate-400 block mb-1">ผลประเมินโซน & ความหมาย:</span>
+                                <div id="res-duval-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                             </div>
                         </div>
                     </div>
@@ -308,8 +355,8 @@
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H6 / C2H2:</span><span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">การแปลผล:</span>
-                            <div id="res-rogers-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">การแปลผล & ความหมายทางวิศวกรรม:</span>
+                            <div id="res-rogers-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -330,8 +377,8 @@
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Ratio i5</span><span id="iec-i5" class="font-mono font-bold text-white">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC:</span>
-                            <div id="res-iec-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC & ความหมาย:</span>
+                            <div id="res-iec-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -351,8 +398,8 @@
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H2 / C2H4:</span><span id="doern-r2" class="font-mono font-bold text-white">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">ผลประเมิน:</span>
-                            <div id="res-doern-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">ผลประเมิน & ความหมาย:</span>
+                            <div id="res-doern-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -372,8 +419,8 @@
                             <span id="keygas-name" class="font-mono font-bold text-amber-400 text-sm">-</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหา:</span>
-                            <div id="res-keygas-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหาและความหมาย:</span>
+                            <div id="res-keygas-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -393,8 +440,8 @@
                             <span id="tdcg-total-val" class="font-mono font-bold text-white text-sm">- ppm</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง:</span>
-                            <div id="res-tdcg-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง & แผนปฏิบัติการ:</span>
+                            <div id="res-tdcg-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -403,22 +450,99 @@
 
     </main>
 
+    <!-- STANDARD GUIDELINE MODAL -->
+    <div id="standard-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30"><i class="fa-solid fa-shield-halved text-lg"></i></div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm sm:text-base">คู่มือเกณฑ์มาตรฐาน FMEA & RCM (Severity, Occurrence, Detection)</h3>
+                        <p class="text-xs text-slate-400">อ้างอิงตามมาตรฐานสากลสำหรับการประเมินค่าความเสี่ยงอุปกรณ์ไฟฟ้า</p>
+                    </div>
+                </div>
+                <button onclick="closeStandardModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-300 flex-1">
+                <div class="space-y-2">
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 1. ความรุนแรง (Severity - S)</h4>
+                    <div class="border border-slate-700 rounded-lg overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">เกณฑ์การประเมินผลกระทบต่อระบบไฟฟ้า</th></tr></thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                <tr><td class="p-2.5 text-center font-bold text-rose-400">9 - 10</td><td class="p-2.5">เกิดการระเบิด, ไฟไหม้, หรือไฟฟ้าดับทั้งสถานีไฟฟ้าย่อย (Catastrophic / Hazardous)</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">7 - 8</td><td class="p-2.5">อุปกรณ์เสียหายหนัก ต้องปลดสับ C/B ฉุกเฉิน ส่งผลกระทบต่อผู้ใช้ไฟบางส่วน</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-yellow-400">4 - 6</td><td class="p-2.5">เกิดความเสียหายปานกลาง สามารถซ่อมบำรุงตามแผน (Moderate / Minor Impact)</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">แทบไม่ส่งผลกระทบต่อการจ่ายไฟ ค่าพารามิเตอร์เบี่ยงเบนเล็กน้อย (Low / None)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> 2. โอกาสเกิด (Occurrence - O)</h4>
+                    <div class="border border-slate-700 rounded-lg overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">ความถี่และความน่าจะเป็นในการเกิดความเสียหาย</th></tr></thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                <tr><td class="p-2.5 text-center font-bold text-rose-400">8 - 10</td><td class="p-2.5">สูงมาก: เกิดขึ้นต่อเนื่องประจำทุกเดือน หรืออุปกรณ์อายุการใช้งานเกินพิกัด</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">4 - 7</td><td class="p-2.5">ปานกลาง: เกิดขึ้นเป็นครั้งคราวในรอบปี หรือพบความผิดปกติจากการทำ PM ล่าสุด</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">ต่ำมาก: แทบไม่เคยเกิดขึ้น (< 1 ครั้งในรอบ 5-10 ปี) อุปกรณ์ใหม่หรือเกรดสูง</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-magnifying-glass mr-1"></i> 3. การตรวจจับ (Detection - D)</h4>
+                    <div class="border border-slate-700 rounded-lg overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">ประสิทธิภาพของระบบตรวจวัดก่อนลุกลาม</th></tr></thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                <tr><td class="p-2.5 text-center font-bold text-rose-400">8 - 10</td><td class="p-2.5">ยากมาก / ตรวจไม่พบ: ความเสียหายเกิดขึ้นฉับพลันโดยไม่มีสัญญาณเตือนล่วงหน้า</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">4 - 7</td><td class="p-2.5">ปานกลาง: ตรวจพบได้จากการตรวจวัดประจำปี หรือค่า DGA เริ่มสูงขึ้น</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">สูงมาก: มีระบบ Online Monitoring / SCADA แจ้งเตือนความผิดปกติทันที</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-5 py-2 rounded-lg text-xs font-bold transition">เข้าใจแล้ว</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEW ATTACHMENT MODAL -->
+    <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <h3 id="preview-title" class="font-bold text-white text-sm">ตัวอย่างไฟล์แนบ</h3>
+                <button onclick="closePreviewModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 text-center space-y-4">
+                <div id="preview-content" class="bg-slate-900 p-6 rounded-xl border border-slate-700 text-slate-300 text-sm"></div>
+            </div>
+            <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closePreviewModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
     <!-- DETAILED TEST POPUP MODAL -->
     <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30">
-                        <i class="fa-solid fa-file-waveform"></i>
-                    </div>
+                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30"><i class="fa-solid fa-file-waveform"></i></div>
                     <div>
                         <h3 id="modal-title" class="font-bold text-white text-sm sm:text-base">ผลทดสอบเชิงลึก</h3>
                         <p id="modal-subtitle" class="text-xs text-slate-400">อุปกรณ์: -</p>
                     </div>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
@@ -432,12 +556,7 @@
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
                         <table class="w-full text-left text-xs min-w-[500px]">
                             <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
-                                <tr>
-                                    <th class="py-2.5 px-3">ชนิดก๊าซ</th>
-                                    <th class="py-2.5 px-3">ค่าตรวจวัด (ppm)</th>
-                                    <th class="py-2.5 px-3">มาตรฐานอ้างอิง (Limit)</th>
-                                    <th class="py-2.5 px-3">สถานะ</th>
-                                </tr>
+                                <tr><th class="py-2.5 px-3">ชนิดก๊าซ</th><th class="py-2.5 px-3">ค่าตรวจวัด (ppm)</th><th class="py-2.5 px-3">มาตรฐานอ้างอิง (Limit)</th><th class="py-2.5 px-3">สถานะ</th></tr>
                             </thead>
                             <tbody id="modal-dga-tbody" class="divide-y divide-slate-700/50"></tbody>
                         </table>
@@ -449,12 +568,7 @@
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
                         <table class="w-full text-left text-xs min-w-[500px]">
                             <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
-                                <tr>
-                                    <th class="py-2.5 px-3">หัวข้อทดสอบ</th>
-                                    <th class="py-2.5 px-3">ค่าที่วัดได้</th>
-                                    <th class="py-2.5 px-3">เกณฑ์มาตรฐาน (Criteria)</th>
-                                    <th class="py-2.5 px-3">ผลสรุป</th>
-                                </tr>
+                                <tr><th class="py-2.5 px-3">หัวข้อทดสอบ</th><th class="py-2.5 px-3">ค่าที่วัดได้</th><th class="py-2.5 px-3">เกณฑ์มาตรฐาน (Criteria)</th><th class="py-2.5 px-3">ผลสรุป</th></tr>
                             </thead>
                             <tbody id="modal-elec-tbody" class="divide-y divide-slate-700/50"></tbody>
                         </table>
@@ -536,7 +650,9 @@
                 healthIndex: parseFloat(healthIndex), rpn: rpn,
                 lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
-                status: status, statusClass: statusClass, gases: gases, electrical: electrical
+                status: status, statusClass: statusClass, gases: gases, electrical: electrical,
+                labFileName: i === 1 ? "DGA_Lab_Report_TR-01.pdf" : null,
+                photoFileName: i === 1 ? "Thermal_Hotspot_TR-01.jpg" : null
             });
 
             fmeaData.push({
@@ -582,6 +698,62 @@
             }
         }
 
+        function openStandardModal() { document.getElementById('standard-modal').classList.remove('hidden'); }
+        function closeStandardModal() { document.getElementById('standard-modal').classList.add('hidden'); }
+
+        function openPreviewModal(type, filename) {
+            document.getElementById('preview-title').innerText = `ตัวอย่างไฟล์: ${filename}`;
+            const content = document.getElementById('preview-content');
+            if(type === 'pdf') {
+                content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-file-pdf text-rose-500 text-4xl"></i><p class="font-bold">รายงานผลตรวจวิเคราะห์ห้องแล็บ (DGA & Electrical Lab Report)</p><p class="text-xs text-slate-400">สถานะ: อนุมัติโดยหัวหน้าฝ่ายวิศวกรรม</p><div class="bg-slate-950 p-3 rounded border border-slate-800 text-left font-mono text-xs text-emerald-400">[Lab Verified Report] Status: Normal / Exceeded</div></div>`;
+            } else {
+                content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-image text-emerald-400 text-4xl"></i><p class="font-bold">ภาพถ่ายจุดความเสียหาย (Thermal Scan / Visual Inspection)</p><div class="bg-industrial-900/40 p-4 rounded-xl border border-industrial-600/50 text-industrial-300 text-xs">📸 [บันทึกภาพถ่ายหน้างาน]: ตรวจสอบสภาพขั้วต่อและฉนวนปกติ</div></div>`;
+            }
+            document.getElementById('preview-modal').classList.remove('hidden');
+        }
+        function closePreviewModal() { document.getElementById('preview-modal').classList.add('hidden'); }
+
+        function simulateSampleAttachment() {
+            const id = document.getElementById('analysis-device-select').value;
+            const asset = assetsData.find(a => a.id === id);
+            if (!asset) return;
+            asset.labFileName = `Lab_Report_${asset.id}.pdf`;
+            asset.photoFileName = `Inspection_${asset.id}.jpg`;
+            onAnalysisDeviceChange();
+            alert(`จำลองการแนบไฟล์สำหรับ ${asset.id} สำเร็จ!`);
+        }
+
+        // --- EXPORT HUB FUNCTIONS ---
+        function downloadExcelCsv() {
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "รหัสอุปกรณ์,ประเภท,สถานีไฟฟ้า (Location),Health Index (%),ค่า RPN,PM รอบถัดไป,สถานะความเสี่ยง\n";
+            assetsData.forEach(row => {
+                csvContent += `"${row.id}","${row.type}","${row.location}",${row.healthIndex},${row.rpn},"${row.nextPm}","${row.status}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "RCM_Master_PM_Schedule_40_Assets.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function printNativePdf() {
+            window.print();
+        }
+
+        function downloadJsonData() {
+            const exportBundle = { system: "RCM Transformer & GIS", totalAssets: assetsData.length, assets: assetsData, fmea: fmeaData, exportDate: new Date().toISOString() };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportBundle, null, 2));
+            const link = document.createElement("a");
+            link.setAttribute("href", dataStr);
+            link.setAttribute("download", "RCM_Full_System_Backup.json");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         function renderTable() {
             const tbody = document.getElementById('pm-table-body');
             tbody.innerHTML = "";
@@ -600,10 +772,9 @@
                     <td class="py-3 px-4 font-mono font-bold text-industrial-400">${item.rpn}</td>
                     <td class="py-3 px-4 text-slate-200 text-xs">${item.nextPm}</td>
                     <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${item.statusClass}">${item.status}</span></td>
-                    <td class="py-3 px-4 text-center">
+                    <td class="py-3 px-4 text-center no-print">
                         <button onclick="openModal('${item.id}')" class="bg-industrial-600 hover:bg-industrial-700 text-white px-2.5 py-1 rounded text-xs font-medium transition inline-flex items-center space-x-1">
-                            <i class="fa-solid fa-eye"></i>
-                            <span>ผลทดสอบ</span>
+                            <i class="fa-solid fa-eye"></i><span>ผลทดสอบ</span>
                         </button>
                     </td>
                 `;
@@ -618,7 +789,6 @@
             const totalPages = Math.ceil(filteredData.length / rowsPerPage);
             const container = document.getElementById('pagination-controls');
             container.innerHTML = "";
-
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
                 btn.innerText = i;
@@ -641,7 +811,6 @@
                 if (a.type !== b.type) return a.type.localeCompare(b.type);
                 return a.id.localeCompare(b.id, undefined, {numeric: true});
             });
-
             sortedAssets.forEach(asset => {
                 const opt = document.createElement('option');
                 opt.value = asset.id;
@@ -710,7 +879,6 @@
 
             document.getElementById('ana-id').innerText = asset.id;
             document.getElementById('ana-type').innerText = asset.type;
-            document.getElementById('ana-loc').innerText = asset.location;
             document.getElementById('ana-hi').innerText = asset.healthIndex + '%';
             document.getElementById('ana-rpn').innerText = asset.rpn;
             const st = document.getElementById('ana-status');
@@ -731,6 +899,47 @@
             document.getElementById('new-c2h6').value = asset.gases.c2h6;
             document.getElementById('new-co').value = asset.gases.co;
             document.getElementById('new-co2').value = asset.gases.co2;
+
+            document.getElementById('new-s').value = linkedFmea.s;
+            document.getElementById('new-o').value = linkedFmea.o;
+            document.getElementById('new-d').value = linkedFmea.d;
+            document.getElementById('new-rpn').value = asset.rpn;
+
+            const attachBox = document.getElementById('attached-files-container');
+            let attachHtml = "";
+            if(asset.labFileName) {
+                attachHtml += `<div class="text-rose-400"><i class="fa-solid fa-file-pdf mr-1"></i> <a href="#" onclick="openPreviewModal('pdf', '${asset.labFileName}')" class="underline hover:text-rose-300 font-medium">${asset.labFileName}</a></div>`;
+            }
+            if(asset.photoFileName) {
+                attachHtml += `<div class="text-emerald-400"><i class="fa-solid fa-image mr-1"></i> <a href="#" onclick="openPreviewModal('img', '${asset.photoFileName}')" class="underline hover:text-emerald-300 font-medium">${asset.photoFileName}</a></div>`;
+            }
+            attachBox.innerHTML = attachHtml || `<span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>`;
+        }
+
+        function autoCalculateRpn() {
+            const h2 = parseInt(document.getElementById('new-h2').value) || 0;
+            const c2h2 = parseInt(document.getElementById('new-c2h2').value) || 0;
+            let tdcg = h2 + c2h2 + 100;
+
+            let sField = document.getElementById('new-s');
+            let oField = document.getElementById('new-o');
+            let dField = document.getElementById('new-d');
+
+            if (tdcg > 1200 || c2h2 > 50) {
+                sField.value = 9; oField.value = 8; dField.value = 6;
+            } else if (tdcg > 400) {
+                sField.value = 7; oField.value = 5; dField.value = 4;
+            } else {
+                sField.value = 4; oField.value = 2; dField.value = 2;
+            }
+            manualCalculateRpn();
+        }
+
+        function manualCalculateRpn() {
+            const s = parseInt(document.getElementById('new-s').value) || 0;
+            const o = parseInt(document.getElementById('new-o').value) || 0;
+            const d = parseInt(document.getElementById('new-d').value) || 0;
+            document.getElementById('new-rpn').value = s * o * d;
         }
 
         function submitNewTestData() {
@@ -746,24 +955,37 @@
             asset.gases.co = parseInt(document.getElementById('new-co').value) || 0;
             asset.gases.co2 = parseInt(document.getElementById('new-co2').value) || 0;
 
-            let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
-            
-            if (tdcg > 1500 || asset.gases.c2h2 > 50) {
-                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5; asset.rpn = 850;
-            } else if (tdcg > 500 || asset.gases.h2 > 60) {
-                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2; asset.rpn = 620;
-            } else {
-                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0; asset.rpn = 210;
+            const fmeaItem = fmeaData.find(f => f.assetId === asset.id);
+            if(fmeaItem) {
+                fmeaItem.s = parseInt(document.getElementById('new-s').value) || 5;
+                fmeaItem.o = parseInt(document.getElementById('new-o').value) || 3;
+                fmeaItem.d = parseInt(document.getElementById('new-d').value) || 3;
             }
+
+            asset.rpn = parseInt(document.getElementById('new-rpn').value) || (fmeaItem.s * fmeaItem.o * fmeaItem.d);
+
+            if (asset.rpn >= 300) {
+                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5;
+            } else if (asset.rpn >= 100) {
+                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2;
+            } else {
+                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0;
+            }
+
+            const labFile = document.getElementById('lab-file-upload').files[0];
+            const photoFile = document.getElementById('damage-photo-upload').files[0];
+            if(labFile) asset.labFileName = labFile.name;
+            if(photoFile) asset.photoFileName = photoFile.name;
 
             assetsData.sort((a, b) => b.rpn - a.rpn);
             filteredData = [...assetsData];
             renderTable();
+            renderFmeaTable();
             onAnalysisDeviceChange();
-            alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตค่า RPN และจัดเรียงลำดับใหม่เรียบร้อยแล้ว`);
+
+            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
         }
 
-        // Modal Popup
         function openModal(id) {
             const asset = assetsData.find(a => a.id === id);
             if (!asset) return;
@@ -771,10 +993,15 @@
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
             document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
-            const linkedFmea = fmeaData.find(f => f.assetId === asset.id) || fmeaData[0];
+            const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA ในหัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (สาเหตุ: ${linkedFmea.cause}, ผลกระทบ: ${linkedFmea.effect}) ประเมินค่าความเสี่ยง RPN = <b>${asset.rpn}</b> ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm และมีค่าผลทดสอบทางไฟฟ้าอยู่ในสถานะ <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
+            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
+            
+            if(asset.labFileName || asset.photoFileName) {
+                rationale += `<br><span class="text-industrial-300"><i class="fa-solid fa-paperclip mr-1"></i> ไฟล์แนบ: ${asset.labFileName || ''} ${asset.photoFileName || ''}</span>`;
+            }
+
             document.getElementById('modal-rationale-text').innerHTML = rationale;
 
             const dgaTbody = document.getElementById('modal-dga-tbody');
@@ -849,9 +1076,9 @@
             document.getElementById('duval-p-c2h4').innerText = (p_c2h4 * 100).toFixed(1) + '%';
             document.getElementById('duval-p-c2h2').innerText = (p_c2h2 * 100).toFixed(1) + '%';
 
-            let duvalZone = "Zone S (Normal Thermal Behaviour)";
-            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing)";
-            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C)";
+            let duvalZone = "Zone S (Normal Thermal Behaviour - สภาพปกติ)";
+            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing - เกิดประกายไฟหรืออาร์กแรงดันสูง)";
+            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C - ความร้อนสูงผิดปกติ เกิน 700°C)";
             document.getElementById('res-duval-detail').innerText = duvalZone;
             drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
 
@@ -865,23 +1092,25 @@
             document.getElementById('rogers-r3').innerText = r3.toFixed(2);
             document.getElementById('rogers-r4').innerText = r4.toFixed(2);
 
-            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD)" : "Normal Operation";
+            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD) - เกิดประจุบางส่วนในเนื้อฉนวน" : "Normal Operation - อัตราส่วน Rogers ปกติ";
             document.getElementById('iec-i1').innerText = r1.toFixed(2);
             document.getElementById('iec-i2').innerText = r3.toFixed(2);
             document.getElementById('iec-i5').innerText = r2.toFixed(2);
-            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing" : "Normal Condition";
+            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing (เกิดการลัดวงจรเฉพาะจุด)" : "Code [0 0 0] - Normal Condition (สถานะปกติ)";
 
             document.getElementById('doern-r1').innerText = r2.toFixed(2);
             document.getElementById('doern-r2').innerText = (g.c2h2 / (g.c2h4 || 1)).toFixed(2);
-            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked";
+            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked: อัตราส่วนอยู่ในเกณฑ์มาตรฐานความปลอดภัย";
 
             let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
-            document.getElementById('keygas-name').innerText = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
-            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "Severe Arcing / Sparking" : "Normal operating range";
+            let keyGasName = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
+            document.getElementById('keygas-name').innerText = keyGasName;
+            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "บ่งชี้ถึงการเกิดอาร์กหรือสปาร์ก (Arcing Fault)" : "ก๊าซไฮโดรเจนอยู่ในช่วงจำกัดปกติ (Normal Operation)";
 
             let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
-            document.getElementById('res-tdcg-detail').innerText = tdcg > 1920 ? "Condition 4 (Excessive Deterioration)" : "Condition 1 (Normal)";
+            let tdcgCond = tdcg > 1920 ? "Condition 4 (Excessive Deterioration - แนะนำปลดอุปกรณ์ซ่อมเร่งด่วน)" : tdcg > 720 ? "Condition 3 (Significant Gassing - เพิ่มความถี่เก็บตัวอย่างน้ำมัน)" : "Condition 1 (Normal Operation - ปลอดภัยตามเกณฑ์)";
+            document.getElementById('res-tdcg-detail').innerText = tdcgCond;
         }
 
         function drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2) {
@@ -913,37 +1142,6 @@
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1.5;
             ctx.stroke();
-        }
-
-        // --- EXPORT HUB FUNCTIONS ---
-        function downloadExcelCsv() {
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            csvContent += "รหัสอุปกรณ์,ประเภท,สถานีไฟฟ้า (Location),Health Index (%),ค่า RPN,PM รอบถัดไป,สถานะความเสี่ยง\n";
-            assetsData.forEach(row => {
-                csvContent += `"${row.id}","${row.type}","${row.location}",${row.healthIndex},${row.rpn},"${row.nextPm}","${row.status}"\n`;
-            });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "RCM_Master_PM_Schedule_40_Assets.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function printNativePdf() {
-            window.print();
-        }
-
-        function downloadJsonData() {
-            const exportBundle = { system: "RCM Transformer & GIS", totalAssets: assetsData.length, assets: assetsData, fmea: fmeaData, exportDate: new Date().toISOString() };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportBundle, null, 2));
-            const link = document.createElement("a");
-            link.setAttribute("href", dataStr);
-            link.setAttribute("download", "RCM_Full_System_Backup.json");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         // Initial Load
