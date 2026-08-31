@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Clickable FMEA Standard Modal)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Attachment Viewer & Pro RCM)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -57,7 +57,7 @@
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-file-pen"></i>
-            <span>บันทึกผลทดสอบ & แนบเอกสาร/รูปภาพ</span>
+            <span>บันทึกผลทดสอบ & ดูไฟล์แนบ</span>
         </button>
         <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
@@ -140,12 +140,12 @@
             </div>
         </div>
 
-        <!-- TAB 2: PRO DATA ENTRY WITH CLICKABLE STANDARD BUTTON -->
+        <!-- TAB 2: PRO DATA ENTRY & ATTACHMENT VIEWER -->
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและแนบหลักฐาน (Pro Data Entry & Attachments)</h2>
-                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมเกณฑ์มาตรฐาน FMEA และรองรับการแนบไฟล์รายงาน / รูปถ่ายความเสียหาย</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ (Attachment Viewer & Pro RCM)</h2>
+                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมตรวจสอบไฟล์รายงานแล็บและรูปถ่ายความเสียหายย้อนหลังได้ทันที</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -153,7 +153,7 @@
                 </div>
             </div>
 
-            <!-- Current Status Summary -->
+            <!-- Current Status Summary & Attached Files Viewer -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์ปัจจุบัน</h3>
@@ -163,6 +163,14 @@
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
                         <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
+                    </div>
+
+                    <!-- ATTACHED FILES VIEWER BOX -->
+                    <div class="pt-3 border-t border-slate-700 space-y-2">
+                        <span class="text-xs font-bold text-slate-300 block"><i class="fa-solid fa-paperclip mr-1 text-industrial-400"></i> หลักฐานแนบปัจจุบัน:</span>
+                        <div id="attached-files-container" class="space-y-1.5 text-xs">
+                            <span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>
+                        </div>
                     </div>
                 </div>
 
@@ -182,8 +190,6 @@
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
-                    
-                    <!-- CLICKABLE STANDARD BUTTON -->
                     <button onclick="openStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 border border-industrial-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-bold shadow transition flex items-center space-x-2">
                         <i class="fa-solid fa-shield-halved"></i>
                         <span>ดูมาตรฐาน FMEA & RCM Compliant</span>
@@ -204,7 +210,7 @@
                     </div>
                 </div>
 
-                <!-- 2. RPN Calculation with Standards Guide -->
+                <!-- 2. RPN Calculation -->
                 <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 space-y-3">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> ประเมินคะแนน FMEA & RPN (ระบบคำนวณอัตโนมัติหรือปรับแก้เองได้)</h4>
@@ -230,7 +236,7 @@
                     </div>
                 </div>
 
-                <!-- 3. File Attachments -->
+                <!-- 3. File Attachments Upload -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
                         <label class="block font-bold text-slate-300"><i class="fa-solid fa-file-pdf mr-1 text-rose-400"></i> แนบไฟล์เอกสารผลตรวจจากห้องแล็บ (PDF / Excel):</label>
@@ -347,7 +353,7 @@
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H2 / CH4:</span><span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-800 block text-[10px]">C2H2 / CH4:</span><span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span></div>
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">CH4 / H2:</span><span id="rogers-r2" class="font-mono font-bold text-white text-sm">-</span></div>
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H4 / C2H6:</span><span id="rogers-r3" class="font-mono font-bold text-white text-sm">-</span></div>
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H6 / C2H2:</span><span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span></div>
@@ -635,7 +641,8 @@
                 healthIndex: parseFloat(healthIndex), rpn: rpn,
                 lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
-                status: status, statusClass: statusClass, gases: gases, electrical: electrical
+                status: status, statusClass: statusClass, gases: gases, electrical: electrical,
+                labFileName: null, photoFileName: null
             });
 
             fmeaData.push({
@@ -681,7 +688,6 @@
             }
         }
 
-        // Standard Modal Functions
         function openStandardModal() {
             document.getElementById('standard-modal').classList.remove('hidden');
         }
@@ -839,6 +845,17 @@
             document.getElementById('new-o').value = linkedFmea.o;
             document.getElementById('new-d').value = linkedFmea.d;
             document.getElementById('new-rpn').value = asset.rpn;
+
+            // Render Attachment Links if exist
+            const attachBox = document.getElementById('attached-files-container');
+            let attachHtml = "";
+            if(asset.labFileName) {
+                attachHtml += `<div class="text-rose-400"><i class="fa-solid fa-file-pdf mr-1"></i> <a href="#" onclick="alert('เปิดดูไฟล์: ${asset.labFileName}')" class="underline hover:text-rose-300">${asset.labFileName}</a></div>`;
+            }
+            if(asset.photoFileName) {
+                attachHtml += `<div class="text-emerald-400"><i class="fa-solid fa-image mr-1"></i> <a href="#" onclick="alert('เปิดดูรูปภาพ: ${asset.photoFileName}')" class="underline hover:text-emerald-300">${asset.photoFileName}</a></div>`;
+            }
+            attachBox.innerHTML = attachHtml || `<span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>`;
         }
 
         function autoCalculateRpn() {
@@ -897,19 +914,18 @@
                 asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0;
             }
 
+            const labFile = document.getElementById('lab-file-upload').files[0];
+            const photoFile = document.getElementById('damage-photo-upload').files[0];
+            if(labFile) asset.labFileName = labFile.name;
+            if(photoFile) asset.photoFileName = photoFile.name;
+
             assetsData.sort((a, b) => b.rpn - a.rpn);
             filteredData = [...assetsData];
             renderTable();
             renderFmeaTable();
             onAnalysisDeviceChange();
 
-            const labFile = document.getElementById('lab-file-upload').files[0];
-            const photoFile = document.getElementById('damage-photo-upload').files[0];
-            let attachMsg = "";
-            if(labFile) attachMsg += ` | แนบไฟล์แล็บ: ${labFile.name}`;
-            if(photoFile) attachMsg += ` | แนบรูปถ่าย: ${photoFile.name}`;
-
-            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!${attachMsg}`);
+            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
         }
 
         function openModal(id) {
@@ -923,6 +939,11 @@
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
             let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
+            
+            if(asset.labFileName || asset.photoFileName) {
+                rationale += `<br><span class="text-industrial-300"><i class="fa-solid fa-paperclip mr-1"></i> มีไฟล์แนบ: ${asset.labFileName || ''} ${asset.photoFileName || ''}</span>`;
+            }
+
             document.getElementById('modal-rationale-text').innerHTML = rationale;
 
             const dgaTbody = document.getElementById('modal-dga-tbody');
