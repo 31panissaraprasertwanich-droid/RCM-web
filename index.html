@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Multi-Format Export Hub)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Professional RCM System)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -90,7 +90,7 @@
                     <i class="fa-solid fa-file-excel"></i><span>ดาวน์โหลด Excel/CSV</span>
                 </button>
                 <button onclick="printNativePdf()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
-                    <i class="fa-solid fa-file-pdf"></i><span>พิมพ์ / บันทึก PDF (ไทยไม่เพี้ยน)</span>
+                    <i class="fa-solid fa-file-pdf"></i><span>บันทึกเป็น PDF</span>
                 </button>
                 <button onclick="downloadJsonData()" class="bg-slate-700 hover:bg-slate-600 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
                     <i class="fa-solid fa-code"></i><span>สำรองข้อมูล JSON</span>
@@ -723,7 +723,7 @@
             alert(`จำลองการแนบไฟล์สำหรับ ${asset.id} สำเร็จ!`);
         }
 
-        // --- EXPORT HUB FUNCTIONS (Excel/CSV, Native Print PDF, JSON) ---
+        // --- EXPORT HUB FUNCTIONS ---
         function downloadExcelCsv() {
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
             csvContent += "รหัสอุปกรณ์,ประเภท,สถานีไฟฟ้า (Location),Health Index (%),ค่า RPN,PM รอบถัดไป,สถานะความเสี่ยง\n";
