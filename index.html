@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Optimized Data Entry & Manual/Auto RPN)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Pro RCM Data Entry with Attachments & Standards)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (40 อุปกรณ์)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4 self-end sm:self-center">
@@ -57,7 +57,7 @@
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-file-pen"></i>
-            <span>บันทึกผลทดสอบรอบใหม่รายอุปกรณ์</span>
+            <span>บันทึกผลทดสอบ & แนบเอกสาร/รูปภาพ</span>
         </button>
         <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
@@ -80,43 +80,35 @@
                         <p class="text-xs text-slate-400 font-medium">อุปกรณ์ทั้งหมด</p>
                         <h3 id="stat-total" class="text-2xl font-bold text-white mt-1">40</h3>
                     </div>
-                    <div class="bg-blue-500/10 text-blue-400 p-3 rounded-lg border border-blue-500/20">
-                        <i class="fa-solid fa-server text-lg"></i>
-                    </div>
+                    <div class="bg-blue-500/10 text-blue-400 p-3 rounded-lg border border-blue-500/20"><i class="fa-solid fa-server text-lg"></i></div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
                     <div>
                         <p class="text-xs text-slate-400 font-medium">ปกติ (Normal)</p>
                         <h3 id="stat-normal" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
                     </div>
-                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-lg border border-emerald-500/20">
-                        <i class="fa-solid fa-circle-check text-lg"></i>
-                    </div>
+                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-circle-check text-lg"></i></div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
                     <div>
                         <p class="text-xs text-slate-400 font-medium">เฝ้าระวัง (Warning)</p>
                         <h3 id="stat-warning" class="text-2xl font-bold text-amber-400 mt-1">0</h3>
                     </div>
-                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-lg border border-amber-500/20">
-                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                    </div>
+                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-lg border border-amber-500/20"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
                     <div>
                         <p class="text-xs text-slate-400 font-medium">วิกฤต (Critical)</p>
                         <h3 id="stat-critical" class="text-2xl font-bold text-rose-400 mt-1">0</h3>
                     </div>
-                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-lg border border-rose-500/20">
-                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                    </div>
+                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-lg border border-rose-500/20"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
-                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปผ่านการคำนวณอัตโนมัติและปรับแก้ได้</p>
+                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปต่ำอย่างถูกต้องแม่นยำ</p>
                 </div>
                 <div class="w-full sm:w-auto">
                     <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ตำแหน่ง..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
@@ -148,12 +140,12 @@
             </div>
         </section>
 
-        <!-- TAB 2: DEDICATED NEW TEST DATA ENTRY & RPN OVERRIDE -->
+        <!-- TAB 2: PRO DATA ENTRY WITH STANDARDS & ATTACHMENTS -->
         <section id="tab-device-analysis" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและประเมินค่า RPN รอบใหม่รายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูค่าปัจจุบัน และกรอกผลแล็บใหม่ ระบบคำนวณให้อัตโนมัติหรือท่านสามารถพิมพ์ปรับแก้คะแนนเองได้</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและแนบหลักฐาน (Pro Data Entry & Attachments)</h2>
+                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมเกณฑ์มาตรฐาน FMEA และรองรับการแนบไฟล์รายงาน / รูปถ่ายความเสียหาย</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -161,16 +153,16 @@
                 </div>
             </div>
 
-            <!-- Current Status Quick View -->
+            <!-- Current Status Summary -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สถานะปัจจุบันของอุปกรณ์</h3>
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์ปัจจุบัน</h3>
                     <div class="space-y-3 text-xs">
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN ปัจจุบัน:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
-                        <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะความเสี่ยง:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
+                        <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
                     </div>
                 </div>
 
@@ -186,16 +178,16 @@
                 </div>
             </div>
 
-            <!-- Dedicated Pure Data Entry & RPN Manual/Auto Override Form -->
+            <!-- Form Container -->
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-3 flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยงรอบใหม่</h3>
-                    <span class="text-[11px] text-slate-400">สามารถให้ระบบคำนวณอัตโนมัติ หรือพิมพ์แก้ไขคะแนน S, O, D, RPN เองได้</span>
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและแนบหลักฐาน</h3>
+                    <span class="text-[11px] text-industrial-300 bg-industrial-950 px-3 py-1 rounded border border-industrial-800">มาตรฐาน FMEA & RCM Compliant</span>
                 </div>
 
-                <!-- DGA Lab Inputs -->
+                <!-- 1. DGA Lab Inputs -->
                 <div>
-                    <h4 class="text-xs font-bold text-white mb-2 uppercase text-slate-300"><i class="fa-solid fa-vial mr-1"></i> ค่าผลแล็บก๊าซละลาย (DGA Lab Resultsในหน่วย ppm)</h4>
+                    <h4 class="text-xs font-bold text-white mb-2 uppercase text-slate-300"><i class="fa-solid fa-vial mr-1"></i> ค่าผลแล็บก๊าซละลาย (DGA Lab Results ในหน่วย ppm)</h4>
                     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-xs">
                         <div><label class="block text-slate-400 mb-1">H2 (ppm)</label><input type="number" id="new-h2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
                         <div><label class="block text-slate-400 mb-1">CH4 (ppm)</label><input type="number" id="new-ch4" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
@@ -207,21 +199,24 @@
                     </div>
                 </div>
 
-                <!-- RPN Calculation & Manual Override Inputs -->
+                <!-- 2. RPN Calculation with Standards Guide -->
                 <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 space-y-3">
-                    <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> การประเมินคะแนนความเสี่ยง FMEA & RPN (ระบบคำนวณอัตโนมัติ / แก้ไขเองได้)</h4>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> ประเมินคะแนน FMEA & RPN (ระบบคำนวณอัตโนมัติหรือปรับแก้เองได้)</h4>
+                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">เกณฑ์มาตรฐาน S, O, D (สเกล 1-10)</span>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
                         <div>
                             <label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label>
-                            <input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
+                            <input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500" title="1=น้อยมาก, 10=วิกฤตระเบิดเสียหายทั้งระบบ">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label>
-                            <input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
+                            <input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500" title="1=แทบไม่เกิด, 10=เกิดประจำต่อเนื่อง">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label>
-                            <input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
+                            <input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500" title="1=ตรวจจับได้ทันที, 10=ตรวจไม่พบเลยก่อนพัง">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1">ค่า RPN รวม (S × O × D):</label>
@@ -230,10 +225,22 @@
                     </div>
                 </div>
 
+                <!-- 3. File Attachments (Lab Report & Damage Photo) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                        <label class="block font-bold text-slate-300"><i class="fa-solid fa-file-pdf mr-1 text-rose-400"></i> แนบไฟล์เอกสารผลตรวจจากห้องแล็บ (PDF / Excel):</label>
+                        <input type="file" id="lab-file-upload" accept=".pdf,.xlsx,.xls,.doc" class="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-industrial-600 file:text-white hover:file:bg-industrial-700 cursor-pointer">
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                        <label class="block font-bold text-slate-300"><i class="fa-solid fa-image mr-1 text-emerald-400"></i> แนบรูปถ่ายสภาพความเสียหาย / จุดตรวจวัด (Image):</label>
+                        <input type="file" id="damage-photo-upload" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-industrial-600 file:text-white hover:file:bg-industrial-700 cursor-pointer">
+                    </div>
+                </div>
+
                 <div class="flex justify-end pt-2">
                     <button onclick="submitNewTestData()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-6 py-2.5 rounded-lg text-xs font-bold transition shadow-lg flex items-center space-x-2">
                         <i class="fa-solid fa-floppy-disk"></i>
-                        <span>บันทึกผลทดสอบรอบใหม่ & อัปเดตระบบทันที</span>
+                        <span>บันทึกผลทดสอบ แนบไฟล์ & อัปเดตระบบทันที</span>
                     </button>
                 </div>
             </div>
@@ -441,17 +448,13 @@
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30">
-                        <i class="fa-solid fa-file-waveform"></i>
-                    </div>
+                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30"><i class="fa-solid fa-file-waveform"></i></div>
                     <div>
                         <h3 id="modal-title" class="font-bold text-white text-sm sm:text-base">ผลทดสอบเชิงลึก</h3>
                         <p id="modal-subtitle" class="text-xs text-slate-400">อุปกรณ์: -</p>
                     </div>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
@@ -465,12 +468,7 @@
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
                         <table class="w-full text-left text-xs min-w-[500px]">
                             <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
-                                <tr>
-                                    <th class="py-2.5 px-3">ชนิดก๊าซ</th>
-                                    <th class="py-2.5 px-3">ค่าตรวจวัด (ppm)</th>
-                                    <th class="py-2.5 px-3">มาตรฐานอ้างอิง (Limit)</th>
-                                    <th class="py-2.5 px-3">สถานะ</th>
-                                </tr>
+                                <tr><th class="py-2.5 px-3">ชนิดก๊าซ</th><th class="py-2.5 px-3">ค่าตรวจวัด (ppm)</th><th class="py-2.5 px-3">มาตรฐานอ้างอิง (Limit)</th><th class="py-2.5 px-3">สถานะ</th></tr>
                             </thead>
                             <tbody id="modal-dga-tbody" class="divide-y divide-slate-700/50"></tbody>
                         </table>
@@ -482,12 +480,7 @@
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
                         <table class="w-full text-left text-xs min-w-[500px]">
                             <thead class="bg-slate-900/80 text-slate-400 uppercase border-b border-slate-700">
-                                <tr>
-                                    <th class="py-2.5 px-3">หัวข้อทดสอบ</th>
-                                    <th class="py-2.5 px-3">ค่าที่วัดได้</th>
-                                    <th class="py-2.5 px-3">เกณฑ์มาตรฐาน (Criteria)</th>
-                                    <th class="py-2.5 px-3">ผลสรุป</th>
-                                </tr>
+                                <tr><th class="py-2.5 px-3">หัวข้อทดสอบ</th><th class="py-2.5 px-3">ค่าที่วัดได้</th><th class="py-2.5 px-3">เกณฑ์มาตรฐาน (Criteria)</th><th class="py-2.5 px-3">ผลสรุป</th></tr>
                             </thead>
                             <tbody id="modal-elec-tbody" class="divide-y divide-slate-700/50"></tbody>
                         </table>
@@ -525,31 +518,32 @@
                 healthIndex = (Math.random() * 14 + 60).toFixed(1);
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-                s = 9; o = Math.floor(Math.random() * 3 + 7); d = Math.floor(Math.random() * 3 + 5);
+                s = 9; o = 8; d = 6;
                 statCounts.critical++;
             } else if (i <= 18) {
                 healthIndex = (Math.random() * 10 + 75).toFixed(1);
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-                s = 7; o = Math.floor(Math.random() * 3 + 4); d = Math.floor(Math.random() * 3 + 3);
+                s = 7; o = 5; d = 4;
                 statCounts.warning++;
             } else {
                 healthIndex = (Math.random() * 15 + 85).toFixed(1);
                 status = "Normal";
                 statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                s = 4; o = Math.floor(Math.random() * 2 + 1); d = Math.floor(Math.random() * 3 + 2);
+                s = 4; o = 2; d = 2;
                 statCounts.normal++;
             }
             rpn = s * o * d;
 
-            let gases;
-            if (status === "Critical") {
-                gases = { h2: 180, ch4: 160, c2h2: 95, c2h4: 140, c2h6: 90, co: 500, co2: 2800 };
-            } else if (status === "Warning") {
-                gases = { h2: 75, ch4: 65, c2h2: 20, c2h4: 45, c2h6: 35, co: 220, co2: 1600 };
-            } else {
-                gases = { h2: 25, ch4: 15, c2h2: 2, c2h4: 10, c2h6: 12, co: 80, co2: 600 };
-            }
+            let gases = { 
+                h2: Math.floor(Math.random() * 100) + 15, 
+                ch4: Math.floor(Math.random() * 80) + 10, 
+                c2h2: status === "Critical" ? Math.floor(Math.random() * 60) + 40 : Math.floor(Math.random() * 10), 
+                c2h4: Math.floor(Math.random() * 70) + 15, 
+                c2h6: Math.floor(Math.random() * 50) + 10, 
+                co: Math.floor(Math.random() * 250 + 50), 
+                co2: Math.floor(Math.random() * 1000 + 500) 
+            };
 
             let electrical = isTransformer ? [
                 { name: "Insulation Resistance (HV-LV)", value: status === "Critical" ? "420 MΩ" : status === "Warning" ? "880 MΩ" : "5,420 MΩ", criteria: "> 1,000 MΩ", pass: status === "Normal" },
@@ -572,13 +566,12 @@
             });
 
             fmeaData.push({
-                assetId: code,
-                type: type,
-                mode: type === 'Transformer' ? (status === 'Critical' ? "Winding Insulation Breakdown" : "Bushing Tracking / Flashover") : (status === 'Critical' ? "SF6 Gas Pressure Loss" : "Contact Resistance High"),
-                effect: status === 'Critical' ? "Catastrophic failure / Outage" : "Minor parameter deviation",
-                cause: status === 'Critical' ? "Severe thermal & electrical stress" : "Normal operation wear",
+                assetId: code, type: type,
+                mode: type === 'Transformer' ? (status === 'Critical' ? "Winding Insulation Breakdown" : "Bushing Tracking") : (status === 'Critical' ? "SF6 Gas Pressure Loss" : "Contact Resistance High"),
+                effect: status === 'Critical' ? "Catastrophic failure" : "Minor deviation",
+                cause: status === 'Critical' ? "Thermal & electrical stress" : "Normal operation wear",
                 s: s, o: o, d: d,
-                action: type === 'Transformer' ? "Perform DGA & Tan Delta testing" : "Perform SF6 gas analysis & contact resistance check"
+                action: type === 'Transformer' ? "Perform DGA & Tan Delta test" : "Perform SF6 & contact test"
             });
         }
 
@@ -632,8 +625,7 @@
                     <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${item.statusClass}">${item.status}</span></td>
                     <td class="py-3 px-4 text-center">
                         <button onclick="openModal('${item.id}')" class="bg-industrial-600 hover:bg-industrial-700 text-white px-2.5 py-1 rounded text-xs font-medium transition inline-flex items-center space-x-1">
-                            <i class="fa-solid fa-eye"></i>
-                            <span>ผลทดสอบ</span>
+                            <i class="fa-solid fa-eye"></i><span>ผลทดสอบ</span>
                         </button>
                     </td>
                 `;
@@ -648,7 +640,6 @@
             const totalPages = Math.ceil(filteredData.length / rowsPerPage);
             const container = document.getElementById('pagination-controls');
             container.innerHTML = "";
-
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
                 btn.innerText = i;
@@ -671,7 +662,6 @@
                 if (a.type !== b.type) return a.type.localeCompare(b.type);
                 return a.id.localeCompare(b.id, undefined, {numeric: true});
             });
-
             sortedAssets.forEach(asset => {
                 const opt = document.createElement('option');
                 opt.value = asset.id;
@@ -753,7 +743,6 @@
             
             document.getElementById('ana-rationale').innerHTML = `อุปกรณ์ <b>${asset.id}</b> วิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> คะแนนความเสี่ยง S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} ส่งผลให้ได้ค่า RPN = <b>${asset.rpn}</b> ตรวจวัดก๊าซ TDCG รวมเท่ากับ ${tdcg} ppm`;
 
-            // Populate pure data entry fields
             document.getElementById('new-h2').value = asset.gases.h2;
             document.getElementById('new-ch4').value = asset.gases.ch4;
             document.getElementById('new-c2h2').value = asset.gases.c2h2;
@@ -768,11 +757,10 @@
             document.getElementById('new-rpn').value = asset.rpn;
         }
 
-        // Auto calculate RPN when gases change or allow manual override
         function autoCalculateRpn() {
             const h2 = parseInt(document.getElementById('new-h2').value) || 0;
             const c2h2 = parseInt(document.getElementById('new-c2h2').value) || 0;
-            let tdcg = h2 + c2h2 + 100; // Simulated accumulation
+            let tdcg = h2 + c2h2 + 100;
 
             let sField = document.getElementById('new-s');
             let oField = document.getElementById('new-o');
@@ -830,7 +818,14 @@
             renderTable();
             renderFmeaTable();
             onAnalysisDeviceChange();
-            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
+
+            const labFile = document.getElementById('lab-file-upload').files[0];
+            const photoFile = document.getElementById('damage-photo-upload').files[0];
+            let attachMsg = "";
+            if(labFile) attachMsg += ` | แนบไฟล์แล็บ: ${labFile.name}`;
+            if(photoFile) attachMsg += ` | แนบรูปถ่าย: ${photoFile.name}`;
+
+            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!${attachMsg}`);
         }
 
         function openModal(id) {
