@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Detailed Rationale)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Dynamic FMEA & RPN)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -144,58 +144,77 @@
             </div>
         </section>
 
-        <!-- TAB 2: FMEA & RPN CALCULATION -->
+        <!-- TAB 2: DYNAMIC FMEA & RPN CALCULATION -->
         <section id="tab-fmea-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA และคำนวณค่า RPN</h2>
-                    <p class="text-xs text-slate-400">ประเมิน S, O และ D ตามหลัก RCM เพื่อคำนวณ Risk Priority Number = S × O × D</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA และเพิ่มข้อมูลคำนวณ RPN ใหม่</h2>
+                    <p class="text-xs text-slate-400">กรอกข้อมูลความเสียหายใหม่ด้านล่าง ระบบจะคำนวณ RPN ($S \times O \times D$) และอัปเดตลงตารางทันที</p>
                 </div>
                 <div class="bg-industrial-900/60 border border-industrial-700 px-4 py-2 rounded-lg text-xs text-industrial-300">
                     <i class="fa-solid fa-circle-info mr-1"></i> สูตร: <b>RPN = S × O × D</b>
                 </div>
             </div>
 
+            <!-- Add New FMEA Data Form -->
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg space-y-4">
-                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-2"></i> จำลองการคำนวณค่า RPN</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-plus-circle mr-2"></i> เพิ่มรายการวิเคราะห์ความเสียหายใหม่ (Add New FMEA Item)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
                     <div>
-                        <label class="block text-slate-400 mb-1">โหมดความเสียหาย:</label>
-                        <select id="fmea-mode-select" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
-                            <option value="Transformer - Winding Insulation Breakdown">1. หม้อแปลง: ฉนวนขดลวดเสื่อมสภาพ/ลัดวงจร</option>
-                            <option value="Transformer - Bushing Flashover">2. หม้อแปลง: บูชชิ่งเกิดรอย Tracking / Flashover</option>
-                            <option value="GIS - SF6 Gas Leakage">3. GIS: ก๊าซ SF6 รั่วไหลต่ำกว่าเกณฑ์</option>
-                            <option value="GIS - Disconnector Contact Resistance High">4. GIS: หน้าสัมผัสความต้านทานสูง</option>
+                        <label class="block text-slate-400 mb-1">ประเภทอุปกรณ์:</label>
+                        <select id="form-asset" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
+                            <option value="Transformer">Transformer (หม้อแปลง)</option>
+                            <option value="GIS">GIS (สวิทช์เกียร์)</option>
                         </select>
                     </div>
                     <div>
+                        <label class="block text-slate-400 mb-1">โหมดความเสียหาย (Failure Mode):</label>
+                        <input type="text" id="form-mode" placeholder="เช่น Overheating on Terminal" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">ผลกระทบ (Effect):</label>
+                        <input type="text" id="form-effect" placeholder="เช่น Power interruption" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">สาเหตุ (Cause):</label>
+                        <input type="text" id="form-cause" placeholder="เช่น Loose connection" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
+                    </div>
+                    <div>
                         <label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label>
-                        <input type="number" id="input-s" min="1" max="10" value="8" oninput="calculateFmeaRpn()" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
+                        <input type="number" id="form-s" min="1" max="10" value="7" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label>
-                        <input type="number" id="input-o" min="1" max="10" value="4" oninput="calculateFmeaRpn()" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
+                        <input type="number" id="form-o" min="1" max="10" value="3" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label>
-                        <input type="number" id="input-d" min="1" max="10" value="3" oninput="calculateFmeaRpn()" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
+                        <input type="number" id="form-d" min="1" max="10" value="3" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">มาตรการแก้ไข (Action):</label>
+                        <input type="text" id="form-action" placeholder="เช่น Torquing & IR Scan" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
                     </div>
                 </div>
-                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 flex justify-between items-center">
-                    <span class="text-xs text-slate-300">ผลลัพธ์ RPN: <b id="calc-rpn-result" class="text-lg font-mono text-industrial-400 ml-2">96</b></span>
-                    <span id="calc-rpn-badge" class="px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">ระดับปานกลาง</span>
+                <div class="flex justify-end pt-2">
+                    <button onclick="addNewFmeaRow()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>เพิ่มรายการ & คำนวณ RPN ใหม่</span>
+                    </button>
                 </div>
             </div>
 
+            <!-- FMEA Master Table -->
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
-                <div class="p-4 bg-slate-900/70 border-b border-slate-700">
-                    <h3 class="text-sm font-bold text-white uppercase"><i class="fa-solid fa-list-check mr-2"></i> ตารางวิเคราะห์ FMEA หลัก</h3>
+                <div class="p-4 bg-slate-900/70 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-white uppercase"><i class="fa-solid fa-list-check mr-2"></i> ตารางวิเคราะห์ FMEA (อัปเดตแบบเรียลไทม์)</h3>
+                    <span id="fmea-count" class="text-xs text-slate-400">ทั้งหมด 4 รายการ</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs min-w-[900px]">
                         <thead>
                             <tr class="bg-slate-900/90 text-slate-400 uppercase tracking-wider border-b border-slate-700">
-                                <th class="py-3 px-3">อุปกรณ์ / ระบบ</th>
+                                <th class="py-3 px-3">อุปกรณ์</th>
                                 <th class="py-3 px-3">Potential Failure Mode</th>
                                 <th class="py-3 px-3">Potential Effect of Failure</th>
                                 <th class="py-3 px-3">Potential Cause</th>
@@ -368,7 +387,7 @@
 
     </main>
 
-    <!-- DETAILED TEST POPUP MODAL WITH ENGINEERING RATIONALE -->
+    <!-- DETAILED TEST POPUP MODAL -->
     <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
@@ -387,7 +406,6 @@
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
-                <!-- NEW: Engineering Diagnosis Rationale Box -->
                 <div class="bg-industrial-950/80 border border-industrial-600/40 p-4 rounded-xl space-y-2">
                     <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรมและการประเมิน (Engineering Diagnosis Rationale)</h4>
                     <p id="modal-rationale-text" class="text-xs text-slate-300 leading-relaxed">กำลังประมวลผลที่มาของการวิเคราะห์...</p>
@@ -504,6 +522,7 @@
 
         assetsData.sort((a, b) => b.rpn - a.rpn);
 
+        // FMEA Master Array
         const fmeaData = [
             { asset: "Transformer", mode: "Winding Insulation Breakdown", effect: "Short circuit, catastrophic failure", cause: "Thermal aging, moisture", s: 9, o: 3, d: 4, action: "Perform DGA monthly & Tan Delta" },
             { asset: "Transformer", mode: "Bushing Flashover", effect: "External arc, explosion", cause: "Pollution, micro-cracks", s: 8, o: 4, d: 3, action: "Thermographic scanning & cleaning" },
@@ -535,7 +554,6 @@
                 initDgaDropdown();
             } else if (tabId === 'fmea-calc') {
                 renderFmeaTable();
-                calculateFmeaRpn();
             }
         }
 
@@ -597,12 +615,17 @@
             renderTable();
         }
 
+        // Render FMEA Table & Sort by RPN descending
         function renderFmeaTable() {
+            fmeaData.sort((a, b) => (b.s * b.o * b.d) - (a.s * a.o * a.d));
             const tbody = document.getElementById('fmea-table-body');
             tbody.innerHTML = "";
+            
             fmeaData.forEach(item => {
                 const rpn = item.s * item.o * item.d;
                 let rpnBadge = rpn >= 150 ? "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold" : "bg-amber-500/10 text-amber-400 border-amber-500/30 font-bold";
+                if (rpn < 80) rpnBadge = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-bold";
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-700/20">
                         <td class="py-3 px-3 font-semibold text-white">${item.asset}</td>
@@ -617,20 +640,36 @@
                     </tr>
                 `;
             });
+            document.getElementById('fmea-count').innerText = `ทั้งหมด ${fmeaData.length} รายการ`;
         }
 
-        function calculateFmeaRpn() {
-            const s = parseInt(document.getElementById('input-s').value) || 0;
-            const o = parseInt(document.getElementById('input-o').value) || 0;
-            const d = parseInt(document.getElementById('input-d').value) || 0;
-            const rpn = s * o * d;
-            document.getElementById('calc-rpn-result').innerText = rpn;
-            const badge = document.getElementById('calc-rpn-badge');
-            if (rpn >= 150) { badge.className = "px-3 py-1 rounded text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30"; badge.innerText = "ระดับสูงมาก - ต้องแก้ไขเร่งด่วน"; }
-            else { badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30"; badge.innerText = "ระดับปานกลาง - ควรเฝ้าระวัง"; }
+        // Add New Fmea Row & Auto Recalculate RPN
+        function addNewFmeaRow() {
+            const asset = document.getElementById('form-asset').value;
+            const mode = document.getElementById('form-mode').value.trim();
+            const effect = document.getElementById('form-effect').value.trim();
+            const cause = document.getElementById('form-cause').value.trim();
+            const s = parseInt(document.getElementById('form-s').value);
+            const o = parseInt(document.getElementById('form-o').value);
+            const d = parseInt(document.getElementById('form-d').value);
+            const action = document.getElementById('form-action').value.trim();
+
+            if (!mode || !effect || !cause || isNaN(s) || isNaN(o) || isNaN(d)) {
+                alert("กรุณากรอกข้อมูล FMEA ให้ครบถ้วน");
+                return;
+            }
+
+            fmeaData.push({ asset, mode, effect, cause, s, o, d, action });
+            renderFmeaTable();
+            alert(`เพิ่มรายการสำเร็จ! ค่า RPN ที่คำนวณได้คือ ${s * o * d}`);
+
+            // Clear inputs
+            document.getElementById('form-mode').value = "";
+            document.getElementById('form-effect').value = "";
+            document.getElementById('form-cause').value = "";
+            document.getElementById('form-action').value = "";
         }
 
-        // Open Modal with Engineering Rationale
         function openModal(id) {
             const asset = assetsData.find(a => a.id === id);
             if (!asset) return;
@@ -638,7 +677,6 @@
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
             document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
-            // Generate Engineering Rationale text based on status
             let rationale = "";
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
@@ -651,7 +689,6 @@
             }
             document.getElementById('modal-rationale-text').innerHTML = rationale;
 
-            // DGA Table
             const dgaTbody = document.getElementById('modal-dga-tbody');
             dgaTbody.innerHTML = "";
             const limits = { h2: 100, ch4: 120, c2h2: 35, c2h4: 50, c2h6: 65, co: 350, co2: 2500 };
@@ -669,7 +706,6 @@
                 `;
             });
 
-            // Electrical Table
             const elecTbody = document.getElementById('modal-elec-tbody');
             elecTbody.innerHTML = "";
             asset.electrical.forEach(test => {
