@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Professional RCM System)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Fixed Data Binding & Unique Scores)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -30,13 +30,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media print {
-            body { background: white !important; color: black !important; font-family: 'Sarabun', sans-serif !important; }
+            body { background: white !important; color: black !important; }
             header, nav, footer, button, .no-print { display: none !important; }
-            .print-container { background: white !important; color: black !important; border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
-            table { width: 100% !important; border-collapse: collapse !important; }
-            th, td { border: 1px solid #cbd5e1 !important; color: black !important; padding: 8px !important; font-size: 11px !important; }
-            .bg-slate-800, .bg-slate-900 { background-color: white !important; color: black !important; border: 1px solid #cbd5e1 !important; }
-            .text-white, .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400 { color: #1e293b !important; }
+            .print-container { background: white !important; color: black !important; border: none !important; box-shadow: none !important; }
         }
     </style>
 </head>
@@ -81,7 +77,7 @@
     </nav>
 
     <!-- Main Container -->
-    <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6 print-container">
+    <main id="pdf-export-container" class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
         <!-- GLOBAL EXPORT HUB BAR -->
         <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 no-print">
@@ -144,7 +140,7 @@
                                 <th class="py-3.5 px-4 font-semibold text-industrial-400">ค่า RPN</th>
                                 <th class="py-3.5 px-4 font-semibold">PM รอบถัดไป</th>
                                 <th class="py-3.5 px-4 font-semibold">สถานะ</th>
-                                <th class="py-3.5 px-4 font-semibold text-center no-print">จัดการ</th>
+                                <th class="py-3.5 px-4 font-semibold text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="pm-table-body" class="divide-y divide-slate-700/50"></tbody>
@@ -176,6 +172,7 @@
                     <div class="space-y-3 text-xs">
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ตำแหน่ง:</span><span id="ana-loc" class="text-slate-200">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
                         <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
@@ -609,31 +606,31 @@
                 healthIndex = (Math.random() * 14 + 60).toFixed(1);
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-                s = 9; o = 8; d = 6;
+                s = 9; o = Math.floor(Math.random() * 2 + 8); d = Math.floor(Math.random() * 3 + 5);
                 statCounts.critical++;
             } else if (i <= 18) {
                 healthIndex = (Math.random() * 10 + 75).toFixed(1);
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-                s = 7; o = 5; d = 4;
+                s = 7; o = Math.floor(Math.random() * 3 + 4); d = Math.floor(Math.random() * 3 + 3);
                 statCounts.warning++;
             } else {
                 healthIndex = (Math.random() * 15 + 85).toFixed(1);
                 status = "Normal";
                 statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                s = 4; o = 2; d = 2;
+                s = 4; o = Math.floor(Math.random() * 2 + 1); d = Math.floor(Math.random() * 3 + 2);
                 statCounts.normal++;
             }
             rpn = s * o * d;
 
             let gases = { 
-                h2: Math.floor(Math.random() * 100) + 15, 
-                ch4: Math.floor(Math.random() * 80) + 10, 
-                c2h2: status === "Critical" ? Math.floor(Math.random() * 60) + 40 : Math.floor(Math.random() * 10), 
-                c2h4: Math.floor(Math.random() * 70) + 15, 
-                c2h6: Math.floor(Math.random() * 50) + 10, 
-                co: Math.floor(Math.random() * 250 + 50), 
-                co2: Math.floor(Math.random() * 1000 + 500) 
+                h2: Math.floor(Math.random() * 120) + 10, 
+                ch4: Math.floor(Math.random() * 90) + 10, 
+                c2h2: status === "Critical" ? Math.floor(Math.random() * 50) + 30 : Math.floor(Math.random() * 8), 
+                c2h4: Math.floor(Math.random() * 60) + 10, 
+                c2h6: Math.floor(Math.random() * 40) + 10, 
+                co: Math.floor(Math.random() * 200 + 40), 
+                co2: Math.floor(Math.random() * 900 + 400) 
             };
 
             let electrical = isTransformer ? [
@@ -913,6 +910,47 @@
             document.getElementById('new-c2h6').value = asset.gases.c2h6;
             document.getElementById('new-co').value = asset.gases.co;
             document.getElementById('new-co2').value = asset.gases.co2;
+
+            document.getElementById('new-s').value = linkedFmea.s;
+            document.getElementById('new-o').value = linkedFmea.o;
+            document.getElementById('new-d').value = linkedFmea.d;
+            document.getElementById('new-rpn').value = asset.rpn;
+
+            const attachBox = document.getElementById('attached-files-container');
+            let attachHtml = "";
+            if(asset.labFileName) {
+                attachHtml += `<div class="text-rose-400"><i class="fa-solid fa-file-pdf mr-1"></i> <a href="#" onclick="openPreviewModal('pdf', '${asset.labFileName}')" class="underline hover:text-rose-300 font-medium">${asset.labFileName}</a></div>`;
+            }
+            if(asset.photoFileName) {
+                attachHtml += `<div class="text-emerald-400"><i class="fa-solid fa-image mr-1"></i> <a href="#" onclick="openPreviewModal('img', '${asset.photoFileName}')" class="underline hover:text-emerald-300 font-medium">${asset.photoFileName}</a></div>`;
+            }
+            attachBox.innerHTML = attachHtml || `<span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>`;
+        }
+
+        function autoCalculateRpn() {
+            const h2 = parseInt(document.getElementById('new-h2').value) || 0;
+            const c2h2 = parseInt(document.getElementById('new-c2h2').value) || 0;
+            let tdcg = h2 + c2h2 + 100;
+
+            let sField = document.getElementById('new-s');
+            let oField = document.getElementById('new-o');
+            let dField = document.getElementById('new-d');
+
+            if (tdcg > 1200 || c2h2 > 50) {
+                sField.value = 9; oField.value = 8; dField.value = 6;
+            } else if (tdcg > 400) {
+                sField.value = 7; oField.value = 5; dField.value = 4;
+            } else {
+                sField.value = 4; oField.value = 2; dField.value = 2;
+            }
+            manualCalculateRpn();
+        }
+
+        function manualCalculateRpn() {
+            const s = parseInt(document.getElementById('new-s').value) || 0;
+            const o = parseInt(document.getElementById('new-o').value) || 0;
+            const d = parseInt(document.getElementById('new-d').value) || 0;
+            document.getElementById('new-rpn').value = s * o * d;
         }
 
         function submitNewTestData() {
@@ -928,173 +966,35 @@
             asset.gases.co = parseInt(document.getElementById('new-co').value) || 0;
             asset.gases.co2 = parseInt(document.getElementById('new-co2').value) || 0;
 
-            let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
-            
-            if (tdcg > 1500 || asset.gases.c2h2 > 50) {
-                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5; asset.rpn = 850;
-            } else if (tdcg > 500 || asset.gases.h2 > 60) {
-                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2; asset.rpn = 620;
-            } else {
-                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0; asset.rpn = 210;
+            const fmeaItem = fmeaData.find(f => f.assetId === asset.id);
+            if(fmeaItem) {
+                fmeaItem.s = parseInt(document.getElementById('new-s').value) || 5;
+                fmeaItem.o = parseInt(document.getElementById('new-o').value) || 3;
+                fmeaItem.d = parseInt(document.getElementById('new-d').value) || 3;
             }
+
+            asset.rpn = parseInt(document.getElementById('new-rpn').value) || (fmeaItem.s * fmeaItem.o * fmeaItem.d);
+
+            if (asset.rpn >= 300) {
+                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5;
+            } else if (asset.rpn >= 100) {
+                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2;
+            } else {
+                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0;
+            }
+
+            const labFile = document.getElementById('lab-file-upload').files[0];
+            const photoFile = document.getElementById('damage-photo-upload').files[0];
+            if(labFile) asset.labFileName = labFile.name;
+            if(photoFile) asset.photoFileName = photoFile.name;
 
             assetsData.sort((a, b) => b.rpn - a.rpn);
             filteredData = [...assetsData];
             renderTable();
+            renderFmeaTable();
             onAnalysisDeviceChange();
-            alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตค่า RPN และจัดเรียงลำดับใหม่เรียบร้อยแล้ว`);
-        }
 
-        // Modal Popup
-        function openModal(id) {
-            const asset = assetsData.find(a => a.id === id);
-            if (!asset) return;
-
-            document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
-            document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
-
-            const linkedFmea = fmeaData.find(f => f.assetId === asset.id) || fmeaData[0];
-            let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
-            
-            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA ในหัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (สาเหตุ: ${linkedFmea.cause}, ผลกระทบ: ${linkedFmea.effect}) ประเมินค่าความเสี่ยง RPN = <b>${asset.rpn}</b> ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm และมีค่าผลทดสอบทางไฟฟ้าอยู่ในสถานะ <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
-            document.getElementById('modal-rationale-text').innerHTML = rationale;
-
-            const dgaTbody = document.getElementById('modal-dga-tbody');
-            dgaTbody.innerHTML = "";
-            const limits = { h2: 100, ch4: 120, c2h2: 35, c2h4: 50, c2h6: 65, co: 350, co2: 2500 };
-            Object.keys(asset.gases).forEach(gas => {
-                const val = asset.gases[gas];
-                const limit = limits[gas];
-                const isPass = val <= limit;
-                dgaTbody.innerHTML += `
-                    <tr class="hover:bg-slate-700/20">
-                        <td class="py-2 px-3 uppercase font-bold text-slate-300">${gas}</td>
-                        <td class="py-2 px-3 font-mono ${isPass ? 'text-slate-200' : 'text-rose-400 font-bold'}">${val} ppm</td>
-                        <td class="py-2 px-3 text-slate-400">สูงสุด ${limit} ppm</td>
-                        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded text-[9px] font-semibold ${isPass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${isPass ? 'Normal' : 'Exceeded'}</span></td>
-                    </tr>
-                `;
-            });
-
-            const elecTbody = document.getElementById('modal-elec-tbody');
-            elecTbody.innerHTML = "";
-            asset.electrical.forEach(test => {
-                elecTbody.innerHTML += `
-                    <tr class="hover:bg-slate-700/20">
-                        <td class="py-2 px-3 font-semibold text-slate-300">${test.name}</td>
-                        <td class="py-2 px-3 font-mono text-slate-200">${test.value}</td>
-                        <td class="py-2 px-3 text-slate-400">${test.criteria}</td>
-                        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded text-[9px] font-semibold ${test.pass ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">${test.pass ? 'Pass' : 'Failed'}</span></td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('test-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('test-modal').classList.add('hidden');
-        }
-
-        function initDgaDropdown(selectId) {
-            const select = document.getElementById(selectId);
-            populateSortedDropdown(select);
-            if (selectId === 'dga-device-select') onDgaDeviceChange();
-        }
-
-        function onDgaDeviceChange() {
-            const selectedId = document.getElementById('dga-device-select').value;
-            const asset = assetsData.find(a => a.id === selectedId);
-            if (!asset) return;
-
-            const container = document.getElementById('gas-values-container');
-            container.innerHTML = "";
-            Object.keys(asset.gases).forEach(gas => {
-                container.innerHTML += `
-                    <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-700">
-                        <div class="text-[9px] text-slate-400 uppercase font-bold">${gas}</div>
-                        <div class="text-sm sm:text-base font-mono font-bold text-white mt-1">${asset.gases[gas]} <span class="text-[9px] font-normal text-slate-400">ppm</span></div>
-                    </div>
-                `;
-            });
-
-            runDetailedDgaCalculations(asset.gases);
-        }
-
-        function runDetailedDgaCalculations(g) {
-            let totalTri = g.ch4 + g.c2h4 + g.c2h2;
-            let p_ch4 = totalTri > 0 ? (g.ch4 / totalTri) : 0.33;
-            let p_c2h4 = totalTri > 0 ? (g.c2h4 / totalTri) : 0.33;
-            let p_c2h2 = totalTri > 0 ? (g.c2h2 / totalTri) : 0.34;
-
-            document.getElementById('duval-p-ch4').innerText = (p_ch4 * 100).toFixed(1) + '%';
-            document.getElementById('duval-p-c2h4').innerText = (p_c2h4 * 100).toFixed(1) + '%';
-            document.getElementById('duval-p-c2h2').innerText = (p_c2h2 * 100).toFixed(1) + '%';
-
-            let duvalZone = "Zone S (Normal Thermal Behaviour)";
-            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing)";
-            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C)";
-            document.getElementById('res-duval-detail').innerText = duvalZone;
-            drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
-
-            let r1 = g.c2h2 / g.ch4;
-            let r2 = g.ch4 / g.h2;
-            let r3 = g.c2h4 / g.c2h6;
-            let r4 = g.c2h6 / g.c2h2;
-
-            document.getElementById('rogers-r1').innerText = r1.toFixed(2);
-            document.getElementById('rogers-r2').innerText = r2.toFixed(2);
-            document.getElementById('rogers-r3').innerText = r3.toFixed(2);
-            document.getElementById('rogers-r4').innerText = r4.toFixed(2);
-
-            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD)" : "Normal Operation";
-            document.getElementById('iec-i1').innerText = r1.toFixed(2);
-            document.getElementById('iec-i2').innerText = r3.toFixed(2);
-            document.getElementById('iec-i5').innerText = r2.toFixed(2);
-            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing" : "Normal Condition";
-
-            document.getElementById('doern-r1').innerText = r2.toFixed(2);
-            document.getElementById('doern-r2').innerText = (g.c2h2 / (g.c2h4 || 1)).toFixed(2);
-            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked";
-
-            let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
-            document.getElementById('keygas-name').innerText = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
-            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "Severe Arcing / Sparking" : "Normal operating range";
-
-            let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
-            document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
-            document.getElementById('res-tdcg-detail').innerText = tdcg > 1920 ? "Condition 4 (Excessive Deterioration)" : "Condition 1 (Normal)";
-        }
-
-        function drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2) {
-            const canvas = document.getElementById('duvalCanvas');
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const A = { x: 110, y: 15 };
-            const B = { x: 205, y: 185 };
-            const C = { x: 15, y: 185 };
-
-            ctx.strokeStyle = '#f97316';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.lineTo(C.x, C.y);
-            ctx.closePath();
-            ctx.fillStyle = '#0f172a';
-            ctx.fill();
-            ctx.stroke();
-
-            let px = p_c2h4 * A.x + p_c2h2 * B.x + p_ch4 * C.x;
-            let py = p_c2h4 * A.y + p_c2h2 * B.y + p_ch4 * C.y;
-
-            ctx.fillStyle = '#ef4444';
-            ctx.beginPath();
-            ctx.arc(px, py, 5, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
+            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
         }
 
         // Initial Load
