@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Detailed DGA with Meanings)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Pro RCM with PDF Report Export)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,18 +28,25 @@
     </script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media print {
+            body { background: white !important; color: black !important; }
+            header, nav, footer, button, .no-print { display: none !important; }
+            .print-container { background: white !important; color: black !important; border: none !important; box-shadow: none !important; }
+        }
+    </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="bg-industrial-dark border-b border-industrial-700/50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg">
+    <header class="bg-industrial-dark border-b border-industrial-700/50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg no-print">
         <div class="flex items-center space-x-3">
             <div class="bg-industrial-600 p-2.5 rounded-lg text-white shadow-md shadow-industrial-600/30">
                 <i class="fa-solid fa-industry text-xl"></i>
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module with Report Export)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4 self-end sm:self-center">
@@ -50,14 +57,14 @@
     </header>
 
     <!-- Navigation Tabs -->
-    <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto">
+    <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto no-print">
         <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
             <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-file-pen"></i>
-            <span>บันทึกผลทดสอบ & ดูไฟล์แนบ</span>
+            <span>บันทึกผลทดสอบ & พิมพ์รายงาน</span>
         </button>
         <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
@@ -65,7 +72,7 @@
         </button>
         <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
-            <span>วิเคราะห์ DGA (6 วิธีมีคำอธิบาย)</span>
+            <span>วิเคราะห์ DGA (6 วิธี)</span>
         </button>
     </nav>
 
@@ -140,12 +147,12 @@
             </div>
         </div>
 
-        <!-- TAB 2: PRO DATA ENTRY -->
+        <!-- TAB 2: PRO DATA ENTRY & EXPORT REPORT -->
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ</h2>
-                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมตรวจสอบไฟล์รายงานแล็บและรูปถ่ายความเสียหายย้อนหลังได้ทันที</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและพิมพ์รายงานวิศวกรรม (Export RCM Report)</h2>
+                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมสั่งพิมพ์รายงานสรุปผลวิเคราะห์ของอุปกรณ์เป็น PDF ได้ทันที</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -153,15 +160,23 @@
                 </div>
             </div>
 
+            <!-- Current Status Summary & Export Button -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์ปัจจุบัน</h3>
-                    <div class="space-y-3 text-xs">
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
-                        <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะ</h3>
+                            <button onclick="printCurrentDeviceReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
+                                <i class="fa-solid fa-file-pdf"></i><span>พิมพ์รายงาน PDF</span>
+                            </button>
+                        </div>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
+                            <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
+                            <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
+                            <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
+                            <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
+                        </div>
                     </div>
 
                     <div class="pt-3 border-t border-slate-700 space-y-2">
@@ -187,6 +202,7 @@
                 </div>
             </div>
 
+            <!-- Form Container -->
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
@@ -280,11 +296,11 @@
             </div>
         </div>
 
-        <!-- TAB 4: DETAILED DGA CALCULATOR WITH CLEAR MEANING CARDS -->
+        <!-- TAB 4: DGA CALCULATOR -->
         <div id="tab-dga-calc" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก พร้อมคำอธิบายความหมาย (Detailed DGA Analysis)</h2>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก พร้อมคำอธิบายความหมาย</h2>
                     <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ผ่าน 6 วิธี พร้อมคำแปลความหมายทางวิศวกรรมไฟฟ้า</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
@@ -298,7 +314,6 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container"></div>
             </div>
 
-            <!-- 6 Methods Grid with Enhanced Meaning Explanation Cards -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Method 1: Duval -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
@@ -714,6 +729,11 @@
             asset.photoFileName = `Inspection_${asset.id}.jpg`;
             onAnalysisDeviceChange();
             alert(`จำลองการแนบไฟล์สำหรับ ${asset.id} สำเร็จ!`);
+        }
+
+        // Print Current Device Report (PDF Export)
+        function printCurrentDeviceReport() {
+            window.print();
         }
 
         function renderTable() {
