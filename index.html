@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (FMEA & RPN Calculation)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Detailed Rationale)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -68,7 +68,7 @@
     <!-- Main Container -->
     <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
-        <!-- TAB 1: PM SCHEDULE (DEFAULT VIEW) -->
+        <!-- TAB 1: PM SCHEDULE -->
         <section id="tab-pm-schedule" class="space-y-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
@@ -144,54 +144,52 @@
             </div>
         </section>
 
-        <!-- TAB 2: FMEA & RPN CALCULATION TABLE -->
+        <!-- TAB 2: FMEA & RPN CALCULATION -->
         <section id="tab-fmea-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA และคำนวณค่า RPN (Failure Mode and Effects Analysis)</h2>
-                    <p class="text-xs text-slate-400">ประเมินความรุนแรง (S), โอกาสเกิด (O) และความสามารถในการตรวจจับ (D) เพื่อคำนวณ Risk Priority Number = S × O × D</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA และคำนวณค่า RPN</h2>
+                    <p class="text-xs text-slate-400">ประเมิน S, O และ D ตามหลัก RCM เพื่อคำนวณ Risk Priority Number = S × O × D</p>
                 </div>
                 <div class="bg-industrial-900/60 border border-industrial-700 px-4 py-2 rounded-lg text-xs text-industrial-300">
-                    <i class="fa-solid fa-circle-info mr-1"></i> สูตรคำนวณ: <b>RPN = S × O × D</b>
+                    <i class="fa-solid fa-circle-info mr-1"></i> สูตร: <b>RPN = S × O × D</b>
                 </div>
             </div>
 
-            <!-- FMEA Interactive Calculator Bar -->
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg space-y-4">
-                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-2"></i> จำลองการคำนวณค่า RPN รายการความเสียหาย</h3>
+                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-2"></i> จำลองการคำนวณค่า RPN</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
                     <div>
-                        <label class="block text-slate-400 mb-1">เลือกโหมดความเสียหาย (Failure Mode):</label>
+                        <label class="block text-slate-400 mb-1">โหมดความเสียหาย:</label>
                         <select id="fmea-mode-select" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-industrial-500">
                             <option value="Transformer - Winding Insulation Breakdown">1. หม้อแปลง: ฉนวนขดลวดเสื่อมสภาพ/ลัดวงจร</option>
-                            <option value="Transformer - Bushing Tracking / Flashover">2. หม้อแปลง: บูชชิ่งเกิดรอย Tracking / Flashover</option>
+                            <option value="Transformer - Bushing Flashover">2. หม้อแปลง: บูชชิ่งเกิดรอย Tracking / Flashover</option>
                             <option value="GIS - SF6 Gas Leakage">3. GIS: ก๊าซ SF6 รั่วไหลต่ำกว่าเกณฑ์</option>
-                            <option value="GIS - Disconnector Contact Resistance High">4. GIS: หน้าสัมผัส Disconnector ความต้านทานสูง</option>
+                            <option value="GIS - Disconnector Contact Resistance High">4. GIS: หน้าสัมผัสความต้านทานสูง</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">ความรุนแรง S (Severity: 1-10):</label>
+                        <label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label>
                         <input type="number" id="input-s" min="1" max="10" value="8" oninput="calculateFmeaRpn()" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">โอกาสเกิด O (Occurrence: 1-10):</label>
+                        <label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label>
                         <input type="number" id="input-o" min="1" max="10" value="4" oninput="calculateFmeaRpn()" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">การตรวจจับ D (Detection: 1-10):</label>
+                        <label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label>
                         <input type="number" id="input-d" min="1" max="10" value="3" oninput="calculateFmeaRpn()" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-200 w-full font-mono font-bold focus:outline-none focus:border-industrial-500">
                     </div>
                 </div>
                 <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 flex justify-between items-center">
-                    <span class="text-xs text-slate-300">ผลลัพธ์ค่า RPN ที่คำนวณได้: <b id="calc-rpn-result" class="text-lg font-mono text-industrial-400 ml-2">96</b></span>
-                    <span id="calc-rpn-badge" class="px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">ระดับปานกลาง (Medium Risk)</span>
+                    <span class="text-xs text-slate-300">ผลลัพธ์ RPN: <b id="calc-rpn-result" class="text-lg font-mono text-industrial-400 ml-2">96</b></span>
+                    <span id="calc-rpn-badge" class="px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">ระดับปานกลาง</span>
                 </div>
             </div>
 
-            <!-- FMEA Master Table -->
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
                 <div class="p-4 bg-slate-900/70 border-b border-slate-700">
-                    <h3 class="text-sm font-bold text-white uppercase"><i class="fa-solid fa-list-check mr-2"></i> ตารางวิเคราะห์ FMEA หลัก (มาตรฐานอุตสาหกรรมหม้อแปลงและ GIS)</h3>
+                    <h3 class="text-sm font-bold text-white uppercase"><i class="fa-solid fa-list-check mr-2"></i> ตารางวิเคราะห์ FMEA หลัก</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs min-w-[900px]">
@@ -208,15 +206,13 @@
                                 <th class="py-3 px-3">Recommended Action</th>
                             </tr>
                         </thead>
-                        <tbody id="fmea-table-body" class="divide-y divide-slate-700/50">
-                            <!-- Injected by JS -->
-                        </tbody>
+                        <tbody id="fmea-table-body" class="divide-y divide-slate-700/50"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- TAB 3: DETAILED DGA CALCULATOR (6 METHODS + TRIANGLE) -->
+        <!-- TAB 3: DGA CALCULATOR -->
         <section id="tab-dga-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -225,20 +221,17 @@
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
-                    <select id="dga-device-select" onchange="onDgaDeviceChange()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
-                    </select>
+                    <select id="dga-device-select" onchange="onDgaDeviceChange()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64"></select>
                 </div>
             </div>
 
-            <!-- Gas Input Values Grid -->
             <div class="bg-slate-800 rounded-xl p-4 sm:p-5 border border-slate-700 shadow-lg">
                 <h3 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask mr-2"></i> ค่าก๊าซละลายปัจจุบันในน้ำมัน (ppm)</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container"></div>
             </div>
 
-            <!-- Detailed 6 Methods Section -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Method 1: Duval Triangle -->
+                <!-- Method 1: Duval -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -247,24 +240,14 @@
                         </div>
                         <span class="text-xs text-slate-400">สัดส่วน CH4 / C2H4 / C2H2</span>
                     </div>
-                    
                     <div class="flex flex-col sm:flex-row items-center gap-4 bg-slate-900/60 p-4 rounded-xl border border-slate-700">
                         <div class="relative flex justify-center shrink-0">
                             <canvas id="duvalCanvas" width="220" height="200" class="bg-slate-900 rounded-lg border border-slate-700 shadow-inner"></canvas>
                         </div>
                         <div class="space-y-2 text-xs w-full">
-                            <div class="flex justify-between border-b border-slate-800 pb-1">
-                                <span class="text-slate-400">เปอร์เซ็นต์ CH4:</span>
-                                <span id="duval-p-ch4" class="font-mono font-bold text-slate-200">0%</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-800 pb-1">
-                                <span class="text-slate-400">เปอร์เซ็นต์ C2H4:</span>
-                                <span id="duval-p-c2h4" class="font-mono font-bold text-slate-200">0%</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-800 pb-1">
-                                <span class="text-slate-400">เปอร์เซ็นต์ C2H2:</span>
-                                <span id="duval-p-c2h2" class="font-mono font-bold text-slate-200">0%</span>
-                            </div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">CH4:</span><span id="duval-p-ch4" class="font-mono font-bold text-slate-200">0%</span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">C2H4:</span><span id="duval-p-c2h4" class="font-mono font-bold text-slate-200">0%</span></div>
+                            <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">C2H2:</span><span id="duval-p-c2h2" class="font-mono font-bold text-slate-200">0%</span></div>
                             <div class="pt-1">
                                 <span class="text-slate-400 block mb-1">ผลประเมินโซน:</span>
                                 <div id="res-duval-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2 rounded border border-industrial-800">-</div>
@@ -273,7 +256,7 @@
                     </div>
                 </div>
 
-                <!-- Method 2: Rogers Ratio -->
+                <!-- Method 2: Rogers -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
@@ -284,56 +267,35 @@
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">C2H2 / CH4 (Ratio 1):</span>
-                                <span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span>
-                            </div>
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">CH4 / H2 (Ratio 2):</span>
-                                <span id="rogers-r2" class="font-mono font-bold text-white text-sm">-</span>
-                            </div>
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">C2H4 / C2H6 (Ratio 3):</span>
-                                <span id="rogers-r3" class="font-mono font-bold text-white text-sm">-</span>
-                            </div>
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">C2H6 / C2H2 (Ratio 4):</span>
-                                <span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span>
-                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H2 / CH4:</span><span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">CH4 / H2:</span><span id="rogers-r2" class="font-mono font-bold text-white text-sm">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H4 / C2H6:</span><span id="rogers-r3" class="font-mono font-bold text-white text-sm">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H6 / C2H2:</span><span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">การแปลผลความผิดปกติ:</span>
+                            <span class="text-slate-400 block mb-1">การแปลผล:</span>
                             <div id="res-rogers-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Method 3: IEC 3-Ratio -->
+                <!-- Method 3: IEC -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
                             <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 3</span>
-                            <h4 class="font-bold text-white text-sm mt-1">IEC 3-Ratio Method (IEC Standard)</h4>
+                            <h4 class="font-bold text-white text-sm mt-1">IEC 3-Ratio Method</h4>
                         </div>
                         <span class="text-xs text-slate-400">รหัสอัตราส่วน I1, I2, I5</span>
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="grid grid-cols-3 gap-2 text-center">
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">Ratio i1 (C2H2/CH4)</span>
-                                <span id="iec-i1" class="font-mono font-bold text-white">-</span>
-                            </div>
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">Ratio i2 (C2H4/C2H6)</span>
-                                <span id="iec-i2" class="font-mono font-bold text-white">-</span>
-                            </div>
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">Ratio i5 (CH4/H2)</span>
-                                <span id="iec-i5" class="font-mono font-bold text-white">-</span>
-                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Ratio i1</span><span id="iec-i1" class="font-mono font-bold text-white">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Ratio i2</span><span id="iec-i2" class="font-mono font-bold text-white">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Ratio i5</span><span id="iec-i5" class="font-mono font-bold text-white">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC & การวินิจฉัย:</span>
+                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC:</span>
                             <div id="res-iec-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
                         </div>
                     </div>
@@ -344,23 +306,17 @@
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
                             <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 4</span>
-                            <h4 class="font-bold text-white text-sm mt-1">Doernenburg Ratio Method (IEEE C57.104)</h4>
+                            <h4 class="font-bold text-white text-sm mt-1">Doernenburg Ratio Method</h4>
                         </div>
-                        <span class="text-xs text-slate-400">ตรวจสอบความเข้มข้นขั้นต่ำ</span>
+                        <span class="text-xs text-slate-400">IEEE C57.104</span>
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">CH4 / H2:</span>
-                                <span id="doern-r1" class="font-mono font-bold text-white">-</span>
-                            </div>
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700">
-                                <span class="text-slate-400 block text-[10px]">C2H2 / C2H4:</span>
-                                <span id="doern-r2" class="font-mono font-bold text-white">-</span>
-                            </div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">CH4 / H2:</span><span id="doern-r1" class="font-mono font-bold text-white">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H2 / C2H4:</span><span id="doern-r2" class="font-mono font-bold text-white">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">ผลการประเมิน Doernenburg:</span>
+                            <span class="text-slate-400 block mb-1">ผลประเมิน:</span>
                             <div id="res-doern-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
                         </div>
                     </div>
@@ -371,38 +327,38 @@
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
                             <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 5</span>
-                            <h4 class="font-bold text-white text-sm mt-1">Key Gas Method (IEEE / IEC Standard)</h4>
+                            <h4 class="font-bold text-white text-sm mt-1">Key Gas Method</h4>
                         </div>
-                        <span class="text-xs text-slate-400">วิเคราะห์ก๊าซเด่นชี้บ่งปัญหา</span>
+                        <span class="text-xs text-slate-400">IEEE / IEC</span>
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="flex justify-between items-center bg-slate-800 p-3 rounded border border-slate-700">
-                            <span class="text-slate-300">ก๊าซที่มีความเข้มข้นเด่นที่สุด (Key Gas):</span>
+                            <span class="text-slate-300">ก๊าซเด่น (Key Gas):</span>
                             <span id="keygas-name" class="font-mono font-bold text-amber-400 text-sm">-</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหาในหม้อแปลง:</span>
+                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหา:</span>
                             <div id="res-keygas-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Method 6: TDCG & IEEE Condition -->
+                <!-- Method 6: TDCG -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <div>
                             <span class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded font-bold">วิธีที่ 6</span>
-                            <h4 class="font-bold text-white text-sm mt-1">TDCG & IEEE Condition Criteria (IEEE C57.104)</h4>
+                            <h4 class="font-bold text-white text-sm mt-1">TDCG & IEEE Condition Criteria</h4>
                         </div>
-                        <span class="text-xs text-slate-400">ผลรวมก๊าซติดไฟได้ (Total Combustible Gas)</span>
+                        <span class="text-xs text-slate-400">IEEE C57.104</span>
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="flex justify-between items-center bg-slate-800 p-3 rounded border border-slate-700">
-                            <span class="text-slate-300">ปริมาณ TDCG รวมทั้งหมด:</span>
+                            <span class="text-slate-300">TDCG รวม:</span>
                             <span id="tdcg-total-val" class="font-mono font-bold text-white text-sm">- ppm</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง (Condition 1 - 4):</span>
+                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง:</span>
                             <div id="res-tdcg-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
                         </div>
                     </div>
@@ -412,7 +368,7 @@
 
     </main>
 
-    <!-- DETAILED TEST POPUP MODAL -->
+    <!-- DETAILED TEST POPUP MODAL WITH ENGINEERING RATIONALE -->
     <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
@@ -431,6 +387,12 @@
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
+                <!-- NEW: Engineering Diagnosis Rationale Box -->
+                <div class="bg-industrial-950/80 border border-industrial-600/40 p-4 rounded-xl space-y-2">
+                    <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรมและการประเมิน (Engineering Diagnosis Rationale)</h4>
+                    <p id="modal-rationale-text" class="text-xs text-slate-300 leading-relaxed">กำลังประมวลผลที่มาของการวิเคราะห์...</p>
+                </div>
+
                 <div>
                     <h4 class="text-xs sm:text-sm font-bold text-industrial-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-vial mr-2"></i> ผลวิเคราะห์ก๊าซละลายในน้ำมันและเกณฑ์มาตรฐาน</h4>
                     <div class="border border-slate-700 rounded-xl overflow-x-auto">
@@ -542,14 +504,11 @@
 
         assetsData.sort((a, b) => b.rpn - a.rpn);
 
-        // FMEA Master Data
         const fmeaData = [
-            { asset: "Transformer", mode: "Winding Insulation Breakdown", effect: "Short circuit, catastrophic failure, substation blackout", cause: "Thermal aging, moisture, high electrical stress", s: 9, o: 3, d: 4, action: "Perform DGA monthly, Tan Delta & SFRA testing" },
-            { asset: "Transformer", mode: "Bushing Flashover / Tracking", effect: "External arc, oil leakage, bushing explosion", cause: "Pollution, surface contamination, micro-cracks", s: 8, o: 4, d: 3, action: "Thermographic scanning (IR), cleaning & porcelain inspection" },
-            { asset: "Transformer", mode: "Tap Changer Mechanism Jam", effect: "Voltage regulation failure, abnormal circulating currents", cause: "Mechanical wear, motor drive failure, lubrication loss", s: 6, o: 5, d: 4, action: "OLTC dynamic resistance test and motor drive overhaul" },
-            { asset: "GIS", mode: "SF6 Gas Pressure Loss / Leakage", effect: "Loss of dielectric strength, internal flashover risk", cause: "O-ring degradation, flange gasket failure, valve leak", s: 9, o: 2, d: 2, action: "Continuous density monitor calibration and gas replenishment" },
-            { asset: "GIS", mode: "Disconnector Contact Resistance High", effect: "Local overheating, thermal runaway at main bus", cause: "Contact erosion, misalignment, oxidation", s: 7, o: 4, d: 5, action: "Micro-ohmmeter contact resistance measurement annually" },
-            { asset: "GIS", mode: "Circuit Breaker Slow Operating Time", effect: "Failure to clear fault within critical clearing time", cause: "Spring mechanism wear, low hydraulic pressure, coil fault", s: 8, o: 3, d: 3, action: "Travel curve analysis and timing test during shutdown PM" }
+            { asset: "Transformer", mode: "Winding Insulation Breakdown", effect: "Short circuit, catastrophic failure", cause: "Thermal aging, moisture", s: 9, o: 3, d: 4, action: "Perform DGA monthly & Tan Delta" },
+            { asset: "Transformer", mode: "Bushing Flashover", effect: "External arc, explosion", cause: "Pollution, micro-cracks", s: 8, o: 4, d: 3, action: "Thermographic scanning & cleaning" },
+            { asset: "GIS", mode: "SF6 Gas Pressure Loss", effect: "Loss of dielectric strength", cause: "Gasket failure, valve leak", s: 9, o: 2, d: 2, action: "Density monitor calibration & refill" },
+            { asset: "GIS", mode: "Contact Resistance High", effect: "Local overheating at busbar", cause: "Contact erosion, oxidation", s: 7, o: 4, d: 5, action: "Micro-ohmmeter measurement" }
         ];
 
         document.getElementById('stat-normal').innerText = statCounts.normal;
@@ -643,10 +602,7 @@
             tbody.innerHTML = "";
             fmeaData.forEach(item => {
                 const rpn = item.s * item.o * item.d;
-                let rpnBadge = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                if (rpn >= 150) rpnBadge = "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold";
-                else if (rpn >= 80) rpnBadge = "bg-amber-500/10 text-amber-400 border-amber-500/30 font-bold";
-
+                let rpnBadge = rpn >= 150 ? "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold" : "bg-amber-500/10 text-amber-400 border-amber-500/30 font-bold";
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-700/20">
                         <td class="py-3 px-3 font-semibold text-white">${item.asset}</td>
@@ -656,7 +612,7 @@
                         <td class="py-3 px-3 text-center font-mono">${item.s}</td>
                         <td class="py-3 px-3 text-center font-mono">${item.o}</td>
                         <td class="py-3 px-3 text-center font-mono">${item.d}</td>
-                        <td class="py-3 px-3 text-center"><span class="px-2.5 py-1 rounded border ${rpnBadge}">${rpn}</span></td>
+                        <td class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded border ${rpnBadge}">${rpn}</span></td>
                         <td class="py-3 px-3 text-slate-300 text-xs">${item.action}</td>
                     </tr>
                 `;
@@ -668,21 +624,13 @@
             const o = parseInt(document.getElementById('input-o').value) || 0;
             const d = parseInt(document.getElementById('input-d').value) || 0;
             const rpn = s * o * d;
-
             document.getElementById('calc-rpn-result').innerText = rpn;
             const badge = document.getElementById('calc-rpn-badge');
-            if (rpn >= 150) {
-                badge.className = "px-3 py-1 rounded text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30";
-                badge.innerText = "ระดับสูงมาก - ต้องแก้ไขเร่งด่วน (High Risk)";
-            } else if (rpn >= 80) {
-                badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30";
-                badge.innerText = "ระดับปานกลาง - ควรเฝ้าระวัง (Medium Risk)";
-            } else {
-                badge.className = "px-3 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
-                badge.innerText = "ระดับต่ำ - อยู่ในเกณฑ์ยอมรับได้ (Low Risk)";
-            }
+            if (rpn >= 150) { badge.className = "px-3 py-1 rounded text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30"; badge.innerText = "ระดับสูงมาก - ต้องแก้ไขเร่งด่วน"; }
+            else { badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30"; badge.innerText = "ระดับปานกลาง - ควรเฝ้าระวัง"; }
         }
 
+        // Open Modal with Engineering Rationale
         function openModal(id) {
             const asset = assetsData.find(a => a.id === id);
             if (!asset) return;
@@ -690,10 +638,23 @@
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
             document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
+            // Generate Engineering Rationale text based on status
+            let rationale = "";
+            let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
+            
+            if (asset.status === "Critical") {
+                rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกจัดอยู่ในสถานะ <span class="text-rose-400 font-bold">วิกฤต (Critical)</span> เนื่องจากผลตรวจวัดก๊าซละลาย (DGA) พบก๊าซอะเซทิลีน (C2H2 = ${asset.gases.c2h2} ppm) และเอทิลีน (C2H4 = ${asset.gases.c2h4} ppm) สูงเกินขีดจำกัดมาตรฐานสากล (IEEE C57.104) ค่า TDCG รวมสูงถึง ${tdcgVal} ppm ซึ่งเข้าข่าย <span class="text-rose-400 font-bold">Condition 4 (Excessive Deterioration)</span> บ่งชี้ถึงความผิดประเภทอาร์กิงแรงดันสูง (Arcing) หรือความร้อนสูงผิดปกติภายในตัวอุปกรณ์ ร่วมกับผลทดสอบทางไฟฟ้าที่ไม่ผ่านเกณฑ์มาตรฐาน ค่า RPN ถูกคำนวณไว้สูงถึง <b>${asset.rpn}</b> จำเป็นต้องวางแผนเข้าทำ Corrective Maintenance ทันที`;
+            } else if (asset.status === "Warning") {
+                rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกจัดอยู่ในสถานะ <span class="text-amber-400 font-bold">เฝ้าระวัง (Warning)</span> เนื่องจากตรวจพบอัตราการเพิ่มขึ้นของก๊าซไฮโดรเจน (H2 = ${asset.gases.h2} ppm) และมีค่า TDCG รวมอยู่ที่ ${tdcgVal} ppm ซึ่งอยู่ใน <span class="text-amber-400 font-bold">Condition 2 หรือ 3</span> บ่งชี้ถึงแนวโน้มการเสื่อมสภาพทางความร้อนหรือ Partial Discharge เล็กน้อย ค่า RPN อยู่ที่ <b>${asset.rpn}</b> แนะนำให้เพิ่มความถี่ในการเก็บตัวอย่างน้ำมันตรวจวิเคราะห์ (Gas Sampling) ทุก 3 เดือน`;
+            } else {
+                rationale = `อุปกรณ์ <b>${asset.id}</b> มีสถานะการทำงาน <span class="text-emerald-400 font-bold">ปกติ (Normal)</span> ค่าก๊าซละลายทั้งหมดอยู่ในเกณฑ์จำกัดเริ่มต้น TDCG รวม (${tdcgVal} ppm) อยู่ใน <span class="text-emerald-400 font-bold">Condition 1</span> ผลทดสอบทางไฟฟ้าผ่านทุกหัวข้อ ค่า RPN อยู่ในเกณฑ์ต่ำปลอดภัย (<b>${asset.rpn}</b>) ดำเนินการทำ PM ตามวาระรอบปกติ`;
+            }
+            document.getElementById('modal-rationale-text').innerHTML = rationale;
+
+            // DGA Table
             const dgaTbody = document.getElementById('modal-dga-tbody');
             dgaTbody.innerHTML = "";
             const limits = { h2: 100, ch4: 120, c2h2: 35, c2h4: 50, c2h6: 65, co: 350, co2: 2500 };
-            
             Object.keys(asset.gases).forEach(gas => {
                 const val = asset.gases[gas];
                 const limit = limits[gas];
@@ -708,6 +669,7 @@
                 `;
             });
 
+            // Electrical Table
             const elecTbody = document.getElementById('modal-elec-tbody');
             elecTbody.innerHTML = "";
             asset.electrical.forEach(test => {
@@ -772,10 +734,7 @@
 
             let duvalZone = "Zone S (Normal Thermal Behaviour)";
             if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing)";
-            else if (p_c2h2 > 0.05 && p_c2h4 > 0.20) duvalZone = "Zone D2 (Discharge of Low Energy / Sparking)";
             else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C)";
-            else if (p_c2h4 > 0.20) duvalZone = "Zone T2 (Thermal Fault 300°C - 700°C)";
-            else if (p_ch4 > 0.60) duvalZone = "Zone T1 (Thermal Fault < 300°C)";
             document.getElementById('res-duval-detail').innerText = duvalZone;
             drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
 
@@ -789,55 +748,33 @@
             document.getElementById('rogers-r3').innerText = r3.toFixed(2);
             document.getElementById('rogers-r4').innerText = r4.toFixed(2);
 
-            let rogersRes = "Normal Operation (No Fault Indicated)";
-            if (r2 > 1.0 && r3 < 1.0 && r4 > 1.0) rogersRes = "Partial Discharge (PD) with low energy density";
-            else if (r1 > 0.1 && r2 > 0.1 && r2 < 1.0 && r3 > 1.0) rogersRes = "Thermal Fault (300°C - 700°C)";
+            let rogersRes = "Normal Operation";
+            if (r2 > 1.0 && r3 < 1.0) rogersRes = "Partial Discharge (PD)";
             else if (r1 > 0.1 && r3 > 1.0) rogersRes = "Thermal Fault (> 700°C)";
-            else if (g.c2h2 > 35) rogersRes = "Arcing (High energy discharge)";
             document.getElementById('res-rogers-detail').innerText = rogersRes;
 
             let i1 = g.c2h2 / g.ch4;
             let i2 = g.c2h4 / g.c2h6;
             let i5 = g.ch4 / g.h2;
-
             document.getElementById('iec-i1').innerText = i1.toFixed(2);
             document.getElementById('iec-i2').innerText = i2.toFixed(2);
             document.getElementById('iec-i5').innerText = i5.toFixed(2);
-
-            let iecRes = "Normal Condition (Code: 0 0 0)";
-            if (i1 > 1.0) iecRes = "Code [1 0 0] - Discharge of High Energy (Arcing)";
-            else if (i2 > 2.0 && i5 > 1.0) iecRes = "Code [0 2 1] - Thermal Fault > 700°C";
-            else if (i5 > 1.0) iecRes = "Code [0 0 1] - Thermal Fault < 300°C";
-            document.getElementById('res-iec-detail').innerText = iecRes;
+            document.getElementById('res-iec-detail').innerText = i1 > 1.0 ? "Code [1 0 0] - High Energy Arcing" : "Normal Condition";
 
             let d1 = g.ch4 / g.h2;
             let d2 = g.c2h2 / g.c2h4;
             document.getElementById('doern-r1').innerText = d1.toFixed(2);
             document.getElementById('doern-r2').innerText = d2.toFixed(2);
-
-            let doernRes = "Normal (Within IEEE Recommended Limits)";
-            if (d1 > 1.0 && d2 < 0.5) doernRes = "Thermal Decomposition of Oil";
-            else if (d2 > 1.0) doernRes = "Arcing Fault / Sparking Discharge";
-            document.getElementById('res-doern-detail').innerText = doernRes;
+            document.getElementById('res-doern-detail').innerText = d2 > 1.0 ? "Arcing Fault / Sparking" : "Normal Limits";
 
             let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
-            let keyName = "Hydrogen (H2)";
-            let keyDesc = "Corona / Partial Discharge in oil";
-            if (maxGasVal === g.c2h2) { keyName = "Acetylene (C2H2)"; keyDesc = "Severe Arcing or High Energy Sparking"; }
-            else if (maxGasVal === g.c2h4) { keyName = "Ethylene (C2H4)"; keyDesc = "Severe Thermal Overheating (> 700°C)"; }
-            else if (maxGasVal === g.co) { keyName = "Carbon Monoxide (CO)"; keyDesc = "Cellulose Insulation Degradation (Paper/Pressboard)"; }
-            else if (maxGasVal === g.ch4) { keyName = "Methane (CH4)"; keyDesc = "Low Temperature Oil Overheating (< 300°C)"; }
-
+            let keyName = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : maxGasVal === g.c2h4 ? "Ethylene (C2H4)" : "Hydrogen (H2)";
             document.getElementById('keygas-name').innerText = keyName;
-            document.getElementById('res-keygas-detail').innerText = keyDesc;
+            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "Severe Arcing / Sparking" : "Normal operating range";
 
             let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
-
-            let tdcgCond = "Condition 1 (Normal: TDCG < 720 ppm)";
-            if (tdcg > 1920) tdcgCond = "Condition 4 (Excessive Deterioration - Immediate Action Required)";
-            else if (tdcg > 720) tdcgCond = "Condition 3 (Significant Gassing - Increase Sampling Frequency)";
-            else if (tdcg > 460) tdcgCond = "Condition 2 (Increasing Gassing Rate - Monitor Closely)";
+            let tdcgCond = tdcg > 1920 ? "Condition 4 (Excessive Deterioration)" : tdcg > 720 ? "Condition 3 (Significant)" : "Condition 1 (Normal)";
             document.getElementById('res-tdcg-detail').innerText = tdcgCond;
         }
 
@@ -853,26 +790,11 @@
             ctx.strokeStyle = '#f97316';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(A.x, A.y);
-            ctx.lineTo(B.x, B.y);
-            ctx.lineTo(C.x, C.y);
+            ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.lineTo(C.x, C.y);
             ctx.closePath();
             ctx.fillStyle = '#0f172a';
             ctx.fill();
             ctx.stroke();
-
-            ctx.strokeStyle = '#475569';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(110, 15); ctx.lineTo(110, 185);
-            ctx.moveTo(60, 100); ctx.lineTo(160, 100);
-            ctx.stroke();
-
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = '9px sans-serif';
-            ctx.fillText('CH4', A.x - 10, A.y - 5);
-            ctx.fillText('C2H4', B.x + 5, B.y + 10);
-            ctx.fillText('C2H2', C.x - 25, C.y + 10);
 
             let px = p_c2h4 * A.x + p_c2h2 * B.x + p_ch4 * C.x;
             let py = p_c2h4 * A.y + p_c2h2 * B.y + p_ch4 * C.y;
@@ -886,7 +808,6 @@
             ctx.stroke();
         }
 
-        // Initialize and Default View
         renderTable();
         switchTab('pm-schedule');
     </script>
