@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Simulated File Attachments & Preview)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Detailed DGA with Meanings)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -65,7 +65,7 @@
         </button>
         <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
-            <span>วิเคราะห์ DGA (6 วิธี)</span>
+            <span>วิเคราะห์ DGA (6 วิธีมีคำอธิบาย)</span>
         </button>
     </nav>
 
@@ -140,11 +140,11 @@
             </div>
         </div>
 
-        <!-- TAB 2: PRO DATA ENTRY & ATTACHMENT VIEWER -->
+        <!-- TAB 2: PRO DATA ENTRY -->
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ (Attachment Preview & Pro RCM)</h2>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ</h2>
                     <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมตรวจสอบไฟล์รายงานแล็บและรูปถ่ายความเสียหายย้อนหลังได้ทันที</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
@@ -153,7 +153,6 @@
                 </div>
             </div>
 
-            <!-- Current Status Summary & Attached Files Viewer -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์ปัจจุบัน</h3>
@@ -165,7 +164,6 @@
                         <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
                     </div>
 
-                    <!-- ATTACHED FILES VIEWER BOX -->
                     <div class="pt-3 border-t border-slate-700 space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-paperclip mr-1 text-industrial-400"></i> หลักฐานแนบ:</span>
@@ -173,9 +171,7 @@
                                 <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> จำลองไฟล์ตัวอย่าง
                             </button>
                         </div>
-                        <div id="attached-files-container" class="space-y-1.5 text-xs">
-                            <span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>
-                        </div>
+                        <div id="attached-files-container" class="space-y-1.5 text-xs"><span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span></div>
                     </div>
                 </div>
 
@@ -191,17 +187,14 @@
                 </div>
             </div>
 
-            <!-- Form Container -->
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
                     <button onclick="openStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 border border-industrial-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-bold shadow transition flex items-center space-x-2">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <span>ดูมาตรฐาน FMEA & RCM Compliant</span>
+                        <i class="fa-solid fa-shield-halved"></i><span>ดูมาตรฐาน FMEA & RCM Compliant</span>
                     </button>
                 </div>
 
-                <!-- 1. DGA Lab Inputs -->
                 <div>
                     <h4 class="text-xs font-bold text-white mb-2 uppercase text-slate-300"><i class="fa-solid fa-vial mr-1"></i> ค่าผลแล็บก๊าซละลาย (DGA Lab Results ในหน่วย ppm)</h4>
                     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-xs">
@@ -215,33 +208,18 @@
                     </div>
                 </div>
 
-                <!-- 2. RPN Calculation -->
                 <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 space-y-3">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> ประเมินคะแนน FMEA & RPN (ระบบคำนวณอัตโนมัติหรือปรับแก้เองได้)</h4>
-                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">เกณฑ์มาตรฐาน S, O, D (สเกล 1-10)</span>
+                        <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> ประเมินคะแนน FMEA & RPN</h4>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
-                        <div>
-                            <label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label>
-                            <input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label>
-                            <input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label>
-                            <input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">ค่า RPN รวม (S × O × D):</label>
-                            <input type="number" id="new-rpn" class="bg-slate-800 border border-industrial-500 rounded p-2 text-industrial-400 font-mono font-bold w-full" readonly>
-                        </div>
+                        <div><label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label><input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full"></div>
+                        <div><label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label><input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full"></div>
+                        <div><label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label><input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full"></div>
+                        <div><label class="block text-slate-400 mb-1">ค่า RPN รวม (S × O × D):</label><input type="number" id="new-rpn" class="bg-slate-800 border border-industrial-500 rounded p-2 text-industrial-400 font-mono font-bold w-full" readonly></div>
                     </div>
                 </div>
 
-                <!-- 3. File Attachments Upload -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
                         <label class="block font-bold text-slate-300"><i class="fa-solid fa-file-pdf mr-1 text-rose-400"></i> แนบไฟล์เอกสารผลตรวจจากห้องแล็บ (PDF / Excel):</label>
@@ -255,8 +233,7 @@
 
                 <div class="flex justify-end pt-2">
                     <button onclick="submitNewTestData()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-6 py-2.5 rounded-lg text-xs font-bold transition shadow-lg flex items-center space-x-2">
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        <span>บันทึกผลทดสอบ แนบไฟล์ & อัปเดตระบบทันที</span>
+                        <i class="fa-solid fa-floppy-disk"></i><span>บันทึกผลทดสอบ แนบไฟล์ & อัปเดตระบบทันที</span>
                     </button>
                 </div>
             </div>
@@ -303,12 +280,12 @@
             </div>
         </div>
 
-        <!-- TAB 4: DGA CALCULATOR -->
+        <!-- TAB 4: DETAILED DGA CALCULATOR WITH CLEAR MEANING CARDS -->
         <div id="tab-dga-calc" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ DGA ผ่าน 6 วิธีมาตรฐาน</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก พร้อมคำอธิบายความหมาย (Detailed DGA Analysis)</h2>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ผ่าน 6 วิธี พร้อมคำแปลความหมายทางวิศวกรรมไฟฟ้า</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -321,6 +298,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-center" id="gas-values-container"></div>
             </div>
 
+            <!-- 6 Methods Grid with Enhanced Meaning Explanation Cards -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Method 1: Duval -->
                 <div class="lg:col-span-6 bg-slate-800 rounded-xl border border-slate-700 p-5 flex flex-col justify-between shadow-lg space-y-4">
@@ -340,8 +318,8 @@
                             <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">C2H4:</span><span id="duval-p-c2h4" class="font-mono font-bold text-slate-200">0%</span></div>
                             <div class="flex justify-between border-b border-slate-800 pb-1"><span class="text-slate-400">C2H2:</span><span id="duval-p-c2h2" class="font-mono font-bold text-slate-200">0%</span></div>
                             <div class="pt-1">
-                                <span class="text-slate-400 block mb-1">ผลประเมินโซน:</span>
-                                <div id="res-duval-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2 rounded border border-industrial-800">-</div>
+                                <span class="text-slate-400 block mb-1">ผลประเมินโซน & ความหมาย:</span>
+                                <div id="res-duval-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                             </div>
                         </div>
                     </div>
@@ -364,8 +342,8 @@
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H6 / C2H2:</span><span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">การแปลผล:</span>
-                            <div id="res-rogers-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">การแปลผล & ความหมายทางวิศวกรรม:</span>
+                            <div id="res-rogers-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -386,8 +364,8 @@
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">Ratio i5</span><span id="iec-i5" class="font-mono font-bold text-white">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC:</span>
-                            <div id="res-iec-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">รหัสโค้ด IEC & ความหมาย:</span>
+                            <div id="res-iec-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -407,8 +385,8 @@
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H2 / C2H4:</span><span id="doern-r2" class="font-mono font-bold text-white">-</span></div>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">ผลประเมิน:</span>
-                            <div id="res-doern-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">ผลประเมิน & ความหมาย:</span>
+                            <div id="res-doern-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -428,8 +406,8 @@
                             <span id="keygas-name" class="font-mono font-bold text-amber-400 text-sm">-</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหา:</span>
-                            <div id="res-keygas-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">แหล่งที่มาของปัญหาและความหมาย:</span>
+                            <div id="res-keygas-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -449,8 +427,8 @@
                             <span id="tdcg-total-val" class="font-mono font-bold text-white text-sm">- ppm</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง:</span>
-                            <div id="res-tdcg-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800">-</div>
+                            <span class="text-slate-400 block mb-1">ระดับสภาพความรุนแรง & แผนปฏิบัติการ:</span>
+                            <div id="res-tdcg-detail" class="text-xs font-bold text-industrial-400 bg-industrial-950 p-2.5 rounded border border-industrial-800 leading-relaxed">-</div>
                         </div>
                     </div>
                 </div>
@@ -474,7 +452,6 @@
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-300 flex-1">
-                <!-- Severity -->
                 <div class="space-y-2">
                     <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 1. ความรุนแรง (Severity - S)</h4>
                     <div class="border border-slate-700 rounded-lg overflow-hidden">
@@ -490,7 +467,6 @@
                     </div>
                 </div>
 
-                <!-- Occurrence -->
                 <div class="space-y-2">
                     <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> 2. โอกาสเกิด (Occurrence - O)</h4>
                     <div class="border border-slate-700 rounded-lg overflow-hidden">
@@ -505,7 +481,6 @@
                     </div>
                 </div>
 
-                <!-- Detection -->
                 <div class="space-y-2">
                     <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-magnifying-glass mr-1"></i> 3. การตรวจจับ (Detection - D)</h4>
                     <div class="border border-slate-700 rounded-lg overflow-hidden">
@@ -535,9 +510,7 @@
                 <button onclick="closePreviewModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 text-center space-y-4">
-                <div id="preview-content" class="bg-slate-900 p-6 rounded-xl border border-slate-700 text-slate-300 text-sm">
-                    <!-- Dynamic Preview Content -->
-                </div>
+                <div id="preview-content" class="bg-slate-900 p-6 rounded-xl border border-slate-700 text-slate-300 text-sm"></div>
             </div>
             <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
                 <button onclick="closePreviewModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition">ปิดหน้าต่าง</button>
@@ -894,7 +867,6 @@
             document.getElementById('new-d').value = linkedFmea.d;
             document.getElementById('new-rpn').value = asset.rpn;
 
-            // Render Attachment Links with Click-to-View Preview
             const attachBox = document.getElementById('attached-files-container');
             let attachHtml = "";
             if(asset.labFileName) {
@@ -1066,9 +1038,9 @@
             document.getElementById('duval-p-c2h4').innerText = (p_c2h4 * 100).toFixed(1) + '%';
             document.getElementById('duval-p-c2h2').innerText = (p_c2h2 * 100).toFixed(1) + '%';
 
-            let duvalZone = "Zone S (Normal Thermal Behaviour)";
-            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing)";
-            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C)";
+            let duvalZone = "Zone S (Normal Thermal Behaviour - สภาพปกติ)";
+            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing - เกิดประกายไฟหรืออาร์กแรงดันสูง)";
+            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C - ความร้อนสูงผิดปกติ เกิน 700°C)";
             document.getElementById('res-duval-detail').innerText = duvalZone;
             drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
 
@@ -1082,23 +1054,25 @@
             document.getElementById('rogers-r3').innerText = r3.toFixed(2);
             document.getElementById('rogers-r4').innerText = r4.toFixed(2);
 
-            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD)" : "Normal Operation";
+            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD) - เกิดประจุบางส่วนในเนื้อฉนวน" : "Normal Operation - อัตราส่วน Rogers ปกติ";
             document.getElementById('iec-i1').innerText = r1.toFixed(2);
             document.getElementById('iec-i2').innerText = r3.toFixed(2);
             document.getElementById('iec-i5').innerText = r2.toFixed(2);
-            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing" : "Normal Condition";
+            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing (เกิดการลัดวงจรเฉพาะจุด)" : "Code [0 0 0] - Normal Condition (สถานะปกติ)";
 
             document.getElementById('doern-r1').innerText = r2.toFixed(2);
             document.getElementById('doern-r2').innerText = (g.c2h2 / (g.c2h4 || 1)).toFixed(2);
-            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked";
+            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked: อัตราส่วนอยู่ในเกณฑ์มาตรฐานความปลอดภัย";
 
             let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
-            document.getElementById('keygas-name').innerText = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
-            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "Severe Arcing / Sparking" : "Normal operating range";
+            let keyGasName = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
+            document.getElementById('keygas-name').innerText = keyGasName;
+            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "บ่งชี้ถึงการเกิดอาร์กหรือสปาร์ก (Arcing Fault)" : "ก๊าซไฮโดรเจนอยู่ในช่วงจำกัดปกติ (Normal Operation)";
 
             let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
-            document.getElementById('res-tdcg-detail').innerText = tdcg > 1920 ? "Condition 4 (Excessive Deterioration)" : "Condition 1 (Normal)";
+            let tdcgCond = tdcg > 1920 ? "Condition 4 (Excessive Deterioration - แนะนำปลดอุปกรณ์ซ่อมเร่งด่วน)" : tdcg > 720 ? "Condition 3 (Significant Gassing - เพิ่มความถี่เก็บตัวอย่างน้ำมัน)" : "Condition 1 (Normal Operation - ปลอดภัยตามเกณฑ์)";
+            document.getElementById('res-tdcg-detail').innerText = tdcgCond;
         }
 
         function drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2) {
