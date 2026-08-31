@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Unique DGA & RCM Analysis)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Optimized Data Entry & Manual/Auto RPN)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -56,8 +56,8 @@
             <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
-            <i class="fa-solid fa-microchip"></i>
-            <span>วิเคราะห์รายอุปกรณ์ & กรอกผลทดสอบใหม่</span>
+            <i class="fa-solid fa-file-pen"></i>
+            <span>บันทึกผลทดสอบรอบใหม่รายอุปกรณ์</span>
         </button>
         <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
@@ -116,7 +116,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
-                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปต่ำอย่างถูกต้องแม่นยำ</p>
+                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปผ่านการคำนวณอัตโนมัติและปรับแก้ได้</p>
                 </div>
                 <div class="w-full sm:w-auto">
                     <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ตำแหน่ง..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
@@ -148,12 +148,12 @@
             </div>
         </section>
 
-        <!-- TAB 2: INDIVIDUAL DEVICE ANALYSIS -->
+        <!-- TAB 2: DEDICATED NEW TEST DATA ENTRY & RPN OVERRIDE -->
         <section id="tab-device-analysis" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">วิเคราะห์ผลและกรอกผลทดสอบรอบใหม่รายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ดรอปดาวน์เรียงลำดับตามรหัสอุปกรณ์อย่างถูกต้อง</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและประเมินค่า RPN รอบใหม่รายอุปกรณ์</h2>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูค่าปัจจุบัน และกรอกผลแล็บใหม่ ระบบคำนวณให้อัตโนมัติหรือท่านสามารถพิมพ์ปรับแก้คะแนนเองได้</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -161,22 +161,22 @@
                 </div>
             </div>
 
+            <!-- Current Status Quick View -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะอุปกรณ์</h3>
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สถานะปัจจุบันของอุปกรณ์</h3>
                     <div class="space-y-3 text-xs">
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ตำแหน่ง:</span><span id="ana-loc" class="text-slate-200">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN ปัจจุบัน:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
                         <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะความเสี่ยง:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-3 shadow-lg flex flex-col justify-between">
                     <div>
-                        <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-brain mr-2"></i> ผลการวิเคราะห์และเหตุผลเชิงวิศวกรรม</h3>
+                        <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรม</h3>
                         <p id="ana-rationale" class="text-xs text-slate-300 leading-relaxed bg-slate-900/80 p-4 rounded-xl border border-slate-700">-</p>
                     </div>
                     <div class="pt-3 border-t border-slate-700 text-xs text-slate-400 flex justify-between">
@@ -186,22 +186,54 @@
                 </div>
             </div>
 
-            <!-- New Test Input Form -->
-            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-lg space-y-4">
-                <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> กรอกผลทดสอบและผลแล็บ DGA รอบใหม่</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-xs">
-                    <div><label class="block text-slate-400 mb-1">H2 (ppm)</label><input type="number" id="new-h2" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">CH4 (ppm)</label><input type="number" id="new-ch4" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">C2H2 (ppm)</label><input type="number" id="new-c2h2" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">C2H4 (ppm)</label><input type="number" id="new-c2h4" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">C2H6 (ppm)</label><input type="number" id="new-c2h6" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">CO (ppm)</label><input type="number" id="new-co" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
-                    <div><label class="block text-slate-400 mb-1">CO2 (ppm)</label><input type="number" id="new-co2" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+            <!-- Dedicated Pure Data Entry & RPN Manual/Auto Override Form -->
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
+                <div class="border-b border-slate-700 pb-3 flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยงรอบใหม่</h3>
+                    <span class="text-[11px] text-slate-400">สามารถให้ระบบคำนวณอัตโนมัติ หรือพิมพ์แก้ไขคะแนน S, O, D, RPN เองได้</span>
                 </div>
-                <div class="flex justify-end pt-3">
-                    <button onclick="submitNewTestData()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-2">
+
+                <!-- DGA Lab Inputs -->
+                <div>
+                    <h4 class="text-xs font-bold text-white mb-2 uppercase text-slate-300"><i class="fa-solid fa-vial mr-1"></i> ค่าผลแล็บก๊าซละลาย (DGA Lab Resultsในหน่วย ppm)</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 text-xs">
+                        <div><label class="block text-slate-400 mb-1">H2 (ppm)</label><input type="number" id="new-h2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">CH4 (ppm)</label><input type="number" id="new-ch4" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">C2H2 (ppm)</label><input type="number" id="new-c2h2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">C2H4 (ppm)</label><input type="number" id="new-c2h4" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">C2H6 (ppm)</label><input type="number" id="new-c2h6" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">CO (ppm)</label><input type="number" id="new-co" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                        <div><label class="block text-slate-400 mb-1">CO2 (ppm)</label><input type="number" id="new-co2" oninput="autoCalculateRpn()" class="bg-slate-900 border border-slate-700 rounded p-2 text-white w-full font-mono"></div>
+                    </div>
+                </div>
+
+                <!-- RPN Calculation & Manual Override Inputs -->
+                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 space-y-3">
+                    <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-calculator mr-1"></i> การประเมินคะแนนความเสี่ยง FMEA & RPN (ระบบคำนวณอัตโนมัติ / แก้ไขเองได้)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+                        <div>
+                            <label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label>
+                            <input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label>
+                            <input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label>
+                            <input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">ค่า RPN รวม (S × O × D):</label>
+                            <input type="number" id="new-rpn" class="bg-slate-800 border border-industrial-500 rounded p-2 text-industrial-400 font-mono font-bold w-full" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button onclick="submitNewTestData()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-6 py-2.5 rounded-lg text-xs font-bold transition shadow-lg flex items-center space-x-2">
                         <i class="fa-solid fa-floppy-disk"></i>
-                        <span>บันทึกผลทดสอบใหม่ & ประเมินผล RPN อัตโนมัติ</span>
+                        <span>บันทึกผลทดสอบรอบใหม่ & อัปเดตระบบทันที</span>
                     </button>
                 </div>
             </div>
@@ -212,7 +244,7 @@
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ดรอปดาวน์กรองรหัสอุปกรณ์เรียงตามลำดับถูกต้อง</p>
+                    <p class="text-xs text-slate-400">ตรวจสอบโหมดความเสียหายและคะแนน RPN อัปเดตตามผลทดสอบล่าสุด</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-xs text-slate-300 whitespace-nowrap">กรองตามอุปกรณ์:</label>
@@ -248,12 +280,12 @@
             </div>
         </section>
 
-        <!-- TAB 4: UNIQUE DGA CALCULATOR -->
+        <!-- TAB 4: DGA CALCULATOR -->
         <section id="tab-dga-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
-                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ DGA ผ่าน 6 วิธี ที่มีค่าเฉพาะตัวไม่ซ้ำกันในแต่ละตัว</p>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ DGA ผ่าน 6 วิธีมาตรฐาน</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -481,7 +513,6 @@
         const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
         let statCounts = { normal: 0, warning: 0, critical: 0 };
 
-        // Generate 40 items: TR-01 to TR-25, GIS-01 to GIS-15 with Unique DGA Gas values per asset
         for (let i = 1; i <= 40; i++) {
             const isTransformer = i <= 25;
             const prefix = isTransformer ? "TR" : "GIS";
@@ -511,38 +542,13 @@
             }
             rpn = s * o * d;
 
-            // Unique random gas values per asset based on its severity tier to avoid identical outputs
             let gases;
             if (status === "Critical") {
-                gases = { 
-                    h2: Math.floor(Math.random() * 150) + 120, 
-                    ch4: Math.floor(Math.random() * 120) + 90, 
-                    c2h2: Math.floor(Math.random() * 80) + 45, 
-                    c2h4: Math.floor(Math.random() * 100) + 80, 
-                    c2h6: Math.floor(Math.random() * 70) + 50, 
-                    co: Math.floor(Math.random() * 300) + 350, 
-                    co2: Math.floor(Math.random() * 1500) + 2000 
-                };
+                gases = { h2: 180, ch4: 160, c2h2: 95, c2h4: 140, c2h6: 90, co: 500, co2: 2800 };
             } else if (status === "Warning") {
-                gases = { 
-                    h2: Math.floor(Math.random() * 50) + 50, 
-                    ch4: Math.floor(Math.random() * 40) + 40, 
-                    c2h2: Math.floor(Math.random() * 15) + 10, 
-                    c2h4: Math.floor(Math.random() * 30) + 30, 
-                    c2h6: Math.floor(Math.random() * 25) + 25, 
-                    co: Math.floor(Math.random() * 100) + 150, 
-                    co2: Math.floor(Math.random() * 800) + 1200 
-                };
+                gases = { h2: 75, ch4: 65, c2h2: 20, c2h4: 45, c2h6: 35, co: 220, co2: 1600 };
             } else {
-                gases = { 
-                    h2: Math.floor(Math.random() * 30) + 5, 
-                    ch4: Math.floor(Math.random() * 20) + 5, 
-                    c2h2: Math.floor(Math.random() * 4), 
-                    c2h4: Math.floor(Math.random() * 15) + 2, 
-                    c2h6: Math.floor(Math.random() * 15) + 3, 
-                    co: Math.floor(Math.random() * 60) + 30, 
-                    co2: Math.floor(Math.random() * 400) + 300 
-                };
+                gases = { h2: 25, ch4: 15, c2h2: 2, c2h4: 10, c2h6: 12, co: 80, co2: 600 };
             }
 
             let electrical = isTransformer ? [
@@ -576,7 +582,6 @@
             });
         }
 
-        // Strictly sort PM Table by RPN Descending (Highest risk first)
         assetsData.sort((a, b) => b.rpn - a.rpn);
         fmeaData.sort((a, b) => (b.s * b.o * b.d) - (a.s * a.o * a.d));
 
@@ -735,7 +740,6 @@
 
             document.getElementById('ana-id').innerText = asset.id;
             document.getElementById('ana-type').innerText = asset.type;
-            document.getElementById('ana-loc').innerText = asset.location;
             document.getElementById('ana-hi').innerText = asset.healthIndex + '%';
             document.getElementById('ana-rpn').innerText = asset.rpn;
             const st = document.getElementById('ana-status');
@@ -749,6 +753,7 @@
             
             document.getElementById('ana-rationale').innerHTML = `อุปกรณ์ <b>${asset.id}</b> วิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> คะแนนความเสี่ยง S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} ส่งผลให้ได้ค่า RPN = <b>${asset.rpn}</b> ตรวจวัดก๊าซ TDCG รวมเท่ากับ ${tdcg} ppm`;
 
+            // Populate pure data entry fields
             document.getElementById('new-h2').value = asset.gases.h2;
             document.getElementById('new-ch4').value = asset.gases.ch4;
             document.getElementById('new-c2h2').value = asset.gases.c2h2;
@@ -756,6 +761,38 @@
             document.getElementById('new-c2h6').value = asset.gases.c2h6;
             document.getElementById('new-co').value = asset.gases.co;
             document.getElementById('new-co2').value = asset.gases.co2;
+
+            document.getElementById('new-s').value = linkedFmea.s;
+            document.getElementById('new-o').value = linkedFmea.o;
+            document.getElementById('new-d').value = linkedFmea.d;
+            document.getElementById('new-rpn').value = asset.rpn;
+        }
+
+        // Auto calculate RPN when gases change or allow manual override
+        function autoCalculateRpn() {
+            const h2 = parseInt(document.getElementById('new-h2').value) || 0;
+            const c2h2 = parseInt(document.getElementById('new-c2h2').value) || 0;
+            let tdcg = h2 + c2h2 + 100; // Simulated accumulation
+
+            let sField = document.getElementById('new-s');
+            let oField = document.getElementById('new-o');
+            let dField = document.getElementById('new-d');
+
+            if (tdcg > 1200 || c2h2 > 50) {
+                sField.value = 9; oField.value = 8; dField.value = 6;
+            } else if (tdcg > 400) {
+                sField.value = 7; oField.value = 5; dField.value = 4;
+            } else {
+                sField.value = 4; oField.value = 2; dField.value = 2;
+            }
+            manualCalculateRpn();
+        }
+
+        function manualCalculateRpn() {
+            const s = parseInt(document.getElementById('new-s').value) || 0;
+            const o = parseInt(document.getElementById('new-o').value) || 0;
+            const d = parseInt(document.getElementById('new-d').value) || 0;
+            document.getElementById('new-rpn').value = s * o * d;
         }
 
         function submitNewTestData() {
@@ -771,27 +808,29 @@
             asset.gases.co = parseInt(document.getElementById('new-co').value) || 0;
             asset.gases.co2 = parseInt(document.getElementById('new-co2').value) || 0;
 
-            let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             const fmeaItem = fmeaData.find(f => f.assetId === asset.id);
-
-            if (tdcg > 1500 || asset.gases.c2h2 > 50) {
-                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5; 
-                if(fmeaItem) { fmeaItem.s = 9; fmeaItem.o = 8; fmeaItem.d = 6; }
-            } else if (tdcg > 500 || asset.gases.h2 > 60) {
-                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2; 
-                if(fmeaItem) { fmeaItem.s = 7; fmeaItem.o = 5; fmeaItem.d = 4; }
-            } else {
-                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0; 
-                if(fmeaItem) { fmeaItem.s = 4; fmeaItem.o = 2; fmeaItem.d = 2; }
+            if(fmeaItem) {
+                fmeaItem.s = parseInt(document.getElementById('new-s').value) || 5;
+                fmeaItem.o = parseInt(document.getElementById('new-o').value) || 3;
+                fmeaItem.d = parseInt(document.getElementById('new-d').value) || 3;
             }
-            asset.rpn = fmeaItem.s * fmeaItem.o * fmeaItem.d;
+
+            asset.rpn = parseInt(document.getElementById('new-rpn').value) || (fmeaItem.s * fmeaItem.o * fmeaItem.d);
+
+            if (asset.rpn >= 300) {
+                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5;
+            } else if (asset.rpn >= 100) {
+                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2;
+            } else {
+                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0;
+            }
 
             assetsData.sort((a, b) => b.rpn - a.rpn);
             filteredData = [...assetsData];
             renderTable();
             renderFmeaTable();
             onAnalysisDeviceChange();
-            alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตตาราง PM และจัดเรียงลำดับใหม่เรียบร้อยแล้ว`);
+            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
         }
 
         function openModal(id) {
@@ -804,7 +843,7 @@
             const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะความเสี่ยงปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
+            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
             document.getElementById('modal-rationale-text').innerHTML = rationale;
 
             const dgaTbody = document.getElementById('modal-dga-tbody');
