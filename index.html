@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Professional RCM System)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (CEHI & Professional RCM)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -46,7 +46,7 @@
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (CIGRE CEHI & FMEA Integrated)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4 self-end sm:self-center">
@@ -60,7 +60,7 @@
     <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto no-print">
         <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
-            <span>ตาราง PM (เรียงตาม RPN)</span>
+            <span>ตาราง PM & CEHI (เรียงตาม RPN)</span>
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-file-pen"></i>
@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <!-- TAB 1: PM SCHEDULE -->
+        <!-- TAB 1: PM SCHEDULE WITH CEHI -->
         <div id="tab-pm-schedule" class="tab-content space-y-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
@@ -121,8 +121,8 @@
 
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
-                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปต่ำอย่างถูกต้องแม่นยำ</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule & CEHI)</h2>
+                    <p class="text-xs text-slate-400">ประเมินสุขภาวะอุปกรณ์ผ่านดัชนี CIGRE CEHI และจัดเรียงตามค่า RPN</p>
                 </div>
                 <div class="w-full sm:w-auto">
                     <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ตำแหน่ง..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
@@ -131,13 +131,13 @@
 
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm min-w-[700px]">
+                    <table class="w-full text-left border-collapse text-sm min-w-[750px]">
                         <thead>
                             <tr class="bg-slate-900/70 text-slate-400 uppercase text-xs tracking-wider border-b border-slate-700">
                                 <th class="py-3.5 px-4 font-semibold">รหัสอุปกรณ์</th>
                                 <th class="py-3.5 px-4 font-semibold">ประเภท</th>
                                 <th class="py-3.5 px-4 font-semibold">ตำแหน่ง</th>
-                                <th class="py-3.5 px-4 font-semibold">HEALTH INDEX</th>
+                                <th class="py-3.5 px-4 font-semibold">CEHI Index</th>
                                 <th class="py-3.5 px-4 font-semibold text-industrial-400">ค่า RPN</th>
                                 <th class="py-3.5 px-4 font-semibold">PM รอบถัดไป</th>
                                 <th class="py-3.5 px-4 font-semibold">สถานะ</th>
@@ -173,7 +173,7 @@
                     <div class="space-y-3 text-xs">
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ประเภท:</span><span id="ana-type" class="text-slate-200">-</span></div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Health Index:</span><span id="ana-hi" class="font-bold">-</span></div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า CEHI Index:</span><span id="ana-cehi" class="font-bold text-emerald-400">-</span></div>
                         <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">ค่า RPN:</span><span id="ana-rpn" class="font-bold text-industrial-400">-</span></div>
                         <div class="flex justify-between pb-1"><span class="text-slate-400">สถานะ:</span><span id="ana-status" class="px-2 py-0.5 rounded font-bold">-</span></div>
                     </div>
@@ -191,7 +191,7 @@
 
                 <div class="lg:col-span-2 bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-3 shadow-lg flex flex-col justify-between">
                     <div>
-                        <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรม</h3>
+                        <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรม & CEHI Assessment</h3>
                         <p id="ana-rationale" class="text-xs text-slate-300 leading-relaxed bg-slate-900/80 p-4 rounded-xl border border-slate-700">-</p>
                     </div>
                     <div class="pt-3 border-t border-slate-700 text-xs text-slate-400 flex justify-between">
@@ -203,9 +203,9 @@
 
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและคำนวณ CEHI / RPN อัตโนมัติ</h3>
                     <button onclick="openStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 border border-industrial-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-bold shadow transition flex items-center space-x-2">
-                        <i class="fa-solid fa-shield-halved"></i><span>ดูมาตรฐาน FMEA & RCM Compliant</span>
+                        <i class="fa-solid fa-shield-halved"></i><span>ดูมาตรฐาน FMEA & CIGRE CEHI</span>
                     </button>
                 </div>
 
@@ -457,7 +457,7 @@
                 <div class="flex items-center space-x-3">
                     <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30"><i class="fa-solid fa-shield-halved text-lg"></i></div>
                     <div>
-                        <h3 class="font-bold text-white text-sm sm:text-base">คู่มือเกณฑ์มาตรฐาน FMEA & RCM (Severity, Occurrence, Detection)</h3>
+                        <h3 class="font-bold text-white text-sm sm:text-base">คู่มือเกณฑ์มาตรฐาน FMEA & CIGRE CEHI</h3>
                         <p class="text-xs text-slate-400">อ้างอิงตามมาตรฐานสากลสำหรับการประเมินค่าความเสี่ยงอุปกรณ์ไฟฟ้า</p>
                     </div>
                 </div>
@@ -481,31 +481,8 @@
                 </div>
 
                 <div class="space-y-2">
-                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> 2. โอกาสเกิด (Occurrence - O)</h4>
-                    <div class="border border-slate-700 rounded-lg overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">ความถี่และความน่าจะเป็นในการเกิดความเสียหาย</th></tr></thead>
-                            <tbody class="divide-y divide-slate-700/50">
-                                <tr><td class="p-2.5 text-center font-bold text-rose-400">8 - 10</td><td class="p-2.5">สูงมาก: เกิดขึ้นต่อเนื่องประจำทุกเดือน หรืออุปกรณ์อายุการใช้งานเกินพิกัด</td></tr>
-                                <tr><td class="p-2.5 text-center font-bold text-amber-400">4 - 7</td><td class="p-2.5">ปานกลาง: เกิดขึ้นเป็นครั้งคราวในรอบปี หรือพบความผิดปกติจากการทำ PM ล่าสุด</td></tr>
-                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">ต่ำมาก: แทบไม่เคยเกิดขึ้น (< 1 ครั้งในรอบ 5-10 ปี) อุปกรณ์ใหม่หรือเกรดสูง</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-magnifying-glass mr-1"></i> 3. การตรวจจับ (Detection - D)</h4>
-                    <div class="border border-slate-700 rounded-lg overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">ประสิทธิภาพของระบบตรวจวัดก่อนลุกลาม</th></tr></thead>
-                            <tbody class="divide-y divide-slate-700/50">
-                                <tr><td class="p-2.5 text-center font-bold text-rose-400">8 - 10</td><td class="p-2.5">ยากมาก / ตรวจไม่พบ: ความเสียหายเกิดขึ้นฉับพลันโดยไม่มีสัญญาณเตือนล่วงหน้า</td></tr>
-                                <tr><td class="p-2.5 text-center font-bold text-amber-400">4 - 7</td><td class="p-2.5">ปานกลาง: ตรวจพบได้จากการตรวจวัดประจำปี หรือค่า DGA เริ่มสูงขึ้น</td></tr>
-                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">สูงมาก: มีระบบ Online Monitoring / SCADA แจ้งเตือนความผิดปกติทันที</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> 2. ดัชนีสุขภาวะ CIGRE CEHI (Combined Electrical & Health Index)</h4>
+                    <p class="text-slate-400 leading-relaxed">ประเมินจากผลทดสอบความเป็นฉนวน (Tan Delta, Insulation Resistance) ร่วมกับก๊าซละลายในน้ำมัน (DGA) โดยให้คะแนน 0 - 100% ยิ่งสูงยิ่งปกติ หากต่ำกว่า 50% จัดอยู่ในเกณฑ์วิกฤต (Critical Replacement)</p>
                 </div>
             </div>
 
@@ -547,7 +524,7 @@
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
                 <div class="bg-industrial-950/80 border border-industrial-600/40 p-4 rounded-xl space-y-2">
-                    <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรมและการประเมิน (Engineering Diagnosis Rationale)</h4>
+                    <h4 class="text-xs font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-brain mr-2"></i> บทวิเคราะห์เหตุผลเชิงวิศวกรรมและการประเมิน (CIGRE CEHI & FMEA)</h4>
                     <p id="modal-rationale-text" class="text-xs text-slate-300 leading-relaxed">กำลังประมวลผลที่มาของการวิเคราะห์...</p>
                 </div>
 
@@ -601,21 +578,21 @@
             const code = `${prefix}-${numStr}`;
             const type = isTransformer ? "Transformer" : "GIS";
             
-            let healthIndex, status, statusClass, rpn, s, o, d;
+            let cehi, status, statusClass, rpn, s, o, d;
             if (i <= 6) {
-                healthIndex = (Math.random() * 14 + 60).toFixed(1);
+                cehi = (Math.random() * 15 + 40).toFixed(1); // 40-55% (Critical)
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
                 s = 9; o = 8; d = 6;
                 statCounts.critical++;
             } else if (i <= 18) {
-                healthIndex = (Math.random() * 10 + 75).toFixed(1);
+                cehi = (Math.random() * 15 + 60).toFixed(1); // 60-75% (Warning)
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
                 s = 7; o = 5; d = 4;
                 statCounts.warning++;
             } else {
-                healthIndex = (Math.random() * 15 + 85).toFixed(1);
+                cehi = (Math.random() * 14 + 85).toFixed(1); // 85-99% (Normal)
                 status = "Normal";
                 statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
                 s = 4; o = 2; d = 2;
@@ -647,7 +624,7 @@
 
             assetsData.push({
                 id: code, type: type, location: locations[Math.floor(Math.random() * locations.length)],
-                healthIndex: parseFloat(healthIndex), rpn: rpn,
+                cehi: parseFloat(cehi), rpn: rpn,
                 lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
                 status: status, statusClass: statusClass, gases: gases, electrical: electrical,
@@ -705,7 +682,7 @@
             document.getElementById('preview-title').innerText = `ตัวอย่างไฟล์: ${filename}`;
             const content = document.getElementById('preview-content');
             if(type === 'pdf') {
-                content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-file-pdf text-rose-500 text-4xl"></i><p class="font-bold">รายงานผลตรวจวิเคราะห์ห้องแล็บ (DGA & Electrical Lab Report)</p><p class="text-xs text-slate-400">สถานะ: อนุมัติโดยหัวหน้าฝ่ายวิศวกรรม</p><div class="bg-slate-950 p-3 rounded border border-slate-800 text-left font-mono text-xs text-emerald-400">[Lab Verified Report] Status: Normal / Exceeded</div></div>`;
+                content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-file-pdf text-rose-500 text-4xl"></i><p class="font-bold">รายงานผลตรวจวิเคราะห์ห้องแล็บ (DGA & Electrical Lab Report)</p><p class="text-xs text-slate-400">สถานะ: อนุมัติโดยหัวหน้าฝ่ายวิศวกรรม</p><div class="bg-slate-950 p-3 rounded border border-slate-800 text-left font-mono text-xs text-emerald-400">[Lab Verified Report] CEHI & DGA Analyzed</div></div>`;
             } else {
                 content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-image text-emerald-400 text-4xl"></i><p class="font-bold">ภาพถ่ายจุดความเสียหาย (Thermal Scan / Visual Inspection)</p><div class="bg-industrial-900/40 p-4 rounded-xl border border-industrial-600/50 text-industrial-300 text-xs">📸 [บันทึกภาพถ่ายหน้างาน]: ตรวจสอบสภาพขั้วต่อและฉนวนปกติ</div></div>`;
             }
@@ -726,14 +703,14 @@
         // --- EXPORT HUB FUNCTIONS ---
         function downloadExcelCsv() {
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            csvContent += "รหัสอุปกรณ์,ประเภท,สถานีไฟฟ้า (Location),Health Index (%),ค่า RPN,PM รอบถัดไป,สถานะความเสี่ยง\n";
+            csvContent += "รหัสอุปกรณ์,ประเภท,สถานีไฟฟ้า (Location),CEHI Index (%),ค่า RPN,PM รอบถัดไป,สถานะความเสี่ยง\n";
             assetsData.forEach(row => {
-                csvContent += `"${row.id}","${row.type}","${row.location}",${row.healthIndex},${row.rpn},"${row.nextPm}","${row.status}"\n`;
+                csvContent += `"${row.id}","${row.type}","${row.location}",${row.cehi},${row.rpn},"${row.nextPm}","${row.status}"\n`;
             });
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "RCM_Master_PM_Schedule_40_Assets.csv");
+            link.setAttribute("download", "RCM_Master_PM_Schedule_CEHI.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -744,11 +721,11 @@
         }
 
         function downloadJsonData() {
-            const exportBundle = { system: "RCM Transformer & GIS", totalAssets: assetsData.length, assets: assetsData, fmea: fmeaData, exportDate: new Date().toISOString() };
+            const exportBundle = { system: "RCM Transformer & GIS with CEHI", totalAssets: assetsData.length, assets: assetsData, fmea: fmeaData, exportDate: new Date().toISOString() };
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportBundle, null, 2));
             const link = document.createElement("a");
             link.setAttribute("href", dataStr);
-            link.setAttribute("download", "RCM_Full_System_Backup.json");
+            link.setAttribute("download", "RCM_CEHI_Full_Backup.json");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -768,7 +745,7 @@
                     <td class="py-3 px-4 font-semibold text-white">${item.id}</td>
                     <td class="py-3 px-4"><span class="px-2 py-0.5 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700">${item.type}</span></td>
                     <td class="py-3 px-4 text-slate-300 text-xs">${item.location}</td>
-                    <td class="py-3 px-4"><span class="font-bold ${item.healthIndex < 75 ? 'text-rose-400' : item.healthIndex < 85 ? 'text-amber-400' : 'text-emerald-400'}">${item.healthIndex}%</span></td>
+                    <td class="py-3 px-4"><span class="font-bold ${item.cehi < 55 ? 'text-rose-400' : item.cehi < 75 ? 'text-amber-400' : 'text-emerald-400'}">${item.cehi}%</span></td>
                     <td class="py-3 px-4 font-mono font-bold text-industrial-400">${item.rpn}</td>
                     <td class="py-3 px-4 text-slate-200 text-xs">${item.nextPm}</td>
                     <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${item.statusClass}">${item.status}</span></td>
@@ -814,7 +791,7 @@
             sortedAssets.forEach(asset => {
                 const opt = document.createElement('option');
                 opt.value = asset.id;
-                opt.innerText = `${asset.id} (${asset.type}) - RPN:${asset.rpn}`;
+                opt.innerText = `${asset.id} (${asset.type}) - CEHI:${asset.cehi}% - RPN:${asset.rpn}`;
                 selectElement.appendChild(opt);
             });
         }
@@ -879,7 +856,7 @@
 
             document.getElementById('ana-id').innerText = asset.id;
             document.getElementById('ana-type').innerText = asset.type;
-            document.getElementById('ana-hi').innerText = asset.healthIndex + '%';
+            document.getElementById('ana-cehi').innerText = asset.cehi + '%';
             document.getElementById('ana-rpn').innerText = asset.rpn;
             const st = document.getElementById('ana-status');
             st.innerText = asset.status;
@@ -890,7 +867,7 @@
             const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
             let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            document.getElementById('ana-rationale').innerHTML = `อุปกรณ์ <b>${asset.id}</b> วิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> คะแนนความเสี่ยง S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} ส่งผลให้ได้ค่า RPN = <b>${asset.rpn}</b> ตรวจวัดก๊าซ TDCG รวมเท่ากับ ${tdcg} ppm`;
+            document.getElementById('ana-rationale').innerHTML = `อุปกรณ์ <b>${asset.id}</b> มีค่าสุขภาวะ <b>CEHI = ${asset.cehi}%</b> วิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcg} ppm`;
 
             document.getElementById('new-h2').value = asset.gases.h2;
             document.getElementById('new-ch4').value = asset.gases.ch4;
@@ -965,11 +942,11 @@
             asset.rpn = parseInt(document.getElementById('new-rpn').value) || (fmeaItem.s * fmeaItem.o * fmeaItem.d);
 
             if (asset.rpn >= 300) {
-                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5;
+                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.cehi = 45.0;
             } else if (asset.rpn >= 100) {
-                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2;
+                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.cehi = 68.5;
             } else {
-                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0;
+                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.cehi = 92.4;
             }
 
             const labFile = document.getElementById('lab-file-upload').files[0];
@@ -983,7 +960,7 @@
             renderFmeaTable();
             onAnalysisDeviceChange();
 
-            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
+            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตค่า CEHI ของอุปกรณ์ ${asset.id} สำเร็จ!`);
         }
 
         function openModal(id) {
@@ -991,12 +968,12 @@
             if (!asset) return;
 
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
-            document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
+            document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | CEHI Index: ${asset.cehi}% | RPN: ${asset.rpn}`;
 
             const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
+            let rationale = `อุปกรณ์ <b>${asset.id}</b> มีค่าสุขภาวะ <b>CEHI = ${asset.cehi}%</b> วิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
             
             if(asset.labFileName || asset.photoFileName) {
                 rationale += `<br><span class="text-industrial-300"><i class="fa-solid fa-paperclip mr-1"></i> ไฟล์แนบ: ${asset.labFileName || ''} ${asset.photoFileName || ''}</span>`;
