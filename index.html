@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (FMEA Linked to Assets)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Synchronized FMEA & RPN)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (40 อุปกรณ์)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (40 อุปกรณ์ - คะแนนสอดคล้องกันทั้งระบบ)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4 self-end sm:self-center">
@@ -207,25 +207,25 @@
             </div>
         </section>
 
-        <!-- TAB 3: FMEA LINKED TO ASSETS -->
+        <!-- TAB 3: SYNCHRONIZED FMEA TABLE -->
         <section id="tab-fmea-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ตรวจสอบว่าอุปกรณ์แต่ละตัวถูกวิเคราะห์ความเสียหาย (Failure Mode) ผ่านเกณฑ์ S, O, D และ RPN อย่างไร</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์ (คะแนนสอดคล้องกับหน้าแรก)</h2>
+                    <p class="text-xs text-slate-400">ตรวจสอบโหมดความเสียหาย คะแนน S, O, D และ RPN ของอุปกรณ์ทั้ง 40 ตัว</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-xs text-slate-300 whitespace-nowrap">กรองตามอุปกรณ์:</label>
                     <select id="fmea-filter-select" onchange="renderFmeaTable()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-48">
-                        <option value="ALL">แสดงทั้งหมด (All Assets)</option>
+                        <option value="ALL">แสดงทั้งหมด (All 40 Assets)</option>
                     </select>
                 </div>
             </div>
 
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-xl">
                 <div class="p-4 bg-slate-900/70 border-b border-slate-700 flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white uppercase"><i class="fa-solid fa-list-check mr-2"></i> รายการวิเคราะห์ FMEA และที่มาของค่าความเสี่ยง</h3>
-                    <span id="fmea-count" class="text-xs text-slate-400">ทั้งหมด 0 รายการ</span>
+                    <h3 class="text-sm font-bold text-white uppercase"><i class="fa-solid fa-list-check mr-2"></i> รายการวิเคราะห์ FMEA และคะแนนความเสี่ยง</h3>
+                    <span id="fmea-count" class="text-xs text-slate-400">ทั้งหมด 40 รายการ</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs min-w-[900px]">
@@ -477,6 +477,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         const assetsData = [];
+        const fmeaData = [];
         const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
         let statCounts = { normal: 0, warning: 0, critical: 0 };
 
@@ -486,26 +487,32 @@
             const prefix = isTransformer ? "TR" : "GIS";
             const code = `${prefix}-${String(i).padStart(2, '0')}`;
             
-            let healthIndex, status, statusClass, rpn;
+            let healthIndex, status, statusClass, rpn, s, o, d;
             if (i <= 6) {
                 healthIndex = (Math.random() * 14 + 60).toFixed(1);
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-                rpn = Math.floor(Math.random() * 200 + 800);
+                rpn = Math.floor(Math.random() * 200 + 800); // 800 - 1000
+                s = 9; o = Math.floor(Math.random() * 3 + 7); d = Math.floor(Math.random() * 3 + 3);
                 statCounts.critical++;
             } else if (i <= 18) {
                 healthIndex = (Math.random() * 10 + 75).toFixed(1);
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-                rpn = Math.floor(Math.random() * 300 + 500);
+                rpn = Math.floor(Math.random() * 300 + 500); // 500 - 799
+                s = 7; o = Math.floor(Math.random() * 3 + 4); d = Math.floor(Math.random() * 3 + 3);
                 statCounts.warning++;
             } else {
                 healthIndex = (Math.random() * 15 + 85).toFixed(1);
                 status = "Normal";
                 statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                rpn = Math.floor(Math.random() * 400 + 100);
+                rpn = Math.floor(Math.random() * 400 + 100); // 100 - 499
+                s = 5; o = Math.floor(Math.random() * 3 + 1); d = Math.floor(Math.random() * 3 + 2);
                 statCounts.normal++;
             }
+
+            // Sync RPN precisely from S * O * D
+            rpn = s * o * d;
 
             let gases;
             if (status === "Critical") {
@@ -535,32 +542,21 @@
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
                 status: status, statusClass: statusClass, gases: gases, electrical: electrical
             });
+
+            // Push corresponding FMEA item for each asset
+            fmeaData.push({
+                assetId: code,
+                type: type,
+                mode: type === 'Transformer' ? (status === 'Critical' ? "Winding Insulation Breakdown" : "Bushing Tracking / Flashover") : (status === 'Critical' ? "SF6 Gas Pressure Loss" : "Contact Resistance High"),
+                effect: status === 'Critical' ? "Catastrophic failure / Outage" : "Minor parameter deviation",
+                cause: status === 'Critical' ? "Severe thermal & electrical stress" : "Normal operation wear",
+                s: s, o: o, d: d,
+                action: type === 'Transformer' ? "Perform DGA & Tan Delta testing" : "Perform SF6 gas analysis & contact resistance check"
+            });
         }
 
         assetsData.sort((a, b) => b.rpn - a.rpn);
-
-        // FMEA Master Linked to Specific Assets
-        const fmeaData = [
-            { assetId: "TR-01", type: "Transformer", mode: "Winding Insulation Breakdown", effect: "Short circuit, catastrophic failure", cause: "Thermal aging, moisture", s: 9, o: 3, d: 4, action: "Perform DGA monthly & Tan Delta" },
-            { assetId: "TR-02", type: "Transformer", mode: "Bushing Flashover / Tracking", effect: "External arc, explosion", cause: "Pollution, micro-cracks", s: 8, o: 4, d: 3, action: "Thermographic scanning & cleaning" },
-            { assetId: "GIS-01", type: "GIS", mode: "SF6 Gas Pressure Loss / Leakage", effect: "Loss of dielectric strength", cause: "Gasket failure, valve leak", s: 9, o: 2, d: 2, action: "Density monitor calibration & refill" },
-            { assetId: "GIS-02", type: "GIS", mode: "Contact Resistance High", effect: "Local overheating at busbar", cause: "Contact erosion, oxidation", s: 7, o: 4, d: 5, action: "Micro-ohmmeter measurement" }
-        ];
-
-        // Automatically populate remaining assets into FMEA
-        assetsData.forEach((asset, idx) => {
-            if (idx >= 4) {
-                fmeaData.push({
-                    assetId: asset.id,
-                    type: asset.type,
-                    mode: asset.type === 'Transformer' ? "General Winding Wear" : "Terminal Micro-Vibration",
-                    effect: "Minor parameter drift",
-                    cause: "Normal operation stress",
-                    s: 5, o: 2, d: 3,
-                    action: "Standard periodic PM inspection"
-                });
-            }
-        });
+        fmeaData.sort((a, b) => (b.s * b.o * b.d) - (a.s * a.o * a.d));
 
         document.getElementById('stat-normal').innerText = statCounts.normal;
         document.getElementById('stat-warning').innerText = statCounts.warning;
@@ -664,8 +660,7 @@
 
             displayList.forEach(item => {
                 const rpn = item.s * item.o * item.d;
-                let rpnBadge = rpn >= 150 ? "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold" : "bg-amber-500/10 text-amber-400 border-amber-500/30 font-bold";
-                if (rpn < 80) rpnBadge = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-bold";
+                let rpnBadge = rpn >= 500 ? "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold" : rpn >= 200 ? "bg-amber-500/10 text-amber-400 border-amber-500/30 font-bold" : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-bold";
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-700/20">
@@ -714,10 +709,10 @@
             document.getElementById('ana-lastpm').innerText = asset.lastPm;
             document.getElementById('ana-nextpm').innerText = asset.nextPm;
 
-            const linkedFmea = fmeaData.find(f => f.assetId === asset.id) || fmeaData[0];
+            const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
             let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            document.getElementById('ana-rationale').innerHTML = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ผ่านตาราง FMEA ในหัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (สาเหตุจาก: ${linkedFmea.cause}) ผลประเมินความเสี่ยงได้ค่า RPN = <b>${asset.rpn}</b> (S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d}) ตรวจวัดค่าก๊าซ TDCG รวมเท่ากับ ${tdcg} ppm`;
+            document.getElementById('ana-rationale').innerHTML = `อุปกรณ์ <b>${asset.id}</b> วิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> คะแนนความเสี่ยง S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} ส่งผลให้ได้ค่า RPN = <b>${asset.rpn}</b> ตรวจวัดก๊าซ TDCG รวมเท่ากับ ${tdcg} ppm`;
 
             document.getElementById('new-h2').value = asset.gases.h2;
             document.getElementById('new-ch4').value = asset.gases.ch4;
@@ -743,18 +738,24 @@
 
             let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
+            const fmeaItem = fmeaData.find(f => f.assetId === asset.id);
+
             if (tdcg > 1500 || asset.gases.c2h2 > 50) {
                 asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5; asset.rpn = 850;
+                if(fmeaItem) { fmeaItem.s = 9; fmeaItem.o = 9; fmeaItem.d = 5; fmeaItem.rpn = 405; }
             } else if (tdcg > 500 || asset.gases.h2 > 60) {
                 asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2; asset.rpn = 620;
+                if(fmeaItem) { fmeaItem.s = 7; fmeaItem.o = 6; fmeaItem.d = 4; fmeaItem.rpn = 168; }
             } else {
                 asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0; asset.rpn = 210;
+                if(fmeaItem) { fmeaItem.s = 5; fmeaItem.o = 2; fmeaItem.d = 3; fmeaItem.rpn = 30; }
             }
 
             assetsData.sort((a, b) => b.rpn - a.rpn);
             renderTable();
+            renderFmeaTable();
             onAnalysisDeviceChange();
-            alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตค่า RPN และสถานะเรียบร้อยแล้ว`);
+            alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตตาราง PM และ FMEA เรียบร้อยแล้ว`);
         }
 
         // Modal Popup
@@ -765,10 +766,10 @@
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
             document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
-            const linkedFmea = fmeaData.find(f => f.assetId === asset.id) || fmeaData[0];
+            const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่านตาราง FMEA ในหัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (สาเหตุ: ${linkedFmea.cause}, ผลกระทบ: ${linkedFmea.effect}) ประเมินค่าความเสี่ยง RPN = <b>${asset.rpn}</b> ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm และมีค่าผลทดสอบทางไฟฟ้าอยู่ในสถานะ <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
+            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะความเสี่ยงปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
             document.getElementById('modal-rationale-text').innerHTML = rationale;
 
             const dgaTbody = document.getElementById('modal-dga-tbody');
