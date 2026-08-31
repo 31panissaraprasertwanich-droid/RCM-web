@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Attachment Viewer & Pro RCM)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Simulated File Attachments & Preview)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -144,7 +144,7 @@
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ (Attachment Viewer & Pro RCM)</h2>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและจัดการไฟล์แนบ (Attachment Preview & Pro RCM)</h2>
                     <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมตรวจสอบไฟล์รายงานแล็บและรูปถ่ายความเสียหายย้อนหลังได้ทันที</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
@@ -167,7 +167,12 @@
 
                     <!-- ATTACHED FILES VIEWER BOX -->
                     <div class="pt-3 border-t border-slate-700 space-y-2">
-                        <span class="text-xs font-bold text-slate-300 block"><i class="fa-solid fa-paperclip mr-1 text-industrial-400"></i> หลักฐานแนบปัจจุบัน:</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-paperclip mr-1 text-industrial-400"></i> หลักฐานแนบ:</span>
+                            <button onclick="simulateSampleAttachment()" class="text-[10px] bg-industrial-900 text-industrial-400 border border-industrial-700 px-2 py-0.5 rounded hover:bg-industrial-800 transition">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> จำลองไฟล์ตัวอย่าง
+                            </button>
+                        </div>
                         <div id="attached-files-container" class="space-y-1.5 text-xs">
                             <span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>
                         </div>
@@ -353,7 +358,7 @@
                     </div>
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3 text-xs">
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-800 block text-[10px]">C2H2 / CH4:</span><span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span></div>
+                            <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H2 / CH4:</span><span id="rogers-r1" class="font-mono font-bold text-white text-sm">-</span></div>
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">CH4 / H2:</span><span id="rogers-r2" class="font-mono font-bold text-white text-sm">-</span></div>
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H4 / C2H6:</span><span id="rogers-r3" class="font-mono font-bold text-white text-sm">-</span></div>
                             <div class="bg-slate-800 p-2 rounded border border-slate-700"><span class="text-slate-400 block text-[10px]">C2H6 / C2H2:</span><span id="rogers-r4" class="font-mono font-bold text-white text-sm">-</span></div>
@@ -454,7 +459,7 @@
 
     </main>
 
-    <!-- STANDARD GUIDELINE MODAL (POPUP) -->
+    <!-- STANDARD GUIDELINE MODAL -->
     <div id="standard-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
@@ -469,7 +474,7 @@
             </div>
 
             <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-300 flex-1">
-                <!-- Severity Scale -->
+                <!-- Severity -->
                 <div class="space-y-2">
                     <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 1. ความรุนแรง (Severity - S)</h4>
                     <div class="border border-slate-700 rounded-lg overflow-hidden">
@@ -477,7 +482,7 @@
                             <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">เกณฑ์การประเมินผลกระทบต่อระบบไฟฟ้า</th></tr></thead>
                             <tbody class="divide-y divide-slate-700/50">
                                 <tr><td class="p-2.5 text-center font-bold text-rose-400">9 - 10</td><td class="p-2.5">เกิดการระเบิด, ไฟไหม้, หรือไฟฟ้าดับทั้งสถานีไฟฟ้าย่อย (Catastrophic / Hazardous)</td></tr>
-                                <tr><td class="p-2.5 text-center font-bold text-amber-400">7 - 8</td><td class="p-2.5">อุปกรณ์เสียหายหนัก ต้องปลดสับC/B ฉุกเฉิน ส่งผลกระทบต่อผู้ใช้ไฟบางส่วน</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">7 - 8</td><td class="p-2.5">อุปกรณ์เสียหายหนัก ต้องปลดสับ C/B ฉุกเฉิน ส่งผลกระทบต่อผู้ใช้ไฟบางส่วน</td></tr>
                                 <tr><td class="p-2.5 text-center font-bold text-yellow-400">4 - 6</td><td class="p-2.5">เกิดความเสียหายปานกลาง สามารถซ่อมบำรุงตามแผน (Moderate / Minor Impact)</td></tr>
                                 <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">แทบไม่ส่งผลกระทบต่อการจ่ายไฟ ค่าพารามิเตอร์เบี่ยงเบนเล็กน้อย (Low / None)</td></tr>
                             </tbody>
@@ -485,7 +490,7 @@
                     </div>
                 </div>
 
-                <!-- Occurrence Scale -->
+                <!-- Occurrence -->
                 <div class="space-y-2">
                     <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> 2. โอกาสเกิด (Occurrence - O)</h4>
                     <div class="border border-slate-700 rounded-lg overflow-hidden">
@@ -500,7 +505,7 @@
                     </div>
                 </div>
 
-                <!-- Detection Scale -->
+                <!-- Detection -->
                 <div class="space-y-2">
                     <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-magnifying-glass mr-1"></i> 3. การตรวจจับ (Detection - D)</h4>
                     <div class="border border-slate-700 rounded-lg overflow-hidden">
@@ -518,6 +523,24 @@
 
             <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
                 <button onclick="closeStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-5 py-2 rounded-lg text-xs font-bold transition">เข้าใจแล้ว</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEW ATTACHMENT MODAL -->
+    <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <h3 id="preview-title" class="font-bold text-white text-sm">ตัวอย่างไฟล์แนบ</h3>
+                <button onclick="closePreviewModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 text-center space-y-4">
+                <div id="preview-content" class="bg-slate-900 p-6 rounded-xl border border-slate-700 text-slate-300 text-sm">
+                    <!-- Dynamic Preview Content -->
+                </div>
+            </div>
+            <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closePreviewModal()" class="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition">ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>
@@ -642,7 +665,8 @@
                 lastPm: `2025-10-${String((i % 28) + 1).padStart(2, '0')}`,
                 nextPm: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
                 status: status, statusClass: statusClass, gases: gases, electrical: electrical,
-                labFileName: null, photoFileName: null
+                labFileName: i === 1 ? "DGA_Lab_Report_TR-01.pdf" : null,
+                photoFileName: i === 1 ? "Thermal_Hotspot_TR-01.jpg" : null
             });
 
             fmeaData.push({
@@ -693,6 +717,30 @@
         }
         function closeStandardModal() {
             document.getElementById('standard-modal').classList.add('hidden');
+        }
+
+        function openPreviewModal(type, filename) {
+            document.getElementById('preview-title').innerText = `ตัวอย่างไฟล์: ${filename}`;
+            const content = document.getElementById('preview-content');
+            if(type === 'pdf') {
+                content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-file-pdf text-rose-500 text-4xl"></i><p class="font-bold">รายงานผลตรวจวิเคราะห์ห้องแล็บ (DGA & Electrical Lab Report)</p><p class="text-xs text-slate-400">สถานะ: อนุมัติโดยหัวหน้าฝ่ายวิศวกรรม | วันที่ตรวจ: 2026-06-15</p><div class="bg-slate-950 p-3 rounded border border-slate-800 text-left font-mono text-xs text-emerald-400">[Lab Data Verified] H2: 180ppm, C2H2: 95ppm - Status: EXCEEDED</div></div>`;
+            } else {
+                content.innerHTML = `<div class="space-y-3"><i class="fa-solid fa-image text-emerald-400 text-4xl"></i><p class="font-bold">ภาพถ่ายจุดความเสียหาย (Thermal Scan / Visual Inspection)</p><div class="bg-industrial-900/40 p-4 rounded-xl border border-industrial-600/50 text-industrial-300 text-xs">📸 [จำลองรูปภาพ]: ตรวจพบจุดความร้อน (Hotspot) บริเวณขั้วต่อบูชชิ่งเฟส A ความร้อนสูงกว่าปกติ 18.5°C</div></div>`;
+            }
+            document.getElementById('preview-modal').classList.remove('hidden');
+        }
+        function closePreviewModal() {
+            document.getElementById('preview-modal').classList.add('hidden');
+        }
+
+        function simulateSampleAttachment() {
+            const id = document.getElementById('analysis-device-select').value;
+            const asset = assetsData.find(a => a.id === id);
+            if (!asset) return;
+            asset.labFileName = `Lab_Report_${asset.id}.pdf`;
+            asset.photoFileName = `Inspection_${asset.id}.jpg`;
+            onAnalysisDeviceChange();
+            alert(`จำลองการแนบไฟล์สำหรับ ${asset.id} สำเร็จ!`);
         }
 
         function renderTable() {
@@ -846,14 +894,14 @@
             document.getElementById('new-d').value = linkedFmea.d;
             document.getElementById('new-rpn').value = asset.rpn;
 
-            // Render Attachment Links if exist
+            // Render Attachment Links with Click-to-View Preview
             const attachBox = document.getElementById('attached-files-container');
             let attachHtml = "";
             if(asset.labFileName) {
-                attachHtml += `<div class="text-rose-400"><i class="fa-solid fa-file-pdf mr-1"></i> <a href="#" onclick="alert('เปิดดูไฟล์: ${asset.labFileName}')" class="underline hover:text-rose-300">${asset.labFileName}</a></div>`;
+                attachHtml += `<div class="text-rose-400"><i class="fa-solid fa-file-pdf mr-1"></i> <a href="#" onclick="openPreviewModal('pdf', '${asset.labFileName}')" class="underline hover:text-rose-300 font-medium">${asset.labFileName}</a></div>`;
             }
             if(asset.photoFileName) {
-                attachHtml += `<div class="text-emerald-400"><i class="fa-solid fa-image mr-1"></i> <a href="#" onclick="alert('เปิดดูรูปภาพ: ${asset.photoFileName}')" class="underline hover:text-emerald-300">${asset.photoFileName}</a></div>`;
+                attachHtml += `<div class="text-emerald-400"><i class="fa-solid fa-image mr-1"></i> <a href="#" onclick="openPreviewModal('img', '${asset.photoFileName}')" class="underline hover:text-emerald-300 font-medium">${asset.photoFileName}</a></div>`;
             }
             attachBox.innerHTML = attachHtml || `<span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>`;
         }
@@ -941,7 +989,7 @@
             let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
             
             if(asset.labFileName || asset.photoFileName) {
-                rationale += `<br><span class="text-industrial-300"><i class="fa-solid fa-paperclip mr-1"></i> มีไฟล์แนบ: ${asset.labFileName || ''} ${asset.photoFileName || ''}</span>`;
+                rationale += `<br><span class="text-industrial-300"><i class="fa-solid fa-paperclip mr-1"></i> ไฟล์แนบ: ${asset.labFileName || ''} ${asset.photoFileName || ''}</span>`;
             }
 
             document.getElementById('modal-rationale-text').innerHTML = rationale;
