@@ -28,6 +28,8 @@
     </script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js สำหรับดาวน์โหลดเป็น PDF อัตโนมัติ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @media print {
             body { background: white !important; color: black !important; }
@@ -77,7 +79,7 @@
     </nav>
 
     <!-- Main Container -->
-    <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
+    <main id="pdf-export-container" class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
         <!-- GLOBAL EXPORT HUB BAR -->
         <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 no-print">
@@ -89,7 +91,7 @@
                 <button onclick="downloadExcelCsv()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
                     <i class="fa-solid fa-file-excel"></i><span>ดาวน์โหลด Excel/CSV</span>
                 </button>
-                <button onclick="printNativePdf()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
+                <button onclick="downloadPdfFile()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
                     <i class="fa-solid fa-file-pdf"></i><span>บันทึกเป็น PDF</span>
                 </button>
                 <button onclick="downloadJsonData()" class="bg-slate-700 hover:bg-slate-600 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
@@ -258,7 +260,7 @@
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ตรวจสอบโหมดความเสียหายและคะแนน RPN อัปเดตตามผลทดสอบล่าสุด</p>
+                    <p class="text-xs text-slate-400">ดรอปดาวน์กรองรหัสอุปกรณ์เรียงตามลำดับถูกต้อง</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-xs text-slate-300 whitespace-nowrap">กรองตามอุปกรณ์:</label>
@@ -723,7 +725,7 @@
             alert(`จำลองการแนบไฟล์สำหรับ ${asset.id} สำเร็จ!`);
         }
 
-        // --- EXPORT HUB FUNCTIONS ---
+        // --- EXPORT HUB FUNCTIONS (Using html2pdf.js for direct PDF download) ---
         function downloadExcelCsv() {
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
             csvContent += "รหัสอุปกรณ์,ประเภท,สถานีไฟฟ้า (Location),Health Index (%),ค่า RPN,PM รอบถัดไป,สถานะความเสี่ยง\n";
@@ -739,8 +741,16 @@
             document.body.removeChild(link);
         }
 
-        function printNativePdf() {
-            window.print();
+        function downloadPdfFile() {
+            const element = document.getElementById('pdf-export-container');
+            const opt = {
+                margin:       5,
+                filename:     'RCM_Management_System_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
         }
 
         function downloadJsonData() {
@@ -772,9 +782,10 @@
                     <td class="py-3 px-4 font-mono font-bold text-industrial-400">${item.rpn}</td>
                     <td class="py-3 px-4 text-slate-200 text-xs">${item.nextPm}</td>
                     <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${item.statusClass}">${item.status}</span></td>
-                    <td class="py-3 px-4 text-center no-print">
+                    <td class="py-3 px-4 text-center">
                         <button onclick="openModal('${item.id}')" class="bg-industrial-600 hover:bg-industrial-700 text-white px-2.5 py-1 rounded text-xs font-medium transition inline-flex items-center space-x-1">
-                            <i class="fa-solid fa-eye"></i><span>ผลทดสอบ</span>
+                            <i class="fa-solid fa-eye"></i>
+                            <span>ผลทดสอบ</span>
                         </button>
                     </td>
                 `;
@@ -789,6 +800,7 @@
             const totalPages = Math.ceil(filteredData.length / rowsPerPage);
             const container = document.getElementById('pagination-controls');
             container.innerHTML = "";
+
             for (let i = 1; i <= totalPages; i++) {
                 const btn = document.createElement('button');
                 btn.innerText = i;
@@ -811,6 +823,7 @@
                 if (a.type !== b.type) return a.type.localeCompare(b.type);
                 return a.id.localeCompare(b.id, undefined, {numeric: true});
             });
+
             sortedAssets.forEach(asset => {
                 const opt = document.createElement('option');
                 opt.value = asset.id;
@@ -879,6 +892,7 @@
 
             document.getElementById('ana-id').innerText = asset.id;
             document.getElementById('ana-type').innerText = asset.type;
+            document.getElementById('ana-loc').innerText = asset.location;
             document.getElementById('ana-hi').innerText = asset.healthIndex + '%';
             document.getElementById('ana-rpn').innerText = asset.rpn;
             const st = document.getElementById('ana-status');
@@ -899,47 +913,6 @@
             document.getElementById('new-c2h6').value = asset.gases.c2h6;
             document.getElementById('new-co').value = asset.gases.co;
             document.getElementById('new-co2').value = asset.gases.co2;
-
-            document.getElementById('new-s').value = linkedFmea.s;
-            document.getElementById('new-o').value = linkedFmea.o;
-            document.getElementById('new-d').value = linkedFmea.d;
-            document.getElementById('new-rpn').value = asset.rpn;
-
-            const attachBox = document.getElementById('attached-files-container');
-            let attachHtml = "";
-            if(asset.labFileName) {
-                attachHtml += `<div class="text-rose-400"><i class="fa-solid fa-file-pdf mr-1"></i> <a href="#" onclick="openPreviewModal('pdf', '${asset.labFileName}')" class="underline hover:text-rose-300 font-medium">${asset.labFileName}</a></div>`;
-            }
-            if(asset.photoFileName) {
-                attachHtml += `<div class="text-emerald-400"><i class="fa-solid fa-image mr-1"></i> <a href="#" onclick="openPreviewModal('img', '${asset.photoFileName}')" class="underline hover:text-emerald-300 font-medium">${asset.photoFileName}</a></div>`;
-            }
-            attachBox.innerHTML = attachHtml || `<span class="text-slate-500 italic">ยังไม่มีการแนบไฟล์ในรอบนี้</span>`;
-        }
-
-        function autoCalculateRpn() {
-            const h2 = parseInt(document.getElementById('new-h2').value) || 0;
-            const c2h2 = parseInt(document.getElementById('new-c2h2').value) || 0;
-            let tdcg = h2 + c2h2 + 100;
-
-            let sField = document.getElementById('new-s');
-            let oField = document.getElementById('new-o');
-            let dField = document.getElementById('new-d');
-
-            if (tdcg > 1200 || c2h2 > 50) {
-                sField.value = 9; oField.value = 8; dField.value = 6;
-            } else if (tdcg > 400) {
-                sField.value = 7; oField.value = 5; dField.value = 4;
-            } else {
-                sField.value = 4; oField.value = 2; dField.value = 2;
-            }
-            manualCalculateRpn();
-        }
-
-        function manualCalculateRpn() {
-            const s = parseInt(document.getElementById('new-s').value) || 0;
-            const o = parseInt(document.getElementById('new-o').value) || 0;
-            const d = parseInt(document.getElementById('new-d').value) || 0;
-            document.getElementById('new-rpn').value = s * o * d;
         }
 
         function submitNewTestData() {
@@ -955,37 +928,24 @@
             asset.gases.co = parseInt(document.getElementById('new-co').value) || 0;
             asset.gases.co2 = parseInt(document.getElementById('new-co2').value) || 0;
 
-            const fmeaItem = fmeaData.find(f => f.assetId === asset.id);
-            if(fmeaItem) {
-                fmeaItem.s = parseInt(document.getElementById('new-s').value) || 5;
-                fmeaItem.o = parseInt(document.getElementById('new-o').value) || 3;
-                fmeaItem.d = parseInt(document.getElementById('new-d').value) || 3;
-            }
-
-            asset.rpn = parseInt(document.getElementById('new-rpn').value) || (fmeaItem.s * fmeaItem.o * fmeaItem.d);
-
-            if (asset.rpn >= 300) {
-                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5;
-            } else if (asset.rpn >= 100) {
-                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2;
+            let tdcg = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
+            
+            if (tdcg > 1500 || asset.gases.c2h2 > 50) {
+                asset.status = "Critical"; asset.statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; asset.healthIndex = 68.5; asset.rpn = 850;
+            } else if (tdcg > 500 || asset.gases.h2 > 60) {
+                asset.status = "Warning"; asset.statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30"; asset.healthIndex = 79.2; asset.rpn = 620;
             } else {
-                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0;
+                asset.status = "Normal"; asset.statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; asset.healthIndex = 92.0; asset.rpn = 210;
             }
-
-            const labFile = document.getElementById('lab-file-upload').files[0];
-            const photoFile = document.getElementById('damage-photo-upload').files[0];
-            if(labFile) asset.labFileName = labFile.name;
-            if(photoFile) asset.photoFileName = photoFile.name;
 
             assetsData.sort((a, b) => b.rpn - a.rpn);
             filteredData = [...assetsData];
             renderTable();
-            renderFmeaTable();
             onAnalysisDeviceChange();
-
-            alert(`บันทึกผลทดสอบรอบใหม่และอัปเดตคะแนน RPN ของอุปกรณ์ ${asset.id} สำเร็จ!`);
+            alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตค่า RPN และจัดเรียงลำดับใหม่เรียบร้อยแล้ว`);
         }
 
+        // Modal Popup
         function openModal(id) {
             const asset = assetsData.find(a => a.id === id);
             if (!asset) return;
@@ -993,15 +953,10 @@
             document.getElementById('modal-title').innerText = `ผลทดสอบเชิงลึก: ${asset.id} (${asset.type})`;
             document.getElementById('modal-subtitle').innerText = `ตำแหน่ง: ${asset.location} | Health Index: ${asset.healthIndex}% | RPN: ${asset.rpn}`;
 
-            const linkedFmea = fmeaData.find(f => f.assetId === asset.id);
+            const linkedFmea = fmeaData.find(f => f.assetId === asset.id) || fmeaData[0];
             let tdcgVal = asset.gases.h2 + asset.gases.ch4 + asset.gases.c2h2 + asset.gases.c2h4 + asset.gases.c2h6 + asset.gases.co;
             
-            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA หัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (คะแนน S=${linkedFmea.s}, O=${linkedFmea.o}, D=${linkedFmea.d} -> RPN = <b>${asset.rpn}</b>) ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm สถานะปัจจุบัน: <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
-            
-            if(asset.labFileName || asset.photoFileName) {
-                rationale += `<br><span class="text-industrial-300"><i class="fa-solid fa-paperclip mr-1"></i> ไฟล์แนบ: ${asset.labFileName || ''} ${asset.photoFileName || ''}</span>`;
-            }
-
+            let rationale = `อุปกรณ์ <b>${asset.id}</b> ถูกวิเคราะห์ความเสียหายผ่าน FMEA ในหัวข้อ <span class="text-industrial-400 font-bold">${linkedFmea.mode}</span> (สาเหตุ: ${linkedFmea.cause}, ผลกระทบ: ${linkedFmea.effect}) ประเมินค่าความเสี่ยง RPN = <b>${asset.rpn}</b> ผลตรวจวัด DGA พบ TDCG รวม ${tdcgVal} ppm และมีค่าผลทดสอบทางไฟฟ้าอยู่ในสถานะ <span class="${asset.status === 'Critical' ? 'text-rose-400' : asset.status === 'Warning' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${asset.status}</span>`;
             document.getElementById('modal-rationale-text').innerHTML = rationale;
 
             const dgaTbody = document.getElementById('modal-dga-tbody');
@@ -1076,9 +1031,9 @@
             document.getElementById('duval-p-c2h4').innerText = (p_c2h4 * 100).toFixed(1) + '%';
             document.getElementById('duval-p-c2h2').innerText = (p_c2h2 * 100).toFixed(1) + '%';
 
-            let duvalZone = "Zone S (Normal Thermal Behaviour - สภาพปกติ)";
-            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing - เกิดประกายไฟหรืออาร์กแรงดันสูง)";
-            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C - ความร้อนสูงผิดปกติ เกิน 700°C)";
+            let duvalZone = "Zone S (Normal Thermal Behaviour)";
+            if (p_c2h2 > 0.20) duvalZone = "Zone D1 (Discharge of High Energy / Arcing)";
+            else if (p_c2h4 > 0.50) duvalZone = "Zone T3 (Thermal Fault > 700°C)";
             document.getElementById('res-duval-detail').innerText = duvalZone;
             drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2);
 
@@ -1092,25 +1047,23 @@
             document.getElementById('rogers-r3').innerText = r3.toFixed(2);
             document.getElementById('rogers-r4').innerText = r4.toFixed(2);
 
-            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD) - เกิดประจุบางส่วนในเนื้อฉนวน" : "Normal Operation - อัตราส่วน Rogers ปกติ";
+            document.getElementById('res-rogers-detail').innerText = r2 > 1.0 ? "Partial Discharge (PD)" : "Normal Operation";
             document.getElementById('iec-i1').innerText = r1.toFixed(2);
             document.getElementById('iec-i2').innerText = r3.toFixed(2);
             document.getElementById('iec-i5').innerText = r2.toFixed(2);
-            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing (เกิดการลัดวงจรเฉพาะจุด)" : "Code [0 0 0] - Normal Condition (สถานะปกติ)";
+            document.getElementById('res-iec-detail').innerText = r1 > 1.0 ? "Code [1 0 0] - High Energy Arcing" : "Normal Condition";
 
             document.getElementById('doern-r1').innerText = r2.toFixed(2);
             document.getElementById('doern-r2').innerText = (g.c2h2 / (g.c2h4 || 1)).toFixed(2);
-            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked: อัตราส่วนอยู่ในเกณฑ์มาตรฐานความปลอดภัย";
+            document.getElementById('res-doern-detail').innerText = "IEEE Limits Checked";
 
             let maxGasVal = Math.max(g.h2, g.ch4, g.c2h2, g.c2h4, g.co);
-            let keyGasName = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
-            document.getElementById('keygas-name').innerText = keyGasName;
-            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "บ่งชี้ถึงการเกิดอาร์กหรือสปาร์ก (Arcing Fault)" : "ก๊าซไฮโดรเจนอยู่ในช่วงจำกัดปกติ (Normal Operation)";
+            document.getElementById('keygas-name').innerText = maxGasVal === g.c2h2 ? "Acetylene (C2H2)" : "Hydrogen (H2)";
+            document.getElementById('res-keygas-detail').innerText = maxGasVal === g.c2h2 ? "Severe Arcing / Sparking" : "Normal operating range";
 
             let tdcg = g.h2 + g.ch4 + g.c2h2 + g.c2h4 + g.c2h6 + g.co;
             document.getElementById('tdcg-total-val').innerText = tdcg.toLocaleString() + ' ppm';
-            let tdcgCond = tdcg > 1920 ? "Condition 4 (Excessive Deterioration - แนะนำปลดอุปกรณ์ซ่อมเร่งด่วน)" : tdcg > 720 ? "Condition 3 (Significant Gassing - เพิ่มความถี่เก็บตัวอย่างน้ำมัน)" : "Condition 1 (Normal Operation - ปลอดภัยตามเกณฑ์)";
-            document.getElementById('res-tdcg-detail').innerText = tdcgCond;
+            document.getElementById('res-tdcg-detail').innerText = tdcg > 1920 ? "Condition 4 (Excessive Deterioration)" : "Condition 1 (Normal)";
         }
 
         function drawDuvalTriangle(p_ch4, p_c2h4, p_c2h2) {
