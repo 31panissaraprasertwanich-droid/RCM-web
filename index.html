@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Fixed Tab Switching)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Clickable FMEA Standard Modal)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -140,7 +140,7 @@
             </div>
         </div>
 
-        <!-- TAB 2: PRO DATA ENTRY WITH VISIBLE RCM BADGE -->
+        <!-- TAB 2: PRO DATA ENTRY WITH CLICKABLE STANDARD BUTTON -->
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -182,10 +182,12 @@
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
-                    <span class="bg-industrial-600/20 border border-industrial-500 text-industrial-400 text-xs px-3 py-1 rounded-full font-bold shadow-sm inline-flex items-center space-x-1.5">
+                    
+                    <!-- CLICKABLE STANDARD BUTTON -->
+                    <button onclick="openStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 border border-industrial-500 text-white text-xs px-3.5 py-1.5 rounded-lg font-bold shadow transition flex items-center space-x-2">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <span>มาตรฐาน FMEA & RCM Compliant</span>
-                    </span>
+                        <span>ดูมาตรฐาน FMEA & RCM Compliant</span>
+                    </button>
                 </div>
 
                 <!-- 1. DGA Lab Inputs -->
@@ -446,6 +448,74 @@
 
     </main>
 
+    <!-- STANDARD GUIDELINE MODAL (POPUP) -->
+    <div id="standard-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-industrial-600/20 text-industrial-500 p-2 rounded-lg border border-industrial-600/30"><i class="fa-solid fa-shield-halved text-lg"></i></div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm sm:text-base">คู่มือเกณฑ์มาตรฐาน FMEA & RCM (Severity, Occurrence, Detection)</h3>
+                        <p class="text-xs text-slate-400">อ้างอิงตามมาตรฐานสากลสำหรับการประเมินค่าความเสี่ยงอุปกรณ์ไฟฟ้า</p>
+                    </div>
+                </div>
+                <button onclick="closeStandardModal()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 text-xs text-slate-300 flex-1">
+                <!-- Severity Scale -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 1. ความรุนแรง (Severity - S)</h4>
+                    <div class="border border-slate-700 rounded-lg overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">เกณฑ์การประเมินผลกระทบต่อระบบไฟฟ้า</th></tr></thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                <tr><td class="p-2.5 text-center font-bold text-rose-400">9 - 10</td><td class="p-2.5">เกิดการระเบิด, ไฟไหม้, หรือไฟฟ้าดับทั้งสถานีไฟฟ้าย่อย (Catastrophic / Hazardous)</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">7 - 8</td><td class="p-2.5">อุปกรณ์เสียหายหนัก ต้องปลดสับC/B ฉุกเฉิน ส่งผลกระทบต่อผู้ใช้ไฟบางส่วน</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-yellow-400">4 - 6</td><td class="p-2.5">เกิดความเสียหายปานกลาง สามารถซ่อมบำรุงตามแผน (Moderate / Minor Impact)</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">แทบไม่ส่งผลกระทบต่อการจ่ายไฟ ค่าพารามิเตอร์เบี่ยงเบนเล็กน้อย (Low / None)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Occurrence Scale -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> 2. โอกาสเกิด (Occurrence - O)</h4>
+                    <div class="border border-slate-700 rounded-lg overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">ความถี่และความน่าจะเป็นในการเกิดความเสียหาย</th></tr></thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                <tr><td class="p-2.5 text-center font-bold text-rose-400">8 - 10</td><td class="p-2.5">สูงมาก: เกิดขึ้นต่อเนื่องประจำทุกเดือน หรืออุปกรณ์อายุการใช้งานเกินพิกัด</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">4 - 7</td><td class="p-2.5">ปานกลาง: เกิดขึ้นเป็นครั้งคราวในรอบปี หรือพบความผิดปกติจากการทำ PM ล่าสุด</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">ต่ำมาก: แทบไม่เคยเกิดขึ้น (< 1 ครั้งในรอบ 5-10 ปี) อุปกรณ์ใหม่หรือเกรดสูง</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detection Scale -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-industrial-400 uppercase tracking-wider text-sm"><i class="fa-solid fa-magnifying-glass mr-1"></i> 3. การตรวจจับ (Detection - D)</h4>
+                    <div class="border border-slate-700 rounded-lg overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-slate-400 uppercase"><tr><th class="p-2.5 w-12 text-center">คะแนน</th><th class="p-2.5">ประสิทธิภาพของระบบตรวจวัดก่อนลุกลาม</th></tr></thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                <tr><td class="p-2.5 text-center font-bold text-rose-400">8 - 10</td><td class="p-2.5">ยากมาก / ตรวจไม่พบ: ความเสียหายเกิดขึ้นฉับพลันโดยไม่มีสัญญาณเตือนล่วงหน้า</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-amber-400">4 - 7</td><td class="p-2.5">ปานกลาง: ตรวจพบได้จากการตรวจวัดประจำปี หรือค่า DGA เริ่มสูงขึ้น</td></tr>
+                                <tr><td class="p-2.5 text-center font-bold text-emerald-400">1 - 3</td><td class="p-2.5">สูงมาก: มีระบบ Online Monitoring / SCADA แจ้งเตือนความผิดปกติทันที</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/80 px-4 sm:px-6 py-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeStandardModal()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-5 py-2 rounded-lg text-xs font-bold transition">เข้าใจแล้ว</button>
+            </div>
+        </div>
+    </div>
+
     <!-- DETAILED TEST POPUP MODAL -->
     <div id="test-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-slate-800 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -590,20 +660,15 @@
         let filteredData = [...assetsData];
 
         function switchTab(tabId) {
-            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(el => el.classList.add('hidden'));
 
-            // Remove active style from all tab buttons
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => {
                 btn.className = "tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap";
             });
 
-            // Show selected tab content
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
-            // Set active style to selected tab button
             document.getElementById(`tab-btn-${tabId}`).className = "tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap";
 
             if (tabId === 'dga-calc') {
@@ -614,6 +679,14 @@
                 initFmeaFilter();
                 renderFmeaTable();
             }
+        }
+
+        // Standard Modal Functions
+        function openStandardModal() {
+            document.getElementById('standard-modal').classList.remove('hidden');
+        }
+        function closeStandardModal() {
+            document.getElementById('standard-modal').classList.add('hidden');
         }
 
         function renderTable() {
