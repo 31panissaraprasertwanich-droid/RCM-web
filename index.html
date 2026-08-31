@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Pro RCM with PDF Report Export)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (File Download & Export Module)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -46,7 +46,7 @@
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">RCM MANAGEMENT SYSTEM</h1>
-                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module with Report Export)</p>
+                <p class="text-xs text-industrial-400">ระบบบริหารจัดการความน่าเชื่อถือหม้อแปลงและ GIS (Professional Module with File Export)</p>
             </div>
         </div>
         <div class="flex items-center space-x-4 self-end sm:self-center">
@@ -64,11 +64,11 @@
         </button>
         <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-file-pen"></i>
-            <span>บันทึกผลทดสอบ & พิมพ์รายงาน</span>
+            <span>บันทึกผลทดสอบ & ดาวน์โหลดไฟล์</span>
         </button>
         <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
-            <span>ตาราง FMEA แยกตามอุปกรณ์</span>
+            <span>ตาราง FMEA & ดาวน์โหลด CSV</span>
         </button>
         <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
@@ -115,10 +115,13 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางแผนการซ่อมบำรุงรักษา (PM Schedule)</h2>
-                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปต่ำอย่างถูกต้องแม่นยำ</p>
+                    <p class="text-xs text-slate-400">จัดเรียงตามค่าความเสี่ยง RPN จากสูงไปต่ำ พร้อมปุ่มดาวน์โหลดรายงานภาพรวม</p>
                 </div>
-                <div class="w-full sm:w-auto">
-                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ตำแหน่ง..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-64">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <button onclick="downloadPmCsv()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-file-excel"></i><span>ดาวน์โหลด PM ทั้งหมด (CSV)</span>
+                    </button>
+                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="ค้นหารหัส หรือ ตำแหน่ง..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-56">
                 </div>
             </div>
 
@@ -147,12 +150,12 @@
             </div>
         </div>
 
-        <!-- TAB 2: PRO DATA ENTRY & EXPORT REPORT -->
+        <!-- TAB 2: PRO DATA ENTRY & DOWNLOAD -->
         <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและพิมพ์รายงานวิศวกรรม (Export RCM Report)</h2>
-                    <p class="text-xs text-slate-400">บันทึกผลแล็บพร้อมสั่งพิมพ์รายงานสรุปผลวิเคราะห์ของอุปกรณ์เป็น PDF ได้ทันที</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบ ดาวน์โหลด และพิมพ์รายงานรายอุปกรณ์</h2>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดาวน์โหลดสรุปผลวิเคราะห์เป็นไฟล์ข้อความ/JSON หรือพิมพ์รายงาน PDF</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -160,15 +163,16 @@
                 </div>
             </div>
 
-            <!-- Current Status Summary & Export Button -->
+            <!-- Current Status Summary & Download Buttons -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 space-y-4 shadow-lg flex flex-col justify-between">
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
                             <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i> สรุปสถานะ</h3>
-                            <button onclick="printCurrentDeviceReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5">
-                                <i class="fa-solid fa-file-pdf"></i><span>พิมพ์รายงาน PDF</span>
-                            </button>
+                            <div class="flex space-x-1">
+                                <button onclick="printCurrentDeviceReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded text-xs font-bold transition shadow" title="พิมพ์ PDF"><i class="fa-solid fa-file-pdf"></i></button>
+                                <button onclick="downloadDeviceJson()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-2.5 py-1.5 rounded text-xs font-bold transition shadow" title="ดาวน์โหลด JSON"><i class="fa-solid fa-download"></i></button>
+                            </div>
                         </div>
                         <div class="space-y-3 text-xs">
                             <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">รหัสอุปกรณ์:</span><span id="ana-id" class="font-bold text-white">-</span></div>
@@ -260,10 +264,12 @@
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ตรวจสอบโหมดความเสียหายและคะแนน RPN อัปเดตตามผลทดสอบล่าสุด</p>
+                    <p class="text-xs text-slate-400">ตรวจสอบโหมดความเสียหายและคะแนน RPN พร้อมปุ่มดาวน์โหลดรายงาน FMEA เป็น CSV</p>
                 </div>
-                <div class="flex items-center space-x-2 w-full sm:w-auto">
-                    <label class="text-xs text-slate-300 whitespace-nowrap">กรองตามอุปกรณ์:</label>
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <button onclick="downloadFmeaCsv()" class="bg-industrial-600 hover:bg-industrial-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow flex items-center space-x-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-file-csv"></i><span>ดาวน์โหลด FMEA (CSV)</span>
+                    </button>
                     <select id="fmea-filter-select" onchange="renderFmeaTable()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-industrial-500 w-full sm:w-48">
                         <option value="ALL">แสดงทั้งหมด (All 40 Assets)</option>
                     </select>
@@ -731,7 +737,53 @@
             alert(`จำลองการแนบไฟล์สำหรับ ${asset.id} สำเร็จ!`);
         }
 
-        // Print Current Device Report (PDF Export)
+        // --- FILE DOWNLOAD & EXPORT FUNCTIONS ---
+        function downloadPmCsv() {
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "Asset ID,Type,Location,Health Index (%),RPN,Next PM,Status\n";
+            assetsData.forEach(row => {
+                csvContent += `"${row.id}","${row.type}","${row.location}",${row.healthIndex},${row.rpn},"${row.nextPm}","${row.status}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "RCM_PM_Schedule_40_Assets.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadFmeaCsv() {
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "Asset ID,Type,Failure Mode,Effect,Cause,Severity,Occurrence,Detection,RPN,Recommended Action\n";
+            fmeaData.forEach(row => {
+                csvContent += `"${row.assetId}","${row.type}","${row.mode}","${row.effect}","${row.cause}",${row.s},${row.o},${row.d},${row.s*row.o*row.d},"${row.action}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "RCM_FMEA_Analysis_Report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadDeviceJson() {
+            const id = document.getElementById('analysis-device-select').value;
+            const asset = assetsData.find(a => a.id === id);
+            const fmea = fmeaData.find(f => f.assetId === id);
+            if (!asset) return;
+
+            const reportData = { asset, fmea, exportDate: new Date().toISOString() };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
+            const link = document.createElement("a");
+            link.setAttribute("href", dataStr);
+            link.setAttribute("download", `RCM_Report_${asset.id}.json`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         function printCurrentDeviceReport() {
             window.print();
         }
