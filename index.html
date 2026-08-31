@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Visible RCM Badge & Pro Data Entry)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Fixed Tab Switching)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -51,19 +51,19 @@
 
     <!-- Navigation Tabs -->
     <nav class="bg-slate-800/80 border-b border-slate-700 px-4 sm:px-6 flex space-x-2 sm:space-x-4 overflow-x-auto">
-        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('pm-schedule')" id="tab-btn-pm-schedule" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calendar-days"></i>
             <span>ตาราง PM (เรียงตาม RPN)</span>
         </button>
-        <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('device-analysis')" id="tab-btn-device-analysis" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-file-pen"></i>
             <span>บันทึกผลทดสอบ & แนบเอกสาร/รูปภาพ</span>
         </button>
-        <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('fmea-calc')" id="tab-btn-fmea-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-table-cells"></i>
             <span>ตาราง FMEA แยกตามอุปกรณ์</span>
         </button>
-        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
+        <button onclick="switchTab('dga-calc')" id="tab-btn-dga-calc" class="tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
             <i class="fa-solid fa-calculator"></i>
             <span>วิเคราะห์ DGA (6 วิธี)</span>
         </button>
@@ -73,7 +73,7 @@
     <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
 
         <!-- TAB 1: PM SCHEDULE -->
-        <section id="tab-pm-schedule" class="space-y-6">
+        <div id="tab-pm-schedule" class="tab-content space-y-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow-md flex items-center justify-between">
                     <div>
@@ -138,10 +138,10 @@
                     <div class="flex space-x-1" id="pagination-controls"></div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- TAB 2: PRO DATA ENTRY WITH VISIBLE RCM BADGE & ATTACHMENTS -->
-        <section id="tab-device-analysis" class="space-y-6 hidden">
+        <!-- TAB 2: PRO DATA ENTRY WITH VISIBLE RCM BADGE -->
+        <div id="tab-device-analysis" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">บันทึกผลทดสอบและแนบหลักฐาน (Pro Data Entry & Attachments)</h2>
@@ -182,7 +182,6 @@
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
                 <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
-                    <!-- VISIBLE RCM BADGE HERE -->
                     <span class="bg-industrial-600/20 border border-industrial-500 text-industrial-400 text-xs px-3 py-1 rounded-full font-bold shadow-sm inline-flex items-center space-x-1.5">
                         <i class="fa-solid fa-shield-halved"></i>
                         <span>มาตรฐาน FMEA & RCM Compliant</span>
@@ -212,15 +211,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
                         <div>
                             <label class="block text-slate-400 mb-1">ความรุนแรง S (1-10):</label>
-                            <input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500" title="1=น้อยมาก, 10=วิกฤตระเบิดเสียหายทั้งระบบ">
+                            <input type="number" id="new-s" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1">โอกาสเกิด O (1-10):</label>
-                            <input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500" title="1=แทบไม่เกิด, 10=เกิดประจำต่อเนื่อง">
+                            <input type="number" id="new-o" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1">การตรวจจับ D (1-10):</label>
-                            <input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500" title="1=ตรวจจับได้ทันที, 10=ตรวจไม่พบเลยก่อนพัง">
+                            <input type="number" id="new-d" min="1" max="10" oninput="manualCalculateRpn()" class="bg-slate-800 border border-slate-700 rounded p-2 text-white font-mono font-bold w-full focus:border-industrial-500">
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1">ค่า RPN รวม (S × O × D):</label>
@@ -229,7 +228,7 @@
                     </div>
                 </div>
 
-                <!-- 3. File Attachments (Lab Report & Damage Photo) -->
+                <!-- 3. File Attachments -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                     <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
                         <label class="block font-bold text-slate-300"><i class="fa-solid fa-file-pdf mr-1 text-rose-400"></i> แนบไฟล์เอกสารผลตรวจจากห้องแล็บ (PDF / Excel):</label>
@@ -248,10 +247,10 @@
                     </button>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- TAB 3: FMEA TABLE -->
-        <section id="tab-fmea-calc" class="space-y-6 hidden">
+        <div id="tab-fmea-calc" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ตารางวิเคราะห์ FMEA แยกตามรายอุปกรณ์</h2>
@@ -289,10 +288,10 @@
                     </table>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- TAB 4: DGA CALCULATOR -->
-        <section id="tab-dga-calc" class="space-y-6 hidden">
+        <div id="tab-dga-calc" class="tab-content hidden space-y-6">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
@@ -443,7 +442,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
     </main>
 
@@ -591,13 +590,21 @@
         let filteredData = [...assetsData];
 
         function switchTab(tabId) {
-            ['pm-schedule', 'device-analysis', 'fmea-calc', 'dga-calc'].forEach(id => {
-                document.getElementById(`tab-${id}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${id}`).className = "py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap";
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(el => el.classList.add('hidden'));
+
+            // Remove active style from all tab buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.className = "tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap";
             });
 
+            // Show selected tab content
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabId}`).className = "py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap";
+
+            // Set active style to selected tab button
+            document.getElementById(`tab-btn-${tabId}`).className = "tab-btn py-3 px-4 sm:px-5 border-b-2 font-medium text-xs sm:text-sm transition-all border-industrial-500 text-industrial-500 flex items-center space-x-2 whitespace-nowrap";
 
             if (tabId === 'dga-calc') {
                 initDgaDropdown('dga-device-select');
@@ -983,6 +990,7 @@
             ctx.stroke();
         }
 
+        // Initial Load
         renderTable();
         switchTab('pm-schedule');
     </script>
