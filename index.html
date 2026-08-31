@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Pro RCM Data Entry with Attachments & Standards)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Visible RCM Badge & Pro Data Entry)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -140,7 +140,7 @@
             </div>
         </section>
 
-        <!-- TAB 2: PRO DATA ENTRY WITH STANDARDS & ATTACHMENTS -->
+        <!-- TAB 2: PRO DATA ENTRY WITH VISIBLE RCM BADGE & ATTACHMENTS -->
         <section id="tab-device-analysis" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -180,9 +180,13 @@
 
             <!-- Form Container -->
             <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-xl space-y-6">
-                <div class="border-b border-slate-700 pb-3 flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและแนบหลักฐาน</h3>
-                    <span class="text-[11px] text-industrial-300 bg-industrial-950 px-3 py-1 rounded border border-industrial-800">มาตรฐาน FMEA & RCM Compliant</span>
+                <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h3 class="text-sm font-bold text-industrial-400 uppercase tracking-wider"><i class="fa-solid fa-file-pen mr-2"></i> ฟอร์มกรอกผลทดสอบและกำหนดคะแนนความเสี่ยง</h3>
+                    <!-- VISIBLE RCM BADGE HERE -->
+                    <span class="bg-industrial-600/20 border border-industrial-500 text-industrial-400 text-xs px-3 py-1 rounded-full font-bold shadow-sm inline-flex items-center space-x-1.5">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>มาตรฐาน FMEA & RCM Compliant</span>
+                    </span>
                 </div>
 
                 <!-- 1. DGA Lab Inputs -->
