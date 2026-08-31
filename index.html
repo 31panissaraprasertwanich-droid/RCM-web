@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCM Dashboard - หม้อแปลงและ GIS (Sorted Correctly & Sorted Dropdowns)</title>
+    <title>RCM Dashboard - หม้อแปลงและ GIS (Unique DGA & RCM Analysis)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -153,7 +153,7 @@
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">วิเคราะห์ผลและกรอกผลทดสอบรอบใหม่รายอุปกรณ์</h2>
-                    <p class="text-xs text-slate-400">ดรอปดาวน์เรียงลำดับตามรหัสอุปกรณ์ (TR-01 ถึง TR-25 และ GIS-01 ถึง GIS-15) อย่างถูกต้อง</p>
+                    <p class="text-xs text-slate-400">ดรอปดาวน์เรียงลำดับตามรหัสอุปกรณ์อย่างถูกต้อง</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -248,12 +248,12 @@
             </div>
         </section>
 
-        <!-- TAB 4: DGA CALCULATOR -->
+        <!-- TAB 4: UNIQUE DGA CALCULATOR -->
         <section id="tab-dga-calc" class="space-y-6 hidden">
             <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-base sm:text-lg font-semibold text-white">ระบบวิเคราะห์ก๊าซละลายน้ำมันหม้อแปลงเชิงลึก (Detailed DGA Analysis)</h2>
-                    <p class="text-xs text-slate-400">ดรอปดาวน์เลือกอุปกรณ์เรียงตามรหัสถูกต้อง (TR-01..TR-25, GIS-01..GIS-15)</p>
+                    <p class="text-xs text-slate-400">เลือกอุปกรณ์เพื่อดูผลวิเคราะห์ DGA ผ่าน 6 วิธี ที่มีค่าเฉพาะตัวไม่ซ้ำกันในแต่ละตัว</p>
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <label class="text-sm font-medium text-slate-300 whitespace-nowrap">เลือกอุปกรณ์:</label>
@@ -481,7 +481,7 @@
         const locations = ["Substation A (BKK)", "Substation B (NC)", "Substation C (SR)", "Substation D (RY)"];
         let statCounts = { normal: 0, warning: 0, critical: 0 };
 
-        // Generate 40 items: TR-01 to TR-25, GIS-01 to GIS-15
+        // Generate 40 items: TR-01 to TR-25, GIS-01 to GIS-15 with Unique DGA Gas values per asset
         for (let i = 1; i <= 40; i++) {
             const isTransformer = i <= 25;
             const prefix = isTransformer ? "TR" : "GIS";
@@ -494,45 +494,55 @@
                 healthIndex = (Math.random() * 14 + 60).toFixed(1);
                 status = "Critical";
                 statusClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-                s = 9; o = 8; d = 6; // RPN = 432
+                s = 9; o = Math.floor(Math.random() * 3 + 7); d = Math.floor(Math.random() * 3 + 5);
                 statCounts.critical++;
             } else if (i <= 18) {
                 healthIndex = (Math.random() * 10 + 75).toFixed(1);
                 status = "Warning";
                 statusClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-                s = 7; o = 5; d = 4; // RPN = 140
+                s = 7; o = Math.floor(Math.random() * 3 + 4); d = Math.floor(Math.random() * 3 + 3);
                 statCounts.warning++;
             } else {
                 healthIndex = (Math.random() * 15 + 85).toFixed(1);
                 status = "Normal";
                 statusClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                s = 4; o = 2; d = 2; // RPN = 16
+                s = 4; o = Math.floor(Math.random() * 2 + 1); d = Math.floor(Math.random() * 3 + 2);
                 statCounts.normal++;
-            }
-
-            // Assign unique variance to S, O, D so RPN is precise and mathematically correct (RPN = S * O * D)
-            if (status === "Critical") {
-                s = 9; 
-                o = Math.floor(Math.random() * 3) + 7; // 7-9
-                d = Math.floor(Math.random() * 3) + 5; // 5-7
-            } else if (status === "Warning") {
-                s = 7; 
-                o = Math.floor(Math.random() * 3) + 4; // 4-6
-                d = Math.floor(Math.random() * 3) + 3; // 3-5
-            } else {
-                s = 4; 
-                o = Math.floor(Math.random() * 2) + 1; // 1-2
-                d = Math.floor(Math.random() * 3) + 2; // 2-4
             }
             rpn = s * o * d;
 
+            // Unique random gas values per asset based on its severity tier to avoid identical outputs
             let gases;
             if (status === "Critical") {
-                gases = { h2: 180, ch4: 160, c2h2: 95, c2h4: 140, c2h6: 90, co: 500, co2: 2800 };
+                gases = { 
+                    h2: Math.floor(Math.random() * 150) + 120, 
+                    ch4: Math.floor(Math.random() * 120) + 90, 
+                    c2h2: Math.floor(Math.random() * 80) + 45, 
+                    c2h4: Math.floor(Math.random() * 100) + 80, 
+                    c2h6: Math.floor(Math.random() * 70) + 50, 
+                    co: Math.floor(Math.random() * 300) + 350, 
+                    co2: Math.floor(Math.random() * 1500) + 2000 
+                };
             } else if (status === "Warning") {
-                gases = { h2: 75, ch4: 65, c2h2: 20, c2h4: 45, c2h6: 35, co: 220, co2: 1600 };
+                gases = { 
+                    h2: Math.floor(Math.random() * 50) + 50, 
+                    ch4: Math.floor(Math.random() * 40) + 40, 
+                    c2h2: Math.floor(Math.random() * 15) + 10, 
+                    c2h4: Math.floor(Math.random() * 30) + 30, 
+                    c2h6: Math.floor(Math.random() * 25) + 25, 
+                    co: Math.floor(Math.random() * 100) + 150, 
+                    co2: Math.floor(Math.random() * 800) + 1200 
+                };
             } else {
-                gases = { h2: 25, ch4: 15, c2h2: 2, c2h4: 10, c2h6: 12, co: 80, co2: 600 };
+                gases = { 
+                    h2: Math.floor(Math.random() * 30) + 5, 
+                    ch4: Math.floor(Math.random() * 20) + 5, 
+                    c2h2: Math.floor(Math.random() * 4), 
+                    c2h4: Math.floor(Math.random() * 15) + 2, 
+                    c2h6: Math.floor(Math.random() * 15) + 3, 
+                    co: Math.floor(Math.random() * 60) + 30, 
+                    co2: Math.floor(Math.random() * 400) + 300 
+                };
             }
 
             let electrical = isTransformer ? [
@@ -650,10 +660,8 @@
             renderTable();
         }
 
-        // Helper function to sort dropdown options cleanly by device ID (TR-01..TR-25, GIS-01..GIS-15)
         function populateSortedDropdown(selectElement) {
             selectElement.innerHTML = "";
-            // Sort assetsData alphabetically/numerically by ID (TR-01, TR-02 ... GIS-01 ...)
             const sortedAssets = [...assetsData].sort((a, b) => {
                 if (a.type !== b.type) return a.type.localeCompare(b.type);
                 return a.id.localeCompare(b.id, undefined, {numeric: true});
@@ -667,7 +675,6 @@
             });
         }
 
-        // FMEA Filter & Render (Sorted dropdown)
         function initFmeaFilter() {
             const select = document.getElementById('fmea-filter-select');
             if (select.children.length <= 1) {
@@ -690,7 +697,6 @@
             tbody.innerHTML = "";
 
             let displayList = filterVal === "ALL" ? [...fmeaData] : fmeaData.filter(item => item.assetId === filterVal);
-            
             if (filterVal === "ALL") {
                 displayList.sort((a, b) => (b.s * b.o * b.d) - (a.s * a.o * a.d));
             }
@@ -716,7 +722,6 @@
             document.getElementById('fmea-count').innerText = `แสดง ${displayList.length} รายการ`;
         }
 
-        // Individual Device Analysis Tab
         function initAnalysisDropdown() {
             const select = document.getElementById('analysis-device-select');
             populateSortedDropdown(select);
@@ -781,7 +786,6 @@
             }
             asset.rpn = fmeaItem.s * fmeaItem.o * fmeaItem.d;
 
-            // Re-sort PM Table by RPN Descending
             assetsData.sort((a, b) => b.rpn - a.rpn);
             filteredData = [...assetsData];
             renderTable();
@@ -790,7 +794,6 @@
             alert(`บันทึกผลทดสอบรอบใหม่สำหรับอุปกรณ์ ${asset.id} สำเร็จ! อัปเดตตาราง PM และจัดเรียงลำดับใหม่เรียบร้อยแล้ว`);
         }
 
-        // Modal Popup
         function openModal(id) {
             const asset = assetsData.find(a => a.id === id);
             if (!asset) return;
